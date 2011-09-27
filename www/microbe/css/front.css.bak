@@ -1,0 +1,183 @@
+@charset "utf-8";
+/* RESET CSS by http://meyerweb.com/eric/tools/css/reset/ */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td{margin:0; padding:0; border:0; outline:0;	font-size:100%; vertical-align:baseline; background:transparent;}
+body{line-height:1;}
+ol, ul{list-style:none;}
+/*blockquote, q{quotes:none;}
+blockquote:before, blockquote:after, q:before, q:after{content:''; content:none;}*/
+:focus{outline:0;} /* remember to define focus styles! */
+ins{text-decoration:none;} /* remember to highlight inserts somehow! */
+del{text-decoration:line-through;}
+table{border-collapse:collapse; border-spacing:0;} /* tables still need 'cellspacing="0"' in the markup */
+/* source: http://sonspring.com/journal/clearing-floats */
+.clear{clear:both; display:block; overflow:hidden; visibility:hidden; width:0; height:0;}
+/* source: http://css-tricks.com/snippets/css/give-clickable-elements-a-pointer-cursor */
+a[href], input[type='submit'], input[type='image'], label[for], select, button, .pointer {cursor: pointer;}
+
+/*raleway-------------
+*/
+@font-face {
+	font-family: 'RalewayThin';
+	src: url('raleway/raleway_thin-webfont.eot');
+	src: local('☺'), url('fonts/raleway/raleway_thin-webfont.woff') format('woff'), url('fonts/raleway/raleway_thin-webfont.ttf') format('truetype'), url('fonts/raleway/raleway_thin-webfont.svg#webfontOH664JqY') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+
+
+h1 , h2 ,h3{
+	
+	font-size:36px;
+	font-weight: 100;
+}
+body{
+	font-family:"Helvetica Neue";
+	font-weight: 100;
+}
+#menu{
+	position:fixed;
+	z-index:100;
+}
+#page{
+	
+	width:960px;
+	position:relative;
+}
+#side{
+	width:200px;
+	float:left;
+}
+
+#contenu{
+	/*float:left;
+		width:300px;*/
+		margin-top:20px;
+		background-color:white;
+}
+#admin{
+	float:left;
+	width:300px;
+}
+
+#catalogue{
+	margin-top:200px;
+	/*position:absolute;
+		overflow:scroll;
+		height:700px;*/
+}
+.cat{
+	position:relative;
+	height:360px;
+	width:100%;
+	margin:0;
+	margin-top:20px;
+	padding:10px;
+	border:dashed 1px black;
+	/*background-color:#cc3300;*/
+
+}
+
+.fakecontenant{
+	height:100%;
+/*	background-color:#6A9930;*/
+}
+.rub{
+	position:absolute;
+	z-index:10;
+	bottom:40px;
+	height:50px;
+	color:white;
+	background:url("assets/ruban.png") no-repeat top left ;
+	/*background-position-x:-20px;*/
+}
+.rub h1{
+	line-height:40px;
+	background-color:black;
+	margin-left:40px;
+}
+.modele{
+	position:relative;
+	float:left;
+	width:300px;
+	height:100%;
+	
+	/*background-color:#5E9954;*/
+}
+
+.modeledescription{
+	position:absolute;
+	bottom:0;
+	min-height:30%;
+	padding:10px;
+	width:280px;
+	float:left;
+	background-color:black;
+	color:white;
+}
+
+
+.modele img{
+	position:absolute;
+	/*background-color:#C7C7C7;*/
+	margin-left:40px;
+	bottom:0;
+/*	height:360px;*/
+/*	border-right: solid 1px  black;*/
+}
+.colTitle{
+	font-size:24px;
+	padding-bottom:7px;
+	border-bottom:1px solid black;
+}
+.col{
+	margin-right:10px;
+	position:relative;
+	float:left;
+	height:360px;
+}
+.col2{	
+	width:300px;
+
+}
+.col3{
+	width:100px;
+
+}
+.col4{
+
+	width:100px;
+
+}
+.col5{
+	width:100px;
+}
+.variantes{
+	position:absolute;
+	bottom:0;
+}
+.variante{
+	margin:2px;
+	float:left;
+	border: 1px solid black;
+	/*background-color:#285E99;*/
+}
+.variante .description{
+	display:none;
+}
+.tailles{
+	position:absolute;
+	bottom:0;
+}
+.taille{
+	
+}
+.price{
+	position:absolute;
+	bottom:0px;
+	text-align:center;
+	/*background-color:#737373;*/
+}
+#admin{
+	float:right;
+}

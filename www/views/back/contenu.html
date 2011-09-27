@@ -1,0 +1,28 @@
+
+@if(content!=null){
+<div id="leftCol">
+	@if(content.nouveau!=null)
+	
+	<div id="nouveau">::raw content.nouveau::</div>
+	}
+	@if(content.liste!=null)
+	<ul>
+	
+	@for(item in content.liste){
+	<li><a href="::link::/back/upSpod/::item.id::/::content.vo::"> ::raw item.getDefaultField()::</a></li>
+	}
+	</ul>
+}
+</div>
+<div id="centerCol">
+	<div class="form_container">
+
+	@if(content.data!=null){
+	<!--::if(content.data.titre!=null)::
+	::raw content.data.titre::
+	::end::-->
+	@content.data
+	}
+	</div>
+	</div>
+}<!-- fin if(content!=null) -->

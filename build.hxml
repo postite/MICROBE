@@ -1,0 +1,43 @@
+-cp src
+-main microbe.controllers.GenericController
+-lib haxignitermicrobe
+-lib templo:2.3.3
+-lib erazor
+-php www
+#--no-traces
+--next
+
+#javascript back
+-main microbe.jsTools.BackJS
+-cp src
+-js www/microbe/js/backjs.js
+-lib feffects
+-lib hxs
+-D noEmbedJS
+#--no-traces
+
+--next
+
+
+-cp src
+  -main Tambour
+  #-main Borb
+  
+-js www/js/tambour.js
+-D noEmbedJS
+--no-traces
+
+
+#-cmd 	rsync -Haurov --delete --exclude 'lib' --exclude 'thieum'  -e ssh /Users/postite/Dropbox/TAMBOUR/www/  postite@ssh.alwaysdata.com:www
+#-cmd open http://postite.alwaysdata.net/
+
+-cmd open http://localhost:8888/
+#-cmd open http://postite.alwaysdata.net/
+
+# -main TestInstance
+# -cp src
+# -js bin/test.js
+# -cmd open bin/index.html
+
+
+

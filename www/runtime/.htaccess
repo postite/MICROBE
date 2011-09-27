@@ -1,0 +1,4 @@
+# This file prevents web access to the files in this directory and its subdirectories.
+order deny,allow
+deny from all
+allow from none
