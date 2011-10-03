@@ -32,11 +32,9 @@
 		  		   		<div class="ajout">ajoute</div>
 		  		   		@{liste=scope.getVoList(currentVo);}
 		  		   		<ul class="itemslist">
-		  		   		@for(item in liste){
-		  		   		<!-- ::foreach item liste:: -->
-		  		   		
-		  		   		 <a href="@backpage/choix/@item.id/@currentVo"> <li>
-		  		   			<!-- raw --><h>@item.getDefaultField()</h></li></a>
+		  		   		@for(item in liste){ 		   		
+		  		   		 <a href="@backpage/choix/@item.id/@currentVo" tri="id_@item.id"> <li >
+		  		   			<!-- raw --><h>@item.getDefaultField()</h><span>@item.poz</span></li></a>
 		  		   		}	
 		  		   		</ul>
 		  		   		}
