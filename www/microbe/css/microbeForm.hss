@@ -70,17 +70,33 @@ form{
 		padding:0 10px 0 10px;
 		border: 1px dashed gray;
 		position:relative;
+		
 		//background-color:#CDCDCD;
-	}
+		
+		
+		.placeHolder{
+			list-style:none;
+			display:block;
+			min-width:100px;
+			min-height:100px;
+			
+			border:1px dashed gray;
+			background:#0AF;
+		}
+		
+		.collection{
+		/*	float:left;*/
+	//	float:left;
+			padding:5px;
+			margin-bottom:10px;
+			background-color:#DCDCDC;
+			min-width:100px;
+			min-height:100px;
+		}
+		
+	}//fin collection wrapper
 	
-	.collection{
-	/*	float:left;*/
-		padding:5px;
-		margin-bottom:10px;
-		background-color:#DCDCDC;
-		min-width:100px;
-		min-height:100px;
-	}
+
 	
 	input[type="text"]{
 		margin-top:0px;

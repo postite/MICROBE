@@ -1,13 +1,11 @@
 .microtrace {
 	z-index : 10;
-	position : absolute;
 	width : 250px;
 	color : #cc3300;
 	font-size : 10px;
 	font-family : "monaco";
 }
 .microfieldTrace {
-	position : absolute;
 	width : 250px;
 	color : #22990E;
 	font-size : 10px;
@@ -110,6 +108,13 @@
 	position : absolute;
 	bottom : 2px;
 	color : white;
+}
+#leftCol .placeHolder {
+	list-style : none;
+	display : block;
+	width : 100px;
+	height : 50px;
+	border : 1px dashed gray;
 }
 #centerCol {
 	background-color : #F3F3F3;

@@ -29,7 +29,15 @@ form .collectionWrapper {
 	border : 1px dashed gray;
 	position : relative;
 }
-form .collection {
+form .collectionWrapper .placeHolder {
+	list-style : none;
+	display : block;
+	min-width : 100px;
+	min-height : 100px;
+	border : 1px dashed gray;
+	background : #0AF;
+}
+form .collectionWrapper .collection {
 	padding : 5px;
 	margin-bottom : 10px;
 	background-color : #DCDCDC;

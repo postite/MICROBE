@@ -1,7 +1,7 @@
 .microtrace{
 	//display:none;
 	z-index:10;
-	position:absolute;
+	//position:absolute;
 	width:250px;
 	color:#cc3300;
 	font-size:10px;
@@ -9,7 +9,7 @@
 }
 .microfieldTrace{
 	//display:none;
-	position:absolute;
+	//position:absolute;
 	width:250px;
 	color:#22990E;
 	font-size:10px;
@@ -29,7 +29,8 @@ var helvetica="HelveticaNeueLTStd45Light";
 var bree="BreeLight";
 var myLabelFont='Lobster13Regular';
 
-
+var spodItemlistWidth=100px;
+var spodItemlistHeight=50px;
 
 
 var hauteurChamp=28px;
@@ -129,63 +130,74 @@ color:#ccc;
 position:absolute;
 left:0;
 
-.ajout{
-	$bigblackblock;
-	width:150px;
-	//height:30px;
-	//	background-color:black;
-	//	color:white;
-	//	font-family:$typo;
-	//	font-weight:200;
-	//	cursor:hand;
-	//	line-height:30px;
-		text-indent:24px;
-		margin-bottom:30px;
-	
-}
-.ajout:hover{
-	background-color:$hoverColor;
-	cursor:hand;
-}
-.itemslist{
-	margin-left:24px;
-	font-family:$bree;
-	font-weight:100;
-	font-size:16px;	
-	
-	li{
-
-		margin-bottom:5px;
-		width:100px;
-		height:50px;
-		border-bottom:1px solid black;
-
-		h{
-
-			color:black;
-			line-height:16px;
-
+		.ajout{
+			$bigblackblock;
+			width:150px;
+			//height:30px;
+			//	background-color:black;
+			//	color:white;
+			//	font-family:$typo;
+			//	font-weight:200;
+			//	cursor:hand;
+			//	line-height:30px;
+				text-indent:24px;
+				margin-bottom:30px;
+			
 		}
 
-	}
-	li:active{
-		position:relative;
-		background-color:#00aaff;
-	}
-	li:hover{
-		position:relative;
-		background-color:#00aaff;
-		//height:100px;
-		//border-bottom:none;
 
-		h{
-			position:absolute;
-			bottom:2px;
-			color:white;
-		}	
-	}
+		.ajout:hover{
+			background-color:$hoverColor;
+			cursor:hand;
+		}
+		.itemslist{
+			margin-left:24px;
+			font-family:$bree;
+			font-weight:100;
+			font-size:16px;	
+			
+		 		li{
+		 		
+		 			margin-bottom:5px;
+		 			width:$spodItemlistWidth;
+		 			height:$spodItemlistHeight;
+		 			border-bottom:1px solid black;
+		 		
+		 					h{
+		 			
+		 					color:black;
+		 					line-height:16px;
+		 			
+		 					}
+		 		
+		 		}//fin li
+				li:active{
+					position:relative;
+					background-color:#00aaff;
+				}
+			li:hover{
+			position:relative;
+			background-color:#00aaff;
+			//height:100px;
+			//border-bottom:none;
+	
+		 		h{
+		 			position:absolute;
+		 			bottom:2px;
+		 			color:white;
+		 		}	
+			}//fin li:hover
 
-}
+			}//fin itemListe
+			// utilisé par sortable
+			.placeHolder{
+				list-style:none;
+				display:block;
+				width:$spodItemlistWidth;
+				height:$spodItemlistHeight;
+				border:1px dashed gray;
+				//background:$hoverColor;
+			}
 }//fin leftCol
 #centerCol{
 background-color:#F3F3F3;
