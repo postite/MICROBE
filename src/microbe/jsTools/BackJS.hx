@@ -7,17 +7,19 @@ import microbe.jsTools.ElementBinder;
 using microbe.tools.Debug;
 import js.JQuery;
 import js.Lib;
+import jquery.ui.Sortable;
 
 
 import microbe.form.elements.TagView;
 import microbe.form.elements.CollectionElement;
+import microbe.form.elements.CollectionWrapper;
 import microbe.form.elements.DeleteButton;
 import microbe.form.elements.PlusCollectionButton;
 
 class BackJS
 {
 	
-	public static var debug=0;
+	public static var debug=1;
 	//singleton instance
 	public static var instance(getInstance,null):BackJS;
 	
@@ -31,13 +33,17 @@ class BackJS
 	
 	//model
 	public var microbeElements:ElementBinder;
+	
+	
+	var sort:Sortable;
+	
 	public static function main() : Void {
 		//à voir avec cette histoire de Singleton
 		instance=new BackJS();
 	}
 	//getter for singleton
 	public static function getInstance() : BackJS {
-		"".Alerte();
+	//	"".Alerte();
 		if( instance==null){
 			instance= new BackJS();
 		}
@@ -50,18 +56,17 @@ class BackJS
 	"new".Alerte();
 	base_url=Lib.window.location.protocol+"//"+Lib.window.location.host;
 	back_url=base_url+"/index.php/pipo/"; //TODO replace pipo par config
-	
 	new JQuery("document").ready(function(e):Void{instance.init();});
 	}
 	
 	//initialisation du Dom
 	function init() : Void {
-		"init".Alerte();
+	//	"init".Alerte();
 		start();
 	}
 	public function start():Void{
 		//c'est moche
-		"".Alerte();
+	Std.string(classMap).Alerte();
 		new JQuery("#"+classMap.submit).click(function(e):Void{instance.record();});
 		
 	//	parseMap();
@@ -76,16 +81,46 @@ class BackJS
 		microbeElements=new ElementBinder();
 		var deleteBouton= new DeleteButton(classMap.voClass+"_form_effacer");
 		var parser=new MapParser(microbeElements);
+		
+		//"beforeparse".Alerte();
 		parser.parse(classMap);
+	//	"afterparse".Alerte();
+		var wrapper= new CollectionWrapper(); /// added dans la new version plus
+		CollectionWrapper.sign.add(PlusCollection);
+		var sortoptions:SortableOptions= cast {};
+		//sortoptions.grid=[20,50];
+		sortoptions.placeholder="placeHolder";
+		sortoptions.opacity=.2;
+		
+		//sortoptions.deactivate=ondeactivate;
+		sortoptions.update=onSortChanged;
+		
+		sort=new Sortable("#leftCol .itemslist").sortable(sortoptions);
+		
 		listen();
 	}
 	
-	
+	public function onSortChanged(e:JqEvent,ui:UI):Void{
+		var pop=sort.sortSerialize({attribute:'tri',key:'id'});
+		trace(pop);
+		var liste:Array<String>=pop.split("&id=");
+		 liste[0]=liste[0].split("id=")[1];
+		
+		//Lib.alert(pop);
+		//sort.disable();
+		var req= new haxe.Http(back_url+"reorder/"+this.currentVo);
+	//	req.setParameter("voName", voName);
+		req.setParameter("orderedList",haxe.Serializer.run(liste));
+		req.onData=function(d) { trace(d);}; 
+		req.request(true);
+		trace("afterreorder");
+	}
 	///appelé en static 
 	public function setClassMap(compressedMap:String){
 	//	trace("setClassMAp");
-		"".Alerte();
+	//	compressedMap.Alerte();
 		classMap=haxe.Unserializer.run(compressedMap);
+	//	"".Alerte();
 		//Lib.alert("hello" +classMap);
 	}
 	
@@ -95,19 +130,19 @@ class BackJS
 		CollectionElement.deleteSignal.add(deleteCollection); //core
 		DeleteButton.sign.add(deleteSpod); //core
 		new JQuery(".ajout").click(onAjoute);
-		if(PlusCollectionButton.sign !=null)
-		PlusCollectionButton.sign.add(PlusCollection);
-		
-	}
+	/*if(PlusCollectionButton.sign !=null)
+			PlusCollectionButton.sign.add(PlusCollection);
+			*/
+		}
 	
 	function onAjoute(e:JqEvent):Void{
 		"ajoute".Alerte();
-		trace("yo");
+	//	trace("yo");
 		Lib.window.location.href=back_url+"ajoute/"+currentVo;
 	}
 
 	///utilisé par bouton delete
-	function deleteSpod() : Void {
+	function deleteSpod():Void{
 		"sur?".Alerte();
 	//Lib.window.location.href="http://localhost:8888/index.php/myback/delete/"+classMap.voClass+"/"+classMap.id;
 		Lib.window.location.href=back_url+"delete/"+classMap.voClass+"/"+classMap.id;
@@ -139,18 +174,23 @@ class BackJS
 		Std.string(classMap).Alerte();
 		
 		var compressedValues=haxe.Serializer.run(classMap);
-		back_url.Alerte();
+	//	back_url.Alerte();
 		trace("classMAp="+classMap +"back_url="+back_url);
 		var req= new haxe.Http(back_url+"rec/");
 	//	req.setParameter("voName", voName);
 		req.setParameter("map", compressedValues);
-		req.onData=function(d) { trace("onDataAjaxForm" + d);}; 
+		req.onData=function(d) { afterRecord(d);}; 
 		req.request(true);
+	}
+	function afterRecord(d) : Void {
+		trace("Fter Record");
+		//Lib.window.location.href=back_url+"nav/"+classMap.voClass+"/"+classMap.id;
 	}
 	
 	
+	
 	function deleteCollection(id:String,voName:String,pos:Int) : Void {
-		"".Alerte();
+	//	"".Alerte();
 		//Lib.alert("popSignal"+id +"voName="+voName);
 		var maputil= new ClassMapUtils(classMap);
 		maputil.searchCollec(voName);
@@ -169,39 +209,32 @@ class BackJS
 	
 	///attention faut revoir ça c'est trop complexe
 	//attention bordel le trucdu pithecantrope , va vraiment falloir trouver autre chose.
-	public function PlusCollection(transport:Transport/*PLUSCollectionBUTTON*/){
-		"".Alerte();
-		//var transport:Transport =cast haxe.Unserializer.run(xtransport);
-		//**var unelement=haxe.Unserializer.run(compressedelement);
-		var unelement=transport.data;
-	    //Lib.alert("pluscollection"+unelement);
-		unelement.Alerte();
+	public function PlusCollection(collectionVoName:String/*PLUSCollectionBUTTON*/){
 		
-			var lastpos=new JQuery(".collection").last().attr("pos");	
-			var posint=Std.parseFloat(lastpos);
-			posint++;
-				var str = unelement;
-			   	var r = ~/(pitecanthrope)/g; // g : replace all instances
-				var element=r.replace(str,Std.string(posint)); // "aaabcbcbcxx"
-			//var unCollec:MicroFieldList=haxe.Unserializer.run(collec);
-			//Lib.alert("type="+unCollec.type);
+	/*	"".Alerte();
+			var maputil= new ClassMapUtils(classMap);
+			var currentCollec=maputil.searchCollec(collectionVoName);
+			var mock:MicroFieldList=cast currentCollec.first();
+			parseplusCollec(mock,10);*/
+				var req= new haxe.Http(back_url+"addCollectItem/");
+			//	req.setParameter("voName", voName);
+		//	voName:String,voParent:String,voParentId:Int
+				req.setParameter("voName", collectionVoName);
+				req.setParameter("voParent", classMap.voClass);
+				req.setParameter("voParentId", Std.string(classMap.id));
+				req.onData=function(x) {onAddItemPlus(x); }; 
+				req.request(true);
 			
-			new JQuery(".collection").last().after(element);
-		//new JQuery(".collectionWrapper").insertAfter(element,new JQuery(".collection").last());	
-			//	var unliste:MicroFieldList=haxe.Unserializer.run(liste);
-			var liste=transport.collec;
-			//var xposint=haxe.Serializer.run(posint);
-			//var posliste=r.replace(liste,xposint); // "aaabcbcbcxx"
-			//trace("posliste="+posliste);
-			//var unliste:MicroFieldList=haxe.Unserializer.run(liste);
-			parseplusCollec(cast liste,Std.int(posint));
-			//trace("liste="+cast(unliste.first(),Microfield).elementId);
-			"liste="+liste.toString().Alerte();
-			//new JQuery(".collection").last().clone().insertAfter(new JQuery(".collection").last());
+	}
+	function onAddItemPlus(x:String) : Void {
+		Std.string(x).Alerte();
+		var d:MicroFieldList=haxe.Unserializer.run(x);
+		Std.string(d).Alerte();
 	}
 	
+	
 	function parseplusCollec(liste:MicroFieldList,pos:Int) : Void {
-		"".Alerte();
+	//	"".Alerte();
 		//trace("before");
 		liste.pos=pos;
 		var r = ~/(pitecanthrope)/g; // g : replace all instances
@@ -220,7 +253,7 @@ class BackJS
 		
 		
 		
-		microbeElements.createCollectionWrapper(microChamps,liste.pos);
+		microbeElements.createCollectionElement(microChamps,liste.pos);
 		var maputil= new ClassMapUtils(classMap);
 		maputil.searchCollec(liste.voName);
 		maputil.addInCollec(liste);
