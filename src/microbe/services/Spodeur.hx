@@ -3,9 +3,14 @@ package microbe.services;
 
 import microbe.controllers.GenericController;
 import haxigniter.server.request.BasicHandler;
-import php.db.Connection;
-import php.db.Manager;
+//import php.db.Connection;
+/*#if !spod_macro
 import php.db.Object;
+import php.db.Manager;
+#else*/
+import sys.db.Manager;
+import sys.db.Object;
+/*#end*/
 
 import microbe.vo.Spodable;
 

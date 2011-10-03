@@ -1,7 +1,7 @@
 package microbe.vo;
 
 import microbe.vo.Spodable;
-import php.db.Object;
+import sys.db.Object;
 
 class Public extends Object
 {
