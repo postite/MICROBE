@@ -13,7 +13,7 @@ class MapParser
 	//binderElement dependency
 	//tags?
 	
-	
+	public static var debug=0;
 	var map:ClassMap;
 	var microbeElements:ElementBinder;
 	
@@ -21,11 +21,8 @@ class MapParser
 	{
 		microbeElements= _microbeElements;
 	}
-	
 
-	
-	
-	
+
 	/// classMAping form_classMAp -> js ClassMAp
 	//implementer le recursif....
 	//appelé par setClassMAp
@@ -41,14 +38,14 @@ class MapParser
 		}*/
 	
 	recurMap(liste);
-	
+	"afterparse".Alerte();
 	
 	}
 	
 	//appelé par parse
 	//recurse dans le classMap et instancie les instancie les AjaxElements pour binding.
 	function recurMap(liste:MicroFieldList):Void{
-		"".Alerte();
+		"recurMap".Alerte();
 	//var ajaxList:List<AjaxElement>=null;
 	/*	if((stock==null)){
 			stock= new List<AjaxElement>();
@@ -63,7 +60,8 @@ class MapParser
 				if(chps.type==collection){
 					
 					for (item in cast(chps,MicroFieldList).fields.iterator()){
-						trace("hop");
+						
+						
 					//	Lib.alert("itemField="+item.toString());
 						/*var microChamps:Microfield=new Microfield();//cast chps;
 												microChamps.elementId=chps.voName;
@@ -73,8 +71,10 @@ class MapParser
 												trace(microChamps.toString());*/
 						
 						//var d:AjaxElement=cast Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[chps,pos]);
-						microbeElements.createCollectionWrapper(chps,pos);
+						"hop".Alerte();
+						microbeElements.createCollectionElement(chps,pos);
 						pos++;
+						
 					}
 					
 					

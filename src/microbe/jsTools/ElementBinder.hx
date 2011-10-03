@@ -9,12 +9,12 @@ using microbe.tools.Debug;
 import microbe.form.MicroFieldList;
 
 //import allElements
-//doir etre accessible depuis BackJS 
+//doit etre accessible depuis BackJS 
 //comportement Model?
 //get values ?
 class ElementBinder
 {
-	public static var debug=false;
+	public static var debug=0;
 	public var elements:List<AjaxElement>;
 	public function new()
 	{
@@ -23,16 +23,18 @@ class ElementBinder
 	}
 	
 	
-	public function createCollectionWrapper(microChamps:IMicrotype,?position:Int) : Void {
+	public function createCollectionElement(microChamps:IMicrotype,?position:Int) : Void {
+		
 		var d:AjaxElement=cast Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[microChamps,position]);
-		var b:PlusCollectionButton= new PlusCollectionButton(cast microChamps,position);
+		"createInstance".Alerte();
+		//var b:PlusCollectionButton= new PlusCollectionButton(cast microChamps,position);
+		
 	}
 	public function createElement(microChamps:Microfield):Void{
 		Std.string(microChamps.element).Alerte();
 		var classe=Type.resolveClass(microChamps.element);
 		Type.getClassName(classe).Alerte();
 		var d:AjaxElement=cast Type.createInstance(Type.resolveClass(microChamps.element),[microChamps]);
-		
 		this.add(d);
 		"after".Alerte();
 	}
