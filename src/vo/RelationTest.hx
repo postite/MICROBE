@@ -38,14 +38,15 @@ class RelationManager extends Manager<RelationTest>{
 	//called when a returned SPOD object is created following data retrieval from the database
 		override function make(a:RelationTest) : Void {
 			trace("make");
-			a.childListe=ChildTest.manager.search({rid:a.id});
+			a.childListe=ChildTest.manager.search({rid:a.id},{orderBy:poz });
 		}
 	
 	//called just before an update is made
 	override function unmake( a : RelationTest ) : Void
 	{
 		trace("unmake");
-		a.childListe=ChildTest.manager.search({rid:a.id});
+		a.childListe=ChildTest.manager.search({rid:a.id},{orderBy:poz });
+		//a.childListe=ChildTest.manager.search({rid:a.id});
 	}
 	
 }

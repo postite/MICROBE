@@ -12,7 +12,7 @@ import microbe.vo.Spodable;
 import microbe.form.Form;
 import microbe.form.Microfield;
 import microbe.form.IMicrotype;
-
+import microbe.form.elements.CollectionElement;
 class CollectionBehaviour implements IBehaviour
 {
 	public var data:Spodable;
@@ -95,13 +95,13 @@ class CollectionBehaviour implements IBehaviour
 
 					bum.type=item.type;
 					bum.voName=item.voName;
-					bum.elementId=collec.elementId+"-"+item.field+"_"+graine;
+					bum.elementId=collec.elementId+"_"+item.field+"_"+graine;
 					bum.element=cast(item,Microfield).element;
 					bum.field=item.field;
 					spodList.add(bum);
 
 
-					var elem:FormElement=creeAjaxFormElement(formulaire,cast bum,Std.string(graine));
+					var elem:FormElement=creeAjaxFormElement(cast bum,Std.string(graine));
 					micros.add(elem);
 					
 					}//fin item in collec*/	
@@ -109,7 +109,7 @@ class CollectionBehaviour implements IBehaviour
 					
 					//creation du wrapper qui va faire un render() sur tous les formelement creeé depuis bum
 	//RENAMING				var microWrapper:FormElement= Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[sousVoName+"_"+field,field,micros,graine,spodList.pos]);
-					var microWrapper:FormElement= Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[spodList.elementId,field,micros,graine,spodList.pos]);
+					var microWrapper:CollectionElement= Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[spodList.elementId,field,micros,graine,spodList.id]);
 					//formulaire.addElement(microWrapper);///warning
 					wrapper.addElement(cast microWrapper);
 					graine++;
@@ -129,13 +129,13 @@ class CollectionBehaviour implements IBehaviour
 
 									item.type=item.type;
 									item.voName=item.voName;
-									cast(item).elementId=collec.elementId+"-"+item.field;
+									cast(item).elementId=collec.elementId+"_"+item.field;
 									item.field=item.field;
 									
-								 var elem:FormElement= creeAjaxFormElement(formulaire,cast item,Std.string(graine));
+								 var elem:FormElement= creeAjaxFormElement(cast item,Std.string(graine));
 								 micros.add(elem);	
 								  		}
-								 var microWrapper:FormElement= Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[collec.elementId,"patapouf",micros,graine,graine]);
+								 var microWrapper:FormElement= Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[collec.elementId,"patapouf",micros,graine,0]);
 								 wrapper.addElement(cast(microWrapper));
 								 
 								 newCollec.add(collec);
@@ -150,6 +150,52 @@ class CollectionBehaviour implements IBehaviour
 
 		return collec;
 	}
+
+	public static function creeEmptyCollection(voName:String,element:FieldType,field:String,graine:Int):Dynamic{
+		
+		//instancie un spod de la collection  //ChildTest + vo package
+		var fieldClass= Type.resolveClass(element.classe);
+		var instanceClass:Spodable=Type.createInstance(fieldClass,[]);
+		//recupere le nom sans le package
+		var sousVoName=Lambda.list(element.classe.split(".")).last();
+		
+		// nouvelle microfieldList celle qui est retournée à la fin de cette fonction 
+		var newCollec=new MicroFieldList();
+		newCollec.type= collection;
+		newCollec.voName=sousVoName;
+		newCollec.field=field;
+		newCollec.elementId="newCollec";
+
+		//// recupere les champs du sousVo
+		var creator=new MicroCreator();
+		var collec:MicroFieldList=cast creator.justGet(sousVoName,instanceClass.getFormule());
+		collec.voName=sousVoName;
+		collec.type=spodable;
+		collec.field=field;
+		collec.elementId=voName+"_"+field+"_"+sousVoName;
+		
+		
+		//var wrapper= new CollectionWrapper(sousVoName); //php
+		//formulaire.addElement(wrapper);
+		//n'a pas besoin de wrapper'
+		
+		var micros:List<FormElement>= new List<FormElement>();
+		 for (item in collec){
+			item.type=item.type;
+			item.voName=item.voName;
+			cast(item).elementId=collec.elementId+"_"+item.field+"_"+graine;
+			item.field=item.field;
+			
+		 var elem:FormElement= creeAjaxFormElement(cast item,Std.string(graine));
+		 micros.add(elem);	
+		  		}
+		
+		 var microWrapper:CollectionElement= Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[collec.elementId,"patapouf",micros,graine,0]);
+		 newCollec.add(collec);
+		
+		 return {microliste:newCollec,element:microWrapper.render()};
+	}
+
 
 	public function record(source:IMicrotype,data:Spodable) : Spodable {
 		trace("record collection"+data.id);
@@ -292,17 +338,15 @@ class CollectionBehaviour implements IBehaviour
 	}
 	
 
-	function creeAjaxFormElement(formulaire:Form,microfield:Microfield,?graine:String=""):FormElement{
+	static function creeAjaxFormElement(microfield:Microfield,?graine:String=""):Dynamic{
 		//microfield= item in collec ou bum
 	///	var microbeFormElement:FormElement= Type.createInstance(Type.resolveClass(microfield.element),[microfield.voName+"_"+microfield.field+graine, microfield.field, null, null, null, null]);
-		var microbeFormElement:FormElement= Type.createInstance(Type.resolveClass(microfield.element),[microfield.elementId, microfield.field, null, null, null, null]);
-		
-
+		var microbeFormElement:Dynamic= Type.createInstance(Type.resolveClass(microfield.element),[microfield.elementId, microfield.field, null, null, null, null]);
 		//microfield.elementId =formulaire.name+"_"+microfield.voName+"_"+microfield.field+graine;
 		//microfield.elementId ="collectionBehaviourcreaAjaxlmnt";
 
 		//microbeFormElement.value= microfield.value;
-		microbeFormElement.cssClass="generatorClass";
+		//microbeFormElement.cssClass="generatorClass";
 		return microbeFormElement;
 	}
 	public function delete(voName:String,id:Int) : Void {

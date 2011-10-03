@@ -60,7 +60,7 @@ class CollectionElement extends FormElement
 		
 		//var style = useSizeValues ? "style=\"width:" + width + "px\"" : "";
 		
-		var str="<div class='collection' name='"+n+"' id='"+n+pos+"' pos='"+pos+"' realpos='"+realpos+"'>";
+		var str="<div class='collection' name='"+n+"' id='"+n+pos+"' pos='"+pos+"' tri='id_"+realpos+"'>";
 	//	str+= "<span>length="+inside.length+"</span>";
 		str+="<h1>poz="+realpos+"</h1>";
 		str+="<button value='delete' type='BUTTON' id='delete"+pos+"' >delete</button>";
@@ -68,7 +68,7 @@ class CollectionElement extends FormElement
 			//this.form.addElement(item);
 			item.form=form;
 			//str+=item.test();
-			str+="<p>"+item.getLabel()+"</p>";
+		//	str+="<p>"+item.getLabel()+"</p>";
 			str+=item.value;
 			
 			str+=item.render(pos);

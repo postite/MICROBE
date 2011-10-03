@@ -33,6 +33,7 @@ class ElementBinder
 	public function createElement(microChamps:Microfield):Void{
 		Std.string(microChamps.element).Alerte();
 		var classe=Type.resolveClass(microChamps.element);
+		Std.string(classe).Alerte();
 		Type.getClassName(classe).Alerte();
 		var d:AjaxElement=cast Type.createInstance(Type.resolveClass(microChamps.element),[microChamps]);
 		this.add(d);

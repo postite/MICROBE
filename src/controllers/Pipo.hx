@@ -14,6 +14,7 @@ import php.Lib;
 import sys.db.Manager;
 import sys.db.Object;
 import microbe.MicroCreator;
+import microbe.form.IMicrotype;
 class Pipo extends Back
 	{
 		
@@ -34,8 +35,8 @@ class Pipo extends Back
 			jsScript=new List<String>();
 			jsLib= new JSLIB();
 			
-		generator= new FormGenerator();
-		FormGenerator.voPackage="vo.";
+			generator= new FormGenerator();
+			FormGenerator.voPackage="vo.";
 		
 			chemins="popopop";
 			var user= new UserVo();
@@ -63,7 +64,8 @@ class Pipo extends Back
 				this.view.assign("link", url.siteUrl());
 				this.view.assign("backpage",url.siteUrl()+"/pipo");
 				this.view.assign("titre","microbe admin");
-				
+				jsLib.addOnce(backjs);
+				jsLib.addOnce(GenericController.appConfig.jsPath+"jquery-ui-1.8.14.custom.min.js");
 				this.view.assign("menu", getMenu());
 				/*this.view.assign("chemins", this.chemins);
 				this.view.assign("menu", null);*/
@@ -81,8 +83,7 @@ class Pipo extends Back
 		public function nav(voName:String){
 			trace("voName="+voName);
 			defaultAssign();
-			jsLib.addOnce(backjs);
-			jsLib.addOnce(GenericController.appConfig.jsPath+"jquery-ui-1.8.14.custom.min.js");	
+			
 			this.view.assign("currentVo",voName);
 			/////// not ready specific renderer pour les pages ...ou autres
 			var content:String="";
@@ -148,7 +149,7 @@ class Pipo extends Back
 			var parentId:Int= Std.parseInt(params.get("voParentId"));
 			
 			
-			var newCollectItem:Object= cast Type.createInstance(Type.resolveClass(GenericController.appConfig.voPackage+voName),[]);
+					var newCollectItem:Object= cast Type.createInstance(Type.resolveClass(GenericController.appConfig.voPackage+voName),[]);
 					var parentClass=Type.resolveClass(GenericController.appConfig.voPackage+voParent);
 					var parentSpod:Object=cast Type.createInstance(parentClass,[]);
 						
@@ -164,12 +165,30 @@ class Pipo extends Back
 					microFieldItem.id=newID;
 					microFieldItem.voName=voName;
 					microFieldItem.type= collection;
-				//	microFieldItem.field=
+					
+					//microFieldItem.elementId= en attente de plusInfos
+				
 					
 					var XmicroFieldItem= haxe.Serializer.run(microFieldItem);
 					Lib.print(XmicroFieldItem);
 		}
-		
+		public function addCollectServerItem():Void{
+			var params=Web.getParams();
+			var collectionName:String=params.get("name");
+			
+				var hierarchy=collectionName.split("_");
+				var voName=hierarchy[0];
+				var field=hierarchy[1];
+				var sousVoName=hierarchy[2];
+				
+			var voParent:String= params.get("voParent");
+			var parentId:Int= Std.parseInt(params.get("voParentId"));
+			var graine:Int=Std.parseInt(params.get("graine"));
+			
+		var retour=	microbe.factoryType.CollectionBehaviour.creeEmptyCollection(voName,{classe:GenericController.appConfig.voPackage+sousVoName,type:collection,
+		champs:null},field,graine);
+			Lib.print(haxe.Serializer.run(retour));
+		}
 		public function ajoute(voName:String):Void{
 			trace("ajoute");
 			generator.generateComplexClassMapForm(voName);

@@ -34,24 +34,24 @@ class AjaxInput extends FormElement
 		useSizeValues = false;
 		printRequired = false;
 		
-		width = 180;
+		width=180;
 	}
 	override public function render(?iter:Int):String
 	{		
 		var n = name;
 		var tType:String = password ? "password" : "text";
-		
-		if (showLabelAsDefaultValue && value == label){
-			addValidator(new BoolValidator(false, "Not valid"));
-		}
-		
-		if ((value == null || value == "") && showLabelAsDefaultValue) {
-			value = label;
-		}		
-		
-		var style = useSizeValues ? "style=\"width:" + width + "px\"" : "";
-		
-		var str = "<input " + style + " class=\"" + getClasses() +"\" type=\"" + tType + "\" name=\"" + n + "\" id=\"" + n + "\" value=\"" +safeString(value) + "\"  " + attributes + " />" ;
+						
+						if (showLabelAsDefaultValue && value == label){
+							addValidator(new BoolValidator(false, "Not valid"));
+						}
+						
+						if ((value == null || value == "") && showLabelAsDefaultValue) {
+							value = label;
+						}		
+						
+						var style = useSizeValues ? "style=\"width:" + width + "px\"" : "";
+
+		var str = "<input " + style +"\" type=\"" + tType + "\" name=\"" + n + "\" id=\"" + n + "\" value=\"" +safeString(value) + "\"  " + attributes + " />" ;
 		
 		str += (if (required && form.isSubmitted() && printRequired) " required");
 		return str;

@@ -19,13 +19,13 @@ import microbe.form.elements.PlusCollectionButton;
 class BackJS
 {
 	
-	public static var debug=1;
+	public static var debug=0;
 	//singleton instance
 	public static var instance(getInstance,null):BackJS;
 	
 	//config
-	public var base_url:String;
-	public var back_url:String;
+	public static var base_url:String;
+	public static var back_url:String;
 	
 	//position
 	public var currentVo:String;
@@ -86,7 +86,7 @@ class BackJS
 		parser.parse(classMap);
 	//	"afterparse".Alerte();
 		var wrapper= new CollectionWrapper(); /// added dans la new version plus
-		CollectionWrapper.sign.add(PlusCollection);
+		CollectionWrapper.plusInfos.add(PlusCollection);
 		var sortoptions:SortableOptions= cast {};
 		//sortoptions.grid=[20,50];
 		sortoptions.placeholder="placeHolder";
@@ -205,60 +205,45 @@ class BackJS
 		//new JQuery("#"+id).remove();
 	}
 	
+	var _plusInfos:PlusInfos;
+	
+
+
 	
 	
-	///attention faut revoir ça c'est trop complexe
-	//attention bordel le trucdu pithecantrope , va vraiment falloir trouver autre chose.
-	public function PlusCollection(collectionVoName:String/*PLUSCollectionBUTTON*/){
-		
-	/*	"".Alerte();
-			var maputil= new ClassMapUtils(classMap);
-			var currentCollec=maputil.searchCollec(collectionVoName);
-			var mock:MicroFieldList=cast currentCollec.first();
-			parseplusCollec(mock,10);*/
-				var req= new haxe.Http(back_url+"addCollectItem/");
-			//	req.setParameter("voName", voName);
-		//	voName:String,voParent:String,voParentId:Int
-				req.setParameter("voName", collectionVoName);
+	public function PlusCollection(plusInfos:microbe.form.elements.PlusInfos){
+		_plusInfos=plusInfos;
+		Std.string("name"+plusInfos.collectionName +"graine="+plusInfos.graine ).Alerte();
+	
+				var req= new haxe.Http(back_url+"addCollectServerItem/");
+			
+				req.setParameter("name",plusInfos.collectionName );
 				req.setParameter("voParent", classMap.voClass);
 				req.setParameter("voParentId", Std.string(classMap.id));
-				req.onData=function(x) {onAddItemPlus(x); }; 
+				req.setParameter("graine",Std.string(plusInfos.graine));
+				req.onData=function(x) {onAddItemPlus(x,this._plusInfos);}; 
 				req.request(true);
 			
 	}
-	function onAddItemPlus(x:String) : Void {
-		Std.string(x).Alerte();
-		var d:MicroFieldList=haxe.Unserializer.run(x);
-		Std.string(d).Alerte();
+	function onAddItemPlus( x:String ,PI:PlusInfos) : Void {
+			var raw=haxe.Unserializer.run(x);
+			parseplusCollec(raw.microliste,PI.graine);
+			PI.target.notify(raw.element);
 	}
 	
 	
 	function parseplusCollec(liste:MicroFieldList,pos:Int) : Void {
-	//	"".Alerte();
-		//trace("before");
-		liste.pos=pos;
-		var r = ~/(pitecanthrope)/g; // g : replace all instances
-	 // "aaabcbcbcxx"
-		for(microfield in liste){
-			var element=r.replace(cast(microfield,Microfield).elementId,Std.string(pos));
-			cast(microfield,Microfield).elementId=element;
-			microbeElements.createElement(cast microfield);
-			
+
+		var microfield:MicroFieldList=cast liste.fields.first();
+		for(elements in microfield){
+			microbeElements.createElement(cast elements);
 		}
-		var microChamps:Microfield=new Microfield();//cast chps;
-		microChamps.elementId=liste.elementId;
-		microChamps.field=liste.field;
-		microChamps.value=null;
-		microChamps.element="microbe.form.elements.CollectionElement";
-		
-		
-		
-		microbeElements.createCollectionElement(microChamps,liste.pos);
+		//microbeElements.createCollectionElement(microfield,pos);
 		var maputil= new ClassMapUtils(classMap);
-		maputil.searchCollec(liste.voName);
-		maputil.addInCollec(liste);
+		maputil.searchCollec(microfield.voName);
+		maputil.addInCollec(microfield);
 		classMap.fields=maputil.mapFields;
-		
+		Std.string(microbeElements).Alerte();
 
 	}
 
