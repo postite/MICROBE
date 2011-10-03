@@ -1,26 +1,36 @@
 package vo;
+/*#if !spod_macro
 import php.db.Object;
 import php.db.Manager;
+#else*/
+import sys.db.Manager;
+import sys.db.Object;
+import sys.db.Types;
+import sys.db.TableCreate;
+//#end
 import microbe.vo.Spodable;
 import microbe.form.IMicrotype;
 
-
+@:table("news")
+@:id(id)
 class News extends Object , implements Spodable
 {
+	public var poz:Int;
+	public var id:SId;
+	public var titre:SString<255>;
+	public var date:SDate;
+	public var contenu:SText;
+	public var image:SString<255>;
+	public var datelitterale:SString<255>;
+	public var en_ligne:SBool;
 	
-	public var id:Int;
-	public var titre:String;
-	public var date:Date;
-	public var contenu:String;
-	public var image:String;
-	public var datelitterale:String;
-	public var en_ligne:Int;
+	public function new() : Void {
+		super();
+		/*
+				sys.db.Manager.cnx = this.db.connection;
+				sys.db.TableCreate.create(manager);*/
+	}
 	
-	public static var manager:Manager<News> = new Manager<News>(News);
-	
-	static var TABLE_NAME = "news";
-
-
 public function getFormule():Hash<FieldType> 
 {
 	var formule:Hash<microbe.form.FieldType>;

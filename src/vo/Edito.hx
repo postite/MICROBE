@@ -1,19 +1,29 @@
 package vo;
+/*#if !spod_macro
 import php.db.Object;
 import php.db.Manager;
+#else*/
+import sys.db.Manager;
+import sys.db.Object;
+import sys.db.Types;
+//#end
 import microbe.vo.Spodable;
 import microbe.form.IMicrotype;
 
-
+@:id(id)
+@:table("edito")
 class Edito extends Object , implements Spodable
 {
-	public var id:Int;
-	public var contenu:String;
-	public var date:Date;
+	public var poz:Int;
+	public var id:SId;
+	public var contenu:SString<255>;
+	public var date:SDate;
+
+public function new() : Void {
 	
-	public static var manager:Manager<Edito> = new Manager<Edito>(Edito);
-	
-	static var TABLE_NAME = "edito";
+	//sys.db.TableCreate.create(manager);
+	super();
+}
 
 
 public function getFormule():Hash<FieldType> 

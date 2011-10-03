@@ -1,7 +1,13 @@
 package vo;
 
+/*#if !spod_macro
 import php.db.Object;
 import php.db.Manager;
+#else*/
+import sys.db.Manager;
+import sys.db.Object;
+import sys.db.Types;
+//#end
 import microbe.vo.Spodable;
 import microbe.form.IMicrotype;
 /**
@@ -9,27 +15,16 @@ import microbe.form.IMicrotype;
  * @author postite
  */
 
+@:table('user')
+@:id(id)
 class UserVo extends Object, implements Spodable
 {
-	public var id:Int;
-	public var mdp:String;
-	public var nom:String;
+	@:skip public var poz:Int;
+	public var id:SId;
+	public var mdp:SString<255>;
+	public var nom:SString<255>;
 	
-	//public var voType:String;
-	
-	static var PRIVATE_FIELDS = ["manager"];
-	public var manager:Manager<UserVo>;
-	
-	static var TABLE_NAME = "user";
-	
-	public function new() 
-	{
-		//voType = "UserVo";
-		manager = new Manager<UserVo>(UserVo);
-		super();
-		
-	}
-	
+
 	/* INTERFACE vo.Spodable */
 	
 	public function getFormule():Hash<FieldType> 

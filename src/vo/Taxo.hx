@@ -1,13 +1,19 @@
 package vo;
 import microbe.vo.Taggable;
 import microbe.vo.Spodable;
-import php.db.Manager;
+/*#if !spod_macro
 import php.db.Object;
+import php.db.Manager;
+#else*/
+import sys.db.Manager;
+import sys.db.Object;
+import sys.db.Types;
+//#end
 import php.Lib;
 class Taxo extends Object
 {
 	
-	public var taxo_id:Int;
+	@:id public var taxo_id:SId;
 	public var tag:String;
 	public var spodtype:String;
 	static var TABLE_IDS =["taxo_id"];
