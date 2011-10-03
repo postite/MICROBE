@@ -25,7 +25,7 @@ import microbe.form.IMicrotype;
 	
 	interface Spodable
 	{
-
+		public var poz:Int;
 		public function getFormule():Hash<FieldType>;
 		public function getDefaultField():String;
 	//	public static var manager:Manager<Spodable>;
