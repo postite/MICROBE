@@ -1,0 +1,9 @@
+-cp src
+-main microbe.controllers.GenericController
+#-lib haxignitermicrobe
+-D spod_macro
+-lib templo:2.3.3
+-lib erazor
+-php www
+
+--no-traces
