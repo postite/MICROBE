@@ -76,7 +76,7 @@ class CheckBox extends AjaxElement{
 		}
 		override public function render(?iter:Int):String{
 			if (iter==null)iter=0;
-				var n = form.name + "_" +name;
+				var n = name;
 
 				var str ="<div id="+n+" class='check'>";
 

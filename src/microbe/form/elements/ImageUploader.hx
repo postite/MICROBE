@@ -13,7 +13,7 @@ class ImageUploader extends AjaxUploader
 	}
 	override function render(?iter:Int):String{
 		//<iframe id='upload_target' name='upload_target' src='' style='width:0;height:0;border:0px solid #fff;'></iframe>
-		var n = form.name + "_" +name;
+		var n = name;
 		var str="";
 		str+="<div id='"+n+"' class='imageuploader' microbe="+composantName+" >";
 		str+="<img src='' id='"+composantName+"preview"+iter+"' >";

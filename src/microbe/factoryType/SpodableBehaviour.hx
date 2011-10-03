@@ -1,6 +1,6 @@
 package microbe.factoryType;
 //import microbe.vo.Taggable;
-import php.db.Object;
+import sys.db.Object;
 import microbe.controllers.GenericController;
 /*import vo.Monstre;*/
 import microbe.form.Form;
@@ -73,7 +73,7 @@ class SpodableBehaviour implements IBehaviour
 				}else{
 				child.update();
 				}
-				child.sync();
+				//child.sync(); //HAck
 				Reflect.callMethod(data, Reflect.field(data, "set_"+source.field), [voInstance]);
 			//}
 			

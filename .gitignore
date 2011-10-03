@@ -1,0 +1,6 @@
+www/uploads/images/*
+www/lib
+www/runtime/cache/*
+srcBak
+www/runtime/session/*
+www/runtime/logs/*

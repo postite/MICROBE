@@ -35,10 +35,10 @@ class DevelopmentConnection extends Database
 {
 	public function new()
 	{
-		this.host = 'mysql.alwaysdata.com';
-		this.user = 'postite';
-		this.pass = 'paglop';
-		this.database = 'postite_tambour';
+		this.host = 'localhost';
+		this.user = 'root';
+		this.pass = 'root';
+		this.database = 'spodmacro';
 		this.driver = DatabaseDriver.mysql; // Can also be sqlite, then Database will be used as filename.
 		this.debug = null; // Displays debug information on database/query errors if set.
 		this.port = null;//3306;

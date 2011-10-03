@@ -32,7 +32,7 @@ class AuthRequestDecorator extends  RequestHandlerDecorator
 	{
 		var result:RequestResult;
 		if (session.user != null){
-			trace("session="+session.user);
+		//	trace("session="+session.user);
 		result = requestHandler.handleRequest(controller, url, method, getPostData, requestData);
 		return result;
 		}else {

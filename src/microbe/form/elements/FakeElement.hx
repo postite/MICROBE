@@ -50,7 +50,7 @@ class FakeElement extends FormElement
 	{
 	
 	//return name;
-		var n = form.name + "_" +name;
+		var n = name;
 	//	var type = display ? "text" : "hidden";
 		//return form.toString();
 		return n;

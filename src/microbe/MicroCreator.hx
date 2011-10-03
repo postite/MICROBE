@@ -42,18 +42,19 @@ class MicroCreator
 	}
 	
 	///cree les microField sans formulaire ... utilisé pour les collections
-	public function justGet(_voName:String,_formule:Hash<FieldType>,liste:MicroFieldList):IMicrotype{
+	public function justGet(_voName:String,_formule:Hash<FieldType>,?liste:MicroFieldList):MicroFieldList{
 		//trace("creator justGet" +formule.get());
 		var list= new MicroFieldList();
 		for ( field in _formule.keys()){
-			
 			var item:FieldType=_formule.get(field);
 			var factory = new TypeFactory();
 			var behaviour=factory.create(item.type);
-			list.add(behaviour.create(voName,item,field));	
+			list.add(behaviour.create(_voName,item,field));	
 		}
 		return list	;
 	}
+	
+	
 	
 	
 	

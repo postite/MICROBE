@@ -17,10 +17,10 @@ class Microfield implements IMicrotype
 	
 	}
 	public function toString():String{
-		#if (php || js)
+		#if (php )
 		return "<div class='microfieldTrace'><p>MICROFIELD :<br/>type:"+type+"<br/>field:"+field+",<br/>voName:"+voName+",<br/>element:"+element+", <br/>elementId:"+elementId+"<br/>value:"+value+"</p></div>";
 		#end
-		#if flash
+		#if (flash || js)
 		return "\nMICROFIELD :type:"+type+"\nfield:"+field+",\nvoName:"+voName+",\nelement:"+element+", \nelementId:"+elementId+"\nvalue:"+value +"\n";
 		#end
 		

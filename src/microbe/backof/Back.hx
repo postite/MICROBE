@@ -17,7 +17,7 @@ class Back extends GenericController
 		super();
 	//	spodeur = new Spodeur();
 	//pour l'authentification
-	this.requestHandler = new AuthRequestDecorator(new BasicHandler(this.configuration),LoginPage,session);
+	this.requestHandler = new AuthRequestDecorator(new 	BasicHandler(this.configuration),LoginPage,session);
 	url= new Url(this.configuration);
 			//pour le test
 	//	var user= new UserVo();

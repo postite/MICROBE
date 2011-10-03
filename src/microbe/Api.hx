@@ -3,9 +3,16 @@ import microbe.vo.Taggable;
 import microbe.MicroCreator;
 import php.Web;
 import microbe.controllers.GenericController;
-import php.db.Connection;
+//
+/*#if !spod_macro
 import php.db.Object;
 import php.db.Manager;
+import php.db.Connection;
+#else*/
+import sys.db.Manager;
+import sys.db.Object;
+import sys.db.Connection;
+/*#end*/
 import microbe.vo.Spodable;
 import php.Lib;
 import vo.Taxo;
@@ -157,7 +164,7 @@ class Api implements haxe.rtti.Infos
 		public function getOne(_vo:String,id:Int) : Spodable {
 			//var inst:Object= cast this.createInstance(_vo);
 			//trace("getOne="+_vo+"id="+id);
-			return cast getManager(_vo).get(id);
+			return cast getManager(_vo).unsafeGet(id);
 		}
 			public function getLast(_vo:String) : Spodable {
 				//var inst:Object= cast this.createInstance(_vo);
@@ -175,6 +182,23 @@ class Api implements haxe.rtti.Infos
 			return compressed;
 		//	Lib.print(compressed);
 		}
+		
+		
+		public function getAllorded(_vo:String):List<Spodable>{
+			var stringVo = voPackage+_vo; 
+			//var manager =  Type.createInstance(
+			var manager:Manager<Object>=cast Reflect.field(Type.resolveClass(stringVo),"manager");
+			//var manager= vo.RelationTest.manager;
+			//var liste:List<Dynamic> = manager.all(true);
+			var table=manager.dbInfos().name;
+			//trace("table="+table);
+			//var liste:List<Dynamic> = manager.all(true);
+			var liste:List<Object> =cast manager.unsafeObjects("SELECT * FROM "+table+" ORDER BY poz",true);
+			
+			return  cast liste;
+			
+		}
+		
 		public function getAll(_vo:String):List<Spodable> {
 			var stringVo = voPackage+_vo; 
 			//var manager =  Type.createInstance(
@@ -222,7 +246,7 @@ class Api implements haxe.rtti.Infos
 	}
 	
 	public function delete(voName:String,id:Int):Void{
-		var spodadelete:Object=cast(getManager(voName).get(id));
+		var spodadelete:Object=cast(getManager(voName).unsafeGet(id));
 		//return spodadelete.id;
 		spodadelete.delete();
 	}

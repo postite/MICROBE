@@ -3,6 +3,8 @@ import microbe.form.MicroFieldList;
 import microbe.ClassMap;
 import microbe.form.IMicrotype;
 import js.Lib;
+
+
 class ClassMapUtils
 {
 	private var currentCollec:MicroFieldList;
@@ -46,15 +48,17 @@ public function removeInCurrent(list:MicroFieldList) : Void {
 	currentCollec.fields=Lambda.list(tab);
 	}
 	
-	public function searchCollec(voName:String):Void {
+	public function searchCollec(voName:String):MicroFieldList {
 		temp=new List<IMicrotype>();
 		currentVoName=voName;
 		var result=mapFields.filter(searchCollecAlgo);
 	//	Lib.alert("result="+currentVoName);
 		currentCollec=cast(result.first());
+		return currentCollec;
 	//	Lib.alert("currentCollec="+result.first());
 	}
 	
+
 	
 	function parseCollec(collec:MicroFieldList){
 		trace("<br/>collec="+collec.getLength());

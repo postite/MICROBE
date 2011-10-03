@@ -5,11 +5,18 @@ import haxigniter.server.request.BasicHandler;
 import microbe.form.elements.Button;
 import microbe.form.elements.Input;
 import microbe.form.Form;
-import php.db.ResultSet;
+
 import haxigniter.server.libraries.DebugLevel;
 import vo.UserVo;
 import microbe.controllers.GenericController;
 import php.Lib;
+
+
+#if !spod_macro
+import php.db.ResultSet;
+#else
+import sys.db.ResultSet;
+#end
 /**
  * ...
  * @author postite
@@ -65,8 +72,8 @@ class Login extends GenericController, implements Controller
 		return formulaire;
 	}
 	public function index() {
-		Lib.print("popopop");
-		trace("login"+"index");
+	//	Lib.print("popopop");
+	//	trace("login"+"index");
 		var formulaire:Form = creeForm();
 		formulaire.action = url.siteUrl()+"/login/checkId/";
 		defaultAssign();
@@ -77,7 +84,7 @@ class Login extends GenericController, implements Controller
 		
 	}
 	public function checkId(){
-		trace("youhou"+"checkID");
+	//	trace("youhou"+"checkID");
 		var formulaire:Form = creeForm();
 		formulaire.populateElements();
 		defaultAssign();
@@ -86,7 +93,7 @@ class Login extends GenericController, implements Controller
 		var result:ResultSet = this.db.query("SELECT * FROM user WHERE nom LIKE '" + formulaire.getValueOf('login') + "' AND mdp LIKE '" + formulaire.getValueOf('mdp')+"'");
 		if (result.length > 0) {
 			var u:UserVo=result.next();
-			trace("mdpop=" + u.mdp);
+		//	trace("mdpop=" + u.mdp);
 			/*var user:Utilisateur= cast {};
 						user.mdp=u.mdp;
 						user.nom=u.nom;

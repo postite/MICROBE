@@ -27,33 +27,23 @@ class Myfront extends GenericController
 		url = new Url(this.configuration);
 	}
 	
-	function index() : Void {
-		
-		
-		jsLib.add("/js/front.js");
-		jsLib.add("/js/VariantesManager.js");
-		
+		function index() : Void {
 		this.view.assign("link", url.siteUrl());
 		this.view.assign("jsScript",jsScript);
 		this.view.assign("jsLib",jsLib);
 		this.view.assign("scope",this);
 		this.view.assign("side",null);
 		this.view.assign("content",null);
-		var content:List<Spodable>= api.getAll("News");
-		var tab=Lambda.array(content);
-		tab.reverse();
-		var orded=Lambda.list(tab);
-		this.view.assign("venir",orded);
-		this.view.assign("edito", api.getLast("Edito"));
-		this.view.display("front.html");
+//	var news= vo.News.manager.all();
+	
+	var news= vo.News.manager.search({titre:"emma"});
+		this.view.assign("news", news);
+		
+		this.view.display("front/frontest.html");
 		
 	
 	}
-		public function blog():Void{
-			var content= api.getAll("News");
-			this.view.assign("venir","content");
-		//	this.view.display("blog.html");
-		}
+	
 		
 	
 	

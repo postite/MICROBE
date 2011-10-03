@@ -91,7 +91,7 @@ class FileUpload extends FormElement
 	
 	override public function render(?iter:Int):String
 	{
-		var n = form.name + "_" +name;
+		var n = name;
 		//TODO
 	//	var path = toFolder.substr((Poko.instance.config.applicationPath + "res/").length);
 		var path = toFolder.substr((MyController.appConfig.runtimePath + "res/").length);

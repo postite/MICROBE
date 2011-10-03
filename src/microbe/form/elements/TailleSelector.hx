@@ -15,7 +15,7 @@ class TailleSelector extends FormElement
 		
 	}
 	override public function render(?iter:Int):String{
-		var n = form.name + "_" +name;
+		var n = name;
 		var str ="<div id="+n+" class='tailleSelector'>";
 		var incr:Int=0;
 		var boule:Bool=false;

@@ -18,10 +18,12 @@ class PlusCollectionButton extends Button
 	public function new(?_data:String,_collec:String)
 	{
 		
-		super("name","label",null,ButtonType.BUTTON);
+		super("name","plus",null,ButtonType.BUTTON);
 		
 		var transport:Transport = {data:haxe.Unserializer.run(_data),collec:haxe.Unserializer.run(_collec)};
-		Xtransport =haxe.Serializer.run(transport);
+		var nom=transport.collec.voName+"_"+transport.collec.field;
+		this.name=nom+"_"+label;
+		Xtransport=haxe.Serializer.run(transport);
 	}
 	override public function render(?iter:Int):String{
 		return "<button type=\"" + type + "\" class=\"" + getClasses() +"\" name=\"" +form.name + "_" +name + "\" id=\"" +form.name + "_" +name + "\" value=\"" + Xtransport + "\"  >" +label + "</button>";
@@ -38,29 +40,46 @@ import hxs.Signal1;
 import js.JQuery;
 using microbe.tools.Debug;
 
-class PlusCollectionButton extends AjaxElement {
+class PlusCollectionButton  {
 	
-	public static var debug=false;
-	public static var sign:Signal1<Transport>;
+	public static var debug=1;
+	
+	
+	public static var sign:Signal1<String>;
+	public static var cont:Int=0;
 	var transport:Transport;
 	var elementid:String;
-	public function new(list:Microfield,?pos:Int){
-		
-		super(list);
-		id.Alerte();
-		sign= new Signal1<Transport>();
-		this.elementid=id;
-	 var collectionWrapper=new JQuery("#"+this.elementid+pos).parent(".collectionWrapper");
-	var me =collectionWrapper.find(".plusCollectionButton");
-	//Std.string(me).Alerte();
-	transport = cast haxe.Unserializer.run(me.val());
-	me.click(onClick);
+	var me:JQuery;
 	
-	}
+	public function new(_me:JQuery){
+		me=_me;
+		//var transport ={data:"POp",}
+		sign= new Signal1<String>();
+			/*	this.elementid=this.id;
+				Std.string(this.elementid).Alerte();	
+				var collectionWrapper=new JQuery("#"+this.elementid+"_plus").parent(".collectionWrapper");
+				me =collectionWrapper.find(".plusCollectionButton");
+				Std.string(collectionWrapper.attr("class")).Alerte();
+				me.click(onClick);
+				Std.string(me).Alerte();*/
+		}
 	function onClick(e:JqEvent) : Void {
-		"".Alerte();
+	//	e.stopPropagation();
+		e.stopImmediatePropagation();
+	//	e.preventDefault();
 		//transport.data.Alerte();
-		sign.dispatch(transport);
+	//	transport = cast haxe.Unserializer.run(me.val());
+	
+		sign.dispatch("transport");
+		Std.string(cont).Alerte();
+		cont++;
+	}
+	public function init(){
+			
+			me.click(onClick);
+	}
+	public static function create(classe:String):String{
+		return '<button type="BUTTON" class="'+classe+'">plus</button>';
 	}
 	
 }

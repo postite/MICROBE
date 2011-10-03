@@ -9,7 +9,11 @@ import microbe.vo.Page;
 import microbe.vo.Spodable;
 import microbe.tools.JSLIB;
 import microbe.backof.Navigation;
-
+import php.Web;
+import php.Lib;
+import sys.db.Manager;
+import sys.db.Object;
+import microbe.MicroCreator;
 class Pipo extends Back
 	{
 		
@@ -32,12 +36,22 @@ class Pipo extends Back
 			
 		generator= new FormGenerator();
 		FormGenerator.voPackage="vo.";
+		
 			chemins="popopop";
 			var user= new UserVo();
 			user.nom="pop";
-								//	session.user=user;
-				//	session.user=null;
-			//spodeur= new Spodeur();	
+			
+			//session.user=user;
+			//session.user=null;
+			//spodeur= new Spodeur();
+			
+					//	new vo.News();
+			sys.db.Manager.cnx = this.db.connection;
+			sys.db.Manager.initialize();
+		//	sys.db.TableCreate.create(vo.ChildTest.manager);
+		//	sys.db.TableCreate.create(vo.RelationTest.manager);
+			
+		//	new vo.Edito();
 			api= new Api();	
 			this.view.assign("contenttype",null);
 		}
@@ -67,7 +81,8 @@ class Pipo extends Back
 		public function nav(voName:String){
 			trace("voName="+voName);
 			defaultAssign();
-			jsLib.addOnce(backjs);		
+			jsLib.addOnce(backjs);
+			jsLib.addOnce(GenericController.appConfig.jsPath+"jquery-ui-1.8.14.custom.min.js");	
 			this.view.assign("currentVo",voName);
 			/////// not ready specific renderer pour les pages ...ou autres
 			var content:String="";
@@ -89,7 +104,7 @@ class Pipo extends Back
 			}
 			if( Std.is(data,Page))this.view.assign("contenttype","page");
 			generator.generateComplexClassMapForm(voName,data);
-
+			jsLib.addOnce(GenericController.appConfig.jsPath+"jquery-ui-1.8.14.custom.min.js");
 			jsLib.addOnce(backjs);//TODO verif si besoin est ! commenté pour eviter doublon...
 			
 			jsScript.add(backInstance+".instance.setClassMap('"+generator.compressedClassMap+"');");
@@ -102,7 +117,7 @@ class Pipo extends Back
 		
 		public function getVoList(voName:String):List<Spodable>{
 		//	return 	spodeur.getRecordList(voName);
-		 return api.getAll(voName);
+		 return api.getAllorded(voName);
 		}
 		
 		public function getMenu():List<NavItem>{
@@ -113,8 +128,7 @@ class Pipo extends Back
 		override function index() : Void {
 			trace("index");
 			jsLib.add(backjs);
-			
-				//session.user=null;
+			//session.user=null;
 			defaultAssign();		
 			this.view.assign("content", "popopo");
 			this.view.display("back/design.html");
@@ -127,19 +141,48 @@ class Pipo extends Back
 		public function getPage(voName:String):Spodable{
 			return api.getOne(voName,1);
 		}
-		
+		public function addCollectItem():Void{
+			var params=Web.getParams();
+			var voName:String=params.get("voName");
+			var voParent:String= params.get("voParent");
+			var parentId:Int= Std.parseInt(params.get("voParentId"));
+			
+			
+			var newCollectItem:Object= cast Type.createInstance(Type.resolveClass(GenericController.appConfig.voPackage+voName),[]);
+					var parentClass=Type.resolveClass(GenericController.appConfig.voPackage+voParent);
+					var parentSpod:Object=cast Type.createInstance(parentClass,[]);
+						
+					var Pmanager:Manager<Object>=Reflect.field(parentClass,"manager");
+					var parent:Object=Pmanager.unsafeGet(parentId);
+					
+						
+					Reflect.callMethod(newCollectItem, "set_rel", [parent]);
+					newCollectItem.insert();
+					var newID=cast(newCollectItem).id;
+					var creator:MicroCreator= new MicroCreator();
+					var microFieldItem=creator.justGet(voName,cast(newCollectItem,Spodable).getFormule());
+					microFieldItem.id=newID;
+					microFieldItem.voName=voName;
+					microFieldItem.type= collection;
+				//	microFieldItem.field=
+					
+					var XmicroFieldItem= haxe.Serializer.run(microFieldItem);
+					Lib.print(XmicroFieldItem);
+		}
 		
 		public function ajoute(voName:String):Void{
 			trace("ajoute");
 			generator.generateComplexClassMapForm(voName);
-			jsLib.add(backjs);
-			//jsScript.add("pop();");
-			jsScript.add(backInstance+".instance.setClassMAp('"+generator.compressedClassMap+"');");
-			//jsScript.add("alert('popop');");
+			jsLib.addOnce(backjs);
+			
+			jsScript.add(backInstance+".instance.setClassMap('"+generator.compressedClassMap+"');");
+		
 			defaultAssign();
 			this.view.assign("currentVo",voName);	
-			this.view.assign("content", generator.formulaire);
-		//	this.view.assign("content", "popopo");
+		
+			this.view.assign("content",generator.render());
+		
+		
 			this.view.display("back/design.html");
 
 		}
@@ -150,6 +193,40 @@ class Pipo extends Back
 		public function delete(voName:String,id:Int):Void{
 			api.delete(voName,id);
 			nav(voName);
+		}
+		public function reorder(voName:String){
+			var manager:Manager<sys.db.Object>=cast (Type.resolveClass(GenericController.appConfig.voPackage+voName)).manager;
+			var table=manager.dbInfos().name;
+			trace("currentVo"+voName);
+			var data=Web.getParams().get("orderedList");
+			var tab:Array<Int>=haxe.Unserializer.run(data);
+			
+			//when then en php ... ça marche pas avec haxe 
+			//$liste=(1,3,6,9)// liste of spod_ids
+			//$ordre= poz
+		/*	function updateListe($liste){
+
+									    $ids = implode(',', $liste);
+									    $sql = "UPDATE favoris SET ordre = CASE id_album ";
+									    foreach ($liste as $ordre => $id_album) {
+									      $sql .= sprintf("WHEN %d THEN %d ", $id_album, $ordre);
+									    }
+									    $sql .= "END WHERE id_album IN ($ids)";
+											$sqlQuery = new SqlQuery($sql);
+											$ret = $this->executeUpdate($sqlQuery);
+									    return $ret;
+
+									}*/
+			
+						///ça peut etre plus efficace avec un When then
+						for (i in 0...tab.length) {  
+						           db.query("UPDATE "+table+" SET poz = "+i+" WHERE id = "+tab[i]+" ");
+						          }
+						
+			
+		
+			Lib.print("lkl"); //TODO :retourner un truc plus parlant genre success or not
+
 		}
 		
 	

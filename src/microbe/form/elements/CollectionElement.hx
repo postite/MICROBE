@@ -47,7 +47,7 @@ class CollectionElement extends FormElement
 	
 	override public function render(?_pos:Int):String
 	{		
-		var n = form.name + "_" +name;
+		var n = name;
 	/*	var tType:String = password ? "password" : "text";
 			
 			if (showLabelAsDefaultValue && value == label){

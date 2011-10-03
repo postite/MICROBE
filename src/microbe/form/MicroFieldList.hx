@@ -55,12 +55,12 @@ class MicroFieldList implements IMicrotype //, implements List<Dynamic>
 	public function toString():String{
 		//attention ne prends pas en compte les microFields Fields
 		indent++;
-		#if (php || js)
+		#if (php )
 		return "<div class='indent"+indent+"'><div class='microtrace'><p>MICROFIELDLIST: "+ voName + "</p><p>-"+", TYPE:"+type+" TAGGABLE="+taggable+"  POS:"+pos+", FIELD:"+field+"  ID:"+id+ "ElementId:"+elementId+", VALUE:"+value+ "</p><p>"+fields.toString()+"</p></div></div>";
 		#end
 		
-		#if flash
-		return "MICROFIELDLIST: "+ voName + "-"+", TYPE:"+type+", FIELD:"+field+"  ID:"+id+", VALUE:"+value+ "\n"+fields.toString()+"\n";
+		#if (flash || js)
+		return "MICROFIELDLIST: "+ voName +", TYPE:"+type+", FIELD:"+field+"  ID:"+id+",ElementId:"+elementId+" VALUE:"+value+ "\n"+fields.toString()+"\n";
 		#end
 		
 		return "";

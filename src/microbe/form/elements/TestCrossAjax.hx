@@ -21,7 +21,7 @@ class TestCrossAjax extends FormElement
 	}
 	override function render(?iter:Int):String{
 		//<iframe id='upload_target' name='upload_target' src='' style='width:0;height:0;border:0px solid #fff;'></iframe>
-		var n = form.name + "_" +name;
+		var n = name;
 	return "<div id='"+n+"' microbe="+Type.getClassName(TestCrossAjax)+"><img src='' id='preview"+iter+"' > <input type='file' name='fl"+iter+"' id='fileinput' enctype='multipart/form-data'/><input type='hidden' id='retour"+iter+"' value=''><iframe id='upload_target"+iter+"' name='upload_target"+iter+"' src='' style='width:0;height:0;border:0px solid #fff;'></iframe><input type='submit' value='Upload some data' id='uploadButton' /></div>";
 
 	}

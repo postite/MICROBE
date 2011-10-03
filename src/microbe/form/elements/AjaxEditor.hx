@@ -64,7 +64,7 @@ class AjaxEditor extends FormElement
 	
 	override public function render(?iter:Int):String
 	{
-		var n = form.name + "_" +name;
+		var n = name;
 		
 	//	editorStyles = StringTools.replace(editorStyles, "\n", " ");
 	//	editorStyles = StringTools.replace(editorStyles, "\r", " ");

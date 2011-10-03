@@ -19,8 +19,14 @@ class Nav extends Navigation
 	b.label="edito";
 	b.vo="Edito";
 	
+	var c:NavItem=cast {};
+	c.data=3;
+	c.label="relationTest";
+	c.vo="RelationTest";
+	
 	items.add(a);
 	items.add(b);
+	items.add(c);
 	
 	}
 }

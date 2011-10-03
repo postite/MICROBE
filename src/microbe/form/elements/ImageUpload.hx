@@ -14,7 +14,7 @@ class ImageUpload extends FileUpload
 	}
 	override public function render(?iter:Int):String
 	{
-		var n = form.name + "_" +name;
+		var n = name;
 		//TODO
 		//var path = toFolder.substr((Poko.instance.config.applicationPath + "res/").length);
 	

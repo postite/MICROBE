@@ -22,7 +22,7 @@ class AjaxUploader extends FormElement
 	}
 	override function render(?iter:Int):String{
 	
-		var n = form.name + "_" +name;
+		var n = name;
 		var str="";
 		str+="<div id='"+n+"' microbe="+composantName+">";
 		str+="<img src='' id='"+composantName+"preview"+iter+"' >";

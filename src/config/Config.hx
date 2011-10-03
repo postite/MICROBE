@@ -36,6 +36,8 @@ import controllers.ImageBase;
 import controllers.Myfront;
 import controllers.Gap;
 import controllers.Login;
+import vo.RelationTest;
+import vo.ChildTest;
 
 class Config extends haxigniter.server.Config
 {
