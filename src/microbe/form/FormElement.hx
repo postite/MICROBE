@@ -101,6 +101,7 @@ class FormElement
 	
 	public function init()
 	{
+	
 		inited = true;
 	}
 	
@@ -117,19 +118,22 @@ class FormElement
 	public function populate():Void
 	{
 		#if php
+		
 		if (!inited)
 			init();
-	
+		
 		var n = form.name + "_" + name;
 		
 		// tentative d'implementation
 		 var v=php.Web.getParams().get(n);
+		trace("v="+php.Web.getParams());
 		if (v != null) value = v;
+		
 		//Todo implementer avec haxigniter
 		/*var v = Poko.instance.params.get(n);
 				
 				if (v != null) value = v;*/
-				#end
+		#end
 	}
 
 	public function getErrors():List<String>

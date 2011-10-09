@@ -6,4 +6,4 @@
 -lib erazor
 -php www
 
---no-traces
+#--no-traces

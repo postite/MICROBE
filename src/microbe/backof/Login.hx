@@ -18,9 +18,11 @@ import php.db.ResultSet;
 import sys.db.ResultSet;
 #end
 /**
+
  * ...
  * @author postite
- */
+
+*/
 
 
 typedef Utilisateur = {
@@ -75,7 +77,7 @@ class Login extends GenericController, implements Controller
 	//	Lib.print("popopop");
 	//	trace("login"+"index");
 		var formulaire:Form = creeForm();
-		formulaire.action = url.siteUrl()+"/login/checkId/";
+		formulaire.action = url.siteUrl()+"/login/checkid/pop";
 		defaultAssign();
 	
 		this.view.assign("content", formulaire);
@@ -83,13 +85,15 @@ class Login extends GenericController, implements Controller
 		this.view.display("back/design.html");
 		
 	}
-	public function checkId(){
+	public function checkid(?pop:String){
 	//	trace("youhou"+"checkID");
 		var formulaire:Form = creeForm();
 		formulaire.populateElements();
 		defaultAssign();
-		this.view.assign("content", formulaire);
-		//this.view.display("back/design.mtt");
+		this.view.assign("content",formulaire);
+	//	this.view.display("back/design.html");
+		
+	//return 	erreur("pop="+pop);
 		var result:ResultSet = this.db.query("SELECT * FROM user WHERE nom LIKE '" + formulaire.getValueOf('login') + "' AND mdp LIKE '" + formulaire.getValueOf('mdp')+"'");
 		if (result.length > 0) {
 			var u:UserVo=result.next();
@@ -100,18 +104,18 @@ class Login extends GenericController, implements Controller
 						trace("user=" + user);*/
 			success(u);
 		}else {
-			erreur();
+			erreur("pop="+pop);
 		}
 		
 	}
-	private function erreur() {
-		trace("erreur");
+	public function erreur(?param) {
+		trace("errur"+param);
 		var formulaire:Form = creeForm();
 		formulaire.populateElements();
 		defaultAssign();
 		
 		this.view.assign("content", formulaire);
-		this.view.assign("commentaire", "erreur d identification");
+		this.view.assign("commentaire", "erreur d'identification");
 		this.view.display("back/design.html");
 	}
 	

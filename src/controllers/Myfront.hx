@@ -3,10 +3,11 @@ import microbe.Api;
 import haxigniter.server.libraries.Url;
 import microbe.controllers.GenericController;
 import haxigniter.server.request.BasicHandler;
-import haxigniter.server.libraries.LibCurl;
+
 import php.Lib;
 import microbe.vo.Spodable;
 import php.Utf8;
+
 class Myfront extends GenericController
 {
 	
@@ -36,7 +37,7 @@ class Myfront extends GenericController
 		this.view.assign("content",null);
 //	var news= vo.News.manager.all();
 	
-	var news= vo.News.manager.search({titre:"emma"});
+		var news= vo.News.manager.search({titre:"emma"});
 		this.view.assign("news", news);
 		
 		this.view.display("front/frontest.html");

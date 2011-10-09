@@ -1,34 +1,69 @@
 package controllers;
-
+/*
 import vo.UserVo;
-import microbe.backof.Back;
-class Test
+import microbe.backof.Back;*/
+import microbe.controllers.GenericController;
+import microbe.form.Form;
+import microbe.form.elements.Input;
+import microbe.form.elements.Button;
+import haxigniter.server.request.BasicHandler;
+import haxigniter.server.libraries.Url;
+class Test extends GenericController
 
-
-	extends Back
 	{
+		var url:Url;
 		public function new()
 		{
-			// Call the superclass to set up database, configuration, etc
-			super(new Login());
-
-			var url = new haxigniter.server.libraries.Url(this.configuration);
-			var user= new UserVo();
-			user.nom="pop";
-			session.user=user;
-			// Some default view assignments for every page
-			//this.view.assign('application', 'haXigniter');
-
-			// The siteUrl() method creates a link to the web directory haXigniter is currently
-			// located, so links won't be broken if moved somewhere else.
-			//this.view.assign('link', url.siteUrl());
-
-		//	this.view.assign('id', null);
+			super();
+			this.requestHandler= new BasicHandler(this.configuration);
+			url = new Url(this.configuration);
 		}
-
-		override public function index()
+		
+		private function creeForm():Form {
+			var formulaire:Form = new Form("logForm");
+			formulaire.addElement(new Input("login", "identifiant"));
+			formulaire.addElement(new Input("mdp", "mot de passe"));
+			var bouton:Button = new Button("submit", "soumettre", "soumettre");
+			formulaire.setSubmitButton(bouton);
+			return formulaire;
+		}
+		 public function index()
 		{
+			var formulaire:Form = creeForm();
+			formulaire.action = url.siteUrl()+"/test/checkid/";
+		//	defaultAssign();
+
+			this.view.assign("content", formulaire);
+			
+			
 			// Displays 'start/index.mtt' (className/method, extension is from the ViewEngine.)
-			this.view.display("test/index.mtt");
+			this.view.assign("content",formulaire);
+			this.view.display("test/logintest.html");
 		}
+		public function checkid() : Void {
+			var formulaire:Form = creeForm();
+			formulaire.populateElements();
+			trace("olo"+php.Web.getParams());
+		//	formulaire.getElement("login").value=php.Web.getParams().get("login");
+			/*for(a in php.Web.getParams().keys()){
+							//formulaire.getElement(a).value=php.Web.getParams().get(a);
+							trace("a="+a);
+						}*/
+			
+			for (elem in formulaire.getElements() ){
+				trace("elem="+elem.value);
+			}
+		//	formulaire.action = url.siteUrl()+"/test/checkid/";
+		//	defaultAssign();
+
+			this.view.assign("content", formulaire);
+			
+			
+			// Displays 'start/index.mtt' (className/method, extension is from the ViewEngine.)
+			this.view.assign("content",formulaire);
+			this.view.display("test/logintest.html");
+		}
+		
+		
+		
 }

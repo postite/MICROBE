@@ -18,12 +18,18 @@ class Login extends microbe.backof.Login
 			super.index();
 		}
 		
-		override public function checkId():Void{
-			super.checkId();
-		}
+	override public function checkid(?param:String):Void{
+				super.checkid();
+	}
 	
 	override public function success(result:UserVo) {
 		super.success(result);
 	}
-	
+	override public function erreur(?p){
+	super.erreur(p);
+	}	
+
 }
+	
+
+

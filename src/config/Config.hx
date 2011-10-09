@@ -25,9 +25,9 @@ import neko.Sys; import neko.Web;
 |
 */
 //import controllers.Start;
-
+import controllers.Terazor;
 import controllers.Myback;
-//import controllers.Test;
+import controllers.Test;
 import controllers.Pipo;
 import vo.News;
 import vo.Edito;
@@ -36,8 +36,8 @@ import controllers.ImageBase;
 import controllers.Myfront;
 import controllers.Gap;
 import controllers.Login;
-import vo.RelationTest;
-import vo.ChildTest;
+//import vo.RelationTest;
+//import vo.ChildTest;
 
 class Config extends haxigniter.server.Config
 {

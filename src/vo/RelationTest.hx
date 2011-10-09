@@ -5,6 +5,7 @@ import sys.db.Types;
 import microbe.vo.Spodable;
 import microbe.form.IMicrotype;
 
+@:id(id)
 @:table("relationtest")
 class RelationTest extends Object, implements Spodable
 {
