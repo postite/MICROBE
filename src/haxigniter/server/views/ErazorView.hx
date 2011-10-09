@@ -24,7 +24,7 @@ class ErazorView extends ViewEngine
 		this.templateExtension = 'html';
 		wrappers= new List<Template>();
 		this.templateVars = new ErazorVars();
-		assign("include", function(file){	return inRender(file);});
+		assign("include", function(file,?suppVar:Hash<Dynamic>){	return inRender(file,suppVar);});
 		assign("wrap", function(file){  wrap(file);});
 		
 		//assign("layoutContent","...");
@@ -67,8 +67,12 @@ class ErazorView extends ViewEngine
 		var t = new erazor.Template(t);
 		return t.execute(this.templateVars);
 	}
-	private function inRender(inTemplate):String{
+	private function inRender(inTemplate,?suppVar:Hash<Dynamic>):String{
 		//php.Lib.print("templte="+inTemplate);
+		if( suppVar != null){
+			for (supp in suppVar.keys())
+			assign(supp,suppVar.get(supp));
+		}
 			var t:erazor.Template;
 			var fileContent = File.getContent(this.templatePath+inTemplate);
 			//php.Lib.print(fileContent);
