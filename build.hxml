@@ -6,16 +6,16 @@
 -lib erazor
 -php www
 
---no-traces
+#--no-traces
 --next
 
 #javascript back
--main microbe.jsTools.BackJS
--cp src
--js www/microbe/js/backjs.js
--lib feffects
--lib hxs
--D noEmbedJS
+# -main microbe.jsTools.BackJS
+# -cp src
+# -js www/microbe/js/backjs.js
+# -lib feffects
+# -lib hxs
+# -D noEmbedJS
 #--no-traces
 
 #--next
@@ -33,7 +33,7 @@
 #-cmd 	rsync -Haurov --delete --exclude 'lib' --exclude 'thieum'  -e ssh /Users/postite/Dropbox/TAMBOUR/www/  postite@ssh.alwaysdata.com:www
 #-cmd open http://postite.alwaysdata.net/
 
--cmd open http://localhost:8888/index.php/pipo
+-cmd open http://localhost:8888/index.php/terazor
 #-cmd open http://postite.alwaysdata.net/
 
 # -main TestInstance
