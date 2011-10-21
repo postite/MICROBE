@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>src/Tambour.hx</string>
+	<string>build.hxml</string>
 	<key>documents</key>
 	<array>
 		<dict>
 			<key>filename</key>
 			<string>build.hxml</string>
 			<key>lastUsed</key>
-			<date>2011-10-07T12:47:14Z</date>
+			<date>2011-10-19T06:59:41Z</date>
 		</dict>
 		<dict>
 			<key>expanded</key>
@@ -23,14 +23,36 @@
 			<string>src</string>
 		</dict>
 		<dict>
-			<key>expanded</key>
-			<true/>
 			<key>name</key>
 			<string>www</string>
 			<key>regexFolderFilter</key>
 			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
 			<key>sourceDirectory</key>
 			<string>www</string>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>export.sh</string>
+			<key>lastUsed</key>
+			<date>2011-10-14T16:31:32Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>haxelib.xml</string>
+			<key>lastUsed</key>
+			<date>2011-10-14T16:29:44Z</date>
+		</dict>
+		<dict>
+			<key>expanded</key>
+			<true/>
+			<key>name</key>
+			<string>release</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>selected</key>
+			<true/>
+			<key>sourceDirectory</key>
+			<string>release</string>
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
@@ -42,14 +64,58 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>12</integer>
+				<integer>16</integer>
 				<key>line</key>
-				<integer>17</integer>
+				<integer>11</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>6</integer>
+		</dict>
+		<key>export.sh</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>39</integer>
+				<key>line</key>
+				<integer>12</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>haxelib.xml</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>17</integer>
+				<key>line</key>
+				<integer>3</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>12</integer>
+				<key>line</key>
+				<integer>3</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>19</integer>
+				<key>line</key>
+				<integer>3</integer>
+			</dict>
 		</dict>
 		<key>src/Nav.hx</key>
 		<dict>
@@ -1209,6 +1275,8 @@
 		<string>src/vo/UserVo.hx</string>
 		<string>src/monjs/FrontJs.hx</string>
 		<string>src/Tambour.hx</string>
+		<string>haxelib.xml</string>
+		<string>export.sh</string>
 		<string>src/Nav.hx</string>
 		<string>src/vo/News.hx</string>
 		<string>src/vo/Taxo.hx</string>
@@ -1219,58 +1287,14 @@
 	<true/>
 	<key>treeState</key>
 	<dict>
-		<key>src</key>
+		<key>release</key>
 		<dict>
 			<key>isExpanded</key>
 			<true/>
 			<key>subItems</key>
-			<dict>
-				<key>config</key>
-				<dict>
-					<key>isExpanded</key>
-					<true/>
-					<key>subItems</key>
-					<dict/>
-				</dict>
-				<key>controllers</key>
-				<dict>
-					<key>isExpanded</key>
-					<true/>
-					<key>subItems</key>
-					<dict/>
-				</dict>
-				<key>jquery</key>
-				<dict>
-					<key>isExpanded</key>
-					<true/>
-					<key>subItems</key>
-					<dict>
-						<key>ui</key>
-						<dict>
-							<key>isExpanded</key>
-							<true/>
-							<key>subItems</key>
-							<dict/>
-						</dict>
-					</dict>
-				</dict>
-				<key>monjs</key>
-				<dict>
-					<key>isExpanded</key>
-					<true/>
-					<key>subItems</key>
-					<dict/>
-				</dict>
-				<key>vo</key>
-				<dict>
-					<key>isExpanded</key>
-					<true/>
-					<key>subItems</key>
-					<dict/>
-				</dict>
-			</dict>
+			<dict/>
 		</dict>
-		<key>www</key>
+		<key>src</key>
 		<dict>
 			<key>isExpanded</key>
 			<true/>
@@ -1279,6 +1303,6 @@
 		</dict>
 	</dict>
 	<key>windowFrame</key>
-	<string>{{65, 57}, {1335, 772}}</string>
+	<string>{{44, 82}, {1335, 772}}</string>
 </dict>
 </plist>
