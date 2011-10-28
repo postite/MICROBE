@@ -22,6 +22,7 @@ import microbe.form.elements.CollectionElement;
 import microbe.form.FormElement;
 
 
+
 ///import all Components
 import microbe.form.elements.FakeElement;
 import microbe.form.elements.DeleteButton;
@@ -32,7 +33,7 @@ import microbe.form.elements.AjaxUploader;
 import microbe.form.elements.CheckBox;
 import microbe.form.elements.AjaxDate;
 import microbe.form.elements.TagView;
-
+import microbe.form.elements.IframeUploader;
 
 
 class FormGenerator
@@ -99,11 +100,12 @@ public function render():String{
 						//var deleteaction:String=DeleteButton.action; 
 						var submit = new Button("submit", "enregistrer","enregistrer",BUTTON);
 						submit.cssClass="submitor";
-						var delete = new DeleteButton("effacer", "effacer","effacer",BUTTON,"poop");
-						delete.cssClass="deletebutton";
+						var delete = new DeleteButton(nomVo+"_"+_formulaire.name+"_effacer", "effacer !");
+						//delete.cssClass="deletebutton";
 						//submit.cssClass="monbouton";
 						_formulaire.setSubmitButton(submit);
-						_formulaire.addElement(delete);			
+						_formulaire.setDeleteButton(delete);
+						//_formulaire.addElement(delete);			
 						_classMap.submit=_formulaire.name+"_"+"submit";
 						formulaire=_formulaire;		
 						classMap=_classMap;

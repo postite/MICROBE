@@ -1,4 +1,122 @@
 $estr = function() { return js.Boot.__string_rec(this,''); }
+if(typeof microbe=='undefined') microbe = {}
+if(!microbe.form) microbe.form = {}
+microbe.form.AjaxElement = function(_microfield,_iter) {
+	if( _microfield === $_ ) return;
+	microbe.tools.Debug.Alerte("new",{ fileName : "AjaxElement.hx", lineNumber : 23, className : "microbe.form.AjaxElement", methodName : "new"});
+	if(Std["is"](_microfield,microbe.form.Microfield)) {
+		this.microfield = _microfield;
+		this.id = _microfield.elementId;
+		this.field = _microfield.field;
+		this.element = _microfield.element;
+		this.value = _microfield.value;
+	}
+	if(Std["is"](_microfield,microbe.form.MicroFieldList)) {
+		this.microfieldliste = _microfield;
+		this.id = _microfield.elementId;
+		this.field = _microfield.field;
+		this.element = _microfield.element;
+		this.value = _microfield.value;
+		this.voName = _microfield.voName;
+		this.spodId = _microfield.id;
+	}
+	if(_iter != null) this.pos = _iter;
+	this.setValue(this.value);
+}
+microbe.form.AjaxElement.__name__ = ["microbe","form","AjaxElement"];
+microbe.form.AjaxElement.prototype.id = null;
+microbe.form.AjaxElement.prototype.microfield = null;
+microbe.form.AjaxElement.prototype.microfieldliste = null;
+microbe.form.AjaxElement.prototype.field = null;
+microbe.form.AjaxElement.prototype.element = null;
+microbe.form.AjaxElement.prototype.value = null;
+microbe.form.AjaxElement.prototype.pos = null;
+microbe.form.AjaxElement.prototype.voName = null;
+microbe.form.AjaxElement.prototype.spodId = null;
+microbe.form.AjaxElement.prototype.focus = function() {
+	new js.JQuery("#" + this.id).addClass("borded");
+}
+microbe.form.AjaxElement.prototype.getForm = function() {
+	var p = new js.JQuery("#" + this.id).parents("form");
+	return p.attr("id");
+}
+microbe.form.AjaxElement.prototype.output = function() {
+	return "yop";
+}
+microbe.form.AjaxElement.prototype.getValue = function() {
+	return "null";
+}
+microbe.form.AjaxElement.prototype.setValue = function(val) {
+}
+microbe.form.AjaxElement.prototype.__class__ = microbe.form.AjaxElement;
+if(!microbe.form.elements) microbe.form.elements = {}
+microbe.form.elements.IframeUploader = function(_microfield,_iter) {
+	if( _microfield === $_ ) return;
+	microbe.form.AjaxElement.call(this,_microfield,_iter);
+	this.self = this;
+	this.base_url = js.Lib.window.location.protocol + "//" + js.Lib.window.location.host;
+	this.getBouton().click($closure(this,"testUpload"));
+}
+microbe.form.elements.IframeUploader.__name__ = ["microbe","form","elements","IframeUploader"];
+microbe.form.elements.IframeUploader.__super__ = microbe.form.AjaxElement;
+for(var k in microbe.form.AjaxElement.prototype ) microbe.form.elements.IframeUploader.prototype[k] = microbe.form.AjaxElement.prototype[k];
+microbe.form.elements.IframeUploader.prototype.self = null;
+microbe.form.elements.IframeUploader.prototype.formDefaultAction = null;
+microbe.form.elements.IframeUploader.prototype.base_url = null;
+microbe.form.elements.IframeUploader.prototype.uploadtarget = null;
+microbe.form.elements.IframeUploader.prototype.init = function(e) {
+}
+microbe.form.elements.IframeUploader.prototype.testUpload = function(e) {
+	this.DisableForm();
+	this.formDefaultAction = new js.JQuery("#" + this.getForm()).attr("target");
+	var iframe = "<iframe id='uploadtarget' name='uploadtarget' style='width:0;height:0;border:0px solid #fff;'></iframe>";
+	new js.JQuery("#" + this.id).append(iframe);
+	new js.JQuery("#" + this.getForm()).attr("target","uploadtarget");
+	new js.JQuery("#" + this.id + " #" + this.getIframe()).load($closure(this,"onLoad"));
+	new js.JQuery("#" + this.getForm()).attr("action","/index.php/upload");
+	new js.JQuery("#" + this.getForm()).submit();
+}
+microbe.form.elements.IframeUploader.prototype.onLoad = function(e) {
+	var p = new js.JQuery("#" + this.id + " #" + this.getIframe()).contents().text();
+	new js.JQuery("#" + this.id + " #" + this.getIframe()).remove();
+	this.setValue(p);
+	this.getpreview().fadeTo(0,0);
+	this.getpreview().fadeTo(600,1);
+	new js.JQuery("#" + this.getForm()).attr("target",this.formDefaultAction);
+	this.enableForm();
+}
+microbe.form.elements.IframeUploader.prototype.getBouton = function() {
+	return new js.JQuery("#" + this.id + " #uploadButton");
+}
+microbe.form.elements.IframeUploader.prototype.getRetour = function() {
+	var retour = new js.JQuery("#" + this.id + " #retour");
+	return retour;
+}
+microbe.form.elements.IframeUploader.prototype.getInputName = function() {
+	var inputName = new js.JQuery("#" + this.id + " #fileinput").attr("name");
+	return inputName;
+}
+microbe.form.elements.IframeUploader.prototype.getpreview = function() {
+	return new js.JQuery("#" + this.id + " #preview");
+}
+microbe.form.elements.IframeUploader.prototype.getIframe = function() {
+	return "uploadtarget";
+}
+microbe.form.elements.IframeUploader.prototype.DisableForm = function() {
+	new js.JQuery("#" + this.getForm() + " input[name!='" + this.getInputName() + "']").attr("disabled","disabled");
+}
+microbe.form.elements.IframeUploader.prototype.enableForm = function() {
+	new js.JQuery("input").attr("disabled","");
+}
+microbe.form.elements.IframeUploader.prototype.getValue = function() {
+	var retour = this.getRetour().attr("value");
+	return retour;
+}
+microbe.form.elements.IframeUploader.prototype.setValue = function(val) {
+	if(val != null) this.getpreview().attr("src",js.Lib.window.location.protocol + "//" + js.Lib.window.location.host + "/index.php/imageBase/resize/thumb/" + val); else this.getpreview().attr("src","/microbe/css/assets/blankframe.png");
+	this.getRetour().attr("value",val);
+}
+microbe.form.elements.IframeUploader.prototype.__class__ = microbe.form.elements.IframeUploader;
 if(typeof haxe=='undefined') haxe = {}
 haxe.Http = function(url) {
 	if( url === $_ ) return;
@@ -101,7 +219,6 @@ haxe.Http.prototype.onError = function(msg) {
 haxe.Http.prototype.onStatus = function(status) {
 }
 haxe.Http.prototype.__class__ = haxe.Http;
-if(typeof microbe=='undefined') microbe = {}
 microbe.ClassMap = function(p) {
 }
 microbe.ClassMap.__name__ = ["microbe","ClassMap"];
@@ -530,8 +647,7 @@ microbe.ClassMapUtils.prototype.searchCollec = function(voName) {
 	return this.currentCollec;
 }
 microbe.ClassMapUtils.prototype.parseCollec = function(collec) {
-	haxe.Log.trace("<br/>collec=" + collec.getLength(),{ fileName : "ClassMapUtils.hx", lineNumber : 64, className : "microbe.ClassMapUtils", methodName : "parseCollec"});
-	haxe.Log.trace("<br/>new Collec=" + collec,{ fileName : "ClassMapUtils.hx", lineNumber : 66, className : "microbe.ClassMapUtils", methodName : "parseCollec"});
+	null;
 }
 microbe.ClassMapUtils.prototype.searchCollecAlgo = function(item) {
 	if(item.type == microbe.form.InstanceType.collection && item.voName == this.currentVoName) {
@@ -543,155 +659,20 @@ microbe.ClassMapUtils.prototype.searchCollecAlgo = function(item) {
 	}
 }
 microbe.ClassMapUtils.prototype.__class__ = microbe.ClassMapUtils;
-if(!microbe.form) microbe.form = {}
-microbe.form.AjaxElement = function(_microfield,_iter) {
-	if( _microfield === $_ ) return;
-	microbe.tools.Debug.Alerte("new",{ fileName : "AjaxElement.hx", lineNumber : 23, className : "microbe.form.AjaxElement", methodName : "new"});
-	if(Std["is"](_microfield,microbe.form.Microfield)) {
-		this.microfield = _microfield;
-		this.id = _microfield.elementId;
-		this.field = _microfield.field;
-		this.element = _microfield.element;
-		this.value = _microfield.value;
-	}
-	if(Std["is"](_microfield,microbe.form.MicroFieldList)) {
-		this.microfieldliste = _microfield;
-		this.id = _microfield.elementId;
-		this.field = _microfield.field;
-		this.element = _microfield.element;
-		this.value = _microfield.value;
-		this.voName = _microfield.voName;
-		this.spodId = _microfield.id;
-	}
-	if(_iter != null) this.pos = _iter;
-	this.setValue(this.value);
-}
-microbe.form.AjaxElement.__name__ = ["microbe","form","AjaxElement"];
-microbe.form.AjaxElement.prototype.id = null;
-microbe.form.AjaxElement.prototype.microfield = null;
-microbe.form.AjaxElement.prototype.microfieldliste = null;
-microbe.form.AjaxElement.prototype.field = null;
-microbe.form.AjaxElement.prototype.element = null;
-microbe.form.AjaxElement.prototype.value = null;
-microbe.form.AjaxElement.prototype.pos = null;
-microbe.form.AjaxElement.prototype.voName = null;
-microbe.form.AjaxElement.prototype.spodId = null;
-microbe.form.AjaxElement.prototype.focus = function() {
-	new js.JQuery("#" + this.id).addClass("borded");
-}
-microbe.form.AjaxElement.prototype.getForm = function() {
-	var p = new js.JQuery("#" + this.id).parents("form");
-	return p.attr("id");
-}
-microbe.form.AjaxElement.prototype.output = function() {
-	return "yop";
-}
-microbe.form.AjaxElement.prototype.getValue = function() {
-	return "null";
-}
-microbe.form.AjaxElement.prototype.setValue = function(val) {
-}
-microbe.form.AjaxElement.prototype.__class__ = microbe.form.AjaxElement;
-if(!microbe.form.elements) microbe.form.elements = {}
-microbe.form.elements.AjaxUploader = function(_microfield,_iter) {
-	if( _microfield === $_ ) return;
-	this.setComposant("AjaxUploader");
-	microbe.form.AjaxElement.call(this,_microfield,_iter);
-	this.self = this;
-	this.base_url = js.Lib.window.location.protocol + "//" + js.Lib.window.location.host;
-	this.getBouton().click($closure(this,"testUpload"));
-}
-microbe.form.elements.AjaxUploader.__name__ = ["microbe","form","elements","AjaxUploader"];
-microbe.form.elements.AjaxUploader.__super__ = microbe.form.AjaxElement;
-for(var k in microbe.form.AjaxElement.prototype ) microbe.form.elements.AjaxUploader.prototype[k] = microbe.form.AjaxElement.prototype[k];
-microbe.form.elements.AjaxUploader.prototype.self = null;
-microbe.form.elements.AjaxUploader.prototype.formDefaultAction = null;
-microbe.form.elements.AjaxUploader.prototype.base_url = null;
-microbe.form.elements.AjaxUploader.prototype.uploadtarget = null;
-microbe.form.elements.AjaxUploader.prototype._composantName = null;
-microbe.form.elements.AjaxUploader.prototype.composantName = null;
-microbe.form.elements.AjaxUploader.prototype.init = function(e) {
-	this.getCollectionContainer();
-}
-microbe.form.elements.AjaxUploader.prototype.getComposant = function() {
-	return this._composantName;
-}
-microbe.form.elements.AjaxUploader.prototype.setComposant = function(val) {
-	this._composantName = val;
-	return this._composantName;
-}
-microbe.form.elements.AjaxUploader.prototype.testUpload = function(e) {
-	this.DisableForm();
-	this.formDefaultAction = new js.JQuery("#" + this.getForm()).attr("target");
-	new js.JQuery("#" + this.getForm()).attr("target",this.getIframe());
-	new js.JQuery("#" + this.getIframe()).load($closure(this,"onLoad"));
-	new js.JQuery("#" + this.getForm()).attr("action","/index.php/upload");
-	new js.JQuery("#" + this.getForm()).submit();
-}
-microbe.form.elements.AjaxUploader.prototype.onLoad = function(e) {
-	var p = new js.JQuery("#" + this.getIframe()).contents().text();
-	this.setValue(p);
-	this.getpreview().fadeTo(0,0);
-	this.getpreview().fadeTo(600,1);
-	new js.JQuery("#" + this.getForm()).attr("target",this.formDefaultAction);
-	this.enableForm();
-}
-microbe.form.elements.AjaxUploader.prototype.getBouton = function() {
-	return new js.JQuery("#" + this.id + " #uploadButton");
-}
-microbe.form.elements.AjaxUploader.prototype.getRetour = function() {
-	var retour = new js.JQuery("#" + this.id + " #" + this.getComposant() + "retour" + this.getCollectionContainer());
-	return retour;
-}
-microbe.form.elements.AjaxUploader.prototype.getInputName = function() {
-	var inputName = new js.JQuery("#" + this.id + " #" + this.getComposant() + "fileinput").attr("name");
-	return inputName;
-}
-microbe.form.elements.AjaxUploader.prototype.getpreview = function() {
-	return new js.JQuery("#" + this.id + " #" + this.getComposant() + "preview" + this.getCollectionContainer());
-}
-microbe.form.elements.AjaxUploader.prototype.getCollectionContainer = function() {
-	var p = new js.JQuery("#" + this.id).parents(".collection");
-	if(p.attr("pos") != null) return p.attr("pos");
-	return "";
-}
-microbe.form.elements.AjaxUploader.prototype.getIframe = function() {
-	var ifr = new js.JQuery("#" + this.getComposant() + "upload_target" + this.getCollectionContainer()).attr("id");
-	return ifr;
-}
-microbe.form.elements.AjaxUploader.prototype.DisableForm = function() {
-	new js.JQuery("#" + this.getForm() + " input[name!='" + this.getInputName() + "']").attr("disabled","disabled");
-}
-microbe.form.elements.AjaxUploader.prototype.enableForm = function() {
-	new js.JQuery("input").attr("disabled","");
-}
-microbe.form.elements.AjaxUploader.prototype.getValue = function() {
-	var retour = this.getRetour().attr("value");
-	return retour;
-}
-microbe.form.elements.AjaxUploader.prototype.setValue = function(val) {
-	this.getpreview().attr("src",js.Lib.window.location.protocol + "//" + js.Lib.window.location.host + "/index.php/imageBase/resize/thumb/" + val);
-	this.getRetour().attr("value",val);
-}
-microbe.form.elements.AjaxUploader.prototype.__class__ = microbe.form.elements.AjaxUploader;
 microbe.form.elements.ImageUploader = function(_microfield,_iter) {
 	if( _microfield === $_ ) return;
-	microbe.form.elements.AjaxUploader.call(this,_microfield,_iter);
-	new js.JQuery(".file_input_button").click($closure(this,"onFake"));
+	microbe.form.elements.IframeUploader.call(this,_microfield,_iter);
+	new js.JQuery("#" + this.id + " .file_input_button").click($closure(this,"onFake"));
 }
 microbe.form.elements.ImageUploader.__name__ = ["microbe","form","elements","ImageUploader"];
-microbe.form.elements.ImageUploader.__super__ = microbe.form.elements.AjaxUploader;
-for(var k in microbe.form.elements.AjaxUploader.prototype ) microbe.form.elements.ImageUploader.prototype[k] = microbe.form.elements.AjaxUploader.prototype[k];
+microbe.form.elements.ImageUploader.__super__ = microbe.form.elements.IframeUploader;
+for(var k in microbe.form.elements.IframeUploader.prototype ) microbe.form.elements.ImageUploader.prototype[k] = microbe.form.elements.IframeUploader.prototype[k];
 microbe.form.elements.ImageUploader.prototype.onFake = function(e) {
 	e.preventDefault();
-	new js.JQuery(".hiddenfileinput").trigger("click");
-}
-microbe.form.elements.ImageUploader.prototype.setComposant = function(val) {
-	this._composantName = "ImageUploader";
-	return this._composantName;
+	new js.JQuery("#" + this.id + " .hiddenfileinput").trigger("click");
 }
 microbe.form.elements.ImageUploader.prototype.setValue = function(val) {
-	this.getpreview().attr("src",js.Lib.window.location.protocol + "//" + js.Lib.window.location.host + "/index.php/imageBase/resize/modele/" + val);
+	if(val != null) this.getpreview().attr("src",js.Lib.window.location.protocol + "//" + js.Lib.window.location.host + "/index.php/imageBase/resize/modele/" + val); else this.getpreview().attr("src","/microbe/css/assets/blankframe.png");
 	this.getRetour().attr("value",val);
 }
 microbe.form.elements.ImageUploader.prototype.__class__ = microbe.form.elements.ImageUploader;
@@ -998,15 +979,18 @@ hxs.Signal3.prototype.getTrigger = function(a,b,c) {
 hxs.Signal3.prototype.__class__ = hxs.Signal3;
 microbe.form.elements.CollectionElement = function(_liste,_pos) {
 	if( _liste === $_ ) return;
-	microbe.tools.Debug.Alerte("",{ fileName : "CollectionElement.hx", lineNumber : 104, className : "microbe.form.elements.CollectionElement", methodName : "new"});
+	microbe.tools.Debug.Alerte("",{ fileName : "CollectionElement.hx", lineNumber : 108, className : "microbe.form.elements.CollectionElement", methodName : "new"});
 	microbe.form.AjaxElement.call(this,_liste,_pos);
-	new js.JQuery("#delete" + _pos).click($closure(this,"delete"));
+	this.elementid = this.id + _pos;
+	js.Lib.alert("popoop" + this.elementid);
+	new js.JQuery("#" + this.elementid + " .deletecollection").click($closure(this,"delete"));
 }
 microbe.form.elements.CollectionElement.__name__ = ["microbe","form","elements","CollectionElement"];
 microbe.form.elements.CollectionElement.__super__ = microbe.form.AjaxElement;
 for(var k in microbe.form.AjaxElement.prototype ) microbe.form.elements.CollectionElement.prototype[k] = microbe.form.AjaxElement.prototype[k];
+microbe.form.elements.CollectionElement.prototype.elementid = null;
 microbe.form.elements.CollectionElement.prototype["delete"] = function(e) {
-	microbe.form.elements.CollectionElement.deleteSignal.dispatch(this.id + this.pos,this.voName,this.pos);
+	microbe.form.elements.CollectionElement.deleteSignal.dispatch(this.elementid,this.voName,this.pos);
 }
 microbe.form.elements.CollectionElement.prototype.active = function() {
 	new js.JQuery("#uploadButton");
@@ -1232,7 +1216,7 @@ microbe.form.elements.AjaxArea.prototype.getValue = function() {
 }
 microbe.form.elements.AjaxArea.prototype.setValue = function(val) {
 	microbe.tools.Debug.Alerte(val,{ fileName : "AjaxArea.hx", lineNumber : 79, className : "microbe.form.elements.AjaxArea", methodName : "setValue"});
-	new js.JQuery("#" + this.id).text(val);
+	new js.JQuery("#" + this.id).val(val);
 }
 microbe.form.elements.AjaxArea.prototype.__class__ = microbe.form.elements.AjaxArea;
 if(!microbe.jsTools) microbe.jsTools = {}
@@ -1473,21 +1457,20 @@ microbe.form.elements.DeleteButton.prototype.tooltip = null;
 microbe.form.elements.DeleteButton.prototype.start = null;
 microbe.form.elements.DeleteButton.prototype.buttonwidth = null;
 microbe.form.elements.DeleteButton.prototype.onClick = function(event) {
-	new js.JQuery("body").append("<div class='tooltip'><span>sure ?</span></div>");
+	new js.JQuery("#" + this.elementid).append("<div class='tooltip'><span>sure ?</span></div>");
 	var tooltip = new js.JQuery(".tooltip");
+	tooltip.css("top","0");
 	this.buttonwidth = new js.JQuery("#" + this.elementid).outerWidth();
-	new js.JQuery(".tooltip").offset(new js.JQuery("#" + this.elementid).offset());
-	this.start = new js.JQuery("#" + this.elementid).offset().left;
 	var maTween = new feffects.Tween(this.start,this.start + this.buttonwidth / 2,500,feffects.easing.Bounce.easeOut);
 	maTween.setTweenHandlers($closure(this,"anime"),$closure(this,"fini"));
 	maTween.start();
-	new js.JQuery("#" + this.elementid).unbind("click");
 }
 microbe.form.elements.DeleteButton.prototype.anime = function(e) {
 	new js.JQuery(".tooltip").css("left",e + "px");
 }
 microbe.form.elements.DeleteButton.prototype.fini = function(e) {
-	new js.JQuery("#" + this.elementid).text("oui");
+	new js.JQuery("#" + this.elementid + " span").first().text("oui");
+	new js.JQuery("#" + this.elementid).css("width","120px").css("text-align","left");
 	new js.JQuery("#" + this.elementid).bind("click",$closure(this,"onTool"));
 }
 microbe.form.elements.DeleteButton.prototype.onTool = function(e) {
@@ -1921,6 +1904,7 @@ microbe.form.Form.prototype.elements = null;
 microbe.form.Form.prototype.fieldsets = null;
 microbe.form.Form.prototype.forcePopulate = null;
 microbe.form.Form.prototype.submitButton = null;
+microbe.form.Form.prototype.deleteButton = null;
 microbe.form.Form.prototype.extraErrors = null;
 microbe.form.Form.prototype.requiredClass = null;
 microbe.form.Form.prototype.requiredErrorClass = null;
@@ -1951,6 +1935,9 @@ microbe.form.Form.prototype.removeElement = function(element) {
 }
 microbe.form.Form.prototype.setSubmitButton = function(el) {
 	return this.submitButton = el;
+}
+microbe.form.Form.prototype.setDeleteButton = function(el) {
+	return this.deleteButton = el;
 }
 microbe.form.Form.prototype.addFieldset = function(fieldSetKey,fieldSet) {
 	fieldSet.form = this;
@@ -2075,11 +2062,15 @@ microbe.form.Form.prototype.getPreview = function() {
 	var $it0 = this.getElements().iterator();
 	while( $it0.hasNext() ) {
 		var element = $it0.next();
-		if(element != this.submitButton) s.add("\t" + element.getPreview() + "\n");
+		if(element != this.submitButton || element != this.deleteButton) s.add("\t" + element.getPreview() + "\n");
 	}
 	if(this.submitButton != null) {
 		this.submitButton.form = this;
 		s.add(this.submitButton.getPreview());
+	}
+	if(this.deleteButton != null) {
+		this.deleteButton.form = this;
+		s.add(this.deleteButton.render());
 	}
 	s.b[s.b.length] = "</ul>\n" == null?"null":"</ul>\n";
 	s.add(this.getCloseTag());
@@ -2755,27 +2746,27 @@ microbe.form.elements.CollectionWrapper.prototype.createPlusBouton = function() 
 	plus.init();
 }
 microbe.form.elements.CollectionWrapper.prototype.onPLUS = function(s) {
+	microbe.tools.Debug.Alerte("onPlus",{ fileName : "CollectionWrapper.hx", lineNumber : 92, className : "microbe.form.elements.CollectionWrapper", methodName : "onPLUS"});
 	this.clone = this.me.children(".collection").last().clone();
 	var collength = this.me.children(".collection").length;
 	this.clone.attr("id",this.clone.attr("name"));
 	microbe.form.elements.CollectionWrapper.plusInfos.dispatch({ collectionName : this.clone.attr("name"), graine : collength, target : this});
 }
 microbe.form.elements.CollectionWrapper.prototype.notify = function(newColl) {
-	microbe.tools.Debug.Alerte("notify",{ fileName : "CollectionWrapper.hx", lineNumber : 97, className : "microbe.form.elements.CollectionWrapper", methodName : "notify"});
+	microbe.tools.Debug.Alerte("notify",{ fileName : "CollectionWrapper.hx", lineNumber : 101, className : "microbe.form.elements.CollectionWrapper", methodName : "notify"});
 	this.me.append(newColl);
 }
 microbe.form.elements.CollectionWrapper.prototype.onSortChanged = function(e,ui) {
 	var pop = this.sort.sortable("serialize",{ attribute : "tri", key : "id"});
-	haxe.Log.trace(pop,{ fileName : "CollectionWrapper.hx", lineNumber : 102, className : "microbe.form.elements.CollectionWrapper", methodName : "onSortChanged"});
 	var liste = pop.split("&id=");
 	liste[0] = liste[0].split("id=")[1];
 	var req = new haxe.Http(microbe.jsTools.BackJS.back_url + "reorder/" + this.spod);
 	req.setParameter("orderedList",haxe.Serializer.run(liste));
 	req.onData = function(d) {
-		haxe.Log.trace(d,{ fileName : "CollectionWrapper.hx", lineNumber : 111, className : "microbe.form.elements.CollectionWrapper", methodName : "onSortChanged"});
+		null;
 	};
 	req.request(true);
-	haxe.Log.trace("afterreorder",{ fileName : "CollectionWrapper.hx", lineNumber : 113, className : "microbe.form.elements.CollectionWrapper", methodName : "onSortChanged"});
+	null;
 }
 microbe.form.elements.CollectionWrapper.prototype.__class__ = microbe.form.elements.CollectionWrapper;
 hxs.Signal = function(caller) {
@@ -2812,6 +2803,22 @@ hxs.Signal.prototype.getTrigger = function() {
 	});
 }
 hxs.Signal.prototype.__class__ = hxs.Signal;
+js.Lib = function() { }
+js.Lib.__name__ = ["js","Lib"];
+js.Lib.isIE = null;
+js.Lib.isOpera = null;
+js.Lib.document = null;
+js.Lib.window = null;
+js.Lib.alert = function(v) {
+	alert(js.Boot.__string_rec(v,""));
+}
+js.Lib.eval = function(code) {
+	return eval(code);
+}
+js.Lib.setErrorHandler = function(f) {
+	js.Lib.onerror = f;
+}
+js.Lib.prototype.__class__ = js.Lib;
 microbe.jsTools.BackJS = function(p) {
 	if( p === $_ ) return;
 	microbe.tools.Debug.Alerte("new",{ fileName : "BackJS.hx", lineNumber : 56, className : "microbe.jsTools.BackJS", methodName : "new"});
@@ -2823,8 +2830,6 @@ microbe.jsTools.BackJS = function(p) {
 }
 microbe.jsTools.BackJS.__name__ = ["microbe","jsTools","BackJS"];
 microbe.jsTools.BackJS.instance = null;
-microbe.jsTools.BackJS.base_url = null;
-microbe.jsTools.BackJS.back_url = null;
 microbe.jsTools.BackJS.main = function() {
 	microbe.jsTools.BackJS.instance = new microbe.jsTools.BackJS();
 }
@@ -2840,7 +2845,7 @@ microbe.jsTools.BackJS.prototype.init = function() {
 	this.start();
 }
 microbe.jsTools.BackJS.prototype.start = function() {
-	microbe.tools.Debug.Alerte(Std.string(this.classMap),{ fileName : "BackJS.hx", lineNumber : 69, className : "microbe.jsTools.BackJS", methodName : "start"});
+	microbe.tools.Debug.Alerte(Std.string(this.classMap.submit),{ fileName : "BackJS.hx", lineNumber : 69, className : "microbe.jsTools.BackJS", methodName : "start"});
 	new js.JQuery("#" + this.classMap.submit).click(function(e) {
 		microbe.jsTools.BackJS.getInstance().record();
 	});
@@ -2861,21 +2866,21 @@ microbe.jsTools.BackJS.prototype.start = function() {
 }
 microbe.jsTools.BackJS.prototype.onSortChanged = function(e,ui) {
 	var pop = this.sort.sortable("serialize",{ attribute : "tri", key : "id"});
-	haxe.Log.trace(pop,{ fileName : "BackJS.hx", lineNumber : 105, className : "microbe.jsTools.BackJS", methodName : "onSortChanged"});
 	var liste = pop.split("&id=");
 	liste[0] = liste[0].split("id=")[1];
 	var req = new haxe.Http(microbe.jsTools.BackJS.back_url + "reorder/" + this.currentVo);
 	req.setParameter("orderedList",haxe.Serializer.run(liste));
 	req.onData = function(d) {
-		haxe.Log.trace(d,{ fileName : "BackJS.hx", lineNumber : 114, className : "microbe.jsTools.BackJS", methodName : "onSortChanged"});
+		null;
 	};
 	req.request(true);
-	haxe.Log.trace("afterreorder",{ fileName : "BackJS.hx", lineNumber : 116, className : "microbe.jsTools.BackJS", methodName : "onSortChanged"});
+	null;
 }
 microbe.jsTools.BackJS.prototype.setClassMap = function(compressedMap) {
 	this.classMap = haxe.Unserializer.run(compressedMap);
 }
 microbe.jsTools.BackJS.prototype.listen = function() {
+	microbe.tools.Debug.Alerte("listen",{ fileName : "BackJS.hx", lineNumber : 129, className : "microbe.jsTools.BackJS", methodName : "listen"});
 	microbe.form.elements.CollectionElement.deleteSignal.add($closure(this,"deleteCollection"));
 	microbe.form.elements.DeleteButton.sign.add($closure(this,"deleteSpod"));
 	new js.JQuery(".ajout").click($closure(this,"onAjoute"));
@@ -2893,21 +2898,19 @@ microbe.jsTools.BackJS.prototype.spodDelete = function(voName,id) {
 	var reponse = haxe.Http.requestUrl(microbe.jsTools.BackJS.back_url + "delete/" + voName + "/" + id);
 }
 microbe.jsTools.BackJS.prototype.record = function() {
-	haxe.Log.trace("clika" + this.microbeElements,{ fileName : "BackJS.hx", lineNumber : 161, className : "microbe.jsTools.BackJS", methodName : "record"});
+	microbe.tools.Debug.Alerte("record",{ fileName : "BackJS.hx", lineNumber : 162, className : "microbe.jsTools.BackJS", methodName : "record"});
 	var $it0 = this.microbeElements.iterator();
 	while( $it0.hasNext() ) {
 		var mic = $it0.next();
-		haxe.Log.trace("micVAlue=" + mic.getValue(),{ fileName : "BackJS.hx", lineNumber : 165, className : "microbe.jsTools.BackJS", methodName : "record"});
 		mic.microfield.value = mic.getValue();
 	}
 	this.AjaxFormTraitement();
-	haxe.Log.trace("finrecord",{ fileName : "BackJS.hx", lineNumber : 169, className : "microbe.jsTools.BackJS", methodName : "record"});
+	null;
 }
 microbe.jsTools.BackJS.prototype.AjaxFormTraitement = function() {
 	var me = this;
 	microbe.tools.Debug.Alerte(Std.string(this.classMap),{ fileName : "BackJS.hx", lineNumber : 174, className : "microbe.jsTools.BackJS", methodName : "AjaxFormTraitement"});
 	var compressedValues = haxe.Serializer.run(this.classMap);
-	haxe.Log.trace("classMAp=" + this.classMap + "back_url=" + microbe.jsTools.BackJS.back_url,{ fileName : "BackJS.hx", lineNumber : 178, className : "microbe.jsTools.BackJS", methodName : "AjaxFormTraitement"});
 	var req = new haxe.Http(microbe.jsTools.BackJS.back_url + "rec/");
 	req.setParameter("map",compressedValues);
 	req.onData = function(d) {
@@ -2916,7 +2919,7 @@ microbe.jsTools.BackJS.prototype.AjaxFormTraitement = function() {
 	req.request(true);
 }
 microbe.jsTools.BackJS.prototype.afterRecord = function(d) {
-	haxe.Log.trace("Fter Record",{ fileName : "BackJS.hx", lineNumber : 186, className : "microbe.jsTools.BackJS", methodName : "afterRecord"});
+	null;
 }
 microbe.jsTools.BackJS.prototype.deleteCollection = function(id,voName,pos) {
 	var maputil = new microbe.ClassMapUtils(this.classMap);
@@ -2935,17 +2938,27 @@ microbe.jsTools.BackJS.prototype.PlusCollection = function(plusInfos) {
 	this._plusInfos = plusInfos;
 	microbe.tools.Debug.Alerte(Std.string("name" + plusInfos.collectionName + "graine=" + plusInfos.graine),{ fileName : "BackJS.hx", lineNumber : 216, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
 	var req = new haxe.Http(microbe.jsTools.BackJS.back_url + "addCollectServerItem/");
+	microbe.tools.Debug.Alerte(microbe.jsTools.BackJS.back_url,{ fileName : "BackJS.hx", lineNumber : 219, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
 	req.setParameter("name",plusInfos.collectionName);
 	req.setParameter("voParent",this.classMap.voClass);
 	req.setParameter("voParentId",Std.string(this.classMap.id));
 	req.setParameter("graine",Std.string(plusInfos.graine));
+	req.onError = js.Lib.alert;
 	req.onData = function(x) {
 		me.onAddItemPlus(x,me._plusInfos);
 	};
 	req.request(true);
+	microbe.tools.Debug.Alerte("end",{ fileName : "BackJS.hx", lineNumber : 227, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
 }
 microbe.jsTools.BackJS.prototype.onAddItemPlus = function(x,PI) {
-	var raw = haxe.Unserializer.run(x);
+	var raw = null;
+	try {
+		raw = haxe.Unserializer.run(x);
+	} catch( err ) {
+		if( js.Boot.__instanceof(err,String) ) {
+			microbe.tools.Debug.Alerte(err,{ fileName : "BackJS.hx", lineNumber : 238, className : "microbe.jsTools.BackJS", methodName : "onAddItemPlus"});
+		} else throw(err);
+	}
 	this.parseplusCollec(raw.microliste,PI.graine);
 	PI.target.notify(raw.element);
 }
@@ -2960,7 +2973,7 @@ microbe.jsTools.BackJS.prototype.parseplusCollec = function(liste,pos) {
 	maputil.searchCollec(microfield.voName);
 	maputil.addInCollec(microfield);
 	this.classMap.fields = maputil.mapFields;
-	microbe.tools.Debug.Alerte(Std.string(this.microbeElements),{ fileName : "BackJS.hx", lineNumber : 246, className : "microbe.jsTools.BackJS", methodName : "parseplusCollec"});
+	microbe.tools.Debug.Alerte(Std.string(this.microbeElements),{ fileName : "BackJS.hx", lineNumber : 256, className : "microbe.jsTools.BackJS", methodName : "parseplusCollec"});
 }
 microbe.jsTools.BackJS.prototype.__class__ = microbe.jsTools.BackJS;
 microbe.jsTools.ElementBinder = function(p) {
@@ -2989,6 +3002,97 @@ microbe.jsTools.ElementBinder.prototype.iterator = function() {
 	return this.elements.iterator();
 }
 microbe.jsTools.ElementBinder.prototype.__class__ = microbe.jsTools.ElementBinder;
+microbe.form.elements.AjaxUploader = function(_microfield,_iter) {
+	if( _microfield === $_ ) return;
+	this.setComposant("AjaxUploader");
+	microbe.form.AjaxElement.call(this,_microfield,_iter);
+	this.self = this;
+	this.base_url = js.Lib.window.location.protocol + "//" + js.Lib.window.location.host;
+	this.makeIframeUniq();
+	this.getBouton().click($closure(this,"testUpload"));
+}
+microbe.form.elements.AjaxUploader.__name__ = ["microbe","form","elements","AjaxUploader"];
+microbe.form.elements.AjaxUploader.__super__ = microbe.form.AjaxElement;
+for(var k in microbe.form.AjaxElement.prototype ) microbe.form.elements.AjaxUploader.prototype[k] = microbe.form.AjaxElement.prototype[k];
+microbe.form.elements.AjaxUploader.prototype.self = null;
+microbe.form.elements.AjaxUploader.prototype.formDefaultAction = null;
+microbe.form.elements.AjaxUploader.prototype.base_url = null;
+microbe.form.elements.AjaxUploader.prototype.uploadtarget = null;
+microbe.form.elements.AjaxUploader.prototype._composantName = null;
+microbe.form.elements.AjaxUploader.prototype.uniqIframe = null;
+microbe.form.elements.AjaxUploader.prototype.composantName = null;
+microbe.form.elements.AjaxUploader.prototype.init = function(e) {
+	this.getCollectionContainer();
+}
+microbe.form.elements.AjaxUploader.prototype.getComposant = function() {
+	return this._composantName;
+}
+microbe.form.elements.AjaxUploader.prototype.setComposant = function(val) {
+	this._composantName = val;
+	return this._composantName;
+}
+microbe.form.elements.AjaxUploader.prototype.testUpload = function(e) {
+	this.DisableForm();
+	this.formDefaultAction = new js.JQuery("#" + this.getForm()).attr("target");
+	new js.JQuery("#" + this.getForm()).attr("target",this.getIframe());
+	js.Lib.alert(new js.JQuery("#" + this.getForm()).attr("target"));
+	new js.JQuery("#" + this.id + " #" + this.getIframe()).load($closure(this,"onLoad"));
+	new js.JQuery("#" + this.getForm()).attr("action","/index.php/upload");
+	new js.JQuery("#" + this.getForm()).submit();
+}
+microbe.form.elements.AjaxUploader.prototype.onLoad = function(e) {
+	var p = new js.JQuery("#" + this.id + " #" + this.getIframe()).contents().text();
+	this.setValue(p);
+	this.getpreview().fadeTo(0,0);
+	this.getpreview().fadeTo(600,1);
+	new js.JQuery("#" + this.getForm()).attr("target",this.formDefaultAction);
+	this.enableForm();
+}
+microbe.form.elements.AjaxUploader.prototype.getBouton = function() {
+	return new js.JQuery("#" + this.id + " #uploadButton");
+}
+microbe.form.elements.AjaxUploader.prototype.getRetour = function() {
+	var retour = new js.JQuery("#" + this.id + " #" + this.getComposant() + "retour" + this.getCollectionContainer());
+	return retour;
+}
+microbe.form.elements.AjaxUploader.prototype.getInputName = function() {
+	var inputName = new js.JQuery("#" + this.id + " #" + this.getComposant() + "fileinput").attr("name");
+	return inputName;
+}
+microbe.form.elements.AjaxUploader.prototype.getpreview = function() {
+	return new js.JQuery("#" + this.id + " #" + this.getComposant() + "preview" + this.getCollectionContainer());
+}
+microbe.form.elements.AjaxUploader.prototype.getCollectionContainer = function() {
+	var p = new js.JQuery("#" + this.id).parents(".collection");
+	if(p.attr("pos") != null) return p.attr("pos");
+	return "";
+}
+microbe.form.elements.AjaxUploader.prototype.makeIframeUniq = function() {
+	var ifr = new js.JQuery("#" + this.id + " #" + this.getComposant() + "upload_target" + this.getCollectionContainer());
+	var oldid = ifr.attr("id");
+	ifr.attr("id",oldid + Std["int"](Math.random() * 2000));
+	this.uniqIframe = ifr.attr("id");
+	ifr[0].contentWindow.name = this.uniqIframe;
+	js.Lib.alert("uniq=" + this.uniqIframe);
+}
+microbe.form.elements.AjaxUploader.prototype.getIframe = function() {
+	return this.uniqIframe;
+}
+microbe.form.elements.AjaxUploader.prototype.DisableForm = function() {
+	new js.JQuery("#" + this.getForm() + " input[name!='" + this.getInputName() + "']").attr("disabled","disabled");
+}
+microbe.form.elements.AjaxUploader.prototype.enableForm = function() {
+	new js.JQuery("input").attr("disabled","");
+}
+microbe.form.elements.AjaxUploader.prototype.getValue = function() {
+	var retour = this.getRetour().attr("value");
+	return retour;
+}
+microbe.form.elements.AjaxUploader.prototype.setValue = function(val) {
+	if(val != null) this.getpreview().attr("src",js.Lib.window.location.protocol + "//" + js.Lib.window.location.host + "/index.php/imageBase/resize/thumb/" + val); else this.getpreview().attr("src","/microbe/css/assets/blankframe.png");
+	this.getRetour().attr("value",val);
+}
+microbe.form.elements.AjaxUploader.prototype.__class__ = microbe.form.elements.AjaxUploader;
 haxe.Unserializer = function(buf) {
 	if( buf === $_ ) return;
 	this.buf = buf;
@@ -3485,22 +3589,6 @@ hxs.core.PriorityQueueIterator.prototype.next = function() {
 	return this.q.items[this.i++].item;
 }
 hxs.core.PriorityQueueIterator.prototype.__class__ = hxs.core.PriorityQueueIterator;
-js.Lib = function() { }
-js.Lib.__name__ = ["js","Lib"];
-js.Lib.isIE = null;
-js.Lib.isOpera = null;
-js.Lib.document = null;
-js.Lib.window = null;
-js.Lib.alert = function(v) {
-	alert(js.Boot.__string_rec(v,""));
-}
-js.Lib.eval = function(code) {
-	return eval(code);
-}
-js.Lib.setErrorHandler = function(f) {
-	js.Lib.onerror = f;
-}
-js.Lib.prototype.__class__ = js.Lib;
 microbe.form.elements.RichtextWym = function(_microfield) {
 	if( _microfield === $_ ) return;
 	microbe.form.AjaxElement.call(this,_microfield);
@@ -3848,10 +3936,10 @@ if(typeof(haxe_timers) == "undefined") haxe_timers = [];
 		return f(msg,[url+":"+line]);
 	}
 }
+microbe.form.AjaxElement.debug = false;
 haxe.Serializer.USE_CACHE = false;
 haxe.Serializer.USE_ENUM_INDEX = false;
 haxe.Serializer.BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%:";
-microbe.form.AjaxElement.debug = false;
 microbe.form.elements.ImageUploader.debug = true;
 feffects.Tween.aTweens = new haxe.FastList();
 feffects.Tween.aPaused = new haxe.FastList();
@@ -3866,10 +3954,12 @@ microbe.form.elements.TestCrossAjax.debug = false;
 microbe.form.elements.PlusCollectionButton.debug = 1;
 microbe.form.elements.PlusCollectionButton.cont = 0;
 microbe.form.elements.CollectionWrapper.debug = 1;
-microbe.jsTools.BackJS.debug = 0;
+js.Lib.onerror = null;
+microbe.jsTools.BackJS.debug = 1;
+microbe.jsTools.BackJS.base_url = js.Lib.window.location.protocol + "//" + js.Lib.window.location.host;
+microbe.jsTools.BackJS.back_url = microbe.jsTools.BackJS.base_url + "/index.php/pipo/";
 microbe.jsTools.ElementBinder.debug = 0;
 haxe.Unserializer.DEFAULT_RESOLVER = Type;
 haxe.Unserializer.BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%:";
 haxe.Unserializer.CODES = null;
-js.Lib.onerror = null;
 microbe.jsTools.BackJS.main()

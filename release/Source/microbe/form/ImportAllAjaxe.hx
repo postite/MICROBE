@@ -15,6 +15,7 @@ import microbe.form.elements.AjaxDate;
 import microbe.form.elements.TagView;
 import microbe.form.elements.CollectionElement;
 import microbe.form.elements.PlusCollectionButton;
+import microbe.form.elements.IframeUploader;
 
 class ImportAllAjaxe
 {

@@ -3,7 +3,7 @@ import haxe.remoting.ExternalConnection;
 import haxe.Http;
 import js.JQuery;
 import js.Lib;
-import js.SWFObject;
+//import js.SWFObject;
 using microbe.tools.Debug;
 class FrontJs
 {
@@ -26,7 +26,9 @@ class FrontJs
 	}
 	function embedSWF() : Void {
 			swfName="monswf";
-			var swf= new SWFObject("/swf/melle.swf",swfName,960,540,"10","#ffffff");
+			//var swf= new SWFObject("/swf/melle.swf",swfName,960,540,"10","#ffffff");
+			untyped __js__("swfobject.embedSWF('/swf/melle.swf', 'flasheader', '960', '540', '10', null, null, {allowScriptAccess:'always',bgcolor:'#ffffff'}, {name:'monswf',id:'monswf'}, null)");
+			
 		//	swf.addParam("allowScriptAccess","always"); // apaprement pas besoin de le mettre 
 			swf.write("flasheader");
 			trace("embeded");

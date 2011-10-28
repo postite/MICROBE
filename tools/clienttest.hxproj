@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project>
+  <!-- Output SWF options -->
+  <output>
+    <movie disabled="False" />
+    <movie input="" />
+    <movie path="..\skel\www\clienttest.js" />
+    <movie fps="0" />
+    <movie width="0" />
+    <movie height="0" />
+    <movie version="11" />
+    <movie background="#FFFFFF" />
+  </output>
+  <!-- Other classes to be compiled into your SWF -->
+  <classpaths>
+    <class path="..\skel\src" />
+    <class path=".." />
+  </classpaths>
+  <!-- Build options -->
+  <build>
+    <option directives="" />
+    <option flashStrict="False" />
+    <option mainClass="ClientTest" />
+    <option override="False" />
+    <option verbose="False" />
+    <option additional="" />
+  </build>
+  <!-- haxelib libraries -->
+  <haxelib>
+    <!-- example: <library name="..." /> -->
+  </haxelib>
+  <!-- Class files to compile (other referenced classes will automatically be included) -->
+  <compileTargets>
+    <compile path="src\Main.hx" />
+  </compileTargets>
+  <!-- Paths to exclude from the Project Explorer tree -->
+  <hiddenPaths>
+    <!-- example: <hidden path="..." /> -->
+  </hiddenPaths>
+  <!-- Executed before build -->
+  <preBuildCommand />
+  <!-- Executed after build -->
+  <postBuildCommand alwaysRun="False" />
+  <!-- Other project options -->
+  <options>
+    <option showHiddenPaths="False" />
+    <option testMovie="Custom" />
+    <option testMovieCommand="http://localhost/index.php" />
+  </options>
+</project>
+<!--
+package ;
+
+import haxigniter.client.restapi.RestApiClient;
+import haxigniter.common.restapi.RestApiResponse;
+
+class ClientTest
+{
+	static function main()
+	{
+		var restApi = new RestApiClient('URL');
+		restApi.read('items', function(response : RestApiResponse) {
+			trace(response);
+		});
+	}
+}
+-->
+<!--
+<html>
+	<body>
+		<div id="haxe:trace"></div>
+		<script src="clienttest.js"></script>
+	</body>
+</html>
+-->

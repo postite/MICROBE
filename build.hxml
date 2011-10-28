@@ -6,34 +6,38 @@
 -lib erazor
 -php www
 
-#--no-traces
+--no-traces
 --next
 
 #javascript back
-# -main microbe.jsTools.BackJS
-# -cp src
-# -js www/microbe/js/backjs.js
-# -lib feffects
-# -lib hxs
-# -D noEmbedJS
-#--no-traces
+-main microbe.jsTools.BackJS
+-cp src
+-js www/microbe/js/backjs.js
+-lib feffects
+-lib hxs
+-D noEmbedJS
+--no-traces
 
-#--next
+-cmd open http://localhost:8888/index.php/pipo
 
-
-# -cp src
-#   -main Tambour
-#   #-main Borb
-#   
-# -js www/js/tambour.js
-# -D noEmbedJS
-# --no-traces
-
-
+#### example pour synchronisation en ssl
 #-cmd 	rsync -Haurov --delete --exclude 'lib' --exclude 'thieum'  -e ssh /Users/postite/Dropbox/TAMBOUR/www/  postite@ssh.alwaysdata.com:www
 #-cmd open http://postite.alwaysdata.net/
+####
+
+#### compilation run.n pour generation squelette
+# --next
+# -main Main
+# -cp tools/runsrc
+# -neko run.n
+
+####
+
+
+#### compilation to haxelib
 -cmd   $TM_PROJECT_DIRECTORY"/export.sh" microbe
-#-cmd open http://localhost:8888/index.php/terazor
+####
+
 #-cmd open http://postite.alwaysdata.net/
 
 # -main TestInstance

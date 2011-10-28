@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>build.hxml</string>
+	<string>src/microbe/form/elements/CollectionWrapper.hx</string>
 	<key>documents</key>
 	<array>
 		<dict>
 			<key>filename</key>
 			<string>build.hxml</string>
 			<key>lastUsed</key>
-			<date>2011-10-19T06:59:41Z</date>
+			<date>2011-10-28T09:17:23Z</date>
 		</dict>
 		<dict>
 			<key>expanded</key>
@@ -23,24 +23,34 @@
 			<string>src</string>
 		</dict>
 		<dict>
+			<key>expanded</key>
+			<true/>
 			<key>name</key>
 			<string>www</string>
 			<key>regexFolderFilter</key>
 			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
 			<key>sourceDirectory</key>
 			<string>www</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>squelette</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string>../../Dropbox/LAB/HAXELAB/deployPotTest/squelette</string>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>export.sh</string>
 			<key>lastUsed</key>
-			<date>2011-10-14T16:31:32Z</date>
+			<date>2011-10-27T10:02:01Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>haxelib.xml</string>
 			<key>lastUsed</key>
-			<date>2011-10-14T16:29:44Z</date>
+			<date>2011-10-26T08:09:48Z</date>
 		</dict>
 		<dict>
 			<key>expanded</key>
@@ -49,10 +59,16 @@
 			<string>release</string>
 			<key>regexFolderFilter</key>
 			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
-			<key>selected</key>
-			<true/>
 			<key>sourceDirectory</key>
 			<string>release</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>tools</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string>../../Dropbox/LAB/HAXELAB/deployPotTest/tools</string>
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
@@ -64,58 +80,28 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>16</integer>
+				<integer>12</integer>
 				<key>line</key>
-				<integer>11</integer>
+				<integer>18</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>6</integer>
+			<integer>10</integer>
 		</dict>
 		<key>export.sh</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>39</integer>
+				<integer>33</integer>
 				<key>line</key>
-				<integer>12</integer>
+				<integer>29</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>haxelib.xml</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>17</integer>
-				<key>line</key>
-				<integer>3</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>12</integer>
-				<key>line</key>
-				<integer>3</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>19</integer>
-				<key>line</key>
-				<integer>3</integer>
-			</dict>
+			<integer>10</integer>
 		</dict>
 		<key>src/Nav.hx</key>
 		<dict>
@@ -150,30 +136,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>3</integer>
+				<integer>25</integer>
 				<key>line</key>
-				<integer>389</integer>
+				<integer>37</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>384</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>424</integer>
-			</dict>
+			<integer>17</integer>
 		</dict>
 		<key>src/controllers/Gap.hx</key>
 		<dict>
@@ -203,19 +173,33 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>src/controllers/Myfront.hx</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>15</integer>
+				<key>line</key>
+				<integer>34</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>14</integer>
+		</dict>
 		<key>src/controllers/Pipo.hx</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>20</integer>
+				<integer>19</integer>
 				<key>line</key>
-				<integer>28</integer>
+				<integer>200</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>213</integer>
+			<integer>59</integer>
 		</dict>
 		<key>src/controllers/Test.hx</key>
 		<dict>
@@ -239,6 +223,20 @@
 				<integer>148</integer>
 				<key>line</key>
 				<integer>21</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>src/jquery/ui/Draggable.hx</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>1</integer>
+				<key>line</key>
+				<integer>10</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -324,14 +322,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>5</integer>
+				<integer>8</integer>
 				<key>line</key>
-				<integer>94</integer>
+				<integer>106</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>74</integer>
+			<integer>81</integer>
 		</dict>
 		<key>src/microbe/backof/Back.hx</key>
 		<dict>
@@ -347,7 +345,7 @@
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>1</integer>
+			<integer>18</integer>
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
@@ -377,33 +375,19 @@
 			<key>firstVisibleLine</key>
 			<integer>70</integer>
 		</dict>
-		<key>src/microbe/controllers/GenericController.hx</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>1</integer>
-				<key>line</key>
-				<integer>88</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>src/microbe/factoryType/CollectionBehaviour.hx</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>55</integer>
+				<integer>3</integer>
 				<key>line</key>
-				<integer>55</integer>
+				<integer>59</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>41</integer>
 		</dict>
 		<key>src/microbe/factoryType/FormElementBehaviour.hx</key>
 		<dict>
@@ -473,51 +457,35 @@
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>19</integer>
+			<integer>0</integer>
 		</dict>
 		<key>src/microbe/form/Form.hx</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>13</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>193</integer>
+				<integer>334</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>169</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>11</integer>
-				<key>line</key>
-				<integer>193</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>19</integer>
-				<key>line</key>
-				<integer>193</integer>
-			</dict>
+			<integer>313</integer>
 		</dict>
 		<key>src/microbe/form/FormElement.hx</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>16</integer>
+				<integer>20</integer>
 				<key>line</key>
-				<integer>124</integer>
+				<integer>215</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>61</integer>
+			<integer>193</integer>
 		</dict>
 		<key>src/microbe/form/Formatter.hx</key>
 		<dict>
@@ -640,14 +608,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>11</integer>
+				<integer>26</integer>
 				<key>line</key>
-				<integer>31</integer>
+				<integer>62</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>43</integer>
+			<integer>52</integer>
 		</dict>
 		<key>src/microbe/form/elements/AjaxDate.hx</key>
 		<dict>
@@ -661,7 +629,7 @@
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>29</integer>
+			<integer>41</integer>
 		</dict>
 		<key>src/microbe/form/elements/AjaxEditor.hx</key>
 		<dict>
@@ -710,28 +678,28 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>10</integer>
+				<integer>5</integer>
 				<key>line</key>
-				<integer>24</integer>
+				<integer>168</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>135</integer>
+			<integer>141</integer>
 		</dict>
 		<key>src/microbe/form/elements/Button.hx</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>19</integer>
+				<integer>1</integer>
 				<key>line</key>
-				<integer>43</integer>
+				<integer>65</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>18</integer>
+			<integer>36</integer>
 		</dict>
 		<key>src/microbe/form/elements/CheckBox.hx</key>
 		<dict>
@@ -752,44 +720,42 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>2</integer>
+				<integer>24</integer>
 				<key>line</key>
-				<integer>61</integer>
+				<integer>120</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>32</integer>
+			<integer>98</integer>
 		</dict>
 		<key>src/microbe/form/elements/CollectionWrapper.hx</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>61</integer>
+				<integer>20</integer>
 				<key>line</key>
-				<integer>17</integer>
+				<integer>14</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>7</integer>
-			<key>selectFrom</key>
+			<integer>0</integer>
+		</dict>
+		<key>src/microbe/form/elements/DeleteButton.hx</key>
+		<dict>
+			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>58</integer>
+				<integer>1</integer>
 				<key>line</key>
-				<integer>17</integer>
+				<integer>48</integer>
 			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>63</integer>
-				<key>line</key>
-				<integer>17</integer>
-			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 		<key>src/microbe/form/elements/FakeElement.hx</key>
 		<dict>
@@ -852,14 +818,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>10</integer>
+				<integer>3</integer>
 				<key>line</key>
-				<integer>15</integer>
+				<integer>72</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>48</integer>
 		</dict>
 		<key>src/microbe/form/elements/Input.hx</key>
 		<dict>
@@ -875,19 +841,63 @@
 			<key>firstVisibleLine</key>
 			<integer>46</integer>
 		</dict>
+		<key>src/microbe/form/elements/PlusCollectionButton.hx</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>22</integer>
+				<key>line</key>
+				<integer>72</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>48</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>17</integer>
+				<key>line</key>
+				<integer>72</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>26</integer>
+				<key>line</key>
+				<integer>72</integer>
+			</dict>
+		</dict>
+		<key>src/microbe/form/elements/TailleSelector.hx</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>50</integer>
+				<key>line</key>
+				<integer>50</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>28</integer>
+		</dict>
 		<key>src/microbe/jsTools/BackJS.hx</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>26</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>21</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>210</integer>
+			<integer>0</integer>
 		</dict>
 		<key>src/microbe/jsTools/ElementBinder.hx</key>
 		<dict>
@@ -897,6 +907,20 @@
 				<integer>24</integer>
 				<key>line</key>
 				<integer>27</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>src/microbe/services/Spodeur.hx</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>14</integer>
+				<key>line</key>
+				<integer>39</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -922,23 +946,23 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>1</integer>
+				<integer>5</integer>
 				<key>line</key>
-				<integer>74</integer>
+				<integer>28</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>20</integer>
+			<integer>11</integer>
 		</dict>
 		<key>src/vo/ChildTest.hx</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>19</integer>
+				<integer>67</integer>
 				<key>line</key>
-				<integer>13</integer>
+				<integer>27</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -978,44 +1002,28 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>1</integer>
 				<key>line</key>
-				<integer>3</integer>
+				<integer>31</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>20</integer>
-				<key>line</key>
-				<integer>3</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>3</integer>
-			</dict>
 		</dict>
 		<key>src/vo/Taxo.hx</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>46</integer>
+				<integer>21</integer>
 				<key>line</key>
-				<integer>25</integer>
+				<integer>4</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>2</integer>
+			<integer>0</integer>
 		</dict>
 		<key>src/vo/UserVo.hx</key>
 		<dict>
@@ -1066,7 +1074,7 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>36</integer>
+				<integer>9</integer>
 				<key>line</key>
 				<integer>184</integer>
 			</dict>
@@ -1094,9 +1102,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>18</integer>
+				<integer>31</integer>
 				<key>line</key>
-				<integer>4</integer>
+				<integer>3</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -1122,30 +1130,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>4</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>199</integer>
+				<integer>25</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>116</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>3</integer>
-				<key>line</key>
-				<integer>192</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>4</integer>
-				<key>line</key>
-				<integer>199</integer>
-			</dict>
+			<integer>31</integer>
 		</dict>
 		<key>www/microbe/css/microbeForm.css</key>
 		<dict>
@@ -1166,14 +1158,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>3</integer>
+				<integer>18</integer>
 				<key>line</key>
-				<integer>88</integer>
+				<integer>91</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>57</integer>
+			<integer>65</integer>
 		</dict>
 		<key>www/views/back/menu.html</key>
 		<dict>
@@ -1221,65 +1213,42 @@
 	<key>openDocuments</key>
 	<array>
 		<string>build.hxml</string>
-		<string>src/microbe/controllers/GenericController.hx</string>
-		<string>src/microbe/backof/Login.hx</string>
-		<string>src/controllers/Test.hx</string>
-		<string>src/controllers/Login.hx</string>
-		<string>src/controllers/Pipo.hx</string>
-		<string>src/haxigniter/server/request/AuthRequestDecorator.hx</string>
-		<string>src/microbe/backof/Back.hx</string>
-		<string>www/lib/controllers/Pipo.class.php</string>
-		<string>src/microbe/jsTools/BackJS.hx</string>
+		<string>src/monjs/FrontJs.hx</string>
+		<string>src/controllers/Myfront.hx</string>
 		<string>src/microbe/form/elements/CollectionWrapper.hx</string>
-		<string>src/jquery/ui/Sortable.hx</string>
-		<string>src/microbe/jsTools/ElementBinder.hx</string>
-		<string>src/controllers/Gap.hx</string>
-		<string>src/microbe/form/elements/FakeElement.hx</string>
-		<string>src/microbe/form/elements/FileUpload.hx</string>
-		<string>src/microbe/form/elements/Hidden.hx</string>
-		<string>src/microbe/form/elements/ImageUpload.hx</string>
-		<string>src/microbe/form/elements/ImageUploader.hx</string>
-		<string>src/microbe/form/elements/Input.hx</string>
-		<string>src/microbe/form/elements/CollectionElement.hx</string>
-		<string>src/microbe/form/OldFormElement.hx</string>
-		<string>src/microbe/form/Formatter.hx</string>
-		<string>src/microbe/form/ImportAllAjaxe.hx</string>
-		<string>src/microbe/factoryType/CollectionBehaviour.hx</string>
-		<string>www/lib/microbe/form/FormElement.class.php</string>
-		<string>www/lib/sys/db/Manager.class.php</string>
-		<string>src/microbe/form/Form.hx</string>
-		<string>src/microbe/factoryType/FormElementBehaviour.hx</string>
-		<string>src/microbe/factoryType/SpodableBehaviour.hx</string>
-		<string>src/microbe/form/elements/AjaxInput.hx</string>
 		<string>src/microbe/form/elements/AjaxUpload.hx</string>
 		<string>src/microbe/form/elements/AjaxUploader.hx</string>
-		<string>src/microbe/form/elements/Button.hx</string>
-		<string>src/microbe/form/elements/CheckBox.hx</string>
-		<string>src/microbe/form/elements/AjaxArea.hx</string>
-		<string>src/microbe/form/elements/AjaxDate.hx</string>
-		<string>src/microbe/form/elements/AjaxEditor.hx</string>
-		<string>src/microbe/factoryType/IBehaviour.hx</string>
-		<string>src/microbe/factoryType/TagBehaviour.hx</string>
-		<string>src/microbe/form/IMicrotype.hx</string>
-		<string>src/microbe/form/FormElement.hx</string>
-		<string>src/microbe/form/AjaxElement.hx</string>
-		<string>src/microbe/form/MicroFieldList.hx</string>
-		<string>src/microbe/Api.hx</string>
-		<string>src/microbe/FormGenerator.hx</string>
-		<string>src/microbe/ClassMapUtils.hx</string>
-		<string>src/config/Config.hx</string>
+		<string>src/microbe/form/elements/ImageUploader.hx</string>
 		<string>src/vo/RelationTest.hx</string>
-		<string>src/microbe/vo/Spodable.hx</string>
-		<string>src/vo/ChildTest.hx</string>
 		<string>src/vo/Edito.hx</string>
-		<string>src/vo/UserVo.hx</string>
-		<string>src/monjs/FrontJs.hx</string>
-		<string>src/Tambour.hx</string>
-		<string>haxelib.xml</string>
+		<string>src/vo/ChildTest.hx</string>
+		<string>src/microbe/form/elements/CollectionElement.hx</string>
+		<string>src/microbe/factoryType/CollectionBehaviour.hx</string>
+		<string>www/microbe/css/microBack.hss</string>
+		<string>www/microbe/css/microbeForm.hss</string>
+		<string>src/microbe/form/elements/AjaxDate.hx</string>
+		<string>src/microbe/form/AjaxElement.hx</string>
+		<string>src/microbe/form/elements/Button.hx</string>
+		<string>src/microbe/form/FormElement.hx</string>
+		<string>src/microbe/FormGenerator.hx</string>
+		<string>src/microbe/form/elements/DeleteButton.hx</string>
+		<string>src/microbe/factoryType/SpodableBehaviour.hx</string>
+		<string>src/microbe/form/Form.hx</string>
+		<string>src/microbe/factoryType/FormElementBehaviour.hx</string>
+		<string>src/controllers/Pipo.hx</string>
+		<string>src/microbe/form/elements/PlusCollectionButton.hx</string>
 		<string>export.sh</string>
-		<string>src/Nav.hx</string>
-		<string>src/vo/News.hx</string>
-		<string>src/vo/Taxo.hx</string>
+	</array>
+	<key>shellVariables</key>
+	<array>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>value</key>
+			<string>/Users/postite/github/MICROBE</string>
+			<key>variable</key>
+			<string>TM_PROJECT_DIRECTORY</string>
+		</dict>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<false/>
@@ -1299,10 +1268,92 @@
 			<key>isExpanded</key>
 			<true/>
 			<key>subItems</key>
-			<dict/>
+			<dict>
+				<key>controllers</key>
+				<dict>
+					<key>isExpanded</key>
+					<true/>
+					<key>subItems</key>
+					<dict/>
+				</dict>
+				<key>microbe</key>
+				<dict>
+					<key>isExpanded</key>
+					<true/>
+					<key>subItems</key>
+					<dict>
+						<key>factoryType</key>
+						<dict>
+							<key>isExpanded</key>
+							<true/>
+							<key>subItems</key>
+							<dict/>
+						</dict>
+						<key>form</key>
+						<dict>
+							<key>isExpanded</key>
+							<true/>
+							<key>subItems</key>
+							<dict>
+								<key>elements</key>
+								<dict>
+									<key>isExpanded</key>
+									<true/>
+									<key>subItems</key>
+									<dict/>
+								</dict>
+							</dict>
+						</dict>
+						<key>jsTools</key>
+						<dict>
+							<key>isExpanded</key>
+							<true/>
+							<key>subItems</key>
+							<dict/>
+						</dict>
+					</dict>
+				</dict>
+				<key>monjs</key>
+				<dict>
+					<key>isExpanded</key>
+					<true/>
+					<key>subItems</key>
+					<dict/>
+				</dict>
+				<key>vo</key>
+				<dict>
+					<key>isExpanded</key>
+					<true/>
+					<key>subItems</key>
+					<dict/>
+				</dict>
+			</dict>
+		</dict>
+		<key>www</key>
+		<dict>
+			<key>isExpanded</key>
+			<true/>
+			<key>subItems</key>
+			<dict>
+				<key>microbe</key>
+				<dict>
+					<key>isExpanded</key>
+					<true/>
+					<key>subItems</key>
+					<dict>
+						<key>css</key>
+						<dict>
+							<key>isExpanded</key>
+							<true/>
+							<key>subItems</key>
+							<dict/>
+						</dict>
+					</dict>
+				</dict>
+			</dict>
 		</dict>
 	</dict>
 	<key>windowFrame</key>
-	<string>{{44, 82}, {1335, 772}}</string>
+	<string>{{67, 80}, {1314, 757}}</string>
 </dict>
 </plist>

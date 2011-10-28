@@ -1,7 +1,9 @@
 <project name="microbe" url="http://myproject.org" license="GPL">
-    <user name="mylogin"/>
-    <tag v="haxe php/js"/>
+    <user name="postite"/>
+    <tag v="js/php"/>
     <tag v="example"/>
     <description>this is an experimental framework to compile pseudo cms</description>
-    <version name="0.2">Initial release, everything is working correctly</version>
+    <version name="0.6">second release, everything is working almost correctly</version>
 </project>
+
+

@@ -41,7 +41,7 @@ class CollectionBehaviour implements IBehaviour
 		newCollec.type= collection;
 		newCollec.voName=sousVoName;
 		newCollec.field=field;
-		newCollec.elementId="newCollec";
+		newCollec.elementId=voName+"_"+field+"_"+sousVoName;
 
 		//// recupere les champs du sousVo
 		var creator=new MicroCreator();
@@ -49,7 +49,7 @@ class CollectionBehaviour implements IBehaviour
 		collec.voName=sousVoName;
 		collec.type=spodable;
 		collec.field=field;
-		collec.elementId=voName+"_"+field+"_"+sousVoName;
+		collec.elementId=newCollec.elementId;
 		collec.pos=0;
 		
 		var graine:Int=0;

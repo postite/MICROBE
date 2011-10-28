@@ -25,10 +25,11 @@ class AjaxUploader extends FormElement
 		var n = name;
 		var str="";
 		str+="<div id='"+n+"' microbe="+composantName+">";
-		str+="<img src='' id='"+composantName+"preview"+iter+"' >";
+		str+="<img src='/microbe/css/assets/blankframe.png' id='"+composantName+"preview"+iter+"' >";
 		str+="<input type='file' name='"+composantName+"fl"+iter+"' id='"+composantName+"fileinput' enctype='multipart/form-data'/>";
 		str+="<input type='hidden' id='"+composantName+"retour"+iter+"' value=''>";
-		str+="<iframe id='"+composantName+"upload_target"+iter+"' name='"+composantName+"upload_target"+iter+"' src='' style='width:0;height:0;border:0px solid #fff;'></iframe>";
+		//str+="<iframe id='"+composantName+"upload_target"+iter+"' name='"+composantName+"upload_target"+iter+"' src='' style='width:0;height:0;border:0px solid #fff;'></iframe>";
+		str+="<iframe id='"+composantName+"upload_target"+iter+"' name='popo' src='' style='width:0;height:0;border:0px solid #fff;'></iframe>";
 		str+="<input type='submit' value='Upload some data' id='uploadButton' />";
 		str+="</div>";
 		return str;
@@ -52,17 +53,20 @@ class AjaxUploader extends FormElement
 		public var base_url:String;
 		public var uploadtarget:String;
 		var _composantName:String;
+		var uniqIframe:String;
 		public var composantName(getComposant,setComposant):String;
 		
 		public function new(_microfield:Microfield,?_iter:Int)
 		{
+			//Lib.alert("ImageUploader"+_iter);
 	//	Lib.alert("upload init");
 		this.composantName="AjaxUploader";
 		super(_microfield,_iter);
 		self=this;
 		base_url=Lib.window.location.protocol+"//"+Lib.window.location.host;
+		makeIframeUniq();
 		getBouton().click(testUpload);
-	
+		
 		}
 		
 		public function init(e:JqEvent) : Void {
@@ -83,7 +87,8 @@ class AjaxUploader extends FormElement
 
 				formDefaultAction=new JQuery("#"+getForm()).attr("target");
 				new JQuery("#"+getForm()).attr("target",getIframe());
-				new JQuery("#"+getIframe()).load(onLoad);
+				Lib.alert(new JQuery("#"+getForm()).attr("target"));
+				new JQuery("#"+this.id+" #"+getIframe()).load(onLoad);
 				
 				//new JQuery("#"+getForm()).attr("action","http://localhost:8888/index.php/upload");
 				new JQuery("#"+getForm()).attr("action","/index.php/upload");
@@ -92,7 +97,7 @@ class AjaxUploader extends FormElement
 		
 		public function onLoad(e:JqEvent){
 		
-			var p=new JQuery("#"+getIframe()).contents().text() ;// getElementsByTagName("body").length;
+			var p=new JQuery("#"+this.id+" #"+getIframe()).contents().text() ;// getElementsByTagName("body").length;
 		
 			setValue(p);
 			getpreview().fadeTo(0,0);
@@ -133,10 +138,19 @@ class AjaxUploader extends FormElement
 			}
 		return "";
 		}
+		public function makeIframeUniq():Void{
+			var ifr =new JQuery("#"+this.id+" #"+this.composantName+"upload_target"+getCollectionContainer());
+		
+			var oldid=ifr.attr("id");
+			ifr.attr("id",oldid+Std.int(Math.random()*2000));
+			uniqIframe=ifr.attr("id");
+			cast(ifr[0]).contentWindow.name=uniqIframe;
+			
+			Lib.alert("uniq="+uniqIframe);
+		}
 		public function getIframe():String{
-			var ifr=new JQuery("#"+this.composantName+"upload_target"+getCollectionContainer()).attr("id");
-		//	Lib.alert("ifr="+ifr);
-			return ifr;
+			//var ifr=new JQuery("#"+this.id+" #"uniqIframe;
+			return uniqIframe;
 		//	Lib.alert(new JQuery("#myFrame"));
 			//return 'myFrame';
 
@@ -166,9 +180,15 @@ class AjaxUploader extends FormElement
 			return retour;
 		}
 		override public function setValue(val:String):Void{
-		//	Lib.alert("setValue" +val);
+			//Lib.alert("setValueAjaxUploader" +val);
 		//		Lib.alert("composantNAme="+this.composantName);
+	//	getpreview().attr("src",Lib.window.location.protocol+"//"+Lib.window.location.host+"/index.php/imageBase/resize/thumb/"+val);
+	
+			if (val!=null){
 		getpreview().attr("src",Lib.window.location.protocol+"//"+Lib.window.location.host+"/index.php/imageBase/resize/thumb/"+val);
+	}else{
+		getpreview().attr("src","/microbe/css/assets/blankframe.png");
+	}
 		getRetour().attr("value",val);
 		}
 		//////////////////////////////

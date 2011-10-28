@@ -19,13 +19,13 @@ import microbe.form.elements.PlusCollectionButton;
 class BackJS
 {
 	
-	public static var debug=0;
+	public static var debug=1;
 	//singleton instance
 	public static var instance(getInstance,null):BackJS;
 	
 	//config
-	public static var base_url:String;
-	public static var back_url:String;
+	public static var base_url:String=Lib.window.location.protocol+"//"+Lib.window.location.host;
+	public static var back_url:String=base_url+"/index.php/pipo/";
 	
 	//position
 	public var currentVo:String;
@@ -66,7 +66,7 @@ class BackJS
 	}
 	public function start():Void{
 		//c'est moche
-	Std.string(classMap).Alerte();
+	Std.string(classMap.submit).Alerte();
 		new JQuery("#"+classMap.submit).click(function(e):Void{instance.record();});
 		
 	//	parseMap();
@@ -126,7 +126,7 @@ class BackJS
 	
 	//ecoute les evenements des Elements statiques
 	function listen() : Void {
-		
+		"listen".Alerte();
 		CollectionElement.deleteSignal.add(deleteCollection); //core
 		DeleteButton.sign.add(deleteSpod); //core
 		new JQuery(".ajout").click(onAjoute);
@@ -159,7 +159,7 @@ class BackJS
 	///appelé par bouton enregistrer
    public function record(){
    	trace("clika"+microbeElements);
-   	
+   	"record".Alerte();
    	for( mic in microbeElements){
 		//	mic.getValue().Alerte();
 			trace("micVAlue="+mic.getValue());
@@ -215,18 +215,28 @@ class BackJS
 		_plusInfos=plusInfos;
 		Std.string("name"+plusInfos.collectionName +"graine="+plusInfos.graine ).Alerte();
 	
-				var req= new haxe.Http(back_url+"addCollectServerItem/");
-			
+				var req= new haxe.Http(BackJS.back_url+"addCollectServerItem/");
+				BackJS.back_url.Alerte();
 				req.setParameter("name",plusInfos.collectionName );
 				req.setParameter("voParent", classMap.voClass);
-				req.setParameter("voParentId", Std.string(classMap.id));
+				req.setParameter("voParentId",Std.string(classMap.id));
 				req.setParameter("graine",Std.string(plusInfos.graine));
+				req.onError=Lib.alert;
 				req.onData=function(x) {onAddItemPlus(x,this._plusInfos);}; 
 				req.request(true);
+				"end".Alerte();
 			
 	}
 	function onAddItemPlus( x:String ,PI:PlusInfos) : Void {
-			var raw=haxe.Unserializer.run(x);
+		
+			var raw:Dynamic=null;
+			try
+			{
+			raw=haxe.Unserializer.run(x);
+			}catch ( err:String )
+			{
+				err.Alerte();
+			}
 			parseplusCollec(raw.microliste,PI.graine);
 			PI.target.notify(raw.element);
 	}

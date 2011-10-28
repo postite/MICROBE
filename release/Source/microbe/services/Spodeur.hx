@@ -10,6 +10,7 @@ import php.db.Manager;
 #else*/
 import sys.db.Manager;
 import sys.db.Object;
+import sys.db.Connection;
 /*#end*/
 
 import microbe.vo.Spodable;
@@ -24,7 +25,7 @@ class Spodeur extends GenericController
 	public function new() 
 	{
 		super();
-		this.requestHandler = new BasicHandler(this.config);
+		this.requestHandler = new BasicHandler(this.configuration);
 		cnx = Manager.cnx = db.connection;
 		Manager.cleanup();
 		//cnx.close();

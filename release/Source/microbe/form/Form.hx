@@ -53,6 +53,7 @@ class Form
 	
 	public var forcePopulate:Bool;
 	public var submitButton:FormElement;
+	public var deleteButton:FormElement;
 	
 	private var extraErrors:List<String>;
 	
@@ -128,6 +129,10 @@ class Form
 	{
 		return submitButton = el;
 	}
+	public function setDeleteButton(el:FormElement):FormElement{
+		return deleteButton = el;
+	}
+	
 	
 	public function addFieldset(fieldSetKey:String, fieldSet:FieldSet)
 	{
@@ -331,11 +336,16 @@ class Form
 				s.add("<ul>\n");
 
 				for (element in getElements()) 
-					if(element != submitButton) s.add("\t"+element.getPreview()+"\n");
+					if(element != submitButton || element!=deleteButton) s.add("\t"+element.getPreview()+"\n");
 
 				if (submitButton != null) {
 					submitButton.form = this;
 					s.add(submitButton.getPreview());
+				}
+				
+				if (deleteButton != null) {
+					deleteButton.form = this;
+					s.add(deleteButton.render());
 				}
 
 				s.add("</ul>\n");

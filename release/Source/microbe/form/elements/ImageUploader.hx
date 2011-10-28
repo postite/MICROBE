@@ -1,9 +1,9 @@
 package microbe.form.elements;
 
 #if php
-import microbe.form.elements.AjaxUploader;
+import microbe.form.elements.IframeUploader;
 
-class ImageUploader extends AjaxUploader
+class ImageUploader extends IframeUploader
 {
 	static var composantName="ImageUploader";
 	public function new(name:String, label:String, ?value:String, ?required:Bool=false, ?validators=null, ?attributes:String="")
@@ -15,12 +15,12 @@ class ImageUploader extends AjaxUploader
 		//<iframe id='upload_target' name='upload_target' src='' style='width:0;height:0;border:0px solid #fff;'></iframe>
 		var n = name;
 		var str="";
-		str+="<div id='"+n+"' class='imageuploader' microbe="+composantName+" >";
-		str+="<img src='' id='"+composantName+"preview"+iter+"' >";
-		str+='<a class="file_input_button" >choisir</a>';
-		str+="<input type='file' class='hiddenfileinput' name='"+composantName+"fl"+iter+"' id='"+composantName+"fileinput' enctype='multipart/form-data'/>";
-		str+="<input type='hidden' id='"+composantName+"retour"+iter+"' value=''>";
-		str+="<iframe id='"+composantName+"upload_target"+iter+"' name='"+composantName+"upload_target"+iter+"' src='' style='width:0;height:0;border:0px solid #fff;'></iframe>";
+		str+="<div class='imageuploader' id="+n+">";
+		str+="<img src='/microbe/css/assets/blankframe.png' id='preview' >";
+		str+="<a class='file_input_button'>choisir</a>";
+		str+="<input type='file' class='hiddenfileinput' name='"+name+"fl' id='fileinput' enctype='multipart/form-data'/>";
+		str+="<input type='hidden' id='retour' value=''>";
+		//str+="<iframe id='"+composantName+"upload_target"+iter+"' name='"+composantName+"upload_target"+iter+"' src='' style='width:0;height:0;border:0px solid #fff;'></iframe>";
 		str+="<a id='uploadButton' ></a>";
 		str+="</div>";
 		return str;
@@ -35,7 +35,7 @@ class ImageUploader extends AjaxUploader
 
 #if js
 
-import microbe.form.elements.AjaxUploader;
+import microbe.form.elements.IframeUploader;
 import microbe.form.Microfield;
 import js.Lib;
 import js.JQuery;
@@ -44,7 +44,7 @@ import microbe.form.AjaxElement;
 
 import microbe.tools.Debug;
 
-class ImageUploader extends AjaxUploader {
+class ImageUploader extends IframeUploader {
 	
 	static var debug:Bool=true;
 	//override public var composantName:String;
@@ -53,26 +53,31 @@ class ImageUploader extends AjaxUploader {
 		super(_microfield,_iter);
 	//	super.composantName="ImageUploader";
 		//composantName="ImageUploader";
-		new JQuery(".file_input_button").click(onFake);
+	//	Lib.alert("ImageUploader"+this.id);
+		new JQuery("#"+this.id+" .file_input_button").click(onFake);
 		//"test".Alerte();
 		//Debug.Alerte("retest");
 	}
 	function onFake(e:JqEvent) : Void {
 		e.preventDefault();
 		//Lib.alert("yo");
-		new JQuery(".hiddenfileinput").trigger("click");
+		new JQuery("#"+this.id+" .hiddenfileinput").trigger("click");
 	}
 	
 	///// overrideing le setter un peu pas cool mais peux pas faire autrement. 
-	override public function setComposant(val:String) : String {
-		_composantName="ImageUploader";
-		return _composantName;
-	}
+	/*override public function setComposant(val:String) : String {
+			_composantName="ImageUploader";
+			return _composantName;
+		}*/
 	
 	override public function setValue(val:String):Void{
-		//Lib.alert("setValue" +val);
+	//	Lib.alert("setValueimageuploader" +val);
 		//Lib.alert("composantNAme="+this.composantName);
+		if (val!=null){
 	getpreview().attr("src",Lib.window.location.protocol+"//"+Lib.window.location.host+"/index.php/imageBase/resize/modele/"+val);
+}else{
+	getpreview().attr("src","/microbe/css/assets/blankframe.png");
+}
 	getRetour().attr("value",val);
 	
 	}

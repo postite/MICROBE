@@ -21,13 +21,28 @@ echo "→ Assembling the 'release.zip' package"
 	# cp -r tmp/$system $targetd/ndll/
 	# 	cp -r ndll/Source $targetd/
 	# 	cp -r curl $targetd/
-	cp -r src/* $targetd/Source
+	
+	cp -r src/haxigniter $targetd/Source
+	cp -r src/javascriptOutils $targetd/Source
+	cp -r src/jquery $targetd/Source
+	cp -r src/js $targetd/Source
+	cp -r src/microbe $targetd/Source
+	#cp -r src/monjs $targetd/Source
+	cp -r src/poko $targetd/Source
+	
+	
+	
+	cp -r src/config squelette
+	cp -r src/controllers squelette
+	cp -r src/Nav.hx squelette
+	cp -r src/vo squelette
+	cp -r squelette $targetd/Source
 	cp haxelib.xml $targetd/Source/haxelib.xml
+	cp run.n $targetd/Source/run.n
 	cd $targetd
 		if command -v 7z &>/dev/null; then
-			7z a -tzip release.zip release > 7z.log
+		7z a -tzip release.zip release > 7z.log
 		
-			
 		else
 			zip -r release.zip Source
 			haxelib remove $lib

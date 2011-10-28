@@ -12,12 +12,16 @@ class CollectionWrapper extends FormElement
 	{
 		field=_field;
 		super();
+		this.label=_field;
 		wrapped=new List<FormElement>();
 	}
 	override function render(?iter:Int) : String {
 			var str:String="<div class='collectionWrapper' spod='"+field+"'>";
 			for(item in wrapped){
+				//str+= "<li>";
 				str+=item.render();
+				
+			//	str+="</li>";
 			//	str+=item.render(2);
 			}
 			str+="</div>";
@@ -85,7 +89,7 @@ typedef PlusInfos =
 			plus.init();
 		}
 		function onPLUS(s:String):Void{
-			//"".Alerte();
+			"onPlus".Alerte();
 			//plusInfos.dispatch({collectionName:"pop",graine:2,target:me});
 			clone=me.children(".collection").last().clone();
 			var collength:Int= me.children(".collection").length; //comme la collection commence à zero  pas besoin d'incrrrr

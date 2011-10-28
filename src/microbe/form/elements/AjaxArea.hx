@@ -33,7 +33,7 @@ class AjaxArea extends FormElement
 			
 			var s="";
 		
-			s += "<textarea   class=\""+ getClasses() +"\" name=\"" + n + "\" id=\"" + n + "\" " + attributes + " >" + value + "</textarea>";
+			s += "<textarea  name=\"" + n + "\" id=\"" + n + "\" " + attributes + " >" + value + "</textarea>";
 
 			return s;
 		}
@@ -77,7 +77,7 @@ class AjaxArea extends AjaxElement
 	}
 	override public function setValue(val:String):Void{
 	val.Alerte();
-	new JQuery("#"+id).text(val);
+	new JQuery("#"+id).val(val);
 	}
 	
 }

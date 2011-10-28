@@ -10,6 +10,9 @@ form ul {
 form ul li {
 	margin-bottom : 24px;
 }
+form ul li li li {
+	background : #0AF;
+}
 form ul li label {
 	display : inline-block;
 	zoom : 1;
@@ -23,9 +26,12 @@ form ul li label {
 	height : 28px;
 	font-family : "BreeLight";
 	font-weight : 100;
+	clear : left;
+	margin-top : 28px;
+	font-family : "BreeLight";
 }
 form .collectionWrapper {
-	padding : 0 10px 0 10px;
+	padding : 10px 10px 10px 10px;
 	border : 1px dashed gray;
 	position : relative;
 }
@@ -38,11 +44,20 @@ form .collectionWrapper .placeHolder {
 	background : #0AF;
 }
 form .collectionWrapper .collection {
+	position : relative;
 	padding : 5px;
 	margin-bottom : 10px;
 	background-color : #DCDCDC;
 	min-width : 100px;
 	min-height : 100px;
+}
+form .collectionWrapper .deletecollection {
+	position : absolute;
+	top : 10px;
+	right : 10px;
+}
+form .collectionWrapper .deletecollection:hover {
+	background : #D0D0D0;
 }
 form input[type="text"] {
 	margin-top : 0px;
@@ -58,7 +73,7 @@ form input[type="file"] {
 }
 form input[type="file"] input[type="submit"] {
 	background : white;
-	font : "Lobster13Regular";
+	font : "BreeLight";
 	border : none;
 	border-radius : 20px;
 	-moz-border-radius : 20px;
@@ -83,7 +98,7 @@ form button {
 	border : none;
 	color : #ffffff;
 	display : block;
-	font : "Lobster13Regular";
+	font : "BreeLight";
 	letter-spacing : 1px;
 	margin : 5px;
 	padding : 7px 25px;
@@ -274,7 +289,7 @@ form input[type="submit"] {
 	width : 107px;
 	height : 41px;
 	color : white;
-	font-family : "Lobster13Regular";
+	font-family : "BreeLight";
 	background-color : white;
 	background : url("assets/tooltip.png") no-repeat top left;
 	position : absolute;

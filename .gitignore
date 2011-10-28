@@ -5,3 +5,5 @@ srcBak
 www/runtime/session/*
 www/runtime/logs/*
 srcGitsafe
+realease
+release/release.zip

@@ -62,16 +62,19 @@ class CollectionElement extends FormElement
 		
 		var str="<div class='collection' name='"+n+"' id='"+n+pos+"' pos='"+pos+"' tri='id_"+realpos+"'>";
 	//	str+= "<span>length="+inside.length+"</span>";
-		str+="<h1>poz="+realpos+"</h1>";
-		str+="<button value='delete' type='BUTTON' id='delete"+pos+"' >delete</button>";
+		
+		str+="<button value='delete' type='BUTTON' id='delete"+pos+"' class='deletecollection' >delete</button>";
+	
 		  for(item in inside){
 			//this.form.addElement(item);
 			item.form=form;
 			//str+=item.test();
 		//	str+="<p>"+item.getLabel()+"</p>";
 			str+=item.value;
-			
+			str+="<div>";
+			str+="<label for='"+item.name+"'>"+item.label+"</label>";
 			str+=item.render(pos);
+			str+="</div>";
 			//this.form.removeElement(item);
 			}
 			str+="</div>";
@@ -99,23 +102,26 @@ class CollectionElement extends AjaxElement
 	static var debug=false;
 	public static var deleteSignal:Signal3<String,String,Int>= new Signal3();
 	//public var moduleid:String;
+	public var elementid:String;
 	public function new(?_liste:MicroFieldList,?_pos:Int)
 	{
 		"".Alerte();
-	//	Lib.alert("popoop");
+		
 		super(_liste,_pos);
+		this.elementid=this.id +_pos;
+	Lib.alert("popoop"+ this.elementid);
 		//Lib.alert("colectionElemnt>micro="+_pos);
 		//Lib.alert("microfield elementId="+this.id+_pos);
-		new JQuery("#delete"+_pos).click(delete);
-		
+		//new JQuery("#delete"+_pos).click(delete);
+		new JQuery("#"+this.elementid +" .deletecollection").click(delete);
 		//Std.string(plusId).Alerte();
 	//	new PlusCollectionButton(plusId);
 		//new JQuery("."+"collection").css("background-color","#FF0000");
 		
 	}
 	function delete(e:JqEvent) : Void {
-		//Lib.alert("delete");
-		deleteSignal.dispatch(this.id+this.pos,this.voName,this.pos);
+	//	Lib.alert("delete");
+		deleteSignal.dispatch(this.elementid,this.voName,this.pos);
 	}
 	
 	public function active(){
