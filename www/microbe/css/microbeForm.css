@@ -148,7 +148,7 @@ form input[type="submit"] {
 }
 .imageuploader .file_input_button:hover {
 	background-color : #00AAFF;
-	cursor : hand;
+	cursor : pointer;
 }
 .imageuploader #uploadButton {
 	width : 38px;
@@ -159,8 +159,8 @@ form input[type="submit"] {
 	background-image : url("assets/images/up.png");
 }
 .imageuploader #uploadButton:hover {
-	cursor : hand;
 	background-image : url("assets/images/up_hover.png");
+	cursor : pointer;
 }
 #tagSelector {
 	position : absolute;
@@ -235,6 +235,7 @@ form input[type="submit"] {
 	font-family : "HelveticaNeueLTStd45Light";
 	font-weight : 100;
 	position : absolute;
+	top : 0;
 	right : 0;
 }
 #tagSelector #instantag #addTag:hover {
@@ -244,6 +245,7 @@ form input[type="submit"] {
 #tagSelector #instantag #results {
 	position : absolute;
 	display : none;
+	overflow : auto;
 	left : 0;
 	top : 30px;
 	width : 120px;
@@ -252,14 +254,14 @@ form input[type="submit"] {
 #tagSelector #instantag #results .result a.readMore {
 	color : green;
 }
-#tagSelector #instantag #results .result h2 {
+#tagSelector #instantag #results .result option {
 	font-size : 19px;
 	margin : 0px 0px 5px 0px;
 	padding : 0px;
 	color : #1111CC;
 	font-weight : normal;
 }
-#tagSelector #instantag #results .result h2 a {
+#tagSelector #instantag #results .result option a {
 	text-decoration : none;
 	border-bottom : 1px solid #1111cc;
 }
@@ -284,7 +286,6 @@ form input[type="submit"] {
 	margin : 0;
 }
 .tooltip {
-	position : relative;
 	text-align : center;
 	width : 107px;
 	height : 41px;

@@ -1,4 +1,5 @@
 package microbe.form.elements;
+using microbe.tools.Debug;
 
 #if js
 import js.JQuery;
@@ -7,7 +8,7 @@ import js.Lib;
 import microbe.TagManager;
 class TagView extends AjaxElement
 {
-	
+	static var debug=1;
 	var spodTags:List<Tag>;
 	var contextTags:List<Tag>; 
 	var fullTags:List<String>;
@@ -21,14 +22,18 @@ class TagView extends AjaxElement
 		//new JQuery("#tagSelector select").change(onSelect);
 		
 	//	createResultsDiv();
+	"new".Alerte();
 		init();
 		
 	}
 
 	function init() : Void {
 		getTags(this.voName,this.spodId);
+		Std.string(spodTags).Alerte();
 		afficheTags();
+		Std.string(contextTags).Alerte();
 		populateTags();
+		Std.string(fullTags).Alerte();
 		
 		new JQuery("#tagSelector #pute").keyup(onType);
 		new JQuery("#tagSelector #results").blur(onBlur);
@@ -38,23 +43,27 @@ class TagView extends AjaxElement
 	}
 	
 	function onType(e:JqEvent) : Void {
-		////Lib.alert("onType");
+		
 	//	e.preventDefault();
 
 		var filtered=findinSpodTags();
+		///Lib.alert("onType");
 		showResults(filtered);
 	}
 	function findinSpodTags() : List<String> {
+	//	Lib.alert("find");
 		return Lambda.filter(fullTags,subFind);
 	}
 	function subFind(item:String) : Bool {
+		//Lib.alert("subFind");
 		var filtre=new JQuery("#tagSelector #pute").val();
-		if(item.substr(0,filtre.length)==filtre)return true;
+		//Lib.alert("subFind"+filtre+"_"+Std.string(item).substr(0,1)+"after substr");
+		if(Std.string(item).substr(0,filtre.length)==filtre)return true;
 		return false;
 	}
 
 	function showResults(data:List<String>){
-	//	//Lib.alert(data);
+	//Lib.alert("data="+data);
 		if(data.length>0){
 	           var resultHtml = '';
 	            for (tag in data){
@@ -76,6 +85,7 @@ class TagView extends AjaxElement
 				}
 	   }
 	function onSelect(e:JqEvent) : Void {
+		Lib.alert("pop");
 	//	e.preventDefault();
 		//var selected = new JQuery("#tagSelector select option:selected");    
 		//Lib.alert(new JQuery(e.currentTarget).text());
@@ -96,10 +106,23 @@ class TagView extends AjaxElement
 	
 	function getTags(spod:String,?spodId:Int) : Void {
 		//Lib.alert("voNAme="+spod+"id="+spodId);
+		"".Alerte();
+		
+		if( spodId!=null){
+			spod.Alerte();
 		var context=TagManager.getTags(spod,spodId);
+		"".Alerte();
 		var tags=TagManager.getTags(spod);
+		"".Alerte();
 		contextTags=cast context;
+		"".Alerte();
 		spodTags=cast tags;
+	}else{
+		"".Alerte();
+		contextTags=new List<Tag>();
+		spodTags=new List<Tag>();
+	}
+		//spodTags=cast contextTags;
 	}
 	function afficheTags() : Void {
 		new JQuery("#tagSelector .tagitem").remove();
@@ -135,7 +158,7 @@ class TagView extends AjaxElement
 		fullTags= new List<String>();
 		var str="";
 		for( tag in spodTags){
-		//	str+="<option>"+tag.tag+"</option>";
+			//str+="<option>"+tag.tag+"</option>";
 			fullTags.add(tag.tag);
 		}
 		new JQuery("#tagSelector select").append(str);
@@ -143,14 +166,17 @@ class TagView extends AjaxElement
 	
 	
 	function onAdd(e:JqEvent){
-		////Lib.alert("pop");
+	Lib.alert("add");
 //	var newTag=TagManager.recTag(new JQuery("#tagSelector #pute").val());
 	var newTag=new JQuery("#tagSelector #pute").val();
 	//	new JQuery("#tagSelector #tags").append("<option>"+newTag+"</option>");
 	////Lib.alert( "spodId="+this.spodId);
-//	//Lib.alert(TagManager.addTag(this.voName,this.spodId,newTag));
-	TagManager.addTag(this.voName,this.spodId,newTag);
+//Lib.alert(this.voName+"_"+this.spodId+"_"+newTag);
+	
+	Lib.alert(TagManager.addTag(this.voName,this.spodId,newTag));
+	Lib.alert("afetr");
 	init();
+
 	}
 	
 }

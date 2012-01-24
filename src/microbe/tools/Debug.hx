@@ -6,8 +6,9 @@ import js.Lib;
 
 class Debug
 {
-	private static var debug:Bool=true;
+	public  static var debug:Bool=false;
 	public static function Alerte(str:String,?pos:haxe.PosInfos){
+		
 		if (debug==true){
 		 	var instance=Type.resolveClass(pos.className);
 		 			if(Reflect.field(instance,"debug")==true){

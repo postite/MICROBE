@@ -10,10 +10,11 @@ import sys.db.TableCreate;
 //#end
 import microbe.vo.Spodable;
 import microbe.form.IMicrotype;
+import microbe.vo.Taggable;
 
-@:table("news")
+@:table("actu")
 @:id(id)
-class News extends Object , implements Spodable
+class News extends Object , implements Spodable , implements Taggable
 {
 	public var poz:Int;
 	public var id:SId;
@@ -22,7 +23,7 @@ class News extends Object , implements Spodable
 	public var contenu:SText;
 	public var image:SString<255>;
 	public var datelitterale:SString<255>;
-	public var en_ligne:SBool;
+	public var en_ligne:SString<255>;
 	
 	public function new() : Void {
 		super();
@@ -30,7 +31,9 @@ class News extends Object , implements Spodable
 				sys.db.Manager.cnx = this.db.connection;
 				sys.db.TableCreate.create(manager);*/
 	}
-	
+	public function getTags():List<String>{
+		return new List<String>();
+	}
 public function getFormule():Hash<FieldType> 
 {
 	var formule:Hash<microbe.form.FieldType>;

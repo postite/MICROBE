@@ -45,13 +45,16 @@ class Pipo extends Back
 			//session.user=user;
 			//session.user=null;
 			//spodeur= new Spodeur();
-			
+			sys.db.Manager.cleanup();
 					//	new vo.News();
 			sys.db.Manager.cnx = this.db.connection;
 			sys.db.Manager.initialize();
+			
+			//sys.db.TableCreate.create(vo.News.manager);
 		//	sys.db.TableCreate.create(vo.ChildTest.manager);
 		//	sys.db.TableCreate.create(vo.RelationTest.manager);
-			
+		//sys.db.TableCreate.create(vo.TagSpod.manager);
+			//sys.db.TableCreate.create(vo.Taxo.manager);
 		//	new vo.Edito();
 			api= new Api();	
 			this.view.assign("contenttype",null);
@@ -189,12 +192,12 @@ class Pipo extends Back
 						//trace(voParent +"-"+parentId+"-"+graine);
 					var retour=	microbe.factoryType.CollectionBehaviour.creeEmptyCollection(voName,{classe:GenericController.appConfig.voPackage+sousVoName,type:collection,
 					champs:null},field,graine);
-							Lib.print(haxe.Serializer.run(retour));
+					Lib.print(haxe.Serializer.run(retour));
 		}
 		public function ajoute(voName:String):Void{
 			trace("ajoute");
-			generator.generateComplexClassMapForm(voName);
-			jsLib.addOnce(backjs);
+			generator.generateComplexClassMapForm(voName);//
+			jsLib.addOnce(backjs);//
 			
 			jsScript.add(backInstance+".instance.setClassMap('"+generator.compressedClassMap+"');");
 		

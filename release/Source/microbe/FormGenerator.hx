@@ -23,18 +23,22 @@ import microbe.form.FormElement;
 
 
 
+
 ///import all Components
-import microbe.form.elements.FakeElement;
-import microbe.form.elements.DeleteButton;
+/*import microbe.form.elements.FakeElement;
+
 import microbe.form.elements.AjaxArea;
 import microbe.form.elements.TailleSelector;
 import microbe.form.elements.ImageUploader;
 import microbe.form.elements.AjaxUploader;
 import microbe.form.elements.CheckBox;
 import microbe.form.elements.AjaxDate;
-import microbe.form.elements.TagView;
-import microbe.form.elements.IframeUploader;
 
+import microbe.form.elements.IframeUploader;*/
+
+import microbe.form.elements.DeleteButton;
+import microbe.form.elements.TagView;
+import microbe.macroUtils.Imports;
 
 class FormGenerator
 {
@@ -49,7 +53,7 @@ class FormGenerator
 	
 	public function new()
 	{
-		
+		Imports.pack("microbe.form.elements",false);
 	}
 
 public function render():String{

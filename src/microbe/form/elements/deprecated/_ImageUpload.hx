@@ -4,7 +4,7 @@ package microbe.form.elements;
  * ...
  * @author postite
  */
-
+#if php
 class ImageUpload extends FileUpload
 {
 
@@ -30,3 +30,5 @@ class ImageUpload extends FileUpload
 	}
 	
 }
+
+#end

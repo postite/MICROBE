@@ -29,7 +29,7 @@ import controllers.Terazor;
 import controllers.Myback;
 import controllers.Test;
 import controllers.Pipo;
-import vo.News;
+import vo.MicrobeNews;
 import vo.Edito;
 import controllers.Upload;
 import controllers.ImageBase;
@@ -71,6 +71,8 @@ class Config extends haxigniter.server.Config
 	*/
 	public function new(?dumpEnv : Dynamic)
 	{
+		
+		microbe.tools.Debug.debug=false;
 		/*
 		|--------------------------------------------------------------------------
 		| Development mode

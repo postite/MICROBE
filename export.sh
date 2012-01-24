@@ -27,6 +27,7 @@ echo "→ Assembling the 'release.zip' package"
 	cp -r src/jquery $targetd/Source
 	cp -r src/js $targetd/Source
 	cp -r src/microbe $targetd/Source
+	cp -r src/vo $targetd/Source #peut creer des conflits 
 	#cp -r src/monjs $targetd/Source
 	cp -r src/poko $targetd/Source
 	

@@ -60,7 +60,7 @@ class MicroFieldList implements IMicrotype //, implements List<Dynamic>
 		#end
 		
 		#if (flash || js)
-		return "MICROFIELDLIST: "+ voName +", TYPE:"+type+", FIELD:"+field+"  ID:"+id+",ElementId:"+elementId+" VALUE:"+value+ "\n"+fields.toString()+"\n";
+		return "MICROFIELDLIST: "+ voName +", TYPE:"+type+", FIELD:"+field+"  ID:"+id+",ElementId:"+elementId+" pos="+pos+" VALUE:"+value+ "\n"+fields.toString()+"\n";
 		#end
 		
 		return "";

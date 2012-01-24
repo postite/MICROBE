@@ -42,7 +42,7 @@ using microbe.tools.Debug;
 
 class PlusCollectionButton  {
 	
-	public static var debug=1;
+	public static var debug=0;
 	
 	
 	public static var sign:Signal1<String>;

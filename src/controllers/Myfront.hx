@@ -37,7 +37,7 @@ class Myfront extends GenericController
 		this.view.assign("content",null);
 //	var news= vo.News.manager.all();
 	
-		var news= vo.News.manager.search({titre:"emma"});
+		var news= vo.MicrobeNews.manager.search({titre:"emma"});
 		this.view.assign("news", news);
 		
 		this.view.display("front/frontest.html");

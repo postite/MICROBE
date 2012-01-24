@@ -69,6 +69,8 @@ class CollectionBehaviour implements IBehaviour
 		
 			var micros:List<FormElement>= new List<FormElement>(); //?
 			
+			if( voitures.length>0){
+			//debut iteration des sous-vo
 			for (car in voitures.iterator()){
 				
 				var micros:List<FormElement>= new List<FormElement>();
@@ -87,6 +89,7 @@ class CollectionBehaviour implements IBehaviour
 				spodList.elementId=collec.elementId;
 
 				
+					
 				for (item in collec){
 					/// cree un microfield pour chaque champs actif (ajaxelement) de collec /sousSpod
 					var bum=new Microfield();
@@ -106,6 +109,8 @@ class CollectionBehaviour implements IBehaviour
 					
 					}//fin item in collec*/	
 					
+					//si data mais pas de collec encore...
+			
 					
 					//creation du wrapper qui va faire un render() sur tous les formelement creeé depuis bum
 	//RENAMING				var microWrapper:FormElement= Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[sousVoName+"_"+field,field,micros,graine,spodList.pos]);
@@ -117,6 +122,67 @@ class CollectionBehaviour implements IBehaviour
 					newCollec.add(spodList);
 					}//fin voiture iterator
 					
+				//si pas de données de collection
+				}else{
+					
+					var car=instanceClass;
+					
+					var micros:List<FormElement>= new List<FormElement>();
+
+					var parent = Reflect.field(instanceClass,"rel"); ///dependance à rel
+
+
+					//on checque les formElements  item:MicroField
+
+					var spodList:MicroFieldList= new MicroFieldList();
+					spodList.voName= sousVoName;
+					spodList.type=spodable;
+					spodList.field=field;
+					spodList.id=car.id;
+					spodList.pos=car.poz;
+					spodList.elementId=collec.elementId;
+
+
+
+					for (item in collec){
+						/// cree un microfield pour chaque champs actif (ajaxelement) de collec /sousSpod
+						var bum=new Microfield();
+
+						bum.value= Reflect.field(car,item.field);//"poiipo"+Std.string(graine);//car.nom;//TODO
+
+						bum.type=item.type;
+						bum.voName=item.voName;
+						bum.elementId=collec.elementId+"_"+item.field+"_"+graine;
+						bum.element=cast(item,Microfield).element;
+						bum.field=item.field;
+						spodList.add(bum);
+
+
+						var elem:FormElement=creeAjaxFormElement(cast bum,Std.string(graine));
+						micros.add(elem);
+
+						}//fin item in collec*/	
+
+						//si data mais pas de collec encore...
+
+
+						//creation du wrapper qui va faire un render() sur tous les formelement creeé depuis bum
+		//RENAMING				var microWrapper:FormElement= Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[sousVoName+"_"+field,field,micros,graine,spodList.pos]);
+						var microWrapper:CollectionElement= Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[spodList.elementId,field,micros,graine,spodList.id]);
+						//formulaire.addElement(microWrapper);///warning
+						wrapper.addElement(cast microWrapper);
+						graine++;
+						//trace("spod="+spodList.fields.last().value);
+						newCollec.add(spodList);
+					
+					
+					
+					
+					
+					
+					
+					
+				}
 					return newCollec;	
 					} //fin if data
 
@@ -152,7 +218,7 @@ class CollectionBehaviour implements IBehaviour
 	}
 
 	public static function creeEmptyCollection(voName:String,element:FieldType,field:String,graine:Int):Dynamic{
-		
+	//	microbe.macroUtils.Imports.pack("microbe.form.elements",false);
 		//instancie un spod de la collection  //ChildTest + vo package
 		var fieldClass= Type.resolveClass(element.classe);
 		var instanceClass:Spodable=Type.createInstance(fieldClass,[]);
@@ -164,7 +230,7 @@ class CollectionBehaviour implements IBehaviour
 		newCollec.type= collection;
 		newCollec.voName=sousVoName;
 		newCollec.field=field;
-		newCollec.elementId="newCollec";
+		newCollec.elementId=voName+"_"+field+"_"+sousVoName;
 
 		//// recupere les champs du sousVo
 		var creator=new MicroCreator();
@@ -190,7 +256,7 @@ class CollectionBehaviour implements IBehaviour
 		 micros.add(elem);	
 		  		}
 		
-		 var microWrapper:CollectionElement= Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[collec.elementId,"patapouf",micros,graine,0]);
+		 var microWrapper:CollectionElement= Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[collec.elementId,"patapouf",micros,graine,null]);
 		 newCollec.add(collec);
 		
 		 return {microliste:newCollec,element:microWrapper.render()};

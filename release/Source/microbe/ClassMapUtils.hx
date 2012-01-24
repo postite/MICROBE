@@ -27,14 +27,25 @@ public function removeInCurrent(list:MicroFieldList) : Void {
 
 	public function searchinCollecByPos(pos:Int) : MicroFieldList {
 		return cast(currentCollec.filter(function (item:Dynamic) : Bool{
-			//js.Lib.alert("cherche"+pos);
+			js.Lib.alert("item="+item);
 			if(item.pos==pos){
-				//js.Lib.alert("Trouvé"+pos);
+				js.Lib.alert("Trouvé"+pos);
 				return true;
 			}
 			return false;
 		}).first());
 	}
+	public function searchinCollecById(collectItemid:Int) : MicroFieldList {
+		return cast(currentCollec.filter(function (item:Dynamic) : Bool{
+			js.Lib.alert("item="+item);
+			if(item.id==collectItemid){
+				js.Lib.alert("Trouvé"+item.id);
+				return true;
+			}
+			return false;
+		}).first());
+	}
+	
 	public function addInCollec(item:MicroFieldList) : Void {
 	//	js.Lib.alert("youoho"+currentCollec.getLength());
 		//untyped console.log(item);

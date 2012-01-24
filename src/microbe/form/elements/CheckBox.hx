@@ -5,46 +5,41 @@ import microbe.form.AjaxElement;
 import js.Lib;
 import js.JQuery;
 import js.Dom.HtmlDom;
+using microbe.tools.Debug;
 class CheckBox extends AjaxElement{
 	
-	
+	public static var debug:Bool=false;
 	public function new(?_microfield,?_iter) : Void {
 	//	//Lib.alert("checkBox");
 		////Lib.alert("gasp");
-		id=cast (_microfield).elementId;
-		pos=Std.parseInt(getCollectionContainer());
+	
 		super(_microfield,_iter);	
+		this.id.Alerte();
 	}
 
-		public function getCollectionContainer():String{
-			var p:JQuery =new JQuery("#"+this.id).parents(".collection");
-		//	//Lib.alert("parent="+p.attr("name"));
-				if( p.attr("pos")!=null){
-					return p.attr("pos");
-				}
-			return "0";
-			}
+		
 		override public function getValue():String{	
-			//Lib.alert("getposl="+pos);
-			
+
 			
 			//this.fucking JQuery has changed his implementation of attr("checked") > check the version my friend > http://api.jquery.com/prop/
 			// BOOL or String that is the question man ! c'est des malades ...
 			
-			var valeur:Bool=cast new JQuery(".checkBox"+pos).attr("checked");
-			//Lib.alert("checked="+valeur);
+			var valeur:Bool=cast new JQuery("#"+this.id).attr("checked");
+			
+			
 			var val:String;
 			if (valeur == true){
 			 val="true"; 
 			}else{
 			 val="false";
 			}
-			//Lib.alert("getVal="+val);
+			
 			return val;
 		}
 		
 		override public function setValue(val:String):Void{
 			//Lib.alert("setpos="+pos);
+			"set_"+val.Alerte();
 			var etat:String;
 			if (val=="true"){
 			etat="checked"	;
@@ -52,7 +47,8 @@ class CheckBox extends AjaxElement{
 			etat="";	
 			} 
 			//Lib.alert("etat="+etat);
-			var valeur=new JQuery(".checkBox"+pos).attr("checked",etat);
+			//Std.string(new JQuery("#"+this.id)).Alerte();
+			new JQuery("#"+this.id).attr("checked",etat);
 			//Lib.alert("valeur="+valeur);
 			
 		}
@@ -78,13 +74,13 @@ class CheckBox extends AjaxElement{
 			if (iter==null)iter=0;
 				var n = name;
 
-				var str ="<div id="+n+" class='check'>";
-
+				//var str ="<div id="+n+" class='check'>";
+var str="";
 			//	str+='<label for="check'+iter+'">'+name+'</label>';
-				str+='<input id="check'+iter+'" name="pipo" class="checkBox'+iter+'" value="'+name+'" type="checkbox" checked="checked" /> '; 
+				str+='<input id="'+n+'" name="pipo" class="checkBox" value="'+name+'" type="checkbox" checked="checked" /> '; 
 
 
-				str+="</div>";
+				//str+="</div>";
 				return str;
 			//	return '<input id="one" name="pipo" class=polo"  type="checkbox"  /> ';
 		}

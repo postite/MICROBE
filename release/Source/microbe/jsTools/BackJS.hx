@@ -5,6 +5,7 @@ import microbe.form.MicroFieldList;
 import microbe.ClassMap;
 import microbe.jsTools.ElementBinder;
 using microbe.tools.Debug;
+import microbe.notification.Note;
 import js.JQuery;
 import js.Lib;
 import jquery.ui.Sortable;
@@ -24,6 +25,7 @@ class BackJS
 	public static var instance(getInstance,null):BackJS;
 	
 	//config
+	//public static var base_url:String=MicrobeConfig.siteRoot;
 	public static var base_url:String=Lib.window.location.protocol+"//"+Lib.window.location.host;
 	public static var back_url:String=base_url+"/index.php/pipo/";
 	
@@ -54,8 +56,8 @@ class BackJS
 	private function new()
 	{
 	"new".Alerte();
-	base_url=Lib.window.location.protocol+"//"+Lib.window.location.host;
-	back_url=base_url+"/index.php/pipo/"; //TODO replace pipo par config
+	//base_url=Lib.window.location.protocol+"//"+Lib.window.location.host;
+	//back_url=base_url+"/index.php/pipo/"; //TODO replace pipo par config
 	new JQuery("document").ready(function(e):Void{instance.init();});
 	}
 	
@@ -64,9 +66,11 @@ class BackJS
 	//	"init".Alerte();
 		start();
 	}
+	
 	public function start():Void{
 		//c'est moche
-	Std.string(classMap.submit).Alerte();
+		if( classMap!=null){
+		Std.string(classMap.submit).Alerte();
 		new JQuery("#"+classMap.submit).click(function(e):Void{instance.record();});
 		
 	//	parseMap();
@@ -75,16 +79,21 @@ class BackJS
 		////binding des tags
 		
 		if (classMap.fields.taggable==true){
+			
+			//mettre une condition si pas de Tag
 			new TagView(classMap.fields);
 		}
+	}
+		"".Alerte();
 		
 		microbeElements=new ElementBinder();
+		"".Alerte();
 		var deleteBouton= new DeleteButton(classMap.voClass+"_form_effacer");
 		var parser=new MapParser(microbeElements);
 		
-		//"beforeparse".Alerte();
+		"beforeparse".Alerte();
 		parser.parse(classMap);
-	//	"afterparse".Alerte();
+		"afterparse".Alerte();
 		var wrapper= new CollectionWrapper(); /// added dans la new version plus
 		CollectionWrapper.plusInfos.add(PlusCollection);
 		var sortoptions:SortableOptions= cast {};
@@ -96,8 +105,10 @@ class BackJS
 		sortoptions.update=onSortChanged;
 		
 		sort=new Sortable("#leftCol .itemslist").sortable(sortoptions);
-		
+		var note= new Note("hello",alerte);
+		note.execute();
 		listen();
+		"endStart".Alerte();
 	}
 	
 	public function onSortChanged(e:JqEvent,ui:UI):Void{
@@ -120,7 +131,7 @@ class BackJS
 	//	trace("setClassMAp");
 	//	compressedMap.Alerte();
 		classMap=haxe.Unserializer.run(compressedMap);
-	//	"".Alerte();
+		"".Alerte();
 		//Lib.alert("hello" +classMap);
 	}
 	
@@ -172,7 +183,6 @@ class BackJS
    	//utilisé à l'enregistrement
 	public function AjaxFormTraitement(){
 		Std.string(classMap).Alerte();
-		
 		var compressedValues=haxe.Serializer.run(classMap);
 	//	back_url.Alerte();
 		trace("classMAp="+classMap +"back_url="+back_url);
@@ -184,22 +194,27 @@ class BackJS
 	}
 	function afterRecord(d) : Void {
 		trace("Fter Record");
-		//Lib.window.location.href=back_url+"nav/"+classMap.voClass+"/"+classMap.id;
+		Lib.window.location.href=back_url+"nav/"+classMap.voClass+"/"+classMap.id;
 	}
 	
 	
 	
-	function deleteCollection(id:String,voName:String,pos:Int) : Void {
+	function deleteCollection(id:String,voName:String,pos:Int,collecItemId) : Void {
 	//	"".Alerte();
 		//Lib.alert("popSignal"+id +"voName="+voName);
 		var maputil= new ClassMapUtils(classMap);
-		maputil.searchCollec(voName);
-		var microListe=maputil.searchinCollecByPos(pos);
+	//	Lib.alert("coolec="+);
+	maputil.searchCollec(voName);
+	//	Lib.alert("maputil"+classMap);
+		var microListe=maputil.searchinCollecById(collecItemId);
+		//Lib.alert("search");
 		var spodid=microListe.id;
+	//	Lib.alert("spodid"+spodid);
 		maputil.removeInCurrent(microListe);
+	//	Lib.alert("remove");
 		//maputil.addInCollec(liste);
 		new JQuery("#"+id).fadeOut(1000, function ():Void{new JQuery("#"+id).remove();});
-		//Lib.alert("afterdelete"+classMap);
+	//	Lib.alert("afterdelete"+classMap);
 		spodDelete(voName,spodid);
 	//	Lib.alert("afterdeleteId"+id);
 		//new JQuery("#"+id).remove();
@@ -232,13 +247,18 @@ class BackJS
 			var raw:Dynamic=null;
 			try
 			{
+				
 			raw=haxe.Unserializer.run(x);
+			
 			}catch ( err:String )
 			{
 				err.Alerte();
 			}
-			parseplusCollec(raw.microliste,PI.graine);
+			///dabord notify> append element 
 			PI.target.notify(raw.element);
+			//puis ajax binding
+			parseplusCollec(raw.microliste,PI.graine);
+			
 	}
 	
 	
@@ -248,12 +268,12 @@ class BackJS
 		for(elements in microfield){
 			microbeElements.createElement(cast elements);
 		}
-		//microbeElements.createCollectionElement(microfield,pos);
+		microbeElements.createCollectionElement(microfield,pos);
 		var maputil= new ClassMapUtils(classMap);
 		maputil.searchCollec(microfield.voName);
 		maputil.addInCollec(microfield);
 		classMap.fields=maputil.mapFields;
-		Std.string(microbeElements).Alerte();
+		Std.string(microfield).Alerte();
 
 	}
 

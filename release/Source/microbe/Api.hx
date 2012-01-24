@@ -111,6 +111,7 @@ class Api implements haxe.rtti.Infos
 	
 	/// tentative d'implementation d'une api publique rest pour les tags
 	public function tags(){
+		
 		//Lib.print("format="+format);
 		//parsing the url
 				var url= new Url(GenericController.appConfig);
@@ -125,23 +126,31 @@ class Api implements haxe.rtti.Infos
 					case "tag":
 					//on attends une url de ce type...
 					//http://localhost:8888/index.php/gap/tags/tag/bim/spod/paf
-						Lib.print("tag"+rest.slice(1));
+						//Lib.print("tag"+rest.slice(1));
 						var args=rest.slice(1);
 						var tagName=args[0].toLowerCase();
 						var spodName= args.slice(2)[0];
-						var spods=microbe.TagManager.getSpodsbyTag(tagName,spodName);
-					//	Lib.print(spods);
+						var spods=null;
+						
+							spods=microbe.TagManager.getSpodsbyTag(tagName,spodName);
+						
+						
+					
 							Lib.print(haxe.Serializer.run(spods));
+							//Lib.print(haxe.Serializer.run("heho"));
 					case "spod":
-
+//trace("spod");
 					//on attends une url de ce type...
 					//http://localhost:8888/index.php/gap/tags/spod/blog
 						var args=rest.slice(1);
 						var spodName=args[0].toLowerCase();
 						var spodId= Std.parseInt(args.slice(2)[0]);
-						var tags=microbe.TagManager.getTags(spodName,spodId);
-						Lib.print(haxe.Serializer.run(tags));
 						
+						
+						var tags=microbe.TagManager.getTags(spodName,spodId);
+						
+						Lib.print(haxe.Serializer.run(tags));
+						//Lib.print(haxe.Serializer.run("heho"+spodName));
 					default:
 					Lib.print("ooups");
 				}
@@ -169,8 +178,24 @@ class Api implements haxe.rtti.Infos
 			public function getLast(_vo:String) : Spodable {
 				//var inst:Object= cast this.createInstance(_vo);
 				//trace("getOne="+_vo+"id="+id);
-				var all= cast getManager(_vo).all();
+				var all=null;
+				try {
+				    // ...
+				all= cast getManager(_vo).all();
+				
+				} catch( msg : String ) {
+				    trace("Error occurred: " + msg);
+				}
+				
+			
+				
+				if(all.length>0){
+					trace("micrabeLast");
 				return all.last();
+				}else{
+					trace("null");
+				return null;
+				}
 			}
 	
 		

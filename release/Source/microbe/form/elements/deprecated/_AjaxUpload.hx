@@ -5,7 +5,7 @@ import microbe.form.FormElement;
  * ...
  * @author postite
  */
-
+#if php
 class AjaxUpload  extends FileUpload
 {
 
@@ -19,14 +19,15 @@ class AjaxUpload  extends FileUpload
 		//TODO
 		//var path = toFolder.substr((Poko.instance.config.applicationPath + "res/").length);
 	
-		var path = toFolder.substr((MyController.appConfig.runtimePath + "res/").length);
+	//	var path = toFolder.substr((MyController.appConfig.runtimePath + "res/").length);
 		var absPath = "http://127.0.0.1/runtime/res/";
 		var str:String = "";
 		
-		str += '<img class="fileName" src="'+MyController.imageCache+"thumb/"+getFileName()+'"/><br/>';
+	//	str += '<img class="fileName" src="'+MyController.imageCache+"thumb/"+getFileName()+'"/><br/>';
 		str += '<input type="file" name="' + n + '" id="' + n + '" ' + attributes + 'value="choisir une image"/>';
 		str += '<input type="hidden" name="' + n + '__previous" id="' + n + '__previous" value="'+value+'"/>';
 		str += '<button type="button" onclick="monjs.JsMelle.graaa( );">Cliquez ici</button>';
 		return str;
 	}
 }
+#end

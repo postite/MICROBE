@@ -211,8 +211,7 @@ input[type="submit"]{
 			}
 			.file_input_button:hover{
 				background-color:#00AAFF;
-				cursor:hand;
-	
+				cursor:pointer;
 			}
 
 			#uploadButton{
@@ -225,9 +224,9 @@ input[type="submit"]{
 	
 			}
 			#uploadButton:hover{
-				cursor:hand;
+				
 				background-image:url("assets/images/up_hover.png");
-	
+				cursor:pointer;
 			}
 
 }///fin .image uploader
@@ -308,6 +307,7 @@ input[type="submit"]{
 		
 			$bigblackblock;
 			position:absolute;
+			top:0;
 			right:0;
 			
 		}
@@ -320,12 +320,20 @@ input[type="submit"]{
 			display:none;
 			//top:$hauteurText;
 			//top:0px;
+			overflow:au;
 			left:0;
 			top:$hauteurText;
 			width:$largeurText;
 			background-color:white;
+			
 	        //padding:10px 0px 0px 15px;
+					
+						
+					
 	 		.result{
+		!important;
+				font-size:19px;
+				font-family:$bree;
 	           //padding:10px 0px;
 	           //margin:10px 0px 10px 0px;
 
@@ -381,7 +389,7 @@ input[type="submit"]{
 
 
 .tooltip{
-	position:relative;
+	
 	text-align:center;
 	width:107px;
 	height:41px;

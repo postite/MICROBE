@@ -54,7 +54,7 @@ class IframeUploader extends FormElement
 		{
 	
 		super(_microfield,_iter);
-		self=this;
+		//self=this;
 		base_url=Lib.window.location.protocol+"//"+Lib.window.location.host;
 		getBouton().click(testUpload);
 		

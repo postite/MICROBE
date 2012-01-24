@@ -27,6 +27,8 @@
 
 
 package microbe.form.elements;
+
+#if php 
 import haxe.Md5;
 import haxe.Timer;
 import php.FileSystem;
@@ -36,6 +38,7 @@ import microbe.form.Form;
 import microbe.form.FormElement;
 import poko.utils.PhpTools;
 import MyController;
+
 class FileUpload extends FormElement
 {
 	public var toFolder:String;
@@ -139,4 +142,6 @@ class FileUpload extends FormElement
 	}
 	
 }
+
+#end
 

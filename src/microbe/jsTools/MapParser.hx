@@ -71,7 +71,7 @@ class MapParser
 												trace(microChamps.toString());*/
 						
 						//var d:AjaxElement=cast Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[chps,pos]);
-						"hop".Alerte();
+						//Std.string(pos+"hop ").Alerte();
 						microbeElements.createCollectionElement(chps,pos);
 						pos++;
 						
@@ -93,7 +93,7 @@ class MapParser
 				
 				var microChamps:Microfield=cast chps;
 				//trace("microChamps"+microChamps.value);
-			//	trace("microchamp="+microChamps.element);
+				//trace("microchamp="+microChamps.element);
 			
 			
 				microbeElements.createElement(microChamps);

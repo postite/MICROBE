@@ -1,7 +1,7 @@
 package microbe;
 import microbe.vo.Taggable;
 import microbe.vo.Spodable;
-
+using microbe.tools.Debug;
 
 
 #if php
@@ -18,7 +18,7 @@ import js.Lib;
 class TagManager
 {
 	
-	
+	public static var debug=1;
 	public function new()
 	{
 		
@@ -26,17 +26,21 @@ class TagManager
 	#if php
 		public static function getSpodsbyTag(tag:String,?spod:String):List<Spodable>{
 			var liste = cast Taxo.manager.getSpodsByTag(tag,spod);
-		//var liste= new List<Spodable>();
-			//Lib.print("manager="+liste.toString());
+		
 			return liste;
 		}
 		
 	public static function getTags(spod:String,?spodId:Int):List<Tag>{
+		
 		var liste:List<Dynamic>;
 		if( spodId !=null){
+		
 		liste = Taxo.manager.getTagsBySpodID(spod, spodId);
+		
 		}else{
+			
 		liste = Taxo.manager.getTags(spod);
+		
 		}
 		var tags= new List<Tag>();
 		for (tax in liste ){
@@ -59,7 +63,7 @@ class TagManager
 			tags.add(tag);
 		}
 
-		Lib.print("tagManager="+liste);
+	
 		return tags;
 	//	return new List<Taxo>();
 	}
@@ -67,13 +71,24 @@ class TagManager
 	
 	#if js
 	public static function getTags(spod:String,?spodId:Int):List<Tag>{
-		var Xreponse=haxe.Http.requestUrl("http://localhost:8888/index.php/gap/tags/spod/"+spod+"/id/"+spodId);
+		Std.string(spodId).Alerte();
+		microbe.jsTools.BackJS.base_url.Alerte();
+		
+		/*try
+								{*/  var Xreponse=haxe.Http.requestUrl(microbe.jsTools.BackJS.base_url+"/index.php/gap/tags/spod/"+spod+"/id/"+spodId);
+			/*throw "error";
+									}
+									catch ( msg:String )
+									{
+										trace("msg"+msg);
+									}*/
 		var reponse = haxe.Unserializer.run(Xreponse);
+		Std.string(reponse).Alerte();
 		return reponse;
 	}
 	
 	public static function addTag(spod:String,spodID:Int,tag:String):String{
-		var reponse=haxe.Http.requestUrl("http://localhost:8888/index.php/gap/recTag/"+tag+"/"+spod+"/"+spodID);
+		var reponse=haxe.Http.requestUrl(microbe.jsTools.BackJS.base_url+"/index.php/gap/recTag/"+tag+"/"+spod+"/"+spodID);
 		return("reponse="+reponse);
 	}
 	
@@ -82,7 +97,7 @@ class TagManager
 		return(new List<Tag>());	
 	}
 	public static function removeTagFromSpod(spod:String,spodID:Int,tag:String):String{
-		var reponse=haxe.Http.requestUrl("http://localhost:8888/index.php/gap/dissociateTag/"+tag+"/"+spod+"/"+spodID);
+		var reponse=haxe.Http.requestUrl(microbe.jsTools.BackJS.base_url+"/index.php/gap/dissociateTag/"+tag+"/"+spod+"/"+spodID);
 		return("reponse="+reponse);
 	}
 

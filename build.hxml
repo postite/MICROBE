@@ -6,7 +6,7 @@
 -lib erazor
 -php www
 
---no-traces
+#--no-traces
 --next
 
 #javascript back
@@ -16,9 +16,9 @@
 -lib feffects
 -lib hxs
 -D noEmbedJS
---no-traces
+#--no-traces
 
--cmd open http://localhost:8888/index.php/pipo
+#-cmd open http://localhost:8888/index.php/pipo
 
 #### example pour synchronisation en ssl
 #-cmd 	rsync -Haurov --delete --exclude 'lib' --exclude 'thieum'  -e ssh /Users/postite/Dropbox/TAMBOUR/www/  postite@ssh.alwaysdata.com:www
@@ -37,7 +37,7 @@
 #### compilation to haxelib
 -cmd   $TM_PROJECT_DIRECTORY"/export.sh" microbe
 ####
-
+#-cmd open http://localhost:8888/index.php/pipo
 #-cmd open http://postite.alwaysdata.net/
 
 # -main TestInstance

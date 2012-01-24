@@ -1,4 +1,5 @@
 package js;
+import js.Dom;
 
 typedef JqEvent = {
 	var target : Dom.HtmlDom;
@@ -57,6 +58,7 @@ extern class JQuery implements ArrayAccess<Dom.HtmlDom> {
 
 	function removeAttr( attr : String ) : JQuery;
 
+	@:overload(function(prop:Dynamic<js.>):js.JQuery{})
 	@:overload(function(prop:String,value:String):js.JQuery{})
 	function css( prop : String ) : String;
 
@@ -170,6 +172,7 @@ extern class JQuery implements ArrayAccess<Dom.HtmlDom> {
 	@:overload(function(value:js.Dom.HtmlDom):js.JQuery{})
 	function prependTo( html : String ) : JQuery;
 
+	@:overload(function(j:js.Dom.HtmlDom):Void{})//postite
 	function remove( ?selector : String ) : JQuery;
 	function replaceAll( selector : String ) : JQuery;
 

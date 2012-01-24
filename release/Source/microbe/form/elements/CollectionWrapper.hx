@@ -40,7 +40,7 @@ class CollectionWrapper extends FormElement
 #end
 
 #if js
-
+import js.Lib;
 using microbe.tools.Debug;
 import js.JQuery;
 import jquery.ui.Sortable;
@@ -60,7 +60,7 @@ typedef PlusInfos =
 		var clone:JQuery;
 		var sort:Sortable;
 		public static var plusInfos:Signal1<PlusInfos>;
-		public static var debug= 1;
+		public static var debug=1;
 		var spod:String;
 		public function new() : Void {
 			
@@ -73,11 +73,12 @@ typedef PlusInfos =
 			var sortoptions:SortableOptions= cast {};
 			//sortoptions.grid=[20,50];
 			sortoptions.update=onSortChanged;
+			sortoptions.start=onSortStart;
 			sortoptions.placeholder="placeHolder";
 			sortoptions.opacity=.2;
 		//	if(me.children(".collection").length>1)
 			sort=new Sortable(".collectionWrapper").sortable(sortoptions); //TODO //pose un probleme sur ajoute et PLUS
-
+			
 		//	Std.string(collec).Alerte();
 		}
 
@@ -100,6 +101,19 @@ typedef PlusInfos =
 		public function notify(newColl:String){
 			"notify".Alerte();
 			me.append(newColl);
+		}
+		private function onSortStart(e:JqEvent,ui:UI) : Void {
+		//	"onsortstart".Alerte();
+			var childs:JQuery=me.children(".collection");
+			for ( a in childs){
+			var value:Int=Lambda.list(a.attr("tri").split("_")).last().length;
+			if( value==0)return dispatchError();
+			}
+			return;
+		}
+		private function dispatchError(){
+			sort.disable();
+			Lib.alert("Veuilez enregistrer avant de réarranger l'ordre !");
 		}
 		private function onSortChanged(e:JqEvent,ui:UI):Void{
 			var pop=sort.sortSerialize({attribute:'tri',key:'id'});
