@@ -8,15 +8,16 @@ using microbe.tools.Debug;
 import microbe.notification.Note;
 import js.JQuery;
 import js.Lib;
-import jquery.ui.Sortable;
-
-
+import postite.jquery.ui.Sortable;
+import microbe.macroUtils.Imports;
+ 
 import microbe.form.elements.TagView;
 import microbe.form.elements.CollectionElement;
 import microbe.form.elements.CollectionWrapper;
 import microbe.form.elements.DeleteButton;
 import microbe.form.elements.PlusCollectionButton;
 
+@:expose("microbe.jsTools.BackJS")
 class BackJS
 {
 	
@@ -56,6 +57,9 @@ class BackJS
 	private function new()
 	{
 	"new".Alerte();
+
+	//taken from element Binder to allow lightJSBAck
+	Imports.pack("microbe.form.elements",false);
 	//base_url=Lib.window.location.protocol+"//"+Lib.window.location.host;
 	//back_url=base_url+"/index.php/pipo/"; //TODO replace pipo par config
 	new JQuery("document").ready(function(e):Void{instance.init();});
@@ -70,7 +74,7 @@ class BackJS
 	public function start():Void{
 		//c'est moche
 		if( classMap!=null){
-		Std.string(classMap.submit).Alerte();
+		//Std.string(classMap.submit).Alerte();
 		new JQuery("#"+classMap.submit).click(function(e):Void{instance.record();});
 		
 	//	parseMap();
@@ -83,17 +87,17 @@ class BackJS
 			//mettre une condition si pas de Tag
 			new TagView(classMap.fields);
 		}
-	}
-		"".Alerte();
+	
+		//"".Alerte();
 		
 		microbeElements=new ElementBinder();
-		"".Alerte();
+		//"".Alerte();
 		var deleteBouton= new DeleteButton(classMap.voClass+"_form_effacer");
 		var parser=new MapParser(microbeElements);
 		
-		"beforeparse".Alerte();
+		//"beforeparse".Alerte();
 		parser.parse(classMap);
-		"afterparse".Alerte();
+		//"afterparse".Alerte();
 		var wrapper= new CollectionWrapper(); /// added dans la new version plus
 		CollectionWrapper.plusInfos.add(PlusCollection);
 		var sortoptions:SortableOptions= cast {};
@@ -105,10 +109,11 @@ class BackJS
 		sortoptions.update=onSortChanged;
 		
 		sort=new Sortable("#leftCol .itemslist").sortable(sortoptions);
-		var note= new Note("hello",alerte);
-		note.execute();
+		//var note= new Note("hello",alerte);
+		//note.execute();
 		listen();
-		"endStart".Alerte();
+		//"endStart".Alerte();
+	}
 	}
 	
 	public function onSortChanged(e:JqEvent,ui:UI):Void{
@@ -131,7 +136,7 @@ class BackJS
 	//	trace("setClassMAp");
 	//	compressedMap.Alerte();
 		classMap=haxe.Unserializer.run(compressedMap);
-		"".Alerte();
+		//"".Alerte();
 		//Lib.alert("hello" +classMap);
 	}
 	

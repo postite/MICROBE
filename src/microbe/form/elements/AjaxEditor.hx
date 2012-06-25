@@ -91,17 +91,17 @@ import js.JQuery;
 import js.Dom;
 import microbe.form.AjaxElement;
 import microbe.form.Microfield;
-
+import postite.jquery.editor.wymeditor.Wymeditor;
 class AjaxEditor extends AjaxElement
 {
 	
 	public static var self:AjaxEditor;
 	public var formDefaultAction:String;
 	private var base_url:String;
-	private var wym:Dynamic;
+	//private var wym:Dynamic;
 	
 	var ed:String;
-	
+	var wym:Wymeditor;
 	var transformed:Bool;
 	public function new(_microfield:Microfield,?iter:Int)
 	{
@@ -120,24 +120,30 @@ class AjaxEditor extends AjaxElement
 	//new JQuery(".editor").wymeditor();
 	
 ///// attention double les editeurs si plusieurs instances
-untyped __js__("
+// untyped __js__("
 	
-	new jQuery(
+// 	new jQuery(
 		
-		function()
-		 {	
-	    	var wym=new jQuery('.editor:visible').wymeditor
-			(
-				{
-					//html:'value'
-					skin:'compact'
-				}
-			);	
-			//wym.update();
-		}
-		);"	
+// 		function()
+// 		 {	
+// 	    	var wym=new jQuery('.editor:visible').wymeditor
+// 			(
+// 				{
+// 					//html:'value'
+// 					skin:'compact'
+// 				}
+// 			);	
+// 			//wym.update();
+// 		}
+// 		);"	
 		
-	); 
+// 	); 
+
+		var wymOptions:WymOptions= cast {};
+		wymOptions.skin="compact";
+		wymOptions.html="hello la compagnie";
+		wym= new Wymeditor(".editor:visible");
+		wym.wymeditor(wymOptions);
 
 }
 
@@ -145,15 +151,15 @@ untyped __js__("
 	//	untyped __js__("jQuery.wymeditors(0).update();");
 //	Lib.alert("wym="+wym.update());
 	//	wym.update();
-	untyped __js__("var i = 0; 
-					while ( jQuery != null ) { 
-						var wym = jQuery.wymeditors(i); 
-							if ( wym != null ) {
-								wym.update(); 
-								i++; } 
-								else {	break; }};"
-				);
-	
+	// untyped __js__("var i = 0; 
+	// 				while ( jQuery != null ) { 
+	// 					var wym = jQuery.wymeditors(i); 
+	// 						if ( wym != null ) {
+	// 							wym.update(); 
+	// 							i++; } 
+	// 							else {	break; }};"
+	// 			);
+	wym.wymeditors(0).update();
 
 	return new JQuery("#"+id).attr("value");
 	}

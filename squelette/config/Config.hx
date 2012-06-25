@@ -29,7 +29,7 @@ import controllers.Terazor;
 import controllers.Myback;
 import controllers.Test;
 import controllers.Pipo;
-import vo.MicrobeNews;
+import vo.News;
 import vo.Edito;
 import controllers.Upload;
 import controllers.ImageBase;
@@ -38,6 +38,8 @@ import controllers.Gap;
 import controllers.Login;
 import vo.RelationTest;
 import vo.ChildTest;
+import controllers.Simple;
+import vo.SubChild;
 
 class Config extends haxigniter.server.Config
 {

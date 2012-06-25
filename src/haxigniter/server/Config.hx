@@ -194,8 +194,12 @@ class Config
 		else
 		{
 			#if php
-			if(!php.FileSystem.exists(logFile))
-				php.io.File.putContent(logFile, output);
+			if(!sys.FileSystem.exists(logFile)){
+				//Change for 2.09
+				//php.io.File.putContent(logFile, output);
+				sys.io.File.saveContent(logFile, output);
+				//end change 2.09
+			}
 			#elseif neko
 			if(!neko.FileSystem.exists(logFile))
 			{

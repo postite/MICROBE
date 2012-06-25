@@ -1,0 +1,13 @@
+<div class="boucle">
+	
+	
+	@for( a in liste){
+		@{var h=new Hash();
+			h.set("item",a);}
+	@include("test/bloc.html",h)
+	<h5>@a</h5>
+}
+	<h2>@test</h2>
+	popoidoud poudpidou
+	
+</div>

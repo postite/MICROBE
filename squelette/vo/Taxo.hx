@@ -2,7 +2,6 @@ package vo;
 import microbe.vo.Taggable;
 import microbe.vo.Spodable;
 	import sys.db.Types;
-
 	import sys.db.Object;
 	import sys.db.Manager;
 	import sys.db.SpodInfos;
@@ -35,12 +34,14 @@ class TagManager extends Manager<Taxo>
 	public function new()
 	{
 	super(Taxo);
+
 	//ChapterManager.amgr = this;
 	}
 public function getTags( spod:String ) : List <Taxo >
 {
-	
+	trace("Taxo.manager from microbe"+spod );
 	var spodTable=getSpodTable(spod);
+	trace("spodTAble="+spodTable);
 	var resultSet=Manager.cnx.request("
 		SELECT distinct TX.* from taxo AS TX
 		JOIN tagSpod AS TS ON TS.tag_id=TX.taxo_id
@@ -48,7 +49,7 @@ public function getTags( spod:String ) : List <Taxo >
 		WHERE TX.spodtype='"+spod.toLowerCase()+"'"
 		);
 		
-		
+		trace("resultSet="+resultSet +"spodTAble="+spodTable);
 		
 		
 		
@@ -63,9 +64,11 @@ public function getTag( tag:String , ?spod:String ) : Taxo
 public function getSpodsByTag(tag:String,?spodstring:String) : List < Spodable >
 {
 	currentspod=firstUpperCase(spodstring);
-	trace("currentSpod="+currentspod);
-	var liste= new List<Spodable>();
+	//trace("currentSpod="+currentspod);
+	
 	var tag_id=getTag(tag,spodstring.toLowerCase()).taxo_id;
+	//trace("tag_id="+tag_id);
+	
 	var spodTable=getSpodTable(spodstring);
 
 var resultSet=Manager.cnx.request("
@@ -74,6 +77,7 @@ var resultSet=Manager.cnx.request("
 	LEFT JOIN  `taxo` AS TX ON TX.`taxo_id`= TS.`tag_id`  
 	WHERE TX.taxo_id="+tag_id
 	);
+	
 
 	var maped:List<Spodable>= resultSet.results().map(maptoSpod);
 
@@ -122,11 +126,16 @@ public function dissociate(tag:String,spod:String,spodId:Int) : Void {
 	Manager.cnx.request("DELETE  FROM tagSpod  WHERE tag_id="+id+" and spod_id="+spodId );
 }
 private function getSpodTable(spod:String):String{
+	trace("getSpoTable"+spod);
 	var voPackage="vo.";
 	var cap= firstUpperCase(spod);
+
 	var spodable:Spodable=cast Type.resolveClass(voPackage+cap);
-	var manager= cast Reflect.field(spodable,"manager");
+	trace("spodable"+spodable);
+	var manager:Manager<sys.db.Object>= cast Reflect.field(spodable,"manager");
+	trace("manager"+manager);
 	var spodinfos:SpodInfos= manager.dbInfos();
+
 	return spodinfos.name; /// added spod_macro specific getTble name via dbInfos
 
 	

@@ -88,7 +88,7 @@ class Api implements haxe.rtti.Infos
 	
 	//à privatiser 
 	public function recTag(tag:String,spod:String,spod_id:Int){
-		
+		tag=StringTools.urlDecode(tag);
 		if( Taxo.manager.getTag(tag,spod) ==null){
 		var neotag= new Taxo();
 		neotag.tag=tag.toLowerCase();
@@ -97,10 +97,12 @@ class Api implements haxe.rtti.Infos
 		}
 		
 		associateTag(tag,spod,spod_id);
+		Lib.print(tag);
 	}
 	
 	
 	public function dissociateTag(tag:String,spod:String,spod_id:Int){
+		tag=StringTools.urlDecode(tag);
 		Taxo.manager.dissociate(tag,spod,spod_id);
 	}
 	public function associateTag(tag:String,spod:String,spodId:Int){
@@ -211,6 +213,7 @@ class Api implements haxe.rtti.Infos
 		
 		public function getAllorded(_vo:String):List<Spodable>{
 			var stringVo = voPackage+_vo; 
+			var liste:List<Object>=new List<Object>();
 			//var manager =  Type.createInstance(
 			var manager:Manager<Object>=cast Reflect.field(Type.resolveClass(stringVo),"manager");
 			//var manager= vo.RelationTest.manager;
@@ -218,7 +221,15 @@ class Api implements haxe.rtti.Infos
 			var table=manager.dbInfos().name;
 			//trace("table="+table);
 			//var liste:List<Dynamic> = manager.all(true);
-			var liste:List<Object> =cast manager.unsafeObjects("SELECT * FROM "+table+" ORDER BY poz",true);
+			for (a in Type.getClassFields(Type.resolveClass(stringVo))){
+				if (a=="getAllorded"){
+					liste= Reflect.callMethod( Type.resolveClass(stringVo), "getAllorded", []);
+					return  cast liste;
+				}
+			}
+		
+				trace( "nofunction");
+			 liste =cast manager.unsafeObjects("SELECT * FROM "+table+" ORDER BY poz",true);
 			
 			return  cast liste;
 			

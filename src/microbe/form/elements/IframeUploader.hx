@@ -68,7 +68,7 @@ class IframeUploader extends FormElement
 		
 		public function testUpload(e:JqEvent){
 				DisableForm();
-
+				disableStatus();
 				formDefaultAction=new JQuery("#"+getForm()).attr("target");
 				
 				var iframe="<iframe id='uploadtarget' name='uploadtarget' style='width:0;height:0;border:0px solid #fff;'></iframe>";
@@ -81,10 +81,19 @@ class IframeUploader extends FormElement
 				new JQuery("#"+getForm()).attr("action","/index.php/upload");
 				new JQuery("#"+getForm()).submit();
 			}
-		
+		function disableStatus() 
+		{
+			new JQuery("#"+this.id+" p.status").remove();
+		}
 		public function onLoad(e:JqEvent){
 		
 			var p=new JQuery("#"+this.id+" #"+getIframe()).contents().text() ;// getElementsByTagName("body").length;
+			if (p=="tooBig"){
+				var status=new JQuery("<p class='status'>");
+				status.text("le fichier est trop lourd");
+				var res=new JQuery("#"+this.id).append(status);
+				
+			}
 			new JQuery("#"+this.id+ " #"+getIframe()).remove();
 			setValue(p);
 			getpreview().fadeTo(0,0);

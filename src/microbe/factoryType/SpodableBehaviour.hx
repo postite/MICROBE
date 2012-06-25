@@ -14,9 +14,6 @@ import php.Lib;
 
 ////implementer les tags la dedans?
 
-
-
-
 class SpodableBehaviour implements IBehaviour
 {
 	public var data:Spodable;
@@ -34,9 +31,7 @@ class SpodableBehaviour implements IBehaviour
 		}
 		return "i'm a spod" + source.voName;
 	} 
-	
-	
-	
+
 	public function create(voName:String,element:FieldType,field:String,?formulaire:Form):IMicrotype{ 
 		trace("im'a spod");
 		var liste= new MicroFieldList();

@@ -88,7 +88,7 @@ class Api implements haxe.rtti.Infos
 	
 	//à privatiser 
 	public function recTag(tag:String,spod:String,spod_id:Int){
-		
+		tag=StringTools.urlDecode(tag);
 		if( Taxo.manager.getTag(tag,spod) ==null){
 		var neotag= new Taxo();
 		neotag.tag=tag.toLowerCase();
@@ -97,10 +97,12 @@ class Api implements haxe.rtti.Infos
 		}
 		
 		associateTag(tag,spod,spod_id);
+		Lib.print(tag);
 	}
 	
 	
 	public function dissociateTag(tag:String,spod:String,spod_id:Int){
+		tag=StringTools.urlDecode(tag);
 		Taxo.manager.dissociate(tag,spod,spod_id);
 	}
 	public function associateTag(tag:String,spod:String,spodId:Int){
@@ -139,16 +141,17 @@ class Api implements haxe.rtti.Infos
 							Lib.print(haxe.Serializer.run(spods));
 							//Lib.print(haxe.Serializer.run("heho"));
 					case "spod":
-//trace("spod");
+					trace("spod");
 					//on attends une url de ce type...
 					//http://localhost:8888/index.php/gap/tags/spod/blog
 						var args=rest.slice(1);
 						var spodName=args[0].toLowerCase();
+						trace("spod"+spodName);
 						var spodId= Std.parseInt(args.slice(2)[0]);
 						
 						
 						var tags=microbe.TagManager.getTags(spodName,spodId);
-						
+						trace("microbe.TagManager.getTags"+tags);
 						Lib.print(haxe.Serializer.run(tags));
 						//Lib.print(haxe.Serializer.run("heho"+spodName));
 					default:
@@ -157,7 +160,21 @@ class Api implements haxe.rtti.Infos
 				
 	    		//associateTag(_tag,2);
 	}
-	
+	public function test(arg:String) 
+	{
+		Lib.print(arg);
+	}
+	//test access specifique method on Spod
+	public function trigger(_voName:String,functionName:String,?params:Array<String>):Dynamic
+	{
+		//return _voName;
+		var instance=createInstance(voPackage+_voName);
+		//return instance;
+		Lib.print( Reflect.callMethod(instance,functionName,params));
+	}
+
+
+
 	//recuper la valeur de "map" passée en POST dans l'appel sous forme Serialisée
 	function getClassMap():ClassMap{
 		var cmap:Compressed= Web.getParams().get("map");
@@ -208,17 +225,31 @@ class Api implements haxe.rtti.Infos
 		//	Lib.print(compressed);
 		}
 		
-		
 		public function getAllorded(_vo:String):List<Spodable>{
+		//public function getAllorded(_vo:String):Dynamic{
+
 			var stringVo = voPackage+_vo; 
+			var liste:List<Object>=new List<Object>();
 			//var manager =  Type.createInstance(
+
 			var manager:Manager<Object>=cast Reflect.field(Type.resolveClass(stringVo),"manager");
+			
 			//var manager= vo.RelationTest.manager;
 			//var liste:List<Dynamic> = manager.all(true);
 			var table=manager.dbInfos().name;
+			
 			//trace("table="+table);
 			//var liste:List<Dynamic> = manager.all(true);
-			var liste:List<Object> =cast manager.unsafeObjects("SELECT * FROM "+table+" ORDER BY poz",true);
+
+			for (a in Type.getClassFields(Type.resolveClass(stringVo))){
+				if (a=="getAllorded"){
+					liste= Reflect.callMethod( Type.resolveClass(stringVo), "getAllorded", []);
+					return  cast liste;
+				}
+			}
+			
+				
+			 liste =cast manager.unsafeObjects("SELECT * FROM "+table+" ORDER BY poz",true);
 			
 			return  cast liste;
 			

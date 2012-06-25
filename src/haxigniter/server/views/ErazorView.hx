@@ -1,6 +1,6 @@
 package haxigniter.server.views;
 import haxigniter.server.Config;
-import php.io.File;
+import sys.io.File;
 import php.Web;
 
 import erazor.Template;

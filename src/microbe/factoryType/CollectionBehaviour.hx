@@ -13,6 +13,7 @@ import microbe.form.Form;
 import microbe.form.Microfield;
 import microbe.form.IMicrotype;
 import microbe.form.elements.CollectionElement;
+
 class CollectionBehaviour implements IBehaviour
 {
 	public var data:Spodable;
@@ -28,14 +29,14 @@ class CollectionBehaviour implements IBehaviour
 		parser.parse();
 	} 
 	public function create(voName:String,element:FieldType,field:String,?formulaire:Form):IMicrotype{ 
-		trace("create collection "+element.classe);
-
+		
+		
 		//instancie un spod de la collection
 		var fieldClass= Type.resolveClass(element.classe);
 		var instanceClass:Spodable=Type.createInstance(fieldClass,[]);
 		//recupere le nom sans le package
 		var sousVoName=Lambda.list(element.classe.split(".")).last();
-		
+		trace("sousvoName="+sousVoName);
 		// nouvelle microfieldList celle qui est retournée à la fin de cette fonction 
 		var newCollec=new MicroFieldList();
 		newCollec.type= collection;
@@ -47,23 +48,35 @@ class CollectionBehaviour implements IBehaviour
 		var creator=new MicroCreator();
 		var collec:MicroFieldList=cast creator.justGet(sousVoName,instanceClass.getFormule());
 		collec.voName=sousVoName;
-		collec.type=spodable;
+		
+			collec.type=spodable;
+		
+		
+	
+		
 		collec.field=field;
+		
+		
 		collec.elementId=newCollec.elementId;
 		collec.pos=0;
-		
+
+		//trace("microfieldList="+collec);
+
+		trace("before collectionWrapper");
 		var graine:Int=0;
 		var wrapper= new CollectionWrapper(sousVoName); //php
+
 		formulaire.addElement(wrapper);
 		
+
 		if (data.id!=null){
 			
-			//trace("----------------------voiture="+tempPos+"<br/>");
-			trace("y'a de la data"+data.id);
+			
+			trace("y'a de la data"+data.id +"voName"+voName);
 			newCollec.id=data.id;
 			//recupere les données
 			var voitures:List<Spodable>=cast Reflect.field(data,field);
-		
+			
 			
 			
 		
@@ -91,9 +104,17 @@ class CollectionBehaviour implements IBehaviour
 				
 					
 				for (item in collec){
+
+		// 			if (element.type==collection){
+						
+		// 				var subcreator=new MicroCreator();
+		// 				var subcollec:MicroFieldList=cast creator.justGet(sousVoName,instanceClass.getFormule());
+		// 				spodList.add(subcollec);
+		// 				continue;
+		// 			}
 					/// cree un microfield pour chaque champs actif (ajaxelement) de collec /sousSpod
 					var bum=new Microfield();
-
+					
 					bum.value= Reflect.field(car,item.field);//"poiipo"+Std.string(graine);//car.nom;//TODO
 
 					bum.type=item.type;
@@ -188,6 +209,7 @@ class CollectionBehaviour implements IBehaviour
 
 /////////////////////pour un nouvel element clique sur 'ajoute' ///////////////
 					else{
+
 						
 								var micros:List<FormElement>= new List<FormElement>();
 								 for (item in collec){

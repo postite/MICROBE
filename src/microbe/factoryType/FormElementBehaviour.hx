@@ -20,7 +20,7 @@ class FormElementBehaviour implements IBehaviour
 
 	}
 	public function create(voName:String,element:FieldType,field:String,?formulaire:Form):IMicrotype{
-
+		trace(voName+"it s a formElement >"+element);
 		var fieldClass= Type.resolveClass(element.classe);
 		var micro:Microfield=creeMicroFieldListElement(field,element,voName,formulaire);		
 

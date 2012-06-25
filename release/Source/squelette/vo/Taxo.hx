@@ -2,7 +2,6 @@ package vo;
 import microbe.vo.Taggable;
 import microbe.vo.Spodable;
 	import sys.db.Types;
-
 	import sys.db.Object;
 	import sys.db.Manager;
 	import sys.db.SpodInfos;
@@ -66,17 +65,19 @@ public function getSpodsByTag(tag:String,?spodstring:String) : List < Spodable >
 	trace("currentSpod="+currentspod);
 	var liste= new List<Spodable>();
 	var tag_id=getTag(tag,spodstring.toLowerCase()).taxo_id;
+	trace("tag_id="+tag_id);
 	var spodTable=getSpodTable(spodstring);
-
+trace("spodtabble="+spodTable);
 var resultSet=Manager.cnx.request("
 	SELECT  DISTINCT B.* from  "+spodTable+" AS B
 	LEFT JOIN `tagSpod` AS TS ON TS.`spod_id`=B.id 
 	LEFT JOIN  `taxo` AS TX ON TX.`taxo_id`= TS.`tag_id`  
 	WHERE TX.taxo_id="+tag_id
 	);
+	
 
 	var maped:List<Spodable>= resultSet.results().map(maptoSpod);
-
+trace("maped="+maped);
 	//Lib.print(liste);
 	//Object
 	//return cast(resultSet.results());

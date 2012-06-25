@@ -1,0 +1,47 @@
+/*---------------------------------------
+  Playfair
+---------------------------------------*/
+@font-face {
+    font-family: Playfair;
+    src: url('fonts/playfair/PlayfairDisplay-Regular.otf');
+    src: url('fonts/playfair/PlayfairDisplay-Regular-webfont.eot');
+    src: url('fonts/playfair/PlayfairDisplay-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/playfair/PlayfairDisplay-Regular-webfont.woff') format('woff'),
+         url('fonts/playfair/PlayfairDisplay-Regular-webfont.ttf') format('truetype'),
+         url('fonts/playfair/PlayfairDisplay-Regular-webfont.svg#PlayfairDisplayRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+/*---------------------------------------
+  Delicious
+---------------------------------------*/
+@font-face {
+  font-family: Delicious;
+  src: url(fonts/delicious/Delicious-Roman.otf);
+  font-style: normal;
+  font-weight: normal;
+}
+/*---------------------------------------
+  League Gothic
+---------------------------------------*/
+@font-face {
+  font-family: Gothic;
+  src: url(fonts/gothic/League-Gothic.otf);
+  font-style: normal;
+  font-weight: normal;
+}
+/*---------------------------------------
+  Goudy
+---------------------------------------*/
+@font-face {
+  font-family: Goudy;
+  src: url(fonts/goudy/GoudyBookletter1911.otf);
+  font-style: normal;
+  font-weight: normal;
+}
+@font-face {
+  font-family: Goudy;
+ src: url(fonts/goudy/OFLGoudyStMTT-Italic.ttf);
+ font-style: italic;
+  font-weight: normal;
+}

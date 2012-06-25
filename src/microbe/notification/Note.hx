@@ -2,6 +2,7 @@ package microbe.notification;
 import javascriptOutils.Layout;
 import js.JQuery;
 import js.Lib;
+
 enum NoteType
 {
 	alerte;

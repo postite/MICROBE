@@ -113,7 +113,7 @@ public function render():String{
 						_classMap.submit=_formulaire.name+"_"+"submit";
 						formulaire=_formulaire;		
 						classMap=_classMap;
-						trace("classMAp="+classMap.fields);
+					//	trace("classMAp="+classMap.fields);
 					//	recurMaptrace(classMap.fields,"-");
 				
 		}
@@ -126,10 +126,10 @@ public function render():String{
 					recurMaptrace(cast chps,indent);
 					
 				}else{
-				trace(indent+"chps="+chps +"<br/>");
-				trace( indent+ chps.field);
-				trace( indent+ chps.value);
-				trace( indent+ chps.voName);
+				//trace(indent+"chps="+chps +"<br/>");
+				//trace( indent+ chps.field);
+				//trace( indent+ chps.value);
+			//	trace( indent+ chps.voName);
 					
 				}
 				
@@ -171,7 +171,7 @@ public function render():String{
 			liste.voName=voName; /// attribution du nomDuVo à la liste
 			liste.type=spodable;
 			liste.id=voInstance.id;
-			trace("yeahhh");
+			//trace("yeahhh");
 			
 					
 			var formule=voInstance.getFormule();
@@ -182,7 +182,7 @@ public function render():String{
 			
 			
 			
-			trace("resolt="+creator.result);
+			//trace("resolt="+creator.result);
 			return creator.result;
 			
 			

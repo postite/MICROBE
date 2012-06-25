@@ -24,15 +24,16 @@ echo "→ Assembling the 'release.zip' package"
 	
 	cp -r src/haxigniter $targetd/Source
 	cp -r src/javascriptOutils $targetd/Source
-	cp -r src/jquery $targetd/Source
-	cp -r src/js $targetd/Source
+	#cp -r src/jquery $targetd/Source
+	#cp -r src/js $targetd/Source
 	cp -r src/microbe $targetd/Source
-	cp -r src/vo $targetd/Source #peut creer des conflits 
+	cp -r src/microbe $targetd/Source
+	#cp -r src/test $targetd/Source #peut creer des conflits 
 	#cp -r src/monjs $targetd/Source
 	cp -r src/poko $targetd/Source
 	
 	
-	
+	cp -r www squelette
 	cp -r src/config squelette
 	cp -r src/controllers squelette
 	cp -r src/Nav.hx squelette

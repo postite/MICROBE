@@ -31,13 +31,13 @@ class Upload implements haxigniter.server.Controller, implements haxe.rtti.Infos
 	// A debug object, for tracing and logging.
 	private static var appDebug = new Debug(appConfig);
 
-	private static var appView = new haxigniter.server.views.Templo(appConfig);
+	//private static var appView = new haxigniter.server.views.Templo(appConfig);
 
 	public function new()
 	{
 		this.config = new config.Config();
 		this.debug = appDebug;
-		this.view = appView;
+		//this.view = appView;
 		this.requestHandler = new FileUploadDecorator(new RestHandler(this.config));
 
 		var url = new haxigniter.server.libraries.Url(this.config);
@@ -52,7 +52,7 @@ class Upload implements haxigniter.server.Controller, implements haxe.rtti.Infos
 	public function show(id : Int)
 	{
 		this.view.assign('id', id);
-		this.view.display('upload/index.mtt');
+		//this.view.display('upload/index.mtt');
 	}
 
 	public function create(posted:Hash<String>,?files:Hash<FileInfo>)

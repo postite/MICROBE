@@ -15,6 +15,8 @@ class RelationTest extends Object, implements Spodable
 	public var id: SId;
 	public var titre:SString<255>;
 	@:skip public var childListe:List<ChildTest>;
+	@:skip public var subchildListe:List<SubChild>;
+
 	static public var manager=new RelationManager(RelationTest);
 	
 	/// interface vo spodable
@@ -23,7 +25,8 @@ class RelationTest extends Object, implements Spodable
 		var formule:Hash<microbe.form.FieldType>;
 		formule = new Hash<microbe.form.FieldType>();
 		formule.set("titre", {classe:"microbe.form.elements.AjaxInput",type:formElement,champs:titre});
-			formule.set("childListe",{classe:"vo.ChildTest",type:collection,champs:childListe});
+		formule.set("childListe",{classe:"vo.ChildTest",type:collection,champs:childListe});
+			
 		return formule;
 	}
 	 public function getDefaultField():String{
@@ -40,6 +43,7 @@ class RelationManager extends Manager<RelationTest>{
 		override function make(a:RelationTest) : Void {
 			trace("make");
 			a.childListe=ChildTest.manager.search({rid:a.id},{orderBy:poz });
+			
 		}
 	
 	//called just before an update is made

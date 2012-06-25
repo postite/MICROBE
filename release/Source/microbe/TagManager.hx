@@ -88,7 +88,7 @@ class TagManager
 	}
 	
 	public static function addTag(spod:String,spodID:Int,tag:String):String{
-		var reponse=haxe.Http.requestUrl(microbe.jsTools.BackJS.base_url+"/index.php/gap/recTag/"+tag+"/"+spod+"/"+spodID);
+		var reponse=haxe.Http.requestUrl(microbe.jsTools.BackJS.base_url+"/index.php/gap/recTag/"+StringTools.urlEncode(tag)+"/"+spod+"/"+spodID);
 		return("reponse="+reponse);
 	}
 	
@@ -97,7 +97,7 @@ class TagManager
 		return(new List<Tag>());	
 	}
 	public static function removeTagFromSpod(spod:String,spodID:Int,tag:String):String{
-		var reponse=haxe.Http.requestUrl(microbe.jsTools.BackJS.base_url+"/index.php/gap/dissociateTag/"+tag+"/"+spod+"/"+spodID);
+		var reponse=haxe.Http.requestUrl(microbe.jsTools.BackJS.base_url+"/index.php/gap/dissociateTag/"+StringTools.urlEncode(tag)+"/"+spod+"/"+spodID);
 		return("reponse="+reponse);
 	}
 

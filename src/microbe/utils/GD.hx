@@ -1,5 +1,10 @@
+/** 
+ * fwork haxe goodness
+ * @author Tony Polinelli <tonyp@touchmypixel.com>
+ */
 
 package microbe.utils;
+
 import php.Lib;
 
 class GD
@@ -42,8 +47,8 @@ class GD
 			case ImageType.SWF: "swf";
 			case ImageType.PSD: "psd";
 			case ImageType.BMP: "bmp";
-			case ImageType.TIFF_II:"tiff";
-			case ImageType.TIFF_MM:"tiff";
+			case ImageType.TIFF_II: "tiff";
+			case ImageType.TIFF_MM: "tiff";
 			case ImageType.JPC: "jpc";
 			case ImageType.JP2: "jp2";
 			case ImageType.JPX: "jpf";
@@ -98,7 +103,7 @@ class GD
 		return untyped __call__("imagealphablending ", image, on);
 	}
 	
-	/** draws a partial ellipse centered at cx, cy (top left is 0, 0) in the image represented by image. W and h specifies the ellipse's width and height respectively while the start and end points are specified in degrees indicated by the s and e arguments. 0° is located at the three-o'clock position, and the arc is drawn clockwise.  */
+	/** draws a partial ellipse centered at cx, cy (top left is 0, 0) in the image represented by image. W and h specifies the ellipse's width and height respectively while the start and end points are specified in degrees indicated by the s and e arguments. 0Â° is located at the three-o'clock position, and the arc is drawn clockwise.  */
 	public static inline function  imageArc( image:ImageResource, cx:Int, cy:Int, w:Int, h:Int, s:Int, e:Int, color:Int):Bool
 	{
 		return untyped __call__("imagearc ", image, cx, cy, w, h, s, e, color );

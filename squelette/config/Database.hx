@@ -43,6 +43,7 @@ class DevelopmentConnection extends Database
 		this.debug = null; // Displays debug information on database/query errors if set.
 		this.port = null;//3306;
 		this.socket = null;
+		
 	}
 }
 

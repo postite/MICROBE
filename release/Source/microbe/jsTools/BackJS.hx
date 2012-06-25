@@ -105,8 +105,8 @@ class BackJS
 		sortoptions.update=onSortChanged;
 		
 		sort=new Sortable("#leftCol .itemslist").sortable(sortoptions);
-		var note= new Note("hello",alerte);
-		note.execute();
+		//var note= new Note("hello",alerte);
+		//note.execute();
 		listen();
 		"endStart".Alerte();
 	}

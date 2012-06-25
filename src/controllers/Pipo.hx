@@ -55,6 +55,8 @@ class Pipo extends Back
 		//	sys.db.TableCreate.create(vo.RelationTest.manager);
 		//sys.db.TableCreate.create(vo.TagSpod.manager);
 			//sys.db.TableCreate.create(vo.Taxo.manager);
+			//sys.db.TableCreate.create(vo.SubChild.manager);
+
 		//	new vo.Edito();
 			api= new Api();	
 			this.view.assign("contenttype",null);

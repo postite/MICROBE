@@ -18,10 +18,12 @@ class ImageUploader extends IframeUploader
 		str+="<div class='imageuploader' id="+n+">";
 		str+="<img src='/microbe/css/assets/blankframe.png' id='preview' >";
 		str+="<a class='file_input_button'>choisir</a>";
+
 		str+="<input type='file' class='hiddenfileinput' name='"+name+"fl' id='fileinput' enctype='multipart/form-data'/>";
 		str+="<input type='hidden' id='retour' value=''>";
 		//str+="<iframe id='"+composantName+"upload_target"+iter+"' name='"+composantName+"upload_target"+iter+"' src='' style='width:0;height:0;border:0px solid #fff;'></iframe>";
 		str+="<a id='uploadButton' ></a>";
+		str+="<a id='cancel'>rien</a>";
 		str+="</div>";
 		return str;
 	//return "<div id='"+n+"' microbe="+Type.getClassName(ImageUploader)+"><img src='' id='imgpreview"+iter+"' > <input type='file' name='img_fl"+iter+"' id='fileinput' enctype='multipart/form-data'/><input type='hidden' id='retour"+iter+"' value=''><iframe id='img_upload_target"+iter+"' name='img_upload_target"+iter+"' src='' style='width:0;height:0;border:0px solid #fff;'></iframe><input type='submit' value='Upload some data' id='uploadButton' /></div>";
@@ -55,8 +57,13 @@ class ImageUploader extends IframeUploader {
 		//composantName="ImageUploader";
 	//	Lib.alert("ImageUploader"+this.id);
 		new JQuery("#"+this.id+" .file_input_button").click(onFake);
+		new JQuery("#"+this.id+" #cancel").click(onVide);
 		//"test".Alerte();
 		//Debug.Alerte("retest");
+	}
+	function onVide(e:JqEvent) 
+	{
+		setValue(null);
 	}
 	function onFake(e:JqEvent) : Void {
 		e.preventDefault();

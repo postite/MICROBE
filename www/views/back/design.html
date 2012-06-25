@@ -37,8 +37,8 @@
 		  		   		@{liste=scope.getVoList(currentVo);}
 		  		   		<ul class="itemslist">
 		  		   		@for(item in liste){ 		   		
-		  		   		 <a href="@backpage/choix/@item.id/@currentVo" tri="id_@item.id"> <li >
-		  		   			<!-- raw --><h>@item.getDefaultField()</h><span>@item.poz</span></li></a>
+		  		   		 <a href="@backpage/choix/@item.id/@currentVo" tri="id_@item.id"> <li poz="@item.poz" >
+		  		   			<!-- raw --><h4>@item.getDefaultField()</h4></li></a>
 		  		   		}	
 		  		   		</ul>
 		  		   		}

@@ -5,7 +5,7 @@ import microbe.form.IMicrotype;
 import microbe.form.AjaxElement;
 import microbe.form.Microfield;
 //import microbe.form.ImportAllAjaxe;
-import microbe.macroUtils.Imports; 
+
 using microbe.tools.Debug;
 import microbe.form.MicroFieldList;
 
@@ -20,7 +20,7 @@ class ElementBinder
 	public function new()
 	{
 		//"new".Alerte();
-		Imports.pack("microbe.form.elements",false);
+		
 		
 		elements= new List<AjaxElement>();
 	}
@@ -34,13 +34,14 @@ class ElementBinder
 		
 	}
 	public function createElement(microChamps:Microfield):Void{
+		//if (microChamps==null )return;
 		Std.string(microChamps.element).Alerte();
 		var classe=Type.resolveClass(microChamps.element);
 		Std.string(classe).Alerte();
-		Type.getClassName(classe).Alerte();
+		//Type.getClassName(classe).Alerte();
 		var d:AjaxElement=cast Type.createInstance(Type.resolveClass(microChamps.element),[microChamps]);
 		this.add(d);
-		"after".Alerte();
+		//"after".Alerte();
 	}
 
 	

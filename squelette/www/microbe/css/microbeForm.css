@@ -1,0 +1,302 @@
+form {
+	font-family : "BreeLight";
+	display : block;
+	height : 100%;
+	float : left;
+}
+form ul {
+	max-width : 600px;
+}
+form ul li {
+	margin-bottom : 24px;
+}
+form ul li li li {
+	background : #0AF;
+}
+form ul li label {
+	display : inline-block;
+	zoom : 1;
+	*display : inline;
+	background-color : black;
+	color : white;
+	padding-left : 5px;
+	padding-right : 5px;
+	line-height : 28px;
+	font-size : 16px;
+	height : 28px;
+	font-family : "BreeLight";
+	font-weight : 100;
+	clear : left;
+	margin-top : 28px;
+	font-family : "BreeLight";
+}
+form .collectionWrapper {
+	padding : 10px 10px 10px 10px;
+	border : 1px dashed gray;
+	position : relative;
+}
+form .collectionWrapper .placeHolder {
+	list-style : none;
+	display : block;
+	min-width : 100px;
+	min-height : 100px;
+	border : 1px dashed gray;
+	background : #0AF;
+}
+form .collectionWrapper .collection {
+	position : relative;
+	padding : 5px;
+	margin-bottom : 10px;
+	background-color : #DCDCDC;
+	min-width : 100px;
+	min-height : 100px;
+}
+form .collectionWrapper .deletecollection {
+	position : absolute;
+	top : 10px;
+	right : 10px;
+}
+form .collectionWrapper .deletecollection:hover {
+	background : #D0D0D0;
+}
+form input[type="text"] {
+	margin-top : 0px;
+	height : 28px;
+	background : gray;
+	border : none;
+	outline : none;
+	padding : 5px;
+	width : 100%;
+}
+form input[type="file"] {
+	color : #fff;
+}
+form input[type="file"] input[type="submit"] {
+	background : white;
+	font : "BreeLight";
+	border : none;
+	border-radius : 20px;
+	-moz-border-radius : 20px;
+	-webkit-border-radius : 20px;
+}
+form textarea {
+	background : #fff;
+	border : none;
+	border-radius : 3px;
+	-moz-border-radius : 3px;
+	-webkit-border-radius : 3px;
+	outline : none;
+	padding : 5px;
+	width : 200px;
+}
+form textarea:focus {
+	background-color : gray;
+}
+form button {
+	height : 34px;
+	background : black;
+	border : none;
+	color : #ffffff;
+	display : block;
+	font : "BreeLight";
+	letter-spacing : 1px;
+	margin : 5px;
+	padding : 7px 25px;
+}
+form button:hover {
+	background : #8E9430;
+	cursor : pointer;
+	color : white;
+}
+form .tailleSelector {
+	font-size : 36px;
+}
+form .tailleSelector .taille {
+	border : 1px solid black;
+}
+form input[type="submit"] {
+	background-color : black;
+	border-style : none;
+	color : white;
+}
+.imageuploader {
+	position : relative;
+}
+.imageuploader .hiddenfileinput {
+	visibility : hidden;
+	font-size : 45px;
+	width : 45px;
+	height : 45px;
+	top : 0px;
+	color : green;
+	opacity : 0.3;
+	filter : alpha(opacity=30);
+	zoom : 1;
+}
+.imageuploader .file_input_button {
+	display : block;
+	color : white;
+	font-size : 12px;
+	height : 38px;
+	width : 40px;
+	padding : 0 2px;
+	line-height : 38px;
+	position : absolute;
+	top : 0px;
+	right : 45px;
+	background-color : black;
+}
+.imageuploader .file_input_button:hover {
+	background-color : #00AAFF;
+	cursor : pointer;
+}
+.imageuploader #uploadButton {
+	width : 38px;
+	height : 38px;
+	position : absolute;
+	top : 0px;
+	right : 0px;
+	background-image : url("assets/images/up.png");
+}
+.imageuploader #uploadButton:hover {
+	background-image : url("assets/images/up_hover.png");
+	cursor : pointer;
+}
+#tagSelector {
+	position : absolute;
+	right : 0;
+	width : 250px;
+}
+#tagSelector .tags {
+	width : 100%;
+	height : 100%;
+}
+#tagSelector .tagitem {
+	float : right;
+	color : white;
+	margin-left : 5px;
+	padding-right : 0px;
+	margin-top : 5px;
+}
+#tagSelector .tagitem .tag {
+	display : inline-block;
+	zoom : 1;
+	*display : inline;
+	background-color : black;
+	color : white;
+	padding-left : 5px;
+	padding-right : 5px;
+	line-height : 28px;
+	font-size : 16px;
+	height : 28px;
+	font-family : "BreeLight";
+	font-weight : 100;
+	height : 29px;
+	line-height : 29px;
+	float : left;
+}
+#tagSelector .tagitem .minus {
+	float : right;
+	background-image : url("assets/images/tagsuppr.png");
+	width : 29px;
+	height : 29px;
+}
+#tagSelector .tagitem .minus:hover {
+	background-image : url("assets/images/tagsuppr_hover.png");
+	cursor : hand;
+}
+#tagSelector #instantag {
+	position : relative;
+	background-color : olive;
+}
+#tagSelector #instantag input {
+	margin-top : 0px;
+	height : 28px;
+	background : gray;
+	border : none;
+	outline : none;
+	padding : 5px;
+	width : 100%;
+}
+#tagSelector #instantag #addTag {
+	display : inline-block;
+	zoom : 1;
+	*display : inline;
+	background-color : black;
+	color : white;
+	padding-left : 5px;
+	padding-right : 5px;
+	line-height : 28px;
+	font-size : 16px;
+	height : 28px;
+	font-family : "BreeLight";
+	font-weight : 100;
+	font-size : 16px;
+	font-family : "HelveticaNeueLTStd45Light";
+	font-weight : 100;
+	position : absolute;
+	top : 0;
+	right : 0;
+}
+#tagSelector #instantag #addTag:hover {
+	background-color : #0AF;
+	cursor : hand;
+}
+#tagSelector #instantag #results {
+	position : absolute;
+	display : none;
+	overflow : auto;
+	left : 0;
+	top : 30px;
+	width : 120px;
+	background-color : white;
+}
+#tagSelector #instantag #results .result a.readMore {
+	color : green;
+}
+#tagSelector #instantag #results .result option {
+	font-size : 19px;
+	margin : 0px 0px 5px 0px;
+	padding : 0px;
+	color : #1111CC;
+	font-weight : normal;
+}
+#tagSelector #instantag #results .result option a {
+	text-decoration : none;
+	border-bottom : 1px solid #1111cc;
+}
+#tagSelector #instantag #results .result p {
+	margin : 0;
+	padding : 0;
+}
+#tagSelector #instantag #results .result:hover {
+	background-color : gray;
+	cursor : hand;
+}
+.submitor {
+	position : fixed;
+	right : 0;
+	bottom : 50px;
+	margin : 0;
+}
+.deletebutton {
+	position : fixed;
+	right : 0;
+	bottom : 10px;
+	margin : 0;
+}
+.tooltip {
+	text-align : center;
+	width : 107px;
+	height : 41px;
+	color : white;
+	font-family : "BreeLight";
+	background-color : white;
+	background : url("assets/tooltip.png") no-repeat top left;
+	position : absolute;
+	z-index : 10;
+}
+.tooltip span {
+	line-height : 30px;
+	margin-left : 5px;
+}
