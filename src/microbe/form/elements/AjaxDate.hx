@@ -30,18 +30,25 @@ class AjaxDate extends AjaxElement{
 					return valeur;
 						//return "poop";
 			}
-		
+	
 	override public function setValue(val:String):Void{
-			//	Lib.alert("setpos="+pos);
+			Lib.alert("#madate_"+pos +"date val="+val);
+
+			var _date:Date=null;
 				if( val==null){
 					val= Date.now().toString();
-					
+				
 				}
-			
-				var valeur=new JQuery("#madate_"+pos).val(val);
-				//Lib.alert("valeur="+valeur);
+				_date=Date.fromString(val);
+				//Lib.alert("date="+_date);
+				var format=DateTools.format(_date,"%Y-%m-%d");
+				Lib.alert("format="+format);
+				new JQuery("#madate_"+pos).val(format);
+				//return valeur;
+
 				
 			}
+
 	
 }
 #end
@@ -53,7 +60,7 @@ class AjaxDate extends AjaxElement{
 	class AjaxDate extends FormElement
 	{
 
-		public function new(name:String, ?label:String, ?value:String, ?required:Bool=false, ?validators=null, ?attributes:String="")
+		public function new(name:String,?label:String, ?value:String, ?required:Bool=false, ?validators=null, ?attributes:String="")
 		{
 			super();
 			this.name=name;
@@ -63,7 +70,7 @@ class AjaxDate extends AjaxElement{
 		override public function render(?iter:Int):String{
 			if (iter==null)iter=0;
 			
-			 var str="<input id='madate_"+iter+"' type='date'  name='madate_"+iter+"' value='' />";
+			 var str="<input id='madate_"+iter+"' type='date' name='madate_"+iter+"' value='2012-12-11' />";
 			return str;
 		}
 	}
