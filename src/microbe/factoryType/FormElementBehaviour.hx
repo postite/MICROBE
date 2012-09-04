@@ -52,7 +52,13 @@ class FormElementBehaviour implements IBehaviour
 			brickElement.element=element.classe; //instancier MicrobeElement
 			brickElement.elementId =voName+"_"+field;
 			brickElement.type=element.type;
-			brickElement.value=Reflect.field(data,field);
+
+			/// forcer le toString() pour les dates sinon il fait un Std.string auto!
+			//et std.string génére une date de type TUE 23...
+			var val:Dynamic=Reflect.field(data,field);
+			if( Std.is(val,Date)){ val=val.toString();}
+			brickElement.value=val;
+
 			return brickElement;
 		}
 		
