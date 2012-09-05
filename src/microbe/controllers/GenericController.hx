@@ -93,7 +93,7 @@ class GenericController implements haxigniter.server.Controller, implements haxe
 	public static function main()
 	{
 
-		
+		microbe.tools.Mytrace.setRedirection();
 		// Configure database depending on development mode.
 		if(appConfig.development)
 			appDb = new DevelopmentConnection();
