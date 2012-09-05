@@ -56,7 +56,7 @@ class BackJS
 	//constriucteur
 	private function new()
 	{
-	"new".Alerte();
+	microbe.tools.Mytrace.setRedirection();
 
 	//taken from element Binder to allow lightJSBAck
 	Imports.pack("microbe.form.elements",false);
