@@ -52,6 +52,7 @@ class Api implements haxe.rtti.Infos
 		
 	public function new()
 	{
+		microbe.tools.Mytrace.setRedirection();
 		cnx = Manager.cnx = GenericController.appDb.connection;
 		Manager.initialize();
 		voPackage=GenericController.appConfig.voPackage;
@@ -179,6 +180,7 @@ class Api implements haxe.rtti.Infos
 	function getClassMap():ClassMap{
 		var cmap:Compressed= Web.getParams().get("map");
 		map = haxe.Unserializer.run(cmap);
+		trace( "map="+map);
 		return map;
 	}
 	
@@ -254,6 +256,34 @@ class Api implements haxe.rtti.Infos
 			return  cast liste;
 			
 		}
+
+		public function getSearch(_vo:String,search:Dynamic):List<Spodable>
+		{
+			var stringVo = voPackage+_vo; 
+			var liste:List<Object>=new List<Object>();
+			//var manager =  Type.createInstance(
+
+			var manager:Manager<Object>=cast Reflect.field(Type.resolveClass(stringVo),"manager");
+			
+			//var manager= vo.RelationTest.manager;
+			//var liste:List<Dynamic> = manager.all(true);
+			var table=manager.dbInfos().name;
+			
+			//trace("table="+table);
+			//var liste:List<Dynamic> = manager.all(true);
+
+			for (a in Type.getClassFields(Type.resolveClass(stringVo))){
+				if (a=="getAllorded"){
+					liste= Reflect.callMethod( Type.resolveClass(stringVo), "getAllorded", []);
+					return  cast liste;
+				}
+			}
+			
+				
+			 liste =cast manager.dynamicSearch(search);
+			
+			return  cast liste;
+		}
 		
 		public function getAll(_vo:String):List<Spodable> {
 			var stringVo = voPackage+_vo; 
@@ -280,8 +310,9 @@ class Api implements haxe.rtti.Infos
 		trace("record"+map.id);
 		var voInstance:Spodable= null;
 		if( map.id!=null){
+			trace("map.id!=null");
 		voInstance=getOne(map.voClass,map.id);
-		trace("map.id="+map.id);
+		
 		}else{
 		voInstance=Type.createInstance(Type.resolveClass(voPackage +map.voClass),[]);
 		
@@ -293,7 +324,9 @@ class Api implements haxe.rtti.Infos
 		creator.source=map.fields;
 		creator.data=voInstance;
 		var fullSpod:Object=cast creator.record();
-		trace("beforeRec="+fullSpod);
+		// trace("beforeRec="+Type.typeof(cast(fullSpod).date));
+		// trace("beforeReccheck date="+cast(fullSpod).date.getTime());
+		cast(fullSpod).date=Date.now();
 		if(cast(fullSpod).id==null){
 		fullSpod.insert();
 		}else{
