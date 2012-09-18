@@ -10,13 +10,17 @@ import js.JQuery;
 import js.Lib;
 import postite.jquery.ui.Sortable;
 import microbe.macroUtils.Imports;
- 
 import microbe.form.elements.TagView;
 import microbe.form.elements.CollectionElement;
 import microbe.form.elements.CollectionWrapper;
 import microbe.form.elements.DeleteButton;
 import microbe.form.elements.PlusCollectionButton;
+#if elements
 
+import microbe.ImportHelper;
+#else
+  #error "add imports in microbe.ImportHelper.hx and compile with -D elements"
+#end
 @:expose("microbe.jsTools.BackJS")
 class BackJS
 {
@@ -56,9 +60,12 @@ class BackJS
 	//constriucteur
 	private function new()
 	{
-	microbe.tools.Mytrace.setRedirection();
+	
 
 	//taken from element Binder to allow lightJSBAck
+	
+	microbe.tools.Mytrace.setRedirection();
+
 	Imports.pack("microbe.form.elements",false);
 	//base_url=Lib.window.location.protocol+"//"+Lib.window.location.host;
 	//back_url=base_url+"/index.php/pipo/"; //TODO replace pipo par config
@@ -159,7 +166,7 @@ class BackJS
 
 	///utilisé par bouton delete
 	function deleteSpod():Void{
-		"sur?".Alerte();
+		
 	//Lib.window.location.href="http://localhost:8888/index.php/myback/delete/"+classMap.voClass+"/"+classMap.id;
 		Lib.window.location.href=back_url+"delete/"+classMap.voClass+"/"+classMap.id;
 	}
@@ -175,10 +182,10 @@ class BackJS
 	///appelé par bouton enregistrer
    public function record(){
    	trace("clika"+microbeElements);
-   	"record".Alerte();
+   
    	for( mic in microbeElements){
 		//	mic.getValue().Alerte();
-			trace("micVAlue="+mic.getValue());
+			//trace("micVAlue="+mic.getValue());
    		mic.microfield.value= mic.getValue();
    	}
 		AjaxFormTraitement();
