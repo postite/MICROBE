@@ -201,8 +201,9 @@ class FormElement
 	public function getLabel():String
 	{
 		var n = form.name + "_" + name;
-	
+		if (label!=null)
 		return "<label for=\"" + n + "\" class=\""+getLabelClasses()+"\" id=\"" + n + "Label\">" + label +(if(required) form.labelRequiredIndicator) +"</label>";
+		return null;	
 	}
 	
 	public function getClasses() : String
