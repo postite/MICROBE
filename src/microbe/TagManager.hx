@@ -8,6 +8,7 @@ using microbe.tools.Debug;
 
 import vo.Taxo;
 import php.Lib;
+import sys.db.Manager;
 #end
 
 #if js
@@ -17,33 +18,51 @@ import js.Lib;
 
 class TagManager
 {
-	
+	static var currentspod:String;
 	public static var debug=1;
 	public function new()
 	{
 		
 	}
 	#if php
-		public static function getSpodsbyTag(tag:String,?spod:String):List<Spodable>{
-		
-		var liste:List<Spodable>= null;
-			try {
-    liste = cast Taxo.manager.getSpodsByTag(tag,spod);
-    
-	} catch( msg : String ) {
-    trace("Error occurred: " + msg);
-	}
-			
-	return liste;
+	
+
+	public static function getSpodsbyTag(tag:String,spodstring:String):List<Spodable>{
+
+	currentspod=firstUpperCase(spodstring);
+	//trace("currentSpod="+currentspod);
+	
+	var tag_id=getTag(tag,spodstring.toLowerCase()).taxo_id;
+	//trace("tag_id="+tag_id);
+	
+	var spodTable=getSpodTable(spodstring);
+
+	var resultSet=Manager.cnx.request("
+	SELECT  DISTINCT B.* from  "+spodTable+" AS B
+	LEFT JOIN `tagSpod` AS TS ON TS.`spod_id`=B.id 
+	LEFT JOIN  `taxo` AS TX ON TX.`taxo_id`= TS.`tag_id`  
+	WHERE TX.taxo_id="+tag_id
+	);
+	
+
+	var maped:List<Spodable>= resultSet.results().map(maptoSpod);
+
+	//Lib.print(liste);
+	//Object
+	//return cast(resultSet.results());
+	return maped;
+//	Lib.print("resultSet="+resultSet.results().toString());
+//	return new List<Spodable>();
+//	return cast liste;
 		}
-		
+	
 	public static function getTags(spod:String,?spodId:Int):List<Tag>{
-		trace("getTags");
+		
 		var liste:List<Dynamic>;
 		if( spodId !=null){
-		liste = Taxo.manager.getTagsBySpodID(spod, spodId);
+		liste = Taxo.manager.getTaxoBySpodID(spod, spodId);
 		}else{
-		liste = Taxo.manager.getTags(spod);
+		liste = Taxo.manager.getTaxos(spod);
 		}
 		var tags= new List<Tag>();
 		for (tax in liste ){
@@ -55,10 +74,46 @@ class TagManager
 		return tags;
 	//	return new List<Taxo>();	
 	}
+
+	public static function getTaxo( tag:String , ?spod:String ) : Taxo
+	{
+	return Taxo.manager.search({ tag : tag, spodtype:spod}).first();
+	}
+
+	private static  function getTaxos( spod:String ) : List <Taxo >
+	{
+	
+	var spodTable=getSpodTable(spod);
+	trace("spodTAble="+spodTable);
+	var resultSet=Manager.cnx.request("
+		SELECT distinct TX.* from taxo AS TX
+		JOIN tagSpod AS TS ON TS.tag_id=TX.taxo_id
+		JOIN "+spodTable+" AS SP ON SP.id=TS.spod_id
+		WHERE TX.spodtype='"+spod.toLowerCase()+"'"
+		);
+		 
+		trace("resultSet="+resultSet +"spodTAble="+spodTable);
+
+	return cast resultSet.results();
+	//return search({spodtype:spod});
+	}
+
+	private static function getTaxoBySpodID(spod:String,spod_id:Int) : List < Taxo >
+	{
+	var spodTable=getSpodTable(spod);
+	var resultSet=Manager.cnx.request("
+	SELECT DISTINCT TX.taxo_id , TX.tag from `taxo` AS TX
+	LEFT JOIN `tagSpod` AS TS ON TS.`tag_id`=TX.`taxo_id`
+	LEFT JOIN "+spodTable+" AS B ON TS.`spod_id`= B.`id`
+	WHERE B.id="+spod_id+" AND TX.spodtype='"+spod+"'"
+	);
+	return cast (resultSet.results());
+	}
+	
 	
 	public static function getTagsById(spod:String,spodId:Int):List<Tag>{	
 		trace("getTags");
-		var liste = Taxo.manager.getTagsBySpodID(spod, spodId);
+		var liste = getTaxoBySpodID(spod, spodId);
 		var tags= new List<Tag>();
 		for (tax in liste ){
 			var tag= new Tag();
@@ -71,6 +126,171 @@ class TagManager
 		return tags;
 	//	return new List<Taxo>();
 	}
+
+	//return spods id for a tag and a spodtype 
+	public static function getIDS(tag:String,spod:String):List<Int>{
+	//var listeTagID=this.search({tag:tag,spodtype:spod.toLowerCase()});
+	//return listeTagID;
+	var result:sys.db.ResultSet=Manager.cnx.request("Select spod_id 
+from tagSpod 
+where tag_id 
+in (
+Select taxo_id 
+from taxo 
+where tag='"+tag+"' and spodtype='"+spod+"')");
+	 var map:List<Int>= new List();
+	 while (result.hasNext()){
+	 	map.add(result.next().spod_id);
+	 }
+	return map;
+}
+
+
+ public static function specialcount(tag:String,spod:String,_search:Dynamic):Int
+{
+	var table=getSpodTable(spod);
+	currentspod=firstUpperCase(spod);
+	var str= new StringBuf();
+	str.add("Select count(*) from "+table);
+ 	str.add(" ");
+ 	str.add(" Where ");
+  	if (_search!=null){
+  	
+    var first = true;
+   		for (key in Reflect.fields(_search)){
+   		  //if(!first) ;
+   		  //trace(key +"="+Reflect.field(_search,key));
+   		  var value=Reflect.field(_search,key);
+   		 	 if( Std.is(value,String)){
+   		 	str.add(key +"='"+value+"'");
+   		 	 }else{
+   		 	   str.add(key +"="+value);
+   		 	 }
+   		  first=false;
+   		  str.add(" AND ");
+   		}
+    
+    str.add(" ");
+	}
+str.add(" id in (Select `spod_id` 
+from tagSpod 
+where tag_id 
+in (
+Select taxo_id 
+from taxo 
+where tag='"+tag+"' and spodtype='"+spod.toLowerCase()+"')) ");
+
+
+var  result:sys.db.ResultSet=Manager.cnx.request(str.toString());
+
+
+///why? 
+Lib.print(result.getIntResult(0));
+//return  result.results();
+return result.getIntResult(0);
+}
+public static function specialsearch(tag:String,spod:String,_search:Dynamic,tri:{ ?orderBy : Array<String>, ?limit : Array<Int> },?generateSpods:Bool=true):List<microbe.vo.Spodable> 
+{
+	var table=getSpodTable(spod);
+	currentspod=firstUpperCase(spod);
+	var str= new StringBuf();
+	str.add("Select * from "+table);
+ 	str.add(" ");
+ 	str.add(" Where ");
+  	if (_search!=null){
+  	
+    var first = true;
+    for (key in Reflect.fields(_search)){
+      //if(!first) ;
+      //trace(key +"="+Reflect.field(_search,key));
+      var value=Reflect.field(_search,key);
+      if( Std.is(value,String)){
+     str.add(key +"='"+value+"'");
+      }else{
+        str.add(key +"="+value);
+      }
+      first=false;
+      str.add(" AND ");
+    }
+    
+    str.add(" ");
+}
+str.add(" id in (Select `spod_id` 
+from tagSpod 
+where tag_id 
+in (
+Select taxo_id 
+from taxo 
+where tag='"+tag+"' and spodtype='"+spod.toLowerCase()+"')) ");
+if (tri!=null){
+if (tri.orderBy!=null)
+str.add(" ORDER BY "+tri.orderBy.join(","));
+if (tri.limit!=null)
+str.add(" LIMIT "+tri.limit.join(","));
+}
+var  result:sys.db.ResultSet=Manager.cnx.request(str.toString());
+if (generateSpods)return  result.results().map(maptoSpod);
+
+	return cast result.results();
+}
+
+
+
+
+///rec / delete
+
+public function associate(tag:String,spod:String,spodId:Int){
+	var id=getTaxo(tag,spod).taxo_id;
+	Manager.cnx.request("insert into tagSpod (tag_id,spod_id) VALUES ("+id+","+spodId+") ");
+	//object("insert into tagSpod (tag_id,spod_id) VALUES ("+id+","+spodId+") ",true);
+}
+
+public function dissociate(tag:String,spod:String,spodId:Int) : Void {
+	var id=getTaxo(tag,spod).taxo_id;
+	Manager.cnx.request("DELETE  FROM tagSpod  WHERE tag_id="+id+" and spod_id="+spodId );
+}
+
+
+//////outils
+
+static function maptoSpod(res:Dynamic) :Spodable{
+	var spod:Spodable= Type.createInstance(Type.resolveClass("vo."+currentspod),[]);
+	var formule= spod.getFormule();
+	Reflect.setField(spod, "id",Reflect.field(res,"id"));
+	for (key in formule.keys()){
+		trace("key="+key);
+		
+	//	if( Reflect.field(res,key)!=null)
+		Reflect.setField(spod, key,Reflect.field(res,key));
+	}
+	return spod;
+	}
+
+// retourne la table du spod en question
+ static function getSpodTable(spod:String):String{
+	trace("getSpoTable"+spod);
+	var voPackage="vo.";
+	var cap= firstUpperCase(spod);
+
+	var spodable:Spodable=cast Type.resolveClass(voPackage+cap);
+	trace("spodable"+spodable);
+	var manager:Manager<sys.db.Object>= cast Reflect.field(spodable,"manager");
+	trace("manager"+manager);
+	var spodinfos:SpodInfos= manager.dbInfos();
+
+	return spodinfos.name; /// added spod_macro specific getTble name via dbInfos
+
+	
+}
+// mets la premiere lettre en majustucule afin d'etre Resolvée par Type.resolveClass
+static function firstUpperCase(str:String) : String {
+var firstChar:String = str.substr(0, 1);
+var restOfString:String = str.substr(1, str.length);
+return firstChar.toUpperCase()+restOfString.toLowerCase();
+}
+
+
+
 	#end
 	
 	#if js
@@ -113,6 +333,7 @@ class TagManager
 	//	return "blog";
 		return Type.getClassName(cast spod).split(".").slice(-1).toString();
 	}
+	
 }
 class Tag{
 	public var tag:String;
