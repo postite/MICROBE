@@ -28,6 +28,11 @@ class Taxo extends Object
 	
 }
 
+//used to be accessed only by TagManager
+typedef FriendlyTaxoManager={
+	private function getTags( spod:String ) : List <Taxo >;
+	private function getTag( tag:String , ?spod:String ) : Taxo
+}
 class TaxoManager extends Manager<Taxo>
 {
 	 var currentspod:String;
@@ -37,7 +42,7 @@ class TaxoManager extends Manager<Taxo>
 
 	//ChapterManager.amgr = this;
 	}
-public function getTags( spod:String ) : List <Taxo >
+ function getTags( spod:String ) : List <Taxo >
 {
 	
 	var spodTable=getSpodTable(spod);
@@ -56,7 +61,7 @@ public function getTags( spod:String ) : List <Taxo >
 	return cast resultSet.results();
 	//return search({spodtype:spod});
 }
-public function getTag( tag:String , ?spod:String ) : Taxo
+ function getTag( tag:String , ?spod:String ) : Taxo
 {
 	return search({ tag : tag, spodtype:spod}).first();
 }
