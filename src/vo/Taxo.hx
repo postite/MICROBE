@@ -13,7 +13,7 @@ import php.Lib;
 @:id(taxo_id)
 class Taxo extends Object
 {
-	
+	//// ça c'est cool
 	public var taxo_id:SId;
 	public var tag:SString<250>;
 	public var spodtype:SString<250>;
