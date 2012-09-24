@@ -8,7 +8,7 @@ class Microfield implements IMicrotype
 	public var field:String; //field in vo/sql
 	public var element:String; //microbe.form.element
 	public var elementId:String; //domId de l'element de formulaire microbe genéré
-	public var value:String; //?opportun ?
+	public var value:String; //?opportun ? fait chier pour les dates
 	public var type:InstanceType;
 //	public var voRef:String; /// reference du champs au Vo"parent" sans le voPakage
 	
@@ -17,6 +17,7 @@ class Microfield implements IMicrotype
 	
 	}
 	public function toString():String{
+		
 		#if (php )
 		return "<div class='microfieldTrace'><p>MICROFIELD :<br/>type:"+type+"<br/>field:"+field+",<br/>voName:"+voName+",<br/>element:"+element+", <br/>elementId:"+elementId+"<br/>value:"+value+"</p></div>";
 		#end

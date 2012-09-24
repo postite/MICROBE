@@ -7,12 +7,12 @@ class microbe_backof_Back extends microbe_controllers_GenericController {
 		$this->requestHandler = new haxigniter_server_request_AuthRequestDecorator(new haxigniter_server_request_BasicHandler($this->configuration), $LoginPage, $this->session, null, null);
 		$this->url = new haxigniter_server_libraries_Url($this->configuration);
 	}}
-	public $url;
-	public $chemins;
 	public function index() {
 		$this->view->assign("content", "popopopo");
 		$this->view->display("simple.mtt");
 	}
+	public $chemins;
+	public $url;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

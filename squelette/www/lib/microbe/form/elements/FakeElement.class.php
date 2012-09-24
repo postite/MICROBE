@@ -1,7 +1,7 @@
 <?php
 
 class microbe_form_elements_FakeElement extends microbe_form_FormElement {
-	public function __construct($name, $value, $required, $display, $attributes) {
+	public function __construct($name, $value = null, $required = null, $display = null, $attributes = null) {
 		if(!php_Boot::$skip_constructor) {
 		if($attributes === null) {
 			$attributes = "";
@@ -19,17 +19,17 @@ class microbe_form_elements_FakeElement extends microbe_form_FormElement {
 		$this->display = $display;
 		$this->attributes = $attributes;
 	}}
-	public $display;
-	public function render($iter) {
-		$n = $this->name;
-		return $n;
+	public function toString() {
+		return $this->render(null);
 	}
 	public function getPreview() {
 		return $this->render(null);
 	}
-	public function toString() {
-		return $this->render(null);
+	public function render($iter = null) {
+		$n = $this->name;
+		return $n;
 	}
+	public $display;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

@@ -15,12 +15,13 @@ import microbe.form.elements.CollectionElement;
 import microbe.form.elements.CollectionWrapper;
 import microbe.form.elements.DeleteButton;
 import microbe.form.elements.PlusCollectionButton;
-#if elements
 
+#if elements 
 import microbe.ImportHelper;
 #else
   #error "add imports in microbe.ImportHelper.hx and compile with -D elements"
 #end
+
 @:expose("microbe.jsTools.BackJS")
 class BackJS
 {
@@ -92,7 +93,9 @@ class BackJS
 		if (classMap.fields.taggable==true){
 			
 			//mettre une condition si pas de Tag
+
 			new TagView(classMap.fields);
+			
 		}
 	
 		//"".Alerte();
@@ -184,10 +187,13 @@ class BackJS
    	trace("clika"+microbeElements);
    
    	for( mic in microbeElements){
-		//	mic.getValue().Alerte();
-			//trace("micVAlue="+mic.getValue());
+		
+		if(mic.element!=null){
    		mic.microfield.value= mic.getValue();
+   		}
+   		//Lib.alert("mic="+mic.microfield.value);
    	}
+
 		AjaxFormTraitement();
 		trace("finrecord");
    }
@@ -195,6 +201,7 @@ class BackJS
    	//utilisé à l'enregistrement
 	public function AjaxFormTraitement(){
 		Std.string(classMap).Alerte();
+		trace("classMAp="+classMap);
 		var compressedValues=haxe.Serializer.run(classMap);
 	//	back_url.Alerte();
 		trace("classMAp="+classMap +"back_url="+back_url);

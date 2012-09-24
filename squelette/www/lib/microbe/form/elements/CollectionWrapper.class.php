@@ -10,9 +10,15 @@ class microbe_form_elements_CollectionWrapper extends microbe_form_FormElement {
 		$this->wrapped = new HList();
 		haxe_Log::trace("after new Collection Wrapper" . $_field, _hx_anonymous(array("fileName" => "CollectionWrapper.hx", "lineNumber" => 18, "className" => "microbe.form.elements.CollectionWrapper", "methodName" => "new")));
 	}}
-	public $wrapped;
-	public $field;
-	public function render($iter) {
+	public function removeElement($collecItem) {
+		$this->wrapped->remove($collecItem);
+	}
+	public function addElement($collecItem) {
+		haxe_Log::trace("addElement" . Std::string($collecItem), _hx_anonymous(array("fileName" => "CollectionWrapper.hx", "lineNumber" => 35, "className" => "microbe.form.elements.CollectionWrapper", "methodName" => "addElement")));
+		$collecItem->form = $this->form;
+		$this->wrapped->add($collecItem);
+	}
+	public function render($iter = null) {
 		$str = "<div class='collectionWrapper' spod='" . $this->field . "'>";
 		if(null == $this->wrapped) throw new HException('null iterable');
 		$»it = $this->wrapped->iterator();
@@ -23,14 +29,8 @@ class microbe_form_elements_CollectionWrapper extends microbe_form_FormElement {
 		$str .= "</div>";
 		return $str;
 	}
-	public function addElement($collecItem) {
-		haxe_Log::trace("addElement" . $collecItem, _hx_anonymous(array("fileName" => "CollectionWrapper.hx", "lineNumber" => 35, "className" => "microbe.form.elements.CollectionWrapper", "methodName" => "addElement")));
-		$collecItem->form = $this->form;
-		$this->wrapped->add($collecItem);
-	}
-	public function removeElement($collecItem) {
-		$this->wrapped->remove($collecItem);
-	}
+	public $field;
+	public $wrapped;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

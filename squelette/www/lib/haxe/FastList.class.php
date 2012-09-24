@@ -4,24 +4,18 @@ class haxe_FastList {
 	public function __construct() {
 		;
 	}
-	public $head;
-	public function add($item) {
-		$this->head = new haxe_FastCell($item, $this->head);
-	}
-	public function first() {
-		return haxe_FastList_0($this);
-	}
-	public function pop() {
-		$k = $this->head;
-		if($k === null) {
-			return null;
-		} else {
-			$this->head = $k->next;
-			return $k->elt;
+	public function toString() {
+		$a = new _hx_array(array());
+		$l = $this->head;
+		while($l !== null) {
+			$a->push($l->elt);
+			$l = $l->next;
 		}
+		return "{" . $a->join(",") . "}";
 	}
-	public function isEmpty() {
-		return $this->head === null;
+	public function iterator() {
+		$l = $this->head;
+		return _hx_anonymous(array("hasNext" => array(new _hx_lambda(array(&$l), "haxe_FastList_0"), 'execute'), "next" => array(new _hx_lambda(array(&$l), "haxe_FastList_1"), 'execute')));
 	}
 	public function remove($v) {
 		$prev = null;
@@ -40,19 +34,25 @@ class haxe_FastList {
 		}
 		return $l !== null;
 	}
-	public function iterator() {
-		$l = $this->head;
-		return _hx_anonymous(array("hasNext" => array(new _hx_lambda(array(&$l), "haxe_FastList_1"), 'execute'), "next" => array(new _hx_lambda(array(&$l), "haxe_FastList_2"), 'execute')));
+	public function isEmpty() {
+		return $this->head === null;
 	}
-	public function toString() {
-		$a = new _hx_array(array());
-		$l = $this->head;
-		while($l !== null) {
-			$a->push($l->elt);
-			$l = $l->next;
+	public function pop() {
+		$k = $this->head;
+		if($k === null) {
+			return null;
+		} else {
+			$this->head = $k->next;
+			return $k->elt;
 		}
-		return "{" . $a->join(",") . "}";
 	}
+	public function first() {
+		return haxe_FastList_2($this);
+	}
+	public function add($item) {
+		$this->head = new haxe_FastCell($item, $this->head);
+	}
+	public $head;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
@@ -65,22 +65,22 @@ class haxe_FastList {
 	}
 	function __toString() { return $this->toString(); }
 }
-function haxe_FastList_0(&$퍁his) {
-	if($퍁his->head === null) {
-		return null;
-	} else {
-		return $퍁his->head->elt;
-	}
-}
-function haxe_FastList_1(&$l) {
+function haxe_FastList_0(&$l) {
 	{
 		return $l !== null;
 	}
 }
-function haxe_FastList_2(&$l) {
+function haxe_FastList_1(&$l) {
 	{
 		$k = $l;
 		$l = $k->next;
 		return $k->elt;
+	}
+}
+function haxe_FastList_2(&$퍁his) {
+	if($퍁his->head === null) {
+		return null;
+	} else {
+		return $퍁his->head->elt;
 	}
 }

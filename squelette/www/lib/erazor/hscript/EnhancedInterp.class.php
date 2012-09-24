@@ -4,11 +4,26 @@ class erazor_hscript_EnhancedInterp extends hscript_Interp {
 	public function __construct() { if(!php_Boot::$skip_constructor) {
 		parent::__construct();
 	}}
-	public function get($o, $f) {
-		if($o === null) {
-			throw new HException(hscript_Error::EInvalidAccess($f));
+	public function expr($e) {
+		$퍁 = ($e);
+		switch($퍁->index) {
+		case 14:
+		$ret = $퍁->params[3]; $name = $퍁->params[2]; $fexpr = $퍁->params[1]; $params = $퍁->params[0];
+		{
+			$capturedLocals = $this->duplicate($this->locals);
+			$me = $this;
+			$f = array(new _hx_lambda(array(&$capturedLocals, &$e, &$fexpr, &$me, &$name, &$params, &$ret), "erazor_hscript_EnhancedInterp_0"), 'execute');
+			$f1 = Reflect::makeVarArgs($f);
+			if($name !== null) {
+				$this->variables->set($name, $f1);
+			}
+			return $f1;
+		}break;
+		default:{
+			return parent::expr($e);
+		}break;
 		}
-		return Reflect::field($o, $f);
+		return null;
 	}
 	public function call($o, $f, $args) {
 		while(true) {
@@ -42,26 +57,11 @@ class erazor_hscript_EnhancedInterp extends hscript_Interp {
 		}
 		return null;
 	}
-	public function expr($e) {
-		$퍁 = ($e);
-		switch($퍁->index) {
-		case 14:
-		$ret = $퍁->params[3]; $name = $퍁->params[2]; $fexpr = $퍁->params[1]; $params = $퍁->params[0];
-		{
-			$capturedLocals = $this->duplicate($this->locals);
-			$me = $this;
-			$f = array(new _hx_lambda(array(&$capturedLocals, &$e, &$fexpr, &$me, &$name, &$params, &$ret), "erazor_hscript_EnhancedInterp_0"), 'execute');
-			$f1 = Reflect::makeVarArgs($f);
-			if($name !== null) {
-				$this->variables->set($name, $f1);
-			}
-			return $f1;
-		}break;
-		default:{
-			return parent::expr($e);
-		}break;
+	public function get($o, $f) {
+		if($o === null) {
+			throw new HException(hscript_Error::EInvalidAccess($f));
 		}
-		return null;
+		return Reflect::field($o, $f);
 	}
 	static $re;
 	function __toString() { return 'erazor.hscript.EnhancedInterp'; }

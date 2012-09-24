@@ -5,8 +5,8 @@ class config_Session extends haxigniter_server_session_SessionObject {
 		if(!php_Boot::$skip_constructor) {
 		parent::__construct();
 	}}
-	public $name;
 	public $user;
+	public $name;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

@@ -9,6 +9,8 @@ using microbe.tools.Debug;
 import vo.Taxo;
 import php.Lib;
 import sys.db.Manager;
+import sys.db.SpodInfos;
+import vo.Traductable;
 #end
 
 #if js
@@ -19,20 +21,21 @@ import js.Lib;
 class TagManager
 {
 	static var currentspod:String;
+	static var voPackage="vo.";
 	public static var debug=1;
 	public function new()
 	{
 		
 	}
 	#if php
-	
+	static var currentInstance:Spodable;
 
-	public static function getSpodsbyTag(tag:String,spodstring:String):List<Spodable>{
+	public static function getSpodsByTag(tag:String,?spodstring:String):List<Spodable>{
 
 	currentspod=firstUpperCase(spodstring);
 	//trace("currentSpod="+currentspod);
 	
-	var tag_id=getTag(tag,spodstring.toLowerCase()).taxo_id;
+	var tag_id=getTaxo(tag,spodstring.toLowerCase()).taxo_id;
 	//trace("tag_id="+tag_id);
 	
 	var spodTable=getSpodTable(spodstring);
@@ -60,9 +63,9 @@ class TagManager
 		
 		var liste:List<Dynamic>;
 		if( spodId !=null){
-		liste = Taxo.manager.getTaxoBySpodID(spod, spodId);
+		liste = getTaxoBySpodID(spod, spodId);
 		}else{
-		liste = Taxo.manager.getTaxos(spod);
+		liste = getTaxos(spod);
 		}
 		var tags= new List<Tag>();
 		for (tax in liste ){
@@ -100,7 +103,18 @@ class TagManager
 
 	private static function getTaxoBySpodID(spod:String,spod_id:Int) : List < Taxo >
 	{
+
+
+
 	var spodTable=getSpodTable(spod);
+	var cap= firstUpperCase(spod);
+	var spodable:Spodable=cast Type.resolveClass(voPackage+cap);
+	//trace("getTAxoBySpodID",spodable.id);
+	// if( cast(spodable).id_ref!=null){
+	// 	//trace("TRADUCTABLE");
+	// 	spod_id=cast(spodable,Traductable).id_ref;
+	// }
+
 	var resultSet=Manager.cnx.request("
 	SELECT DISTINCT TX.taxo_id , TX.tag from `taxo` AS TX
 	LEFT JOIN `tagSpod` AS TS ON TS.`tag_id`=TX.`taxo_id`
@@ -239,13 +253,13 @@ if (generateSpods)return  result.results().map(maptoSpod);
 
 ///rec / delete
 
-public function associate(tag:String,spod:String,spodId:Int){
+public static function associate(tag:String,spod:String,spodId:Int){
 	var id=getTaxo(tag,spod).taxo_id;
 	Manager.cnx.request("insert into tagSpod (tag_id,spod_id) VALUES ("+id+","+spodId+") ");
 	//object("insert into tagSpod (tag_id,spod_id) VALUES ("+id+","+spodId+") ",true);
 }
 
-public function dissociate(tag:String,spod:String,spodId:Int) : Void {
+public static function dissociate(tag:String,spod:String,spodId:Int) : Void {
 	var id=getTaxo(tag,spod).taxo_id;
 	Manager.cnx.request("DELETE  FROM tagSpod  WHERE tag_id="+id+" and spod_id="+spodId );
 }
@@ -271,8 +285,8 @@ static function maptoSpod(res:Dynamic) :Spodable{
 	trace("getSpoTable"+spod);
 	var voPackage="vo.";
 	var cap= firstUpperCase(spod);
-
 	var spodable:Spodable=cast Type.resolveClass(voPackage+cap);
+	currentInstance=spodable;
 	trace("spodable"+spodable);
 	var manager:Manager<sys.db.Object>= cast Reflect.field(spodable,"manager");
 	trace("manager"+manager);

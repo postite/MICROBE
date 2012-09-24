@@ -6,43 +6,70 @@ class sys_db__Mysql_MysqlResultSet implements sys_db_ResultSet{
 		$this->__r = $r;
 		$this->__c = $c;
 	}}
-	public $length;
-	public $nfields;
-	public $__r;
-	public $__c;
-	public $cache;
-	public function getLength() {
-		if(($this->__r === true)) {
-			return mysql_affected_rows($this->__c);
-		} else {
-			if(($this->__r === false)) {
-				return 0;
+	public function getFieldsNames() {
+		$fields = new _hx_array(array());
+		{
+			$_g1 = 0; $_g = $this->getNFields();
+			while($_g1 < $_g) {
+				$i = $_g1++;
+				$fields->push(mysql_field_name($this->__r, $i));
+				unset($i);
 			}
 		}
-		return mysql_num_rows($this->__r);
+		return $fields;
 	}
-	public $_nfields;
-	public function getNFields() {
-		if($this->_nfields === null) {
-			$this->_nfields = mysql_num_fields($this->__r);
-		}
-		return $this->_nfields;
+	public function getFloatResult($n) {
+		return floatval($this->getResult($n));
 	}
-	public $_fieldsDesc;
-	public function getFieldsDescription() {
-		if($this->_fieldsDesc === null) {
-			$this->_fieldsDesc = new _hx_array(array());
-			{
-				$_g1 = 0; $_g = $this->getNFields();
-				while($_g1 < $_g) {
-					$i = $_g1++;
-					$item = _hx_anonymous(array("name" => mysql_field_name($this->__r, $i), "type" => mysql_field_type($this->__r, $i)));
-					$this->_fieldsDesc->push($item);
-					unset($item,$i);
-				}
+	public function getIntResult($n) {
+		return intval($this->getResult($n));
+	}
+	public function getResult($n) {
+		if($this->cRow === null) {
+			if(!$this->fetchRow()) {
+				return null;
 			}
 		}
-		return $this->_fieldsDesc;
+		return $this->cRow[$n];
+	}
+	public function results() {
+		$l = new HList();
+		while($this->hasNext()) {
+			$l->add($this->next());
+		}
+		return $l;
+	}
+	public function next() {
+		if(_hx_field($this, "cache") !== null) {
+			$t = $this->cache;
+			$this->cache = null;
+			return $t;
+		}
+		if(!$this->fetchRow()) {
+			return null;
+		}
+		$o = _hx_anonymous(array());
+		$descriptions = $this->getFieldsDescription();
+		{
+			$_g1 = 0; $_g = $this->getNFields();
+			while($_g1 < $_g) {
+				$i = $_g1++;
+				$o->{_hx_array_get($descriptions, $i)->name} = $this->convert($this->cRow[$i], _hx_array_get($descriptions, $i)->type);
+				unset($i);
+			}
+		}
+		return $o;
+	}
+	public function fetchRow() {
+		$this->cRow = mysql_fetch_array($this->__r, MYSQL_NUM);
+		return !($this->cRow === false);
+	}
+	public $cRow;
+	public function hasNext() {
+		if(_hx_field($this, "cache") === null) {
+			$this->cache = $this->next();
+		}
+		return _hx_field($this, "cache") !== null;
 	}
 	public function convert($v, $type) {
 		if($v === null) {
@@ -66,71 +93,44 @@ class sys_db__Mysql_MysqlResultSet implements sys_db_ResultSet{
 		}break;
 		}
 	}
-	public function hasNext() {
-		if(_hx_field($this, "cache") === null) {
-			$this->cache = $this->next();
-		}
-		return _hx_field($this, "cache") !== null;
-	}
-	public $cRow;
-	public function fetchRow() {
-		$this->cRow = mysql_fetch_array($this->__r, MYSQL_NUM);
-		return !($this->cRow === false);
-	}
-	public function next() {
-		if(_hx_field($this, "cache") !== null) {
-			$t = $this->cache;
-			$this->cache = null;
-			return $t;
-		}
-		if(!$this->fetchRow()) {
-			return null;
-		}
-		$o = _hx_anonymous(array());
-		$descriptions = $this->getFieldsDescription();
-		{
-			$_g1 = 0; $_g = $this->getNFields();
-			while($_g1 < $_g) {
-				$i = $_g1++;
-				$o->{_hx_array_get($descriptions, $i)->name} = $this->convert($this->cRow[$i], _hx_array_get($descriptions, $i)->type);
-				unset($i);
+	public function getFieldsDescription() {
+		if($this->_fieldsDesc === null) {
+			$this->_fieldsDesc = new _hx_array(array());
+			{
+				$_g1 = 0; $_g = $this->getNFields();
+				while($_g1 < $_g) {
+					$i = $_g1++;
+					$item = _hx_anonymous(array("name" => mysql_field_name($this->__r, $i), "type" => mysql_field_type($this->__r, $i)));
+					$this->_fieldsDesc->push($item);
+					unset($item,$i);
+				}
 			}
 		}
-		return $o;
+		return $this->_fieldsDesc;
 	}
-	public function results() {
-		$l = new HList();
-		while($this->hasNext()) {
-			$l->add($this->next());
+	public $_fieldsDesc;
+	public function getNFields() {
+		if($this->_nfields === null) {
+			$this->_nfields = mysql_num_fields($this->__r);
 		}
-		return $l;
+		return $this->_nfields;
 	}
-	public function getResult($n) {
-		if($this->cRow === null) {
-			if(!$this->fetchRow()) {
-				return null;
+	public $_nfields;
+	public function getLength() {
+		if(($this->__r === true)) {
+			return mysql_affected_rows($this->__c);
+		} else {
+			if(($this->__r === false)) {
+				return 0;
 			}
 		}
-		return $this->cRow[$n];
+		return mysql_num_rows($this->__r);
 	}
-	public function getIntResult($n) {
-		return intval($this->getResult($n));
-	}
-	public function getFloatResult($n) {
-		return floatval($this->getResult($n));
-	}
-	public function getFieldsNames() {
-		$fields = new _hx_array(array());
-		{
-			$_g1 = 0; $_g = $this->getNFields();
-			while($_g1 < $_g) {
-				$i = $_g1++;
-				$fields->push(mysql_field_name($this->__r, $i));
-				unset($i);
-			}
-		}
-		return $fields;
-	}
+	public $cache;
+	public $__c;
+	public $__r;
+	public $nfields;
+	public $length;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
@@ -141,6 +141,6 @@ class sys_db__Mysql_MysqlResultSet implements sys_db_ResultSet{
 		else
 			throw new HException('Unable to call «'.$m.'»');
 	}
-	static $__properties__ = array("get_nfields" => "getNFields","get_length" => "getLength");
+	static $__properties__ = array("get_length" => "getLength","get_nfields" => "getNFields");
 	function __toString() { return 'sys.db._Mysql.MysqlResultSet'; }
 }

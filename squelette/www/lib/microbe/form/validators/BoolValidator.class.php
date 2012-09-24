@@ -1,7 +1,7 @@
 <?php
 
 class microbe_form_validators_BoolValidator extends microbe_form_Validator {
-	public function __construct($valid, $error) {
+	public function __construct($valid, $error = null) {
 		if(!php_Boot::$skip_constructor) {
 		parent::__construct();
 		$this->valid = $valid;
@@ -11,14 +11,14 @@ class microbe_form_validators_BoolValidator extends microbe_form_Validator {
 			$this->errorNotValid = "Not valid.";
 		}
 	}}
-	public $errorNotValid;
-	public $valid;
 	public function isValid($value) {
 		if(!$this->valid) {
 			$this->errors->push($this->errorNotValid);
 		}
 		return $this->valid;
 	}
+	public $valid;
+	public $errorNotValid;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

@@ -40,6 +40,7 @@ import vo.RelationTest;
 import vo.ChildTest;
 import controllers.Simple;
 import vo.SubChild;
+import controllers.Install;
 
 class Config extends haxigniter.server.Config
 {

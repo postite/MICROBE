@@ -1,4 +1,4 @@
-package ;
+ package ;
 
 import config.Database;
 import config.Config;

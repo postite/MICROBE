@@ -21,13 +21,14 @@ class TagView extends AjaxElement
 		new JQuery("#tagSelector select").change(onSelect);
 		//new JQuery("#tagSelector select").change(onSelect);
 		
-	//	createResultsDiv();
-	"new".Alerte();
+		//createResultsDiv();
+		
 		init();
 		
 	}
 
 	function init() : Void {
+		
 		getTags(this.voName,this.spodId);
 		Std.string(spodTags).Alerte();
 		afficheTags();
@@ -38,6 +39,7 @@ class TagView extends AjaxElement
 		new JQuery("#tagSelector #pute").keyup(onType);
 		new JQuery("#tagSelector #results").blur(onBlur);
 	}
+
 	function onBlur(e:JqEvent) : Void {
 		new JQuery('#tagSelector #results').hide();
 	}
@@ -50,7 +52,7 @@ class TagView extends AjaxElement
 		///Lib.alert("onType");
 		showResults(filtered);
 	}
-	function findinSpodTags() : List<String> {
+	function findinSpodTags() : List<String>{
 	//	Lib.alert("find");
 		return Lambda.filter(fullTags,subFind);
 	}
@@ -109,7 +111,7 @@ class TagView extends AjaxElement
 		"".Alerte();
 		
 		if( spodId!=null){
-			spod.Alerte();
+			
 		var context=TagManager.getTags(spod,spodId);
 		"".Alerte();
 		var tags=TagManager.getTags(spod);
@@ -229,8 +231,6 @@ class TagView extends FormElement
 		str+="</SELECT >";
 		str+="<a id='addTag'>+ TAG</a>";
 		str+="</div>";
-		
-		
 		str+="</div>";
 		return str;
 		

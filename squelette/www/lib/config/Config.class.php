@@ -1,7 +1,7 @@
 <?php
 
 class config_Config extends haxigniter_server_Config {
-	public function __construct($dumpEnv) {
+	public function __construct($dumpEnv = null) {
 		if(!php_Boot::$skip_constructor) {
 		microbe_tools_Debug::$debug = false;
 		$this->development = $_SERVER['SERVER_NAME'] === "localhost" || $_SERVER['SERVER_NAME'] === "127.0.0.1";
@@ -35,14 +35,14 @@ class config_Config extends haxigniter_server_Config {
 		$this->frontcssPath = "/css/";
 		parent::__construct($dumpEnv);
 	}}
-	public $jsPath;
-	public $cssPath;
-	public $voPackage;
-	public $uploadsPath;
-	public $imagesPath;
-	public $backjs;
-	public $frontjsPath;
 	public $frontcssPath;
+	public $frontjsPath;
+	public $backjs;
+	public $imagesPath;
+	public $uploadsPath;
+	public $voPackage;
+	public $cssPath;
+	public $jsPath;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

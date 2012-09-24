@@ -65,7 +65,7 @@ class Sys {
 		}
 		return "\"" . _hx_explode("\"", $arg)->join("\\\"") . "\"";
 	}
-	static function command($cmd, $args) {
+	static function command($cmd, $args = null) {
 		if($args !== null) {
 			$cmd = Sys::escapeArgument($cmd);
 			{

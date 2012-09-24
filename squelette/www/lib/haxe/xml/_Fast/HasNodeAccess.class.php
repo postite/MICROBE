@@ -5,10 +5,10 @@ class haxe_xml__Fast_HasNodeAccess {
 		if(!php_Boot::$skip_constructor) {
 		$this->__x = $x;
 	}}
-	public $__x;
 	public function resolve($name) {
 		return $this->__x->elementsNamed($name)->hasNext();
 	}
+	public $__x;
 	public $»dynamics = array();
 	public function __get($n) {
 		if(isset($this->»dynamics[$n]))

@@ -1,17 +1,17 @@
 <?php
 
 class haxe_Utf8 {
-	public function __construct($size) {
+	public function __construct($size = null) {
 		if(!php_Boot::$skip_constructor) {
 		$this->__b = "";
 	}}
-	public $__b;
-	public function addChar($c) {
-		$this->__b .= haxe_Utf8::uchr($c);
-	}
 	public function toString() {
 		return $this->__b;
 	}
+	public function addChar($c) {
+		$this->__b .= haxe_Utf8::uchr($c);
+	}
+	public $__b;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

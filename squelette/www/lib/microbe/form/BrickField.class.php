@@ -4,14 +4,6 @@ class microbe_form_BrickField {
 	public function __construct() {
 		;
 	}
-	public $voName;
-	public $field;
-	public $enfants;
-	public $element;
-	public $id;
-	public $voRel;
-	public $relation;
-	public $valeur;
 	public function toString() {
 		$str = "voName:" . $this->voName;
 		$str .= "<br/>";
@@ -19,6 +11,14 @@ class microbe_form_BrickField {
 		$str .= "<br/>";
 		return $str;
 	}
+	public $valeur;
+	public $relation;
+	public $voRel;
+	public $id;
+	public $element;
+	public $enfants;
+	public $field;
+	public $voName;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

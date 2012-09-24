@@ -1,10 +1,11 @@
 package microbe.jsTools;
 import microbe.form.elements.PlusCollectionButton;
 import microbe.form.IMicrotype;
+import microbe.macroUtils.Imports;
 
 import microbe.form.AjaxElement;
 import microbe.form.Microfield;
-//import microbe.form.ImportAllAjaxe;
+
 
 using microbe.tools.Debug;
 import microbe.form.MicroFieldList;
@@ -20,7 +21,8 @@ class ElementBinder
 	public function new()
 	{
 		//"new".Alerte();
-		
+	Imports.pack("microbe.form.elements",false);
+	//Imports.pack("elements",false);
 		
 		elements= new List<AjaxElement>();
 	}
@@ -35,12 +37,17 @@ class ElementBinder
 	}
 	public function createElement(microChamps:Microfield):Void{
 		//if (microChamps==null )return;
-		Std.string(microChamps.element).Alerte();
+		//Std.string(microChamps.element).Alerte();
+		if( microChamps.element!=null){
 		var classe=Type.resolveClass(microChamps.element);
-		Std.string(classe).Alerte();
+		
 		//Type.getClassName(classe).Alerte();
-		var d:AjaxElement=cast Type.createInstance(Type.resolveClass(microChamps.element),[microChamps]);
+		var d:AjaxElement=cast Type.createInstance(classe,[microChamps]);
 		this.add(d);
+		}else{
+			var fake=new AjaxElement(microChamps);
+			this.add(fake);
+		}
 		//"after".Alerte();
 	}
 

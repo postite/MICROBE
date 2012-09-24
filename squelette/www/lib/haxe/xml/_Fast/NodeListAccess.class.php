@@ -5,7 +5,6 @@ class haxe_xml__Fast_NodeListAccess {
 		if(!php_Boot::$skip_constructor) {
 		$this->__x = $x;
 	}}
-	public $__x;
 	public function resolve($name) {
 		$l = new HList();
 		if(null == $this->__x) throw new HException('null iterable');
@@ -16,6 +15,7 @@ class haxe_xml__Fast_NodeListAccess {
 		}
 		return $l;
 	}
+	public $__x;
 	public $»dynamics = array();
 	public function __get($n) {
 		if(isset($this->»dynamics[$n]))

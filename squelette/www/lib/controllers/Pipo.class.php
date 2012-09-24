@@ -17,49 +17,33 @@ class controllers_Pipo extends microbe_backof_Back {
 		$this->api = new microbe_Api();
 		$this->view->assign("contenttype", null);
 	}}
-	public $api;
-	public $jsScript;
-	public $jsLib;
-	public $generator;
-	public function defaultAssign() {
-		$this->view->assign("page", null);
-		$this->view->assign("link", $this->url->siteUrl(null, null));
-		$this->view->assign("backpage", $this->url->siteUrl(null, null) . "/pipo");
-		$this->view->assign("titre", "microbe admin");
-		$this->jsLib->addOnce(controllers_Pipo::$backjs);
-		$this->jsLib->addOnce(microbe_controllers_GenericController::$appConfig->jsPath . "jquery-ui-1.8.14.custom.min.js");
-		$this->view->assign("menu", $this->getMenu());
-		$this->view->assign("contentype", null);
-		$this->view->assign("currentVo", null);
-		$this->view->assign("jsScript", $this->jsScript);
-		$this->view->assign("jsLib", $this->jsLib);
-		$this->view->assign("title", "Microbe admin");
-		$this->view->assign("scope", $this);
+	public function reorder($voName) {
+		$manager = Type::resolveClass(microbe_controllers_GenericController::$appConfig->voPackage . $voName)->manager;
+		$table = $manager->dbInfos()->name;
+		haxe_Log::trace("currentVo" . $voName, _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 226, "className" => "controllers.Pipo", "methodName" => "reorder")));
+		$data = php_Web::getParams()->get("orderedList");
+		$tab = haxe_Unserializer::run($data);
+		{
+			$_g1 = 0; $_g = $tab->length;
+			while($_g1 < $_g) {
+				$i = $_g1++;
+				$this->db->query("UPDATE " . $table . " SET poz = " . _hx_string_rec($i, "") . " WHERE id = " . _hx_string_rec($tab[$i], "") . " ", null, _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 249, "className" => "controllers.Pipo", "methodName" => "reorder")));
+				unset($i);
+			}
+		}
+		php_Lib::hprint("lkl");
 	}
-	public function nav($voName) {
-		haxe_Log::trace("voName=" . $voName, _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 89, "className" => "controllers.Pipo", "methodName" => "nav")));
-		$this->defaultAssign();
-		$this->view->assign("currentVo", $voName);
-		$content = "";
-		$this->choix(null, $voName);
-		return;
-		$this->view->assign("content", $content);
-		$this->view->display("back/design.html");
+	public function delete($voName, $id) {
+		$this->api->delete($voName, $id);
+		$this->nav($voName);
+	}
+	public function rec() {
+		$this->api->rec();
 		return;
 	}
-	public function choix($id, $voName) {
-		haxe_Log::trace("choix id=" . $id . " vo=" . $voName, _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 104, "className" => "controllers.Pipo", "methodName" => "choix")));
-		$data = null;
-		if($id === null) {
-			$data = $this->api->getLast($voName);
-		} else {
-			$data = $this->api->getOne($voName, $id);
-		}
-		if(Std::is($data, _hx_qtype("microbe.vo.Page"))) {
-			$this->view->assign("contenttype", "page");
-		}
-		$this->generator->generateComplexClassMapForm($voName, $data);
-		$this->jsLib->addOnce(microbe_controllers_GenericController::$appConfig->jsPath . "jquery-ui-1.8.14.custom.min.js");
+	public function ajoute($voName) {
+		haxe_Log::trace("ajoute", _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 200, "className" => "controllers.Pipo", "methodName" => "ajoute")));
+		$this->generator->generateComplexClassMapForm($voName, null);
 		$this->jsLib->addOnce(controllers_Pipo::$backjs);
 		$this->jsScript->add(controllers_Pipo::$backInstance . ".instance.setClassMap('" . $this->generator->getCompressedClassMap() . "');");
 		$this->defaultAssign();
@@ -67,23 +51,18 @@ class controllers_Pipo extends microbe_backof_Back {
 		$this->view->assign("content", $this->generator->render());
 		$this->view->display("back/design.html");
 	}
-	public function getVoList($voName) {
-		return $this->api->getAllorded($voName);
-	}
-	public function getMenu() {
-		$navig = new Nav();
-		return $navig->items;
-	}
-	public function index() {
-		haxe_Log::trace("index", _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 135, "className" => "controllers.Pipo", "methodName" => "index")));
-		$this->jsLib->add(controllers_Pipo::$backjs);
-		$this->defaultAssign();
-		$this->view->assign("content", "popopo");
-		$this->view->display("back/design.html");
-		haxe_Log::trace("after", _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 141, "className" => "controllers.Pipo", "methodName" => "index")));
-	}
-	public function getPage($voName) {
-		return $this->api->getOne($voName, 1);
+	public function addCollectServerItem() {
+		$params = php_Web::getParams();
+		$collectionName = $params->get("name");
+		$hierarchy = _hx_explode("_", $collectionName);
+		$voName = $hierarchy[0];
+		$field = $hierarchy[1];
+		$sousVoName = $hierarchy[2];
+		$voParent = $params->get("voParent");
+		$parentId = Std::parseInt($params->get("voParentId"));
+		$graine = Std::parseInt($params->get("graine"));
+		$retour = microbe_factoryType_CollectionBehaviour::creeEmptyCollection($voName, _hx_anonymous(array("classe" => microbe_controllers_GenericController::$appConfig->voPackage . $sousVoName, "type" => microbe_form_InstanceType::$collection, "champs" => null)), $field, $graine);
+		php_Lib::hprint(haxe_Serializer::run($retour));
 	}
 	public function addCollectItem() {
 		$params = php_Web::getParams();
@@ -106,22 +85,37 @@ class controllers_Pipo extends microbe_backof_Back {
 		$XmicroFieldItem = haxe_Serializer::run($microFieldItem);
 		php_Lib::hprint($XmicroFieldItem);
 	}
-	public function addCollectServerItem() {
-		$params = php_Web::getParams();
-		$collectionName = $params->get("name");
-		$hierarchy = _hx_explode("_", $collectionName);
-		$voName = $hierarchy[0];
-		$field = $hierarchy[1];
-		$sousVoName = $hierarchy[2];
-		$voParent = $params->get("voParent");
-		$parentId = Std::parseInt($params->get("voParentId"));
-		$graine = Std::parseInt($params->get("graine"));
-		$retour = microbe_factoryType_CollectionBehaviour::creeEmptyCollection($voName, _hx_anonymous(array("classe" => microbe_controllers_GenericController::$appConfig->voPackage . $sousVoName, "type" => microbe_form_InstanceType::$collection, "champs" => null)), $field, $graine);
-		php_Lib::hprint(haxe_Serializer::run($retour));
+	public function getPage($voName) {
+		return $this->api->getOne($voName, 1);
 	}
-	public function ajoute($voName) {
-		haxe_Log::trace("ajoute", _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 200, "className" => "controllers.Pipo", "methodName" => "ajoute")));
-		$this->generator->generateComplexClassMapForm($voName, null);
+	public function index() {
+		haxe_Log::trace("index", _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 135, "className" => "controllers.Pipo", "methodName" => "index")));
+		$this->jsLib->add(controllers_Pipo::$backjs);
+		$this->defaultAssign();
+		$this->view->assign("content", "popopo");
+		$this->view->display("back/design.html");
+		haxe_Log::trace("after", _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 141, "className" => "controllers.Pipo", "methodName" => "index")));
+	}
+	public function getMenu() {
+		$navig = new Nav();
+		return $navig->items;
+	}
+	public function getVoList($voName) {
+		return $this->api->getAllorded($voName);
+	}
+	public function choix($id = null, $voName) {
+		haxe_Log::trace("choix id=" . _hx_string_rec($id, "") . " vo=" . $voName, _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 104, "className" => "controllers.Pipo", "methodName" => "choix")));
+		$data = null;
+		if($id === null) {
+			$data = $this->api->getLast($voName);
+		} else {
+			$data = $this->api->getOne($voName, $id);
+		}
+		if(Std::is($data, _hx_qtype("microbe.vo.Page"))) {
+			$this->view->assign("contenttype", "page");
+		}
+		$this->generator->generateComplexClassMapForm($voName, $data);
+		$this->jsLib->addOnce(microbe_controllers_GenericController::$appConfig->jsPath . "jquery-ui-1.8.14.custom.min.js");
 		$this->jsLib->addOnce(controllers_Pipo::$backjs);
 		$this->jsScript->add(controllers_Pipo::$backInstance . ".instance.setClassMap('" . $this->generator->getCompressedClassMap() . "');");
 		$this->defaultAssign();
@@ -129,30 +123,36 @@ class controllers_Pipo extends microbe_backof_Back {
 		$this->view->assign("content", $this->generator->render());
 		$this->view->display("back/design.html");
 	}
-	public function rec() {
-		$this->api->rec();
+	public function nav($voName) {
+		haxe_Log::trace("voName=" . $voName, _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 89, "className" => "controllers.Pipo", "methodName" => "nav")));
+		$this->defaultAssign();
+		$this->view->assign("currentVo", $voName);
+		$content = "";
+		$this->choix(null, $voName);
+		return;
+		$this->view->assign("content", $content);
+		$this->view->display("back/design.html");
 		return;
 	}
-	public function delete($voName, $id) {
-		$this->api->delete($voName, $id);
-		$this->nav($voName);
+	public function defaultAssign() {
+		$this->view->assign("page", null);
+		$this->view->assign("link", $this->url->siteUrl(null, null));
+		$this->view->assign("backpage", $this->url->siteUrl(null, null) . "/pipo");
+		$this->view->assign("titre", "microbe admin");
+		$this->jsLib->addOnce(controllers_Pipo::$backjs);
+		$this->jsLib->addOnce(microbe_controllers_GenericController::$appConfig->jsPath . "jquery-ui-1.8.14.custom.min.js");
+		$this->view->assign("menu", $this->getMenu());
+		$this->view->assign("contentype", null);
+		$this->view->assign("currentVo", null);
+		$this->view->assign("jsScript", $this->jsScript);
+		$this->view->assign("jsLib", $this->jsLib);
+		$this->view->assign("title", "Microbe admin");
+		$this->view->assign("scope", $this);
 	}
-	public function reorder($voName) {
-		$manager = Type::resolveClass(microbe_controllers_GenericController::$appConfig->voPackage . $voName)->manager;
-		$table = $manager->dbInfos()->name;
-		haxe_Log::trace("currentVo" . $voName, _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 226, "className" => "controllers.Pipo", "methodName" => "reorder")));
-		$data = php_Web::getParams()->get("orderedList");
-		$tab = haxe_Unserializer::run($data);
-		{
-			$_g1 = 0; $_g = $tab->length;
-			while($_g1 < $_g) {
-				$i = $_g1++;
-				$this->db->query("UPDATE " . $table . " SET poz = " . $i . " WHERE id = " . $tab[$i] . " ", null, _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 249, "className" => "controllers.Pipo", "methodName" => "reorder")));
-				unset($i);
-			}
-		}
-		php_Lib::hprint("lkl");
-	}
+	public $generator;
+	public $jsLib;
+	public $jsScript;
+	public $api;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

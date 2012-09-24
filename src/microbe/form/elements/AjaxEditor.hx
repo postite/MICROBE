@@ -140,9 +140,11 @@ class AjaxEditor extends AjaxElement
 // 	); 
 
 		var wymOptions:WymOptions= cast {};
+
 		wymOptions.skin="compact";
-		wymOptions.html="hello la compagnie";
+		wymOptions.html="";
 		wym= new Wymeditor(".editor:visible");
+		wymOptions.postInit=function(){untyped __this__.wym.embed();}
 		wym.wymeditor(wymOptions);
 
 }

@@ -1,7 +1,7 @@
 <?php
 
 class haxigniter_server_libraries_Server {
-	public function __construct($config, $session, $SSLInDevelopmentMode) {
+	public function __construct($config, $session = null, $SSLInDevelopmentMode = null) {
 		if(!php_Boot::$skip_constructor) {
 		if($SSLInDevelopmentMode === null) {
 			$SSLInDevelopmentMode = false;
@@ -10,41 +10,22 @@ class haxigniter_server_libraries_Server {
 		$this->session = $session;
 		$this->SSLInDevelopmentMode = $SSLInDevelopmentMode;
 	}}
-	public $config;
-	public $session;
-	public $SSLInDevelopmentMode;
-	public function requireExternal($path) {
-		require_once($this->config->externalPath . $path);
+	public function forceSsl($ssl = null, $sslActive = null) {
+		if($ssl === null) {
+			$ssl = true;
+		}
+		if($this->config->development && !$this->SSLInDevelopmentMode) {
+			return;
+		}
+		if($sslActive === null) {
+			$sslActive = Sys::environment()->exists("HTTPS") && Sys::environment()->get("HTTPS") === "on";
+		}
+		if($sslActive && $ssl || !($sslActive || $ssl)) {
+			return;
+		}
+		$this->redirect(null, haxigniter_server_libraries_Server_0($this, $ssl, $sslActive), $ssl, null);
 	}
-	public function error404($title, $header, $message) {
-		if($title === null) {
-			$title = "404 not found";
-		}
-		if($header === null) {
-			$header = $title;
-		}
-		if($message === null) {
-			$message = "The page you requested was not found.";
-		}
-		$this->error($title, $header, $message, 404);
-	}
-	public function error($title, $header, $message, $returnCode) {
-		$errorPage = haxigniter_server_libraries_Server_0($this, $header, $message, $returnCode, $title);
-		if($returnCode !== null) {
-			php_Web::setReturnCode($returnCode);
-		}
-		if($errorPage === null) {
-			$content = sys_io_File::getContent($this->config->viewPath . "error.html");
-			$content = str_replace("::TITLE::", $title, $content);
-			$content = str_replace("::HEADER::", $header, $content);
-			$content = str_replace("::MESSAGE::", $message, $content);
-			php_Lib::hprint($content);
-		} else {
-			$request = new haxigniter_server_libraries_Request($this->config);
-			$request->execute($errorPage, null, null, null, null);
-		}
-	}
-	public function redirect($url, $flashMessage, $https, $responseCode) {
+	public function redirect($url = null, $flashMessage = null, $https = null, $responseCode = null) {
 		if($flashMessage !== null && $this->session !== null) {
 			$this->session->setFlash($flashMessage);
 		}
@@ -67,21 +48,40 @@ class haxigniter_server_libraries_Server {
 		}
 		php_Web::redirect($url);
 	}
-	public function forceSsl($ssl, $sslActive) {
-		if($ssl === null) {
-			$ssl = true;
+	public function error($title, $header, $message, $returnCode = null) {
+		$errorPage = haxigniter_server_libraries_Server_1($this, $header, $message, $returnCode, $title);
+		if($returnCode !== null) {
+			php_Web::setReturnCode($returnCode);
 		}
-		if($this->config->development && !$this->SSLInDevelopmentMode) {
-			return;
+		if($errorPage === null) {
+			$content = sys_io_File::getContent($this->config->viewPath . "error.html");
+			$content = str_replace("::TITLE::", $title, $content);
+			$content = str_replace("::HEADER::", $header, $content);
+			$content = str_replace("::MESSAGE::", $message, $content);
+			php_Lib::hprint($content);
+		} else {
+			$request = new haxigniter_server_libraries_Request($this->config);
+			$request->execute($errorPage, null, null, null, null);
 		}
-		if($sslActive === null) {
-			$sslActive = Sys::environment()->exists("HTTPS") && Sys::environment()->get("HTTPS") === "on";
-		}
-		if($sslActive && $ssl || !($sslActive || $ssl)) {
-			return;
-		}
-		$this->redirect(null, haxigniter_server_libraries_Server_1($this, $ssl, $sslActive), $ssl, null);
 	}
+	public function error404($title = null, $header = null, $message = null) {
+		if($title === null) {
+			$title = "404 not found";
+		}
+		if($header === null) {
+			$header = $title;
+		}
+		if($message === null) {
+			$message = "The page you requested was not found.";
+		}
+		$this->error($title, $header, $message, 404);
+	}
+	public function requireExternal($path) {
+		require_once($this->config->externalPath . $path);
+	}
+	public $SSLInDevelopmentMode;
+	public $session;
+	public $config;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
@@ -128,7 +128,7 @@ class haxigniter_server_libraries_Server {
 		return haxigniter_server_libraries_Server::requestContent($contentData, (($contentType === null) ? null : trim($contentType)), (($contentEncoding === null) ? null : trim($contentEncoding)));
 	}
 	static $charsetRegexp;
-	static function requestContent($contentData, $contentType, $contentEncoding) {
+	static function requestContent($contentData, $contentType = null, $contentEncoding = null) {
 		$output = _hx_anonymous(array("mimeType" => null, "charSet" => null, "encoding" => $contentEncoding, "data" => $contentData));
 		if($contentType !== null) {
 			$splitPos = _hx_index_of($contentType, ";", null);
@@ -142,7 +142,7 @@ class haxigniter_server_libraries_Server {
 	static function dirname($path) {
 		return haxe_io_Path::directory($path);
 	}
-	static function basename($path, $suffix) {
+	static function basename($path, $suffix = null) {
 		$output = haxe_io_Path::withoutDirectory($path);
 		if($suffix === null) {
 			return $output;
@@ -153,15 +153,15 @@ class haxigniter_server_libraries_Server {
 	function __toString() { return 'haxigniter.server.libraries.Server'; }
 }
 haxigniter_server_libraries_Server::$charsetRegexp = new EReg("\\bcharset=([\\w-]+)", "");
-function haxigniter_server_libraries_Server_0(&$퍁his, &$header, &$message, &$returnCode, &$title) {
+function haxigniter_server_libraries_Server_0(&$퍁his, &$ssl, &$sslActive) {
+	if($퍁his->session !== null) {
+		return $퍁his->session->flashVar;
+	}
+}
+function haxigniter_server_libraries_Server_1(&$퍁his, &$header, &$message, &$returnCode, &$title) {
 	if($returnCode === 404) {
 		return $퍁his->config->error404Page;
 	} else {
 		return $퍁his->config->errorPage;
-	}
-}
-function haxigniter_server_libraries_Server_1(&$퍁his, &$ssl, &$sslActive) {
-	if($퍁his->session !== null) {
-		return $퍁his->session->flashVar;
 	}
 }

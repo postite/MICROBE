@@ -1,7 +1,7 @@
 <?php
 
 class haxigniter_server_libraries_Debug {
-	public function __construct($config, $traceLevel, $logOutput, $htmlOutput) {
+	public function __construct($config, $traceLevel = null, $logOutput = null, $htmlOutput = null) {
 		if(!php_Boot::$skip_constructor) {
 		if($htmlOutput === null) {
 			$htmlOutput = true;
@@ -11,33 +11,7 @@ class haxigniter_server_libraries_Debug {
 		$this->logOutput = $logOutput;
 		$this->htmlOutput = $htmlOutput;
 	}}
-	public $logOutput;
-	public $htmlOutput;
-	public $traceLevel;
-	public $config;
-	public function log($message, $debugLevel) {
-		if($debugLevel === null) {
-			$debugLevel = haxigniter_server_libraries_DebugLevel::$info;
-		}
-		if(haxigniter_server_libraries_Debug::toInt($debugLevel) > haxigniter_server_libraries_Debug::toInt($this->config->logLevel)) {
-			return;
-		}
-		$output = strtoupper(Std::string($debugLevel)) . " - " . DateTools::format(Date::now(), $this->config->logDateFormat) . " --> " . $message . "\x0A";
-		if($this->logOutput === null) {
-			$logFile = $this->config->logPath . "log-" . DateTools::format(Date::now(), "%Y-%m-%d");
-			$logFile .= ".php";
-			if(!file_exists($logFile)) {
-				$output = "<?php exit; ?>\x0A\x0A" . $output;
-			}
-			$file = sys_io_File::append($logFile, false);
-			$file->writeString($output);
-			$file->close();
-		} else {
-			$this->logOutput->writeString($output);
-			$this->logOutput->flush();
-		}
-	}
-	public function trace($data, $traceLevel, $pos) {
+	public function trace($data, $traceLevel = null, $pos = null) {
 		if($traceLevel === null) {
 			$traceLevel = haxigniter_server_libraries_DebugLevel::$info;
 		}
@@ -58,6 +32,32 @@ class haxigniter_server_libraries_Debug {
 			php_Lib::hprint("</pre>");
 		}
 	}
+	public function log($message, $debugLevel = null) {
+		if($debugLevel === null) {
+			$debugLevel = haxigniter_server_libraries_DebugLevel::$info;
+		}
+		if(haxigniter_server_libraries_Debug::toInt($debugLevel) > haxigniter_server_libraries_Debug::toInt($this->config->logLevel)) {
+			return;
+		}
+		$output = strtoupper(Std::string($debugLevel)) . " - " . DateTools::format(Date::now(), $this->config->logDateFormat) . " --> " . Std::string($message) . "\x0A";
+		if($this->logOutput === null) {
+			$logFile = $this->config->logPath . "log-" . DateTools::format(Date::now(), "%Y-%m-%d");
+			$logFile .= ".php";
+			if(!file_exists($logFile)) {
+				$output = "<?php exit; ?>\x0A\x0A" . $output;
+			}
+			$file = sys_io_File::append($logFile, false);
+			$file->writeString($output);
+			$file->close();
+		} else {
+			$this->logOutput->writeString($output);
+			$this->logOutput->flush();
+		}
+	}
+	public $config;
+	public $traceLevel;
+	public $htmlOutput;
+	public $logOutput;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

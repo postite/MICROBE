@@ -192,7 +192,7 @@ class Form
 		return data;
 	}
 	
-	public function populateElements():Dynamic
+	public function populateElements()
 	{
 		var element:FormElement;
 		for (element in getElements()){
@@ -200,7 +200,7 @@ class Form
 		}
 	}
 	
-	public function clearData():Dynamic
+	public function clearData()
 	{
 		var element:FormElement;
 		for (element in getElements()){

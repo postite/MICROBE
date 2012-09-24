@@ -9,14 +9,12 @@ class haxigniter_common_libraries_ParsedUrl {
 		{
 			$pos = _hx_index_of($this->host, "?", null);
 			if($pos >= 0) {
-				{
-					$self->query = _hx_substr($self->host, $pos + 1, null);
-					$self->host = _hx_substr($self->host, 0, $pos);
-					$fragmentPos = _hx_last_index_of($self->query, "#", null);
-					if($fragmentPos >= 0) {
-						$self->fragment = _hx_substr($self->query, $fragmentPos + 1, null);
-						$self->query = _hx_substr($self->query, 0, $fragmentPos);
-					}
+				$self->query = _hx_substr($self->host, $pos + 1, null);
+				$self->host = _hx_substr($self->host, 0, $pos);
+				$fragmentPos = _hx_last_index_of($self->query, "#", null);
+				if($fragmentPos >= 0) {
+					$self->fragment = _hx_substr($self->query, $fragmentPos + 1, null);
+					$self->query = _hx_substr($self->query, 0, $fragmentPos);
 				}
 			}
 		}
@@ -32,16 +30,14 @@ class haxigniter_common_libraries_ParsedUrl {
 		{
 			$pos = _hx_index_of($self->host, "@", null);
 			if($pos >= 0) {
+				$self->user = _hx_substr($self->host, 0, $pos);
+				$self->host = _hx_substr($self->host, $pos + 1, null);
 				{
-					$self->user = _hx_substr($self->host, 0, $pos);
-					$self->host = _hx_substr($self->host, $pos + 1, null);
-					{
-						$pos1 = _hx_index_of($self->user, ":", null);
-						if($pos1 >= 0) {
-							{
-								$self->pass = _hx_substr($self->user, $pos1 + 1, null);
-								$self->user = _hx_substr($self->user, 0, $pos1);
-							}
+					$pos1 = _hx_index_of($self->user, ":", null);
+					if($pos1 >= 0) {
+						{
+							$self->pass = _hx_substr($self->user, $pos1 + 1, null);
+							$self->user = _hx_substr($self->user, 0, $pos1);
 						}
 					}
 				}
@@ -57,13 +53,11 @@ class haxigniter_common_libraries_ParsedUrl {
 			}
 		}
 		if($this->fragment === null) {
-			{
-				$pos = _hx_index_of($this->path, "#", null);
-				if($pos >= 0) {
-					{
-						$self->fragment = _hx_substr($self->path, $pos + 1, null);
-						$self->path = _hx_substr($self->path, 0, $pos);
-					}
+			$pos = _hx_index_of($this->path, "#", null);
+			if($pos >= 0) {
+				{
+					$self->fragment = _hx_substr($self->path, $pos + 1, null);
+					$self->path = _hx_substr($self->path, 0, $pos);
 				}
 			}
 		}
@@ -73,20 +67,20 @@ class haxigniter_common_libraries_ParsedUrl {
 			$this->port = Std::parseInt($portTest->matched(2));
 		}
 	}}
-	public $scheme;
-	public $host;
-	public $port;
-	public $user;
-	public $pass;
-	public $path;
-	public $query;
-	public $fragment;
 	public function ifMatch($input, $searchFor, $callBack) {
 		$pos = _hx_index_of($input, $searchFor, null);
 		if($pos >= 0) {
 			call_user_func_array($callBack, array($pos));
 		}
 	}
+	public $fragment;
+	public $query;
+	public $path;
+	public $pass;
+	public $user;
+	public $port;
+	public $host;
+	public $scheme;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

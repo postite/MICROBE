@@ -5,14 +5,14 @@ class microbe_form_Validator {
 		if(!php_Boot::$skip_constructor) {
 		$this->errors = new HList();
 	}}
-	public $errors;
+	public function reset() {
+		$this->errors->clear();
+	}
 	public function isValid($value) {
 		$this->errors->clear();
 		return true;
 	}
-	public function reset() {
-		$this->errors->clear();
-	}
+	public $errors;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

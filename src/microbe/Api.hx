@@ -17,7 +17,7 @@ import microbe.vo.Spodable;
 import php.Lib;
 import vo.Taxo;
 import haxigniter.server.libraries.Url;
-
+import microbe.TagManager;
 
 
 
@@ -74,8 +74,12 @@ class Api implements haxe.rtti.Infos
 			//var tags=Taxo.m
 			return tags;
 		}*/
+
+		/// mmm pas normal cette function .. getSpodsBytags devrait avoir un spodstring en arg
+		//par qui est elle appelée
+
  	public function spodByTag(s:String):List<Spodable>{
-		var spods=Taxo.manager.getSpodsByTag(s);
+		var spods=TagManager.getSpodsByTag(s);
 		Lib.print(spods);
 		
 		/*for (a in spods){
@@ -90,7 +94,7 @@ class Api implements haxe.rtti.Infos
 	//à privatiser 
 	public function recTag(tag:String,spod:String,spod_id:Int){
 		tag=StringTools.urlDecode(tag);
-		if( Taxo.manager.getTag(tag,spod) ==null){
+		if( TagManager.getTaxo(tag,spod) ==null){
 		var neotag= new Taxo();
 		neotag.tag=tag.toLowerCase();
 		neotag.spodtype=spod.toLowerCase();
@@ -104,10 +108,10 @@ class Api implements haxe.rtti.Infos
 	
 	public function dissociateTag(tag:String,spod:String,spod_id:Int){
 		tag=StringTools.urlDecode(tag);
-		Taxo.manager.dissociate(tag,spod,spod_id);
+		TagManager.dissociate(tag,spod,spod_id);
 	}
 	public function associateTag(tag:String,spod:String,spodId:Int){
-		Taxo.manager.associate(tag,spod,spodId);
+		TagManager.associate(tag,spod,spodId);
 	}
 	
 	
@@ -135,7 +139,7 @@ class Api implements haxe.rtti.Infos
 						var spodName= args.slice(2)[0];
 						var spods=null;
 						
-							spods=microbe.TagManager.getSpodsbyTag(tagName,spodName);
+							spods=microbe.TagManager.getSpodsByTag(tagName,spodName);
 						
 						
 					
@@ -166,7 +170,7 @@ class Api implements haxe.rtti.Infos
 		Lib.print(arg);
 	}
 	//test access specifique method on Spod
-	public function trigger(_voName:String,functionName:String,?params:Array<String>):Dynamic
+	public function trigger(_voName:String,functionName:String,?params:Array<String>)
 	{
 		//return _voName;
 		var instance=createInstance(voPackage+_voName);
@@ -273,7 +277,9 @@ class Api implements haxe.rtti.Infos
 			//var liste:List<Dynamic> = manager.all(true);
 
 			for (a in Type.getClassFields(Type.resolveClass(stringVo))){
+				
 				if (a=="getAllorded"){
+
 					liste= Reflect.callMethod( Type.resolveClass(stringVo), "getAllorded", []);
 					return  cast liste;
 				}

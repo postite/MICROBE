@@ -5,24 +5,6 @@ class erazor_Template {
 		if(!php_Boot::$skip_constructor) {
 		$this->template = $template;
 	}}
-	public $template;
-	public $variables;
-	public function execute($content) {
-		$buffer = new StringBuf();
-		$parsedBlocks = _hx_deref(new erazor_Parser())->parse($this->template);
-		$script = _hx_deref(new erazor_ScriptBuilder("__b__"))->build($parsedBlocks);
-		$parser = new hscript_Parser();
-		$program = $parser->parseString($script);
-		$interp = new erazor_hscript_EnhancedInterp();
-		$this->variables = $interp->variables;
-		$bufferStack = new _hx_array(array());
-		$this->setInterpreterVars($interp, $content);
-		$interp->variables->set("__b__", $buffer);
-		$interp->variables->set("__string_buf__", array(new _hx_lambda(array(&$buffer, &$bufferStack, &$content, &$interp, &$parsedBlocks, &$parser, &$program, &$script), "erazor_Template_0"), 'execute'));
-		$interp->variables->set("__restore_buf__", array(new _hx_lambda(array(&$buffer, &$bufferStack, &$content, &$interp, &$parsedBlocks, &$parser, &$program, &$script), "erazor_Template_1"), 'execute'));
-		$interp->execute($program);
-		return $buffer->b;
-	}
 	public function setInterpreterVars($interp, $content) {
 		if(Std::is($content, _hx_qtype("Hash"))) {
 			$hash = $content;
@@ -42,6 +24,24 @@ class erazor_Template {
 			}
 		}
 	}
+	public function execute($content = null) {
+		$buffer = new StringBuf();
+		$parsedBlocks = _hx_deref(new erazor_Parser())->parse($this->template);
+		$script = _hx_deref(new erazor_ScriptBuilder("__b__"))->build($parsedBlocks);
+		$parser = new hscript_Parser();
+		$program = $parser->parseString($script);
+		$interp = new erazor_hscript_EnhancedInterp();
+		$this->variables = $interp->variables;
+		$bufferStack = new _hx_array(array());
+		$this->setInterpreterVars($interp, $content);
+		$interp->variables->set("__b__", $buffer);
+		$interp->variables->set("__string_buf__", array(new _hx_lambda(array(&$buffer, &$bufferStack, &$content, &$interp, &$parsedBlocks, &$parser, &$program, &$script), "erazor_Template_0"), 'execute'));
+		$interp->variables->set("__restore_buf__", array(new _hx_lambda(array(&$buffer, &$bufferStack, &$content, &$interp, &$parsedBlocks, &$parser, &$program, &$script), "erazor_Template_1"), 'execute'));
+		$interp->execute($program);
+		return $buffer->b;
+	}
+	public $variables;
+	public $template;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

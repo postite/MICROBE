@@ -56,10 +56,18 @@ class FormGenerator
 		Imports.pack("microbe.form.elements",false);
 	}
 
-public function render():String{
+	public function render():String{
 	return formulaire+cloud;
-}
-		
+	}
+	public function renderForm():String 
+	{
+		return formulaire.toString();
+	}
+	public function renderCloud() 
+	{
+		this.cloud=new TagView("pif","paf").render();
+		return cloud;
+	}
 		
 		//////// function d'execution des formules de vo ... peut etre a externaliser 
 		
@@ -73,8 +81,9 @@ public function render():String{
 			
 			//instanciation du vo ->spodvo
 			var stringVo = voPackage + nomVo;
-			if(data==null) {
+			if(data==null){
 			spodvo=Type.createInstance(Type.resolveClass(stringVo),[]);
+			//if (Reflect.hasField(spodvo,"date")Reflect.setField(spodvo,"date",Date.now());
 			}else{
 			spodvo=data;
 			_classMap.id=spodvo.id;
@@ -94,9 +103,9 @@ public function render():String{
 				fields.taggable=true;
 		//	var tags=haxe.Serializer.run(TagManager.getTags(TagManager.getSpodName(spodvo)));
 		//	var tagid=haxe.Serializer.run(TagManager.getTagsById(TagManager.getSpodName(spodvo), spodvo.id));
-			this.cloud=new TagView("pif","paf").render();
+			
 				//_formulaire.addElement(new TagView("pif","paf",tags));
-				
+				renderCloud();
 			}	
 			
 			_classMap.fields=fields;

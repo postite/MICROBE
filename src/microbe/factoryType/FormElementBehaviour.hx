@@ -16,7 +16,7 @@ class FormElementBehaviour implements IBehaviour
 	}
 	public function parse(source:IMicrotype):String{
 		source.value=source.value+"___modif";
-		return "im a formElement"+source.voName;
+		return "im a dataElement"+source.voName;
 
 	}
 	public function create(voName:String,element:FieldType,field:String,?formulaire:Form):IMicrotype{
@@ -32,10 +32,11 @@ class FormElementBehaviour implements IBehaviour
 		}
 		
 	public function record(source:IMicrotype,data:Spodable):Spodable {
-			trace("elementVAlue="+data);
+
+			trace("FormElementBehaviour"+source.field +"--"+source.value);
 			Reflect.setField(data,source.field, source.value);
-			trace("afterReflect"+Reflect.field(data, source.field));
-			trace("titre value="+Reflect.field(data, "titre"));
+			// trace("titre value="+Reflect.field(data, "titre"));
+			// trace("DATE value="+Reflect.field(data, "date"));
 			return data;
 		}
 		

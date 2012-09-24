@@ -5,7 +5,6 @@ class haxe_xml__Fast_NodeAccess {
 		if(!php_Boot::$skip_constructor) {
 		$this->__x = $x;
 	}}
-	public $__x;
 	public function resolve($name) {
 		$x = $this->__x->elementsNamed($name)->next();
 		if($x === null) {
@@ -14,6 +13,7 @@ class haxe_xml__Fast_NodeAccess {
 		}
 		return new haxe_xml_Fast($x);
 	}
+	public $__x;
 	public $»dynamics = array();
 	public function __get($n) {
 		if(isset($this->»dynamics[$n]))

@@ -4,6 +4,7 @@ import microbe.factoryType.CollectionBehaviour;
 import microbe.factoryType.FormElementBehaviour;
 import microbe.factoryType.SpodableBehaviour;
 import microbe.factoryType.IBehaviour;
+import microbe.factoryType.DataElementBehaviour;
 
 class TypeFactory
 {
@@ -21,6 +22,8 @@ class TypeFactory
 			return Type.createInstance(FormElementBehaviour,[]);
 			case InstanceType.collection:
 			return Type.createInstance(CollectionBehaviour,[]);
+			case InstanceType.dataElement:
+			return Type.createInstance(DataElementBehaviour,[]);
 		}
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 
 class haxe_io_BytesInput extends haxe_io_Input {
-	public function __construct($b, $pos, $len) {
+	public function __construct($b, $pos = null, $len = null) {
 		if(!php_Boot::$skip_constructor) {
 		if($pos === null) {
 			$pos = 0;
@@ -16,16 +16,6 @@ class haxe_io_BytesInput extends haxe_io_Input {
 		$this->pos = $pos;
 		$this->len = $len;
 	}}
-	public $b;
-	public $pos;
-	public $len;
-	public function readByte() {
-		if($this->len === 0) {
-			throw new HException(new haxe_io_Eof());
-		}
-		$this->len--;
-		return ord($this->b[$this->pos++]);
-	}
 	public function readBytes($buf, $pos, $len) {
 		if($pos < 0 || $len < 0 || $pos + $len > $buf->length) {
 			throw new HException(haxe_io_Error::$OutsideBounds);
@@ -41,6 +31,16 @@ class haxe_io_BytesInput extends haxe_io_Input {
 		$this->len -= $len;
 		return $len;
 	}
+	public function readByte() {
+		if($this->len === 0) {
+			throw new HException(new haxe_io_Eof());
+		}
+		$this->len--;
+		return ord($this->b[$this->pos++]);
+	}
+	public $len;
+	public $pos;
+	public $b;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

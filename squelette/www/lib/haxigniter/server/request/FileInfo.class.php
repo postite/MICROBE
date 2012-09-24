@@ -6,8 +6,6 @@ class haxigniter_server_request_FileInfo {
 		$this->tmpPath = $tmpPath;
 		$this->name = $name;
 	}}
-	public $name;
-	public $tmpPath;
 	public function copyTo($relpath) {
 		if(haxe_io_Path::withoutDirectory($relpath) === "") {
 			$relpath .= $this->name;
@@ -15,6 +13,8 @@ class haxigniter_server_request_FileInfo {
 		sys_io_File::copy($this->tmpPath, haxe_io_Path::directory(dirname($_SERVER["SCRIPT_FILENAME"]) . "/") . $relpath);
 		return $this->name;
 	}
+	public $tmpPath;
+	public $name;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

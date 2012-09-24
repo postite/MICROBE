@@ -1,7 +1,7 @@
 <?php
 
 class microbe_form_FieldSet {
-	public function __construct($name, $label, $visible) {
+	public function __construct($name = null, $label = null, $visible = null) {
 		if(!php_Boot::$skip_constructor) {
 		if($visible === null) {
 			$visible = true;
@@ -17,17 +17,17 @@ class microbe_form_FieldSet {
 		$this->visible = $visible;
 		$this->elements = new HList();
 	}}
-	public $name;
-	public $form;
-	public $label;
-	public $visible;
-	public $elements;
-	public function getOpenTag() {
-		return "<fieldset id=\"" . $this->form->name . "_" . $this->name . "\" name=\"" . $this->form->name . "_" . $this->name . "\" class=\"" . ((($this->visible) ? "" : "fieldsetNoDisplay")) . "\" ><legend>" . $this->label . "</legend>";
-	}
 	public function getCloseTag() {
 		return "</fieldset>";
 	}
+	public function getOpenTag() {
+		return "<fieldset id=\"" . $this->form->name . "_" . $this->name . "\" name=\"" . $this->form->name . "_" . $this->name . "\" class=\"" . ((($this->visible) ? "" : "fieldsetNoDisplay")) . "\" ><legend>" . $this->label . "</legend>";
+	}
+	public $elements;
+	public $visible;
+	public $label;
+	public $form;
+	public $name;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

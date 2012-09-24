@@ -9,7 +9,7 @@ class haxigniter_common_rtti_RttiUtil {
 		}
 		return $methods->get($name);
 	}
-	static function getMethods($classType, $methodName) {
+	static function getMethods($classType, $methodName = null) {
 		$output = new Hash();
 		$»t = (haxigniter_common_rtti_RttiUtil::getTypeTree($classType));
 		switch($»t->index) {
@@ -45,7 +45,7 @@ class haxigniter_common_rtti_RttiUtil {
 			}
 		}break;
 		default:{
-			throw new HException("No RTTI class information found in " . $classType);
+			throw new HException("No RTTI class information found in " . Std::string($classType));
 		}break;
 		}
 		return $output;
@@ -93,7 +93,7 @@ class haxigniter_common_rtti_RttiUtil {
 	static function getRtti($classType) {
 		$rtti = $classType->__rtti;
 		if($rtti === null) {
-			throw new HException("No RTTI information found in " . $classType . " (class must implement haxe.rtti.Infos)");
+			throw new HException("No RTTI information found in " . Std::string($classType) . " (class must implement haxe.rtti.Infos)");
 		}
 		return $rtti;
 	}

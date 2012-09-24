@@ -1,7 +1,7 @@
 <?php
 
 class microbe_form_elements_RichtextWym extends microbe_form_FormElement {
-	public function __construct($name, $label, $value, $required, $attibutes) {
+	public function __construct($name, $label, $value = null, $required = null, $attibutes = null) {
 		if(!php_Boot::$skip_constructor) {
 		if($attibutes === null) {
 			$attibutes = "";
@@ -23,19 +23,15 @@ class microbe_form_elements_RichtextWym extends microbe_form_FormElement {
 		$this->containersItems = "";
 		$this->classesItems = "";
 	}}
-	public $width;
-	public $height;
-	public $allowImages;
-	public $allowTables;
-	public $editorStyles;
-	public $containersItems;
-	public $classesItems;
-	public function render($iter) {
+	public function toString() {
+		return $this->render(null);
+	}
+	public function render($iter = null) {
 		$n = $this->name;
 		$this->editorStyles = str_replace("\x0A", " ", $this->editorStyles);
 		$this->editorStyles = str_replace("\x0D", " ", $this->editorStyles);
 		$str = new StringBuf();
-		$str->add("\x0A <textarea name=\"" . $n . "\" id=\"" . $n . "\" >" . $this->value . "</textarea>");
+		$str->add("\x0A <textarea name=\"" . $n . "\" id=\"" . $n . "\" >" . Std::string($this->value) . "</textarea>");
 		$str->add("<script type=\"text/javascript\">");
 		$str->add("jQuery(function() {");
 		$str->add("\x09jQuery('#" . $n . "').wymeditor({");
@@ -44,7 +40,7 @@ class microbe_form_elements_RichtextWym extends microbe_form_FormElement {
 		$str->add("skin:'compact',");
 		$str->add("postInit: function(wym) {");
 		$str->add("\x09jQuery(wym._box).find(wym._options.containersSelector).removeClass('wym_dropdown').addClass('wym_panel').find('h2 > span').remove();");
-		$str->add("\x09jQuery(wym._box).find(wym._options.iframeSelector).css('height', '" . $this->height . "px').css('width', '" . $this->width . "px');");
+		$str->add("\x09jQuery(wym._box).find(wym._options.iframeSelector).css('height', '" . _hx_string_rec($this->height, "") . "px').css('width', '" . _hx_string_rec($this->width, "") . "px');");
 		$str->add("},");
 		$str->add("toolsItems: [");
 		$str->add("\x09{'name': 'Bold', 'title': 'Strong', 'css': 'wym_tools_strong'}, ");
@@ -79,9 +75,13 @@ class microbe_form_elements_RichtextWym extends microbe_form_FormElement {
 		}
 		return $str->b;
 	}
-	public function toString() {
-		return $this->render(null);
-	}
+	public $classesItems;
+	public $containersItems;
+	public $editorStyles;
+	public $allowTables;
+	public $allowImages;
+	public $height;
+	public $width;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

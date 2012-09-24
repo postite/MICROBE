@@ -9,10 +9,6 @@ class controllers_Myfront extends microbe_controllers_GenericController {
 		$this->jsLib = new HList();
 		$this->url = new haxigniter_server_libraries_Url($this->configuration);
 	}}
-	public $jsScript;
-	public $jsLib;
-	public $api;
-	public $url;
 	public function index() {
 		$this->view->assign("link", $this->url->siteUrl(null, null));
 		$this->view->assign("jsScript", $this->jsScript);
@@ -22,6 +18,10 @@ class controllers_Myfront extends microbe_controllers_GenericController {
 		$this->view->assign("content", null);
 		$this->view->display("front/frontest.html");
 	}
+	public $url;
+	public $api;
+	public $jsLib;
+	public $jsScript;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

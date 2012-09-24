@@ -5,7 +5,6 @@ class haxe_xml__Fast_AttribAccess {
 		if(!php_Boot::$skip_constructor) {
 		$this->__x = $x;
 	}}
-	public $__x;
 	public function resolve($name) {
 		if($this->__x->nodeType == Xml::$Document) {
 			throw new HException("Cannot access document attribute " . $name);
@@ -16,6 +15,7 @@ class haxe_xml__Fast_AttribAccess {
 		}
 		return $v;
 	}
+	public $__x;
 	public $»dynamics = array();
 	public function __get($n) {
 		if(isset($this->»dynamics[$n]))

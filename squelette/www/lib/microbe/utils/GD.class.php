@@ -5,7 +5,7 @@ class microbe_utils_GD {
 	static function gdInfo() {
 		return php_Lib::hashOfAssociativeArray(gd_info());
 	}
-	static function getImageSize($filename, $imageinfo) {
+	static function getImageSize($filename, $imageinfo = null) {
 		$types = new _hx_array(array(microbe_utils_ImageType::$GIF, microbe_utils_ImageType::$JPG, microbe_utils_ImageType::$PNG, microbe_utils_ImageType::$SWF, microbe_utils_ImageType::$PSD, microbe_utils_ImageType::$BMP, microbe_utils_ImageType::$TIFF_II, microbe_utils_ImageType::$TIFF_MM, microbe_utils_ImageType::$JPC, microbe_utils_ImageType::$JP2, microbe_utils_ImageType::$JPX, microbe_utils_ImageType::$JB2, microbe_utils_ImageType::$SWC, microbe_utils_ImageType::$IFF, microbe_utils_ImageType::$WBMP, microbe_utils_ImageType::$XBM));
 		$a = getimagesize($filename);
 		$bits = null;
@@ -23,14 +23,14 @@ class microbe_utils_GD {
 		}
 		return _hx_anonymous(array("width" => $a[0], "height" => $a[1], "type" => $types[$a[2]], "bits" => $bits, "channels" => $channels, "mime" => $mime));
 	}
-	static function image_type_to_extension($imagetype, $include_dot) {
+	static function image_type_to_extension($imagetype, $include_dot = null) {
 		$t = microbe_utils_GD_3($imagetype, $include_dot);
 		return microbe_utils_GD_4($imagetype, $include_dot, $t);
 	}
 	static function imageTypeToMimeType($imagetype) {
 		return microbe_utils_GD_5($imagetype);
 	}
-	static function imageToWBMP($image, $filename, $threshold) {
+	static function imageToWBMP($image, $filename = null, $threshold) {
 		return image2wbmp($image, $filename, $threshold);
 	}
 	static function imageAlphaBlending($image, $blendmode) {
@@ -170,7 +170,7 @@ class microbe_utils_GD {
 	static function imageFillToBorder($image, $x, $y, $border, $color) {
 		return imagefilltoborder($image, $x, $y, $border, $color);
 	}
-	static function imageFilter($src_im, $filtertype, $arg1, $arg2, $arg3) {
+	static function imageFilter($src_im, $filtertype, $arg1 = null, $arg2 = null, $arg3 = null) {
 		$filters = new _hx_array(array(microbe_utils_ImageFilter::$NEGATE, microbe_utils_ImageFilter::$GRAYSCALE, microbe_utils_ImageFilter::$BRIGHTNESS, microbe_utils_ImageFilter::$CONTRAST, microbe_utils_ImageFilter::$COLORIZE, microbe_utils_ImageFilter::$EDGEDETECT, microbe_utils_ImageFilter::$EMBOSS, microbe_utils_ImageFilter::$GAUSSIAN_BLUR, microbe_utils_ImageFilter::$SELECTIVE_BLUR, microbe_utils_ImageFilter::$MEAN_REMOVAL, microbe_utils_ImageFilter::$SMOOTH));
 		$c = 0;
 		{
@@ -193,31 +193,31 @@ class microbe_utils_GD {
 	static function imageFontWidth($font) {
 		return imagefontwidth($font);
 	}
-	static function imageFTBBox($size, $angle, $font_file, $text, $extrainfo) {
+	static function imageFTBBox($size, $angle, $font_file, $text, $extrainfo = null) {
 		return imageftbbox($size, $angle, $font_file, $text, $extrainfo);
 	}
-	static function imageFTText($image, $size, $angle, $x, $y, $col, $font_file, $text, $extrainfo) {
+	static function imageFTText($image, $size, $angle, $x, $y, $col, $font_file, $text, $extrainfo = null) {
 		return imagefttbox($image, $size, $angle, $x, $y, $col, $font_file, $text, $extrainfo);
 	}
 	static function imageGammaCorrect($image, $inputgamma, $outputgamma) {
 		return imagegammacorrect($image, $inputgamma, $outputgamma);
 	}
-	static function imageGD2($image, $filename, $chunk_size, $type) {
+	static function imageGD2($image, $filename = null, $chunk_size = null, $type) {
 		return imagegd2($image, $filename, $chunk_size, $type);
 	}
-	static function imageGD($image, $filename) {
+	static function imageGD($image, $filename = null) {
 		return imagegd($image, $filename);
 	}
-	static function imageGif($image, $filename) {
+	static function imageGif($image, $filename = null) {
 		return imagegif($image, $filename);
 	}
-	static function imageInterlace($image, $interlace) {
+	static function imageInterlace($image, $interlace = null) {
 		return imageinterlace($image, $interlace);
 	}
 	static function imageIsTrueColor($image) {
 		return imageistruecolor ($image);
 	}
-	static function imageJpeg($image, $filename, $quality) {
+	static function imageJpeg($image, $filename = null, $quality = null) {
 		if($quality === null) {
 			$quality = 80;
 		}
@@ -249,13 +249,13 @@ class microbe_utils_GD {
 	static function imagePaletteCopy($destination, $source) {
 		imagepalettecopy($destination, $source);
 	}
-	static function imagePng($image, $filename) {
+	static function imagePng($image, $filename = null) {
 		return imagepng($image, $filename);
 	}
 	static function imagePolygon($image, $points, $num_points, $color) {
 		return imagepolygon($image, $points, $num_points, $color);
 	}
-	static function imagePSBBox($text, $font, $size, $space, $tightness, $angle) {
+	static function imagePSBBox($text, $font, $size, $space = null, $tightness = null, $angle) {
 		return imagepsbbox($text, $font, $size, $space, $tightness, $angle);
 	}
 	static function imagePSEncodeFont($font_index, $encodingfile) {
@@ -273,13 +273,13 @@ class microbe_utils_GD {
 	static function imagePSSlantFont($font_index, $slant) {
 		return imagepsslantfont($font_index, $slant);
 	}
-	static function imagePSText($image, $text, $font, $size, $foreground, $background, $x, $y, $space, $tightness, $angle, $antialias_steps) {
+	static function imagePSText($image, $text, $font, $size, $foreground, $background, $x, $y, $space = null, $tightness = null, $angle = null, $antialias_steps = null) {
 		return imagepstext($image, $text, $font, $size, $foreground, $background, $x, $y, $space, $tightness, $angle, $antialias_steps);
 	}
 	static function imageRectangle($image, $x1, $y1, $x2, $y2, $col) {
 		return imagerectangle($image, $x1, $y1, $x2, $y2, $col);
 	}
-	static function imageRotate($src_im, $angle, $bgd_color, $ignore_transparent) {
+	static function imageRotate($src_im, $angle, $bgd_color, $ignore_transparent = null) {
 		return imagerotate($src_im, $angle, $bgd_color, $ignore_transparent);
 	}
 	static function imageSaveAlpha($image, $saveflag) {
@@ -324,13 +324,13 @@ class microbe_utils_GD {
 	static function imageTypes() {
 		return imagetypes();
 	}
-	static function imageWBmp($image, $filename, $foreground) {
+	static function imageWBmp($image, $filename = null, $foreground = null) {
 		return imagewbmp($image, $filename, $foreground);
 	}
-	static function imageXbm($image, $filename, $foreground) {
+	static function imageXbm($image, $filename = null, $foreground = null) {
 		return imagexbm($image, $filename, $foreground);
 	}
-	static function iptcEmbed($iptcdata, $jpeg_file_name, $spool) {
+	static function iptcEmbed($iptcdata, $jpeg_file_name, $spool = null) {
 		return iptcembed($iptcdata, $jpeg_file_name, $spool);
 	}
 	static function iptcParse($iptcblock) {

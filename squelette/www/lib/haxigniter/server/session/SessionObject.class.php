@@ -4,11 +4,11 @@ class haxigniter_server_session_SessionObject {
 	public function __construct() {
 		;
 	}
-	public $flashVar;
 	public function setFlash($value) {
 		haxigniter_server_session_SessionObject::setObjFlash(Type::getClass($this), $value);
 		$this->flashVar = $value;
 	}
+	public $flashVar;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
@@ -22,7 +22,7 @@ class haxigniter_server_session_SessionObject {
 	static $session;
 	static $sessionName = "_haxigniter_session_";
 	static $flashName = "_flash";
-	static function restore($session, $classType, $classArgs) {
+	static function restore($session, $classType, $classArgs = null) {
 		if(haxigniter_server_session_SessionObject::$session !== null && haxigniter_server_session_SessionObject::$session !== $session) {
 			throw new HException("Cannot change session handler for SessionObject.");
 		} else {

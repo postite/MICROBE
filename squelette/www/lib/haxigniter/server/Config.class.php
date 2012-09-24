@@ -1,7 +1,7 @@
 <?php
 
 class haxigniter_server_Config {
-	public function __construct($debug) {
+	public function __construct($debug = null) {
 		if(!php_Boot::$skip_constructor) {
 		$env = Sys::environment();
 		if($this->applicationPath === null) {
@@ -53,29 +53,7 @@ class haxigniter_server_Config {
 			$this->dumpEnvironment($debug);
 		}
 	}}
-	public $development;
-	public $controllerPackage;
-	public $indexFile;
-	public $indexPath;
-	public $applicationPath;
-	public $viewPath;
-	public $externalPath;
-	public $runtimePath;
-	public $logPath;
-	public $cachePath;
-	public $sessionPath;
-	public $permittedUriChars;
-	public $logLevel;
-	public $logDateFormat;
-	public $errorPage;
-	public $error404Page;
-	public $language;
-	public $encryptionKey;
-	public $defaultController;
-	public $defaultAction;
-	public $router;
-	public $view;
-	public function dumpEnvironment($logFile) {
+	public function dumpEnvironment($logFile = null) {
 		$date = DateTools::format(Date::now(), "%Y-%m-%d %H:%M:%S");
 		$output = "";
 		$output .= "*** [" . $date . "] Start of dump\x0A";
@@ -88,7 +66,7 @@ class haxigniter_server_Config {
 				if($field === "encryptionKey") {
 					continue;
 				}
-				$output .= $field . ": '" . Reflect::field($this, $field) . "'\x0A";
+				$output .= $field . ": '" . Std::string(Reflect::field($this, $field)) . "'\x0A";
 				unset($field);
 			}
 		}
@@ -121,6 +99,28 @@ class haxigniter_server_Config {
 			}
 		}
 	}
+	public $view;
+	public $router;
+	public $defaultAction;
+	public $defaultController;
+	public $encryptionKey;
+	public $language;
+	public $error404Page;
+	public $errorPage;
+	public $logDateFormat;
+	public $logLevel;
+	public $permittedUriChars;
+	public $sessionPath;
+	public $cachePath;
+	public $logPath;
+	public $runtimePath;
+	public $externalPath;
+	public $viewPath;
+	public $applicationPath;
+	public $indexPath;
+	public $indexFile;
+	public $controllerPackage;
+	public $development;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

@@ -88,7 +88,7 @@ class php_Session {
 		}
 		session_module_name($module);
 	}
-	static function regenerateId($deleteold) {
+	static function regenerateId($deleteold = null) {
 		return session_regenerate_id($deleteold);
 	}
 	static function get($name) {
@@ -102,7 +102,7 @@ class php_Session {
 		php_Session::start();
 		return $_SESSION[$name] = $value;
 	}
-	static function setCookieParams($lifetime, $path, $domain, $secure, $httponly) {
+	static function setCookieParams($lifetime = null, $path = null, $domain = null, $secure = null, $httponly = null) {
 		if(php_Session::$started) {
 			throw new HException("You can't set the cookie params while the session is already in use");
 		}

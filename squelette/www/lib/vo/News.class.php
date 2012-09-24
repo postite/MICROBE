@@ -5,16 +5,8 @@ class vo_News extends sys_db_Object implements microbe_vo_Spodable{
 		if(!php_Boot::$skip_constructor) {
 		parent::__construct();
 	}}
-	public $poz;
-	public $id;
-	public $titre;
-	public $date;
-	public $contenu;
-	public $image;
-	public $datelitterale;
-	public $en_ligne;
-	public function getTags() {
-		return new HList();
+	public function getDefaultField() {
+		return $this->titre;
 	}
 	public function getFormule() {
 		$formule = null;
@@ -27,9 +19,17 @@ class vo_News extends sys_db_Object implements microbe_vo_Spodable{
 		$formule->set("en_ligne", _hx_anonymous(array("type" => microbe_form_InstanceType::$formElement, "classe" => "microbe.form.elements.CheckBox", "champs" => $this->en_ligne)));
 		return $formule;
 	}
-	public function getDefaultField() {
-		return $this->titre;
+	public function getTags() {
+		return new HList();
 	}
+	public $en_ligne;
+	public $datelitterale;
+	public $image;
+	public $contenu;
+	public $date;
+	public $titre;
+	public $id;
+	public $poz;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

@@ -10,57 +10,9 @@ class haxe_Serializer {
 		$this->shash = new Hash();
 		$this->scount = 0;
 	}}
-	public $buf;
-	public $cache;
-	public $shash;
-	public $scount;
-	public $useCache;
-	public $useEnumIndex;
-	public function toString() {
-		return $this->buf->b;
-	}
-	public function serializeString($s) {
-		$x = $this->shash->get($s);
-		if($x !== null) {
-			$this->buf->add("R");
-			$this->buf->add($x);
-			return;
-		}
-		$this->shash->set($s, $this->scount++);
-		$this->buf->add("y");
-		$s = rawurlencode($s);
-		$this->buf->add(strlen($s));
-		$this->buf->add(":");
-		$this->buf->add($s);
-	}
-	public function serializeRef($v) {
-		{
-			$_g1 = 0; $_g = $this->cache->length;
-			while($_g1 < $_g) {
-				$i = $_g1++;
-				if(_hx_equal($this->cache[$i], $v)) {
-					$this->buf->add("r");
-					$this->buf->add($i);
-					return true;
-				}
-				unset($i);
-			}
-		}
-		$this->cache->push($v);
-		return false;
-	}
-	public function serializeFields($v) {
-		{
-			$_g = 0; $_g1 = Reflect::fields($v);
-			while($_g < $_g1->length) {
-				$f = $_g1[$_g];
-				++$_g;
-				$this->serializeString($f);
-				$this->serialize(Reflect::field($v, $f));
-				unset($f);
-			}
-		}
-		$this->buf->add("g");
+	public function serializeException($e) {
+		$this->buf->add("x");
+		$this->serialize($e);
 	}
 	public function serialize($v) {
 		$»t = (Type::typeof($v));
@@ -186,25 +138,32 @@ class haxe_Serializer {
 				$v1 = $v;
 				$i = 0;
 				$max = $v1->length - 2;
-				$chars = "";
+				$charsBuf = new StringBuf();
 				$b64 = haxe_Serializer::$BASE64;
 				while($i < $max) {
 					$b1 = ord($v1->b[$i++]);
 					$b2 = ord($v1->b[$i++]);
 					$b3 = ord($v1->b[$i++]);
-					$chars .= _hx_char_at($b64, $b1 >> 2) . _hx_char_at($b64, ($b1 << 4 | $b2 >> 4) & 63) . _hx_char_at($b64, ($b2 << 2 | $b3 >> 6) & 63) . _hx_char_at($b64, $b3 & 63);
+					$charsBuf->add(_hx_char_at($b64, $b1 >> 2));
+					$charsBuf->add(_hx_char_at($b64, ($b1 << 4 | $b2 >> 4) & 63));
+					$charsBuf->add(_hx_char_at($b64, ($b2 << 2 | $b3 >> 6) & 63));
+					$charsBuf->add(_hx_char_at($b64, $b3 & 63));
 					unset($b3,$b2,$b1);
 				}
 				if($i === $max) {
 					$b1 = ord($v1->b[$i++]);
 					$b2 = ord($v1->b[$i++]);
-					$chars .= _hx_char_at($b64, $b1 >> 2) . _hx_char_at($b64, ($b1 << 4 | $b2 >> 4) & 63) . _hx_char_at($b64, $b2 << 2 & 63);
+					$charsBuf->add(_hx_char_at($b64, $b1 >> 2));
+					$charsBuf->add(_hx_char_at($b64, ($b1 << 4 | $b2 >> 4) & 63));
+					$charsBuf->add(_hx_char_at($b64, $b2 << 2 & 63));
 				} else {
 					if($i === $max + 1) {
 						$b1 = ord($v1->b[$i++]);
-						$chars .= _hx_char_at($b64, $b1 >> 2) . _hx_char_at($b64, $b1 << 4 & 63);
+						$charsBuf->add(_hx_char_at($b64, $b1 >> 2));
+						$charsBuf->add(_hx_char_at($b64, $b1 << 4 & 63));
 					}
 				}
+				$chars = $charsBuf->b;
 				$this->buf->add("s");
 				$this->buf->add(strlen($chars));
 				$this->buf->add(":");
@@ -276,10 +235,58 @@ class haxe_Serializer {
 		}break;
 		}
 	}
-	public function serializeException($e) {
-		$this->buf->add("x");
-		$this->serialize($e);
+	public function serializeFields($v) {
+		{
+			$_g = 0; $_g1 = Reflect::fields($v);
+			while($_g < $_g1->length) {
+				$f = $_g1[$_g];
+				++$_g;
+				$this->serializeString($f);
+				$this->serialize(Reflect::field($v, $f));
+				unset($f);
+			}
+		}
+		$this->buf->add("g");
 	}
+	public function serializeRef($v) {
+		{
+			$_g1 = 0; $_g = $this->cache->length;
+			while($_g1 < $_g) {
+				$i = $_g1++;
+				if(_hx_equal($this->cache[$i], $v)) {
+					$this->buf->add("r");
+					$this->buf->add($i);
+					return true;
+				}
+				unset($i);
+			}
+		}
+		$this->cache->push($v);
+		return false;
+	}
+	public function serializeString($s) {
+		$x = $this->shash->get($s);
+		if($x !== null) {
+			$this->buf->add("R");
+			$this->buf->add($x);
+			return;
+		}
+		$this->shash->set($s, $this->scount++);
+		$this->buf->add("y");
+		$s = rawurlencode($s);
+		$this->buf->add(strlen($s));
+		$this->buf->add(":");
+		$this->buf->add($s);
+	}
+	public function toString() {
+		return $this->buf->b;
+	}
+	public $useEnumIndex;
+	public $useCache;
+	public $scount;
+	public $shash;
+	public $cache;
+	public $buf;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

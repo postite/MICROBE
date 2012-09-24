@@ -6,10 +6,11 @@ import sys.db.Types;
 
 //@:id(tag_id) ne pas metter d'id pour ne pas generer de primary key...
 @:table('tagSpod')
+@:id(tag_id,spod_id)
 class TagSpod extends Object
 {
 	
 	
-		public var tag_id:SInt;
+		public var tag_id:SId;
 		public var spod_id:SInt;
 }

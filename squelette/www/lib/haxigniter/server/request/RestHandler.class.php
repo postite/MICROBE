@@ -1,7 +1,7 @@
 <?php
 
 class haxigniter_server_request_RestHandler implements haxigniter_server_request_RequestHandler{
-	public function __construct($config, $passRequestData) {
+	public function __construct($config, $passRequestData = null) {
 		if(!php_Boot::$skip_constructor) {
 		if($passRequestData === null) {
 			$passRequestData = false;
@@ -9,8 +9,6 @@ class haxigniter_server_request_RestHandler implements haxigniter_server_request
 		$this->config = $config;
 		$this->passRequestData = $passRequestData;
 	}}
-	public $config;
-	public $passRequestData;
 	public function handleRequest($controller, $url, $method, $getPostData, $requestData) {
 		$action = null;
 		$args = new _hx_array(array());
@@ -43,7 +41,7 @@ class haxigniter_server_request_RestHandler implements haxigniter_server_request
 			}
 			$callMethod = Reflect::field($controller, $action);
 			if($callMethod === null) {
-				throw new HException(new haxigniter_server_exceptions_NotFoundException($controllerType . " REST-action \"" . $action . "\" not found.", null, _hx_anonymous(array("fileName" => "RestHandler.hx", "lineNumber" => 105, "className" => "haxigniter.server.request.RestHandler", "methodName" => "handleRequest"))));
+				throw new HException(new haxigniter_server_exceptions_NotFoundException(Std::string($controllerType) . " REST-action \"" . $action . "\" not found.", null, _hx_anonymous(array("fileName" => "RestHandler.hx", "lineNumber" => 105, "className" => "haxigniter.server.request.RestHandler", "methodName" => "handleRequest"))));
 			}
 			if($extraArgsPos !== null) {
 				$extraArguments = haxigniter_common_types_TypeFactory::typecastArguments(Type::getClass($controller), $action, $uriSegments->slice($extraArgsPos, null), $argOffset);
@@ -72,7 +70,7 @@ class haxigniter_server_request_RestHandler implements haxigniter_server_request
 				}
 				$callMethod = Reflect::field($controller, $action);
 				if($callMethod === null) {
-					throw new HException(new haxigniter_server_exceptions_NotFoundException($controllerType . " REST-action \"" . $action . "\" not found.", null, _hx_anonymous(array("fileName" => "RestHandler.hx", "lineNumber" => 143, "className" => "haxigniter.server.request.RestHandler", "methodName" => "handleRequest"))));
+					throw new HException(new haxigniter_server_exceptions_NotFoundException(Std::string($controllerType) . " REST-action \"" . $action . "\" not found.", null, _hx_anonymous(array("fileName" => "RestHandler.hx", "lineNumber" => 143, "className" => "haxigniter.server.request.RestHandler", "methodName" => "handleRequest"))));
 				}
 			} else {
 				throw new HException(new haxigniter_common_exceptions_Exception("Unsupported HTTP method: " . $method, null, _hx_anonymous(array("fileName" => "RestHandler.hx", "lineNumber" => 147, "className" => "haxigniter.server.request.RestHandler", "methodName" => "handleRequest"))));
@@ -84,6 +82,8 @@ class haxigniter_server_request_RestHandler implements haxigniter_server_request
 		}
 		return haxigniter_server_request_RequestResult::methodCall($controller, $callMethod, $args);
 	}
+	public $passRequestData;
+	public $config;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

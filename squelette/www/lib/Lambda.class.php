@@ -43,7 +43,7 @@ class Lambda {
 		}
 		return $l;
 	}
-	static function has($it, $elt, $cmp) {
+	static function has($it, $elt, $cmp = null) {
 		if($cmp === null) {
 			if(null == $it) throw new HException('null iterable');
 			$»it = $it->iterator();
@@ -116,7 +116,7 @@ class Lambda {
 		}
 		return $first;
 	}
-	static function count($it, $pred) {
+	static function count($it, $pred = null) {
 		$n = 0;
 		if($pred === null) {
 			if(null == $it) throw new HException('null iterable');

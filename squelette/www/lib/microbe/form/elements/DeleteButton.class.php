@@ -6,7 +6,7 @@ class microbe_form_elements_DeleteButton extends microbe_form_FormElement {
 		$this->name = $name;
 		$this->label = $label;
 	}}
-	public function render($iter) {
+	public function render($iter = null) {
 		return "<button type='BUTTON' class='deletebutton'  id='" . $this->name . "' ><span>" . $this->label . "</span></button>";
 	}
 	function __toString() { return 'microbe.form.elements.DeleteButton'; }

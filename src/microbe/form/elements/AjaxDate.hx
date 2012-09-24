@@ -9,7 +9,7 @@ class AjaxDate extends AjaxElement{
 	
 	
 	public function new(?_microfield,?_iter) : Void {
-	//	//Lib.alert("checkBox");
+		//Lib.alert("checkBox");
 		////Lib.alert("gasp");
 		id=cast (_microfield).elementId;
 		pos=Std.parseInt(getCollectionContainer());
@@ -27,26 +27,30 @@ class AjaxDate extends AjaxElement{
 		override public function getValue():String{	
 	
 					var valeur=new JQuery("#madate_"+pos).val();
-					return valeur;
-						//return "poop";
-			}
-	
-	override public function setValue(val:String):Void{
-			Lib.alert("#madate_"+pos +"date val="+val);
 
+					//Lib.alert("get date"+valeur);
+					var _date=Date.fromString(valeur);
+					var format=DateTools.format(_date,"%Y-%m-%d");
+					//Lib.alert("true date"+format);
+					trace("format="+format.toString());
+					return format.toString();
+						//return "poop";
+		}
+	
+	override public function setValue(valeur:String):Void{
+			//Lib.alert("#madate_"+pos +"date val="+valeur);
+			trace("date="+valeur);
 			var _date:Date=null;
-				if( val==null){
-					val= Date.now().toString();
-				
+				if( valeur==null){
+					valeur= DateTools.format(Date.now(),"%Y-%m-%d").toString();
+					
 				}
-				_date=Date.fromString(val);
+				_date=Date.fromString(valeur);
 				//Lib.alert("date="+_date);
 				var format=DateTools.format(_date,"%Y-%m-%d");
-				Lib.alert("format="+format);
+				//Lib.alert("format="+format);
 				new JQuery("#madate_"+pos).val(format);
 				//return valeur;
-
-				
 			}
 
 	
