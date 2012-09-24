@@ -5,11 +5,9 @@ class vo_RelationTest extends sys_db_Object implements microbe_vo_Spodable{
 		if(!php_Boot::$skip_constructor) {
 		parent::__construct();
 	}}
-	public $poz;
-	public $id;
-	public $titre;
-	public $childListe;
-	public $subchildListe;
+	public function getDefaultField() {
+		return $this->titre;
+	}
 	public function getFormule() {
 		$formule = null;
 		$formule = new Hash();
@@ -17,9 +15,11 @@ class vo_RelationTest extends sys_db_Object implements microbe_vo_Spodable{
 		$formule->set("childListe", _hx_anonymous(array("classe" => "vo.ChildTest", "type" => microbe_form_InstanceType::$collection, "champs" => $this->childListe)));
 		return $formule;
 	}
-	public function getDefaultField() {
-		return $this->titre;
-	}
+	public $subchildListe;
+	public $childListe;
+	public $titre;
+	public $id;
+	public $poz;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

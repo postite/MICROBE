@@ -2,7 +2,7 @@
 
 class haxigniter_server_Application {
 	public function __construct(){}
-	static function run($config, $errorHandler) {
+	static function run($config, $errorHandler = null) {
 		$controller = null;
 		try {
 			$method = php_Web::getMethod();
@@ -24,7 +24,7 @@ class haxigniter_server_Application {
 						} else {
 							if(Std::is($e, _hx_qtype("haxigniter.common.exceptions.Exception"))) {
 								$fullClass = Type::getClassName(Type::getClass($e));
-								haxigniter_server_Application::logError($config, "[" . _hx_substr($fullClass, _hx_last_index_of($fullClass, ".", null) + 1, null) . "] " . $e->message, $e);
+								haxigniter_server_Application::logError($config, "[" . _hx_substr($fullClass, _hx_last_index_of($fullClass, ".", null) + 1, null) . "] " . Std::string($e->message), $e);
 							} else {
 								haxigniter_server_Application::logError($config, Std::string($e), $e);
 							}

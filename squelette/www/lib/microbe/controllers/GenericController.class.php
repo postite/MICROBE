@@ -10,19 +10,19 @@ class microbe_controllers_GenericController implements haxe_rtti_Infos, haxignit
 		$this->session = haxigniter_server_session_SessionObject::restore(microbe_controllers_GenericController::$appSession, _hx_qtype("config.Session"), null);
 		$this->requestHandler = new haxigniter_server_request_RestHandler($this->configuration, null);
 	}}
-	public $requestHandler;
-	public $contentHandler;
-	public $configuration;
-	public $view;
-	public $db;
-	public $session;
-	public $debug;
-	public function trace($data, $debugLevel, $pos) {
-		$this->debug->trace($data, $debugLevel, $pos);
-	}
-	public function log($message, $debugLevel) {
+	public function log($message, $debugLevel = null) {
 		$this->debug->log($message, $debugLevel);
 	}
+	public function trace($data, $debugLevel = null, $pos = null) {
+		$this->debug->trace($data, $debugLevel, $pos);
+	}
+	public $debug;
+	public $session;
+	public $db;
+	public $view;
+	public $configuration;
+	public $contentHandler;
+	public $requestHandler;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
@@ -40,6 +40,7 @@ class microbe_controllers_GenericController implements haxe_rtti_Infos, haxignit
 	static $appDebug;
 	static $appView;
 	static function main() {
+		microbe_tools_Mytrace::setRedirection();
 		if(microbe_controllers_GenericController::$appConfig->development) {
 			microbe_controllers_GenericController::$appDb = new config_DevelopmentConnection();
 		} else {

@@ -5,12 +5,15 @@ class vo_SubChild extends sys_db_Object implements microbe_vo_Spodable{
 		if(!php_Boot::$skip_constructor) {
 		parent::__construct();
 	}}
-	public $poz;
-	public $id;
-	public $titre;
-	public $image;
-	public $modele;
-	public $rel;
+	public function set_rel($_v) {
+		return vo_RelationTest::$manager->h__set($this, "rel", "rid", $_v);
+	}
+	public function get_rel() {
+		return vo_RelationTest::$manager->h__get($this, "rel", "rid", false);
+	}
+	public function getDefaultField() {
+		return $this->titre;
+	}
 	public function getFormule() {
 		$formule = null;
 		$formule = new Hash();
@@ -18,15 +21,12 @@ class vo_SubChild extends sys_db_Object implements microbe_vo_Spodable{
 		$formule->set("image", _hx_anonymous(array("classe" => "microbe.form.elements.ImageUploader", "type" => microbe_form_InstanceType::$formElement, "champs" => $this->image)));
 		return $formule;
 	}
-	public function getDefaultField() {
-		return $this->titre;
-	}
-	public function get_rel() {
-		return vo_RelationTest::$manager->h__get($this, "rel", "rid", false);
-	}
-	public function set_rel($_v) {
-		return vo_RelationTest::$manager->h__set($this, "rel", "rid", $_v);
-	}
+	public $rel;
+	public $modele;
+	public $image;
+	public $titre;
+	public $id;
+	public $poz;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

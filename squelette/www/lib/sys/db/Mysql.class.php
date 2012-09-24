@@ -15,7 +15,7 @@ function sys_db_Mysql_0(&$params) {
 	if($params->port === null) {
 		return "";
 	} else {
-		return ":" . $params->port;
+		return ":" . _hx_string_rec($params->port, "");
 	}
 }
 function sys_db_Mysql_1(&$params) {

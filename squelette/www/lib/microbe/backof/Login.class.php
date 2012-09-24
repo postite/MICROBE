@@ -7,7 +7,54 @@ class microbe_backof_Login extends microbe_controllers_GenericController impleme
 		$this->requestHandler = new haxigniter_server_request_BasicHandler($this->configuration);
 		$this->url = new haxigniter_server_libraries_Url($this->configuration);
 	}}
-	public $url;
+	public function success($result) {
+		$this->trace("result.next=" . Std::string($result), null, _hx_anonymous(array("fileName" => "Login.hx", "lineNumber" => 128, "className" => "microbe.backof.Login", "methodName" => "success")));
+		$this->defaultAssign();
+		$formulaire2 = new microbe_form_Form("cool", null, null);
+		$this->session->user = $result;
+		$formulaire2->submitButton = new microbe_form_elements_Button("continuer", "continuer", "continuer", null, null);
+		$formulaire2->action = $this->url->siteUrl(null, null) . "/pipo/";
+		$this->view->assign("content", $formulaire2);
+		$this->view->assign("commentaire", "merci de vous etre identifie ");
+		$this->view->display("back/design.html");
+	}
+	public function erreur($param = null) {
+		$formulaire = $this->creeForm();
+		$formulaire->populateElements();
+		$this->defaultAssign();
+		$this->view->assign("content", $formulaire);
+		$this->view->assign("commentaire", "erreur d'identification");
+		$this->view->display("back/design.html");
+	}
+	public function checkid($pop = null) {
+		$formulaire = $this->creeForm();
+		$formulaire->populateElements();
+		$this->defaultAssign();
+		$this->view->assign("content", $formulaire);
+		$result = $this->db->query("SELECT * FROM user WHERE nom LIKE '" . $formulaire->getValueOf("login") . "' AND mdp LIKE '" . $formulaire->getValueOf("mdp") . "'", null, _hx_anonymous(array("fileName" => "Login.hx", "lineNumber" => 97, "className" => "microbe.backof.Login", "methodName" => "checkid")));
+		if($result->getLength() > 0) {
+			$u = $result->next();
+			$this->success($u);
+		} else {
+			$this->erreur("pop=" . $pop);
+		}
+	}
+	public function index() {
+		$formulaire = $this->creeForm();
+		$formulaire->action = $this->url->siteUrl(null, null) . "/login/checkid/pop";
+		$this->defaultAssign();
+		$this->view->assign("content", $formulaire);
+		$this->view->assign("commentaire", "rien");
+		$this->view->display("back/design.html");
+	}
+	public function creeForm() {
+		$formulaire = new microbe_form_Form("logForm", null, null);
+		$formulaire->addElement(new microbe_form_elements_Input("login", "identifiant", null, null, null, null), null);
+		$formulaire->addElement(new microbe_form_elements_Input("mdp", "mot de passe", null, null, null, null), null);
+		$bouton = new microbe_form_elements_Button("submit", "soumettre", "soumettre", null, null);
+		$formulaire->setSubmitButton($bouton);
+		return $formulaire;
+	}
 	public function defaultAssign() {
 		$this->view->assign("page", null);
 		$this->view->assign("link", $this->url->siteUrl(null, null));
@@ -21,55 +68,7 @@ class microbe_backof_Login extends microbe_controllers_GenericController impleme
 		$this->view->assign("scope", $this);
 		$this->view->assign("contenttype", null);
 	}
-	public function creeForm() {
-		$formulaire = new microbe_form_Form("logForm", null, null);
-		$formulaire->addElement(new microbe_form_elements_Input("login", "identifiant", null, null, null, null), null);
-		$formulaire->addElement(new microbe_form_elements_Input("mdp", "mot de passe", null, null, null, null), null);
-		$bouton = new microbe_form_elements_Button("submit", "soumettre", "soumettre", null, null);
-		$formulaire->setSubmitButton($bouton);
-		return $formulaire;
-	}
-	public function index() {
-		$formulaire = $this->creeForm();
-		$formulaire->action = $this->url->siteUrl(null, null) . "/login/checkid/pop";
-		$this->defaultAssign();
-		$this->view->assign("content", $formulaire);
-		$this->view->assign("commentaire", "rien");
-		$this->view->display("back/design.html");
-	}
-	public function checkid($pop) {
-		$formulaire = $this->creeForm();
-		$formulaire->populateElements();
-		$this->defaultAssign();
-		$this->view->assign("content", $formulaire);
-		$result = $this->db->query("SELECT * FROM user WHERE nom LIKE '" . $formulaire->getValueOf("login") . "' AND mdp LIKE '" . $formulaire->getValueOf("mdp") . "'", null, _hx_anonymous(array("fileName" => "Login.hx", "lineNumber" => 97, "className" => "microbe.backof.Login", "methodName" => "checkid")));
-		if($result->getLength() > 0) {
-			$u = $result->next();
-			$this->success($u);
-		} else {
-			$this->erreur("pop=" . $pop);
-		}
-	}
-	public function erreur($param) {
-		haxe_Log::trace("errur" . $param, _hx_anonymous(array("fileName" => "Login.hx", "lineNumber" => 112, "className" => "microbe.backof.Login", "methodName" => "erreur")));
-		$formulaire = $this->creeForm();
-		$formulaire->populateElements();
-		$this->defaultAssign();
-		$this->view->assign("content", $formulaire);
-		$this->view->assign("commentaire", "erreur d'identification");
-		$this->view->display("back/design.html");
-	}
-	public function success($result) {
-		$this->trace("result.next=" . $result, null, _hx_anonymous(array("fileName" => "Login.hx", "lineNumber" => 128, "className" => "microbe.backof.Login", "methodName" => "success")));
-		$this->defaultAssign();
-		$formulaire2 = new microbe_form_Form("cool", null, null);
-		$this->session->user = $result;
-		$formulaire2->submitButton = new microbe_form_elements_Button("continuer", "continuer", "continuer", null, null);
-		$formulaire2->action = $this->url->siteUrl(null, null) . "/pipo/";
-		$this->view->assign("content", $formulaire2);
-		$this->view->assign("commentaire", "merci de vous etre identifie ");
-		$this->view->display("back/design.html");
-	}
+	public $url;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

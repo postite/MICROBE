@@ -1,7 +1,7 @@
 <?php
 
 class microbe_form_elements_Input extends microbe_form_FormElement {
-	public function __construct($name, $label, $value, $required, $validators, $attributes) {
+	public function __construct($name, $label, $value = null, $required = null, $validators = null, $attributes = null) {
 		if(!php_Boot::$skip_constructor) {
 		if($attributes === null) {
 			$attributes = "";
@@ -21,13 +21,10 @@ class microbe_form_elements_Input extends microbe_form_FormElement {
 		$this->printRequired = false;
 		$this->width = 180;
 	}}
-	public $password;
-	public $width;
-	public $showLabelAsDefaultValue;
-	public $useSizeValues;
-	public $printRequired;
-	public $formatter;
-	public function render($iter) {
+	public function toString() {
+		return $this->render(null);
+	}
+	public function render($iter = null) {
 		$n = $this->form->name . "_" . $this->name;
 		$tType = (($this->password) ? "password" : "text");
 		if($this->showLabelAsDefaultValue && _hx_equal($this->value, $this->label)) {
@@ -39,9 +36,12 @@ class microbe_form_elements_Input extends microbe_form_FormElement {
 		$style = microbe_form_elements_Input_0($this, $iter, $n, $tType);
 		return "<input " . $style . " class=\"" . $this->getClasses() . "\" type=\"" . $tType . "\" name=\"" . $n . "\" id=\"" . $n . "\" value=\"" . microbe_form_elements_Input_1($this, $iter, $n, $style, $tType) . "\"  " . $this->attributes . " />" . ((($this->required && $this->form->isSubmitted() && $this->printRequired) ? " required" : null));
 	}
-	public function toString() {
-		return $this->render(null);
-	}
+	public $formatter;
+	public $printRequired;
+	public $useSizeValues;
+	public $showLabelAsDefaultValue;
+	public $width;
+	public $password;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
@@ -56,7 +56,7 @@ class microbe_form_elements_Input extends microbe_form_FormElement {
 }
 function microbe_form_elements_Input_0(&$퍁his, &$iter, &$n, &$tType) {
 	if($퍁his->useSizeValues) {
-		return "style=\"width:" . $퍁his->width . "px\"";
+		return "style=\"width:" . _hx_string_rec($퍁his->width, "") . "px\"";
 	} else {
 		return "";
 	}

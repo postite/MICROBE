@@ -5,11 +5,11 @@ class haxigniter_server_request_RequestHandlerDecorator implements haxigniter_se
 		if(!php_Boot::$skip_constructor) {
 		$this->requestHandler = $requestHandler;
 	}}
-	public $requestHandler;
 	public function handleRequest($controller, $url, $method, $getPostData, $requestData) {
 		throw new HException("RequestHandlerDecorater.handleRequest() is an abstract method and must be overridden in a child class.");
 		return null;
 	}
+	public $requestHandler;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

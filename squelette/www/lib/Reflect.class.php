@@ -16,31 +16,26 @@ class Reflect {
 			return null;
 		}
 		$cls = ((Std::is($o, _hx_qtype("Class"))) ? $o->__tname__ : get_class($o));
-		if(property_exists($cls, "__properties__")) {
-			eval('$props = '.$cls.'::$__properties__;');
-			if(isset($props['get_'.$field]) && ($field = $props['get_'.$field])) {
-				return $o->$field();
-			} else {
-				return _hx_field($o, $field);
-			}
+		$cls_vars = get_class_vars($cls);
+		if(isset($cls_vars['__properties__']) && isset($cls_vars['__properties__']['get_'.$field]) && ($field = $cls_vars['__properties__']['get_'.$field])) {
+			return $o->$field();
 		} else {
-			return _hx_field($o, $field);
+			return $o->$field;
 		}
 	}
 	static function setProperty($o, $field, $value) {
 		if(null === $o) {
+			null;
 			return;
 		}
 		$cls = ((Std::is($o, _hx_qtype("Class"))) ? $o->__tname__ : get_class($o));
-		if(property_exists($cls, "__properties__")) {
-			eval('$props = '.$cls.'::$__properties__;');
-			if(isset($props['set_'.$field]) && ($field = $props['set_'.$field])) {
-				$o->$field($value);
-			} else {
-				$o->{$field} = $value;
-			}
+		$cls_vars = get_class_vars($cls);
+		if(isset($cls_vars['__properties__']) && isset($cls_vars['__properties__']['set_'.$field]) && ($field = $cls_vars['__properties__']['set_'.$field])) {
+			$o->$field($value);
+			return;
 		} else {
-			$o->{$field} = $value;
+			$o->$field = $value;
+			return;
 		}
 	}
 	static function callMethod($o, $func, $args) {

@@ -5,20 +5,6 @@ class erazor_ScriptBuilder {
 		if(!php_Boot::$skip_constructor) {
 		$this->context = $context;
 	}}
-	public $context;
-	public function build($blocks) {
-		$buffer = new StringBuf();
-		{
-			$_g = 0;
-			while($_g < $blocks->length) {
-				$block = $blocks[$_g];
-				++$_g;
-				$buffer->add($this->blockToString($block));
-				unset($block);
-			}
-		}
-		return $buffer->b;
-	}
 	public function blockToString($block) {
 		$»t = ($block);
 		switch($»t->index) {
@@ -39,6 +25,20 @@ class erazor_ScriptBuilder {
 		}break;
 		}
 	}
+	public function build($blocks) {
+		$buffer = new StringBuf();
+		{
+			$_g = 0;
+			while($_g < $blocks->length) {
+				$block = $blocks[$_g];
+				++$_g;
+				$buffer->add($this->blockToString($block));
+				unset($block);
+			}
+		}
+		return $buffer->b;
+	}
+	public $context;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

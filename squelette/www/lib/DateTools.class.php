@@ -15,7 +15,7 @@ class DateTools {
 		if($month !== 1) {
 			return DateTools::$DAYS_OF_MONTH[$month];
 		}
-		$isB = $year % 4 === 0 && $year % 100 !== 0 || $year % 400 === 0;
+		$isB = _hx_mod($year, 4) === 0 && _hx_mod($year, 100) !== 0 || _hx_mod($year, 400) === 0;
 		return (($isB) ? 29 : 28);
 	}
 	static function seconds($n) {
@@ -34,7 +34,7 @@ class DateTools {
 		$s = $t / 1000;
 		$m = $s / 60;
 		$h = $m / 60;
-		return _hx_anonymous(array("ms" => $t % 1000, "seconds" => intval($s % 60), "minutes" => intval($m % 60), "hours" => intval($h % 24), "days" => intval($h / 24)));
+		return _hx_anonymous(array("ms" => _hx_mod($t, 1000), "seconds" => intval(_hx_mod($s, 60)), "minutes" => intval(_hx_mod($m, 60)), "hours" => intval(_hx_mod($h, 24)), "days" => intval($h / 24)));
 	}
 	static function make($o) {
 		return $o->ms + 1000.0 * ($o->seconds + 60.0 * ($o->minutes + 60.0 * ($o->hours + 24.0 * $o->days)));

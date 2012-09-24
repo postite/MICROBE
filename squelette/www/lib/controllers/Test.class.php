@@ -7,14 +7,18 @@ class controllers_Test extends microbe_controllers_GenericController {
 		$this->requestHandler = new haxigniter_server_request_BasicHandler($this->configuration);
 		$this->url = new haxigniter_server_libraries_Url($this->configuration);
 	}}
-	public $url;
-	public function creeForm() {
-		$formulaire = new microbe_form_Form("logForm", null, null);
-		$formulaire->addElement(new microbe_form_elements_Input("login", "identifiant", null, null, null, null), null);
-		$formulaire->addElement(new microbe_form_elements_Input("mdp", "mot de passe", null, null, null, null), null);
-		$bouton = new microbe_form_elements_Button("submit", "soumettre", "soumettre", null, null);
-		$formulaire->setSubmitButton($bouton);
-		return $formulaire;
+	public function checkid() {
+		$formulaire = $this->creeForm();
+		$formulaire->populateElements();
+		if(null == $formulaire->getElements()) throw new HException('null iterable');
+		$»it = $formulaire->getElements()->iterator();
+		while($»it->hasNext()) {
+			$elem = $»it->next();
+			null;
+		}
+		$this->view->assign("content", $formulaire);
+		$this->view->assign("content", $formulaire);
+		$this->view->display("test/logintest.html");
 	}
 	public function index() {
 		$formulaire = $this->creeForm();
@@ -23,20 +27,15 @@ class controllers_Test extends microbe_controllers_GenericController {
 		$this->view->assign("content", $formulaire);
 		$this->view->display("test/logintest.html");
 	}
-	public function checkid() {
-		$formulaire = $this->creeForm();
-		$formulaire->populateElements();
-		haxe_Log::trace("olo" . php_Web::getParams(), _hx_anonymous(array("fileName" => "Test.hx", "lineNumber" => 46, "className" => "controllers.Test", "methodName" => "checkid")));
-		if(null == $formulaire->getElements()) throw new HException('null iterable');
-		$»it = $formulaire->getElements()->iterator();
-		while($»it->hasNext()) {
-			$elem = $»it->next();
-			haxe_Log::trace("elem=" . $elem->value, _hx_anonymous(array("fileName" => "Test.hx", "lineNumber" => 54, "className" => "controllers.Test", "methodName" => "checkid")));
-		}
-		$this->view->assign("content", $formulaire);
-		$this->view->assign("content", $formulaire);
-		$this->view->display("test/logintest.html");
+	public function creeForm() {
+		$formulaire = new microbe_form_Form("logForm", null, null);
+		$formulaire->addElement(new microbe_form_elements_Input("login", "identifiant", null, null, null, null), null);
+		$formulaire->addElement(new microbe_form_elements_Input("mdp", "mot de passe", null, null, null, null), null);
+		$bouton = new microbe_form_elements_Button("submit", "soumettre", "soumettre", null, null);
+		$formulaire->setSubmitButton($bouton);
+		return $formulaire;
 	}
+	public $url;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

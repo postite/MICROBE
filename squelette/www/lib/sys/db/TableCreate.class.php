@@ -8,7 +8,7 @@ class sys_db_TableCreate {
 	static function getTypeSQL($t, $dbName) {
 		return sys_db_TableCreate_0($dbName, $t);
 	}
-	static function create($manager, $engine) {
+	static function create($manager, $engine = null) {
 		$quote = array(new _hx_lambda(array(&$engine, &$manager), "sys_db_TableCreate_1"), 'execute');
 		$cnx = $manager->getCnx();
 		if($cnx === null) {
@@ -54,6 +54,22 @@ class sys_db_TableCreate {
 			$sql .= "ENGINE=" . $engine;
 		}
 		$cnx->request($sql);
+	}
+	static function exists($manager) {
+		$cnx = $manager->getCnx();
+		if($cnx === null) {
+			throw new HException("SQL Connection not initialized on Manager");
+		}
+		try {
+			$cnx->request("SELECT * FROM `" . $manager->dbInfos()->name . "` LIMIT 1");
+			return true;
+		}catch(Exception $»e) {
+			$_ex_ = ($»e instanceof HException) ? $»e->e : $»e;
+			$e = $_ex_;
+			{
+				return false;
+			}
+		}
 	}
 	function __toString() { return 'sys.db.TableCreate'; }
 }
@@ -116,7 +132,7 @@ function sys_db_TableCreate_0(&$dbName, &$t) {
 	case 9:
 	$n = $»t->params[0];
 	{
-		return "VARCHAR(" . $n . ")";
+		return "VARCHAR(" . _hx_string_rec($n, "") . ")";
 	}break;
 	case 10:
 	{
@@ -167,7 +183,7 @@ function sys_db_TableCreate_0(&$dbName, &$t) {
 	case 19:
 	$n = $»t->params[0];
 	{
-		return "BINARY(" . $n . ")";
+		return "BINARY(" . _hx_string_rec($n, "") . ")";
 	}break;
 	case 23:
 	$auto = $»t->params[1]; $fl = $»t->params[0];

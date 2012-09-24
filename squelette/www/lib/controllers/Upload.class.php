@@ -9,18 +9,10 @@ class controllers_Upload implements haxe_rtti_Infos, haxigniter_server_Controlle
 		$url = new haxigniter_server_libraries_Url($this->config);
 		$this->view->assign("link", $url->siteUrl(null, null));
 	}}
-	public $requestHandler;
-	public $contentHandler;
-	public $config;
-	public $view;
-	public $debug;
-	public function index() {
-		$this->view->displayDefault(_hx_anonymous(array("fileName" => "Upload.hx", "lineNumber" => 49, "className" => "controllers.Upload", "methodName" => "index")));
+	public function trace($data, $debugLevel = null, $pos = null) {
+		$this->debug->trace($data, $debugLevel, $pos);
 	}
-	public function show($id) {
-		$this->view->assign("id", $id);
-	}
-	public function create($posted, $files) {
+	public function create($posted, $files = null) {
 		$name = "";
 		if(null == $files) throw new HException('null iterable');
 		$»it = $files->iterator();
@@ -31,9 +23,17 @@ class controllers_Upload implements haxe_rtti_Infos, haxigniter_server_Controlle
 			}
 		}
 	}
-	public function trace($data, $debugLevel, $pos) {
-		$this->debug->trace($data, $debugLevel, $pos);
+	public function show($id) {
+		$this->view->assign("id", $id);
 	}
+	public function index() {
+		$this->view->displayDefault(_hx_anonymous(array("fileName" => "Upload.hx", "lineNumber" => 49, "className" => "controllers.Upload", "methodName" => "index")));
+	}
+	public $debug;
+	public $view;
+	public $config;
+	public $contentHandler;
+	public $requestHandler;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

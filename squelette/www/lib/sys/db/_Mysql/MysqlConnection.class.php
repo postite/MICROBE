@@ -5,23 +5,20 @@ class sys_db__Mysql_MysqlConnection implements sys_db_Connection{
 		if(!php_Boot::$skip_constructor) {
 		$this->c = $c;
 	}}
-	public $c;
-	public function close() {
-		mysql_close($this->c);
-		unset($this->c);
+	public function rollback() {
+		$this->request("ROLLBACK");
 	}
-	public function request($s) {
-		$h = mysql_query($s, $this->c);
-		if(($h === false)) {
-			throw new HException("Error while executing " . $s . " (" . (mysql_error($this->c) . ")"));
-		}
-		return new sys_db__Mysql_MysqlResultSet($h, $this->c);
+	public function commit() {
+		$this->request("COMMIT");
 	}
-	public function escape($s) {
-		return mysql_real_escape_string($s, $this->c);
+	public function startTransaction() {
+		$this->request("START TRANSACTION");
 	}
-	public function quote($s) {
-		return "'" . (mysql_real_escape_string($s, $this->c) . "'");
+	public function dbName() {
+		return "MySQL";
+	}
+	public function lastInsertId() {
+		return mysql_insert_id($this->c);
 	}
 	public function addValue($s, $v) {
 		if(is_int($v) || is_null($v)) {
@@ -34,21 +31,24 @@ class sys_db__Mysql_MysqlConnection implements sys_db_Connection{
 			}
 		}
 	}
-	public function lastInsertId() {
-		return mysql_insert_id($this->c);
+	public function quote($s) {
+		return "'" . (mysql_real_escape_string($s, $this->c) . "'");
 	}
-	public function dbName() {
-		return "MySQL";
+	public function escape($s) {
+		return mysql_real_escape_string($s, $this->c);
 	}
-	public function startTransaction() {
-		$this->request("START TRANSACTION");
+	public function request($s) {
+		$h = mysql_query($s, $this->c);
+		if(($h === false)) {
+			throw new HException("Error while executing " . $s . " (" . (mysql_error($this->c) . ")"));
+		}
+		return new sys_db__Mysql_MysqlResultSet($h, $this->c);
 	}
-	public function commit() {
-		$this->request("COMMIT");
+	public function close() {
+		mysql_close($this->c);
+		unset($this->c);
 	}
-	public function rollback() {
-		$this->request("ROLLBACK");
-	}
+	public $c;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

@@ -12,28 +12,379 @@ class sys_db_Manager {
 		$this->table_keys = $this->table_infos->key;
 		$this->class_proto = $classval;
 	}}
-	public $table_infos;
-	public $table_name;
-	public $table_keys;
-	public $class_proto;
-	public function all($lock) {
-		return $this->unsafeObjects("SELECT * FROM " . $this->table_name, $lock);
+	public function getFromCache($x, $lock) {
+		$c = sys_db_Manager::$object_cache->get($this->makeCacheKey($x));
+		if($c !== null && $lock && !$c->_lock) {
+			{
+				$_g = 0; $_g1 = Reflect::fields($c);
+				while($_g < $_g1->length) {
+					$f = $_g1[$_g];
+					++$_g;
+					Reflect::deleteField($c, $f);
+					unset($f);
+				}
+			}
+			{
+				$_g = 0; $_g1 = Reflect::fields($x);
+				while($_g < $_g1->length) {
+					$f = $_g1[$_g];
+					++$_g;
+					$c->{$f} = Reflect::field($x, $f);
+					unset($f);
+				}
+			}
+			$c->_lock = true;
+			$c->_manager = $this;
+			$c->{"__cache__"} = $x;
+			$this->make($c);
+		}
+		return $c;
 	}
-	public $get;
-	public $select;
-	public $search;
-	public $count;
-	public $delete;
-	public function dynamicSearch($x, $lock) {
+	public function getFromCacheKey($key) {
+		return sys_db_Manager::$object_cache->get($key);
+	}
+	public function removeFromCache($x) {
+		sys_db_Manager::$object_cache->remove($this->makeCacheKey($x));
+	}
+	public function addToCache($x) {
+		sys_db_Manager::$object_cache->set($this->makeCacheKey($x), $x);
+	}
+	public function makeCacheKey($x) {
+		if($this->table_keys->length === 1) {
+			$k = Reflect::field($x, $this->table_keys[0]);
+			if($k === null) {
+				throw new HException("Missing key " . $this->table_keys[0]);
+			}
+			return Std::string($k) . $this->table_name;
+		}
+		$s = new StringBuf();
+		{
+			$_g = 0; $_g1 = $this->table_keys;
+			while($_g < $_g1->length) {
+				$k = $_g1[$_g];
+				++$_g;
+				$v = Reflect::field($x, $k);
+				if($k === null) {
+					throw new HException("Missing key " . $k);
+				}
+				$s->add($v);
+				$s->add("#");
+				unset($v,$k);
+			}
+		}
+		$s->add($this->table_name);
+		return $s->b;
+	}
+	public function h__set($x, $prop, $key, $v) {
+		$x->{$prop} = _hx_anonymous(array("value" => $v));
+		if($v === null) {
+			$x->{$key} = null;
+		} else {
+			$x->{$key} = Reflect::field($v, $this->table_keys[0]);
+		}
+	}
+	public function h__get($x, $prop, $key, $lock) {
+		$v = Reflect::field($x, $prop);
+		if($v !== null) {
+			return $v->value;
+		}
+		$y = $this->unsafeGet(Reflect::field($x, $key), $lock);
+		$x->{$prop} = _hx_anonymous(array("value" => $y));
+		return $y;
+	}
+	public function initRelation($r) {
+		$spod = Type::resolveClass($r->type);
+		if($spod === null) {
+			throw new HException("Missing spod type " . $r->type);
+		}
+		$manager = $spod->manager;
+		$hprop = "__" . $r->prop;
+		$hkey = $r->key;
+		$lock = $r->lock;
+		if($manager === null || $manager->table_keys === null) {
+			throw new HException("Invalid manager for relation " . $this->table_name . ":" . $r->prop);
+		}
+		if($manager->table_keys->length !== 1) {
+			throw new HException("Relation " . $r->prop . "(" . $r->key . ") on a multiple key table");
+		}
+		$this->class_proto->prototype->{"get_" . $r->prop} = array(new _hx_lambda(array(&$hkey, &$hprop, &$lock, &$manager, &$r, &$spod), "sys_db_Manager_0"), 'execute');
+		$this->class_proto->prototype->{"set_" . $r->prop} = array(new _hx_lambda(array(&$hkey, &$hprop, &$lock, &$manager, &$r, &$spod), "sys_db_Manager_1"), 'execute');
+	}
+	public function forceUpdate($o, $field) {
+		Reflect::field($o, "__cache__")->{$field} = null;
+	}
+	public function getLockMode() {
+		return sys_db_Manager::$lockMode;
+	}
+	public function getCnx() {
+		return sys_db_Manager::$cnx;
+	}
+	public function dbInfos() {
+		return $this->table_infos;
+	}
+	public function dbClass() {
+		return $this->class_proto;
+	}
+	public function addCondition($s, $x) {
+		$first = true;
+		if($x !== null) {
+			$_g = 0; $_g1 = Reflect::fields($x);
+			while($_g < $_g1->length) {
+				$f = $_g1[$_g];
+				++$_g;
+				if($first) {
+					$first = false;
+				} else {
+					$s->add(" AND ");
+				}
+				$s->add($this->quoteField($f));
+				$d = Reflect::field($x, $f);
+				if($d === null) {
+					$s->add(" IS NULL");
+				} else {
+					$s->add(" = ");
+					$this->getCnx()->addValue($s, $d);
+				}
+				unset($f,$d);
+			}
+		}
+		if($first) {
+			$s->add("1");
+		}
+	}
+	public function unsafeGetId($o) {
+		return (($o === null) ? null : Reflect::field($o, $this->table_keys[0]));
+	}
+	public function unsafeGetWithKeys($keys, $lock = null) {
+		if($lock === null) {
+			$lock = true;
+		}
+		$x = $this->getFromCacheKey($this->makeCacheKey($keys));
+		if($x !== null && (!$lock || $x->_lock)) {
+			return $x;
+		}
 		$s = new StringBuf();
 		$s->add("SELECT * FROM ");
 		$s->add($this->table_name);
 		$s->add(" WHERE ");
-		$this->addCondition($s, $x);
-		return $this->unsafeObjects($s->b, $lock);
+		$this->addKeys($s, $keys);
+		return $this->unsafeObject($s->b, $lock);
 	}
-	public function quote($s) {
-		return $this->getCnx()->quote($s);
+	public function unsafeGet($id, $lock = null) {
+		if($lock === null) {
+			$lock = true;
+		}
+		if($this->table_keys->length !== 1) {
+			throw new HException("Invalid number of keys");
+		}
+		if($id === null) {
+			return null;
+		}
+		$x = $this->getFromCacheKey(Std::string($id) . $this->table_name);
+		if($x !== null && (!$lock || $x->_lock)) {
+			return $x;
+		}
+		$s = new StringBuf();
+		$s->add("SELECT * FROM ");
+		$s->add($this->table_name);
+		$s->add(" WHERE ");
+		$s->add($this->quoteField($this->table_keys[0]));
+		$s->add(" = ");
+		$this->getCnx()->addValue($s, $id);
+		return $this->unsafeObject($s->b, $lock);
+	}
+	public function unsafeDelete($sql) {
+		$this->unsafeExecute($sql);
+	}
+	public function unsafeCount($sql) {
+		return $this->unsafeExecute($sql)->getIntResult(0);
+	}
+	public function unsafeObjects($sql, $lock) {
+		if($lock !== false) {
+			$lock = true;
+			$sql .= $this->getLockMode();
+		}
+		$l = $this->unsafeExecute($sql)->results();
+		$l2 = new HList();
+		if(null == $l) throw new HException('null iterable');
+		$»it = $l->iterator();
+		while($»it->hasNext()) {
+			$x = $»it->next();
+			$c = $this->getFromCache($x, $lock);
+			if($c !== null) {
+				$l2->add($c);
+			} else {
+				$x = $this->cacheObject($x, $lock);
+				$this->make($x);
+				$l2->add($x);
+			}
+			unset($c);
+		}
+		return $l2;
+	}
+	public function unsafeObject($sql, $lock) {
+		if($lock !== false) {
+			$lock = true;
+			$sql .= $this->getLockMode();
+		}
+		$r = $this->unsafeExecute($sql)->next();
+		if($r === null) {
+			return null;
+		}
+		$c = $this->getFromCache($r, $lock);
+		if($c !== null) {
+			return $c;
+		}
+		$r = $this->cacheObject($r, $lock);
+		$this->make($r);
+		return $r;
+	}
+	public function unsafeExecute($sql) {
+		return $this->getCnx()->request($sql);
+	}
+	public function addKeys($s, $x) {
+		$first = true;
+		{
+			$_g = 0; $_g1 = $this->table_keys;
+			while($_g < $_g1->length) {
+				$k = $_g1[$_g];
+				++$_g;
+				if($first) {
+					$first = false;
+				} else {
+					$s->add(" AND ");
+				}
+				$s->add($this->quoteField($k));
+				$s->add(" = ");
+				$f = Reflect::field($x, $k);
+				if($f === null) {
+					throw new HException("Missing key " . $k);
+				}
+				$this->getCnx()->addValue($s, $f);
+				unset($k,$f);
+			}
+		}
+	}
+	public function quoteField($f) {
+		return sys_db_Manager_2($this, $f);
+	}
+	public function unmake($x) {
+	}
+	public function make($x) {
+	}
+	public function cacheObject($x, $lock) {
+		$o = Type::createEmptyInstance($this->class_proto);
+		{
+			$_g = 0; $_g1 = Reflect::fields($x);
+			while($_g < $_g1->length) {
+				$f = $_g1[$_g];
+				++$_g;
+				$o->{$f} = Reflect::field($x, $f);
+				unset($f);
+			}
+		}
+		$o->_manager = $this;
+		$o->{"__cache__"} = $x;
+		$this->addToCache($o);
+		$o->_lock = $lock;
+		return $o;
+	}
+	public function objectToString($it) {
+		$s = new StringBuf();
+		$s->add($this->table_name);
+		if($this->table_keys->length === 1) {
+			$s->add("#");
+			$s->add(Reflect::field($it, $this->table_keys[0]));
+		} else {
+			$s->add("(");
+			$first = true;
+			{
+				$_g = 0; $_g1 = $this->table_keys;
+				while($_g < $_g1->length) {
+					$f = $_g1[$_g];
+					++$_g;
+					if($first) {
+						$first = false;
+					} else {
+						$s->add(",");
+					}
+					$s->add($this->quoteField($f));
+					$s->add(":");
+					$s->add(Reflect::field($it, $f));
+					unset($f);
+				}
+			}
+			$s->add(")");
+		}
+		return $s->b;
+	}
+	public function doLock($i) {
+		if($i->_lock) {
+			return;
+		}
+		$s = new StringBuf();
+		$s->add("SELECT * FROM ");
+		$s->add($this->table_name);
+		$s->add(" WHERE ");
+		$this->addKeys($s, $i);
+		if($this->unsafeObject($s->b, true) != $i) {
+			throw new HException("Could not lock object (was deleted ?); try restarting transaction");
+		}
+	}
+	public function doDelete($x) {
+		$s = new StringBuf();
+		$s->add("DELETE FROM ");
+		$s->add($this->table_name);
+		$s->add(" WHERE ");
+		$this->addKeys($s, $x);
+		$this->unsafeExecute($s->b);
+		$this->removeFromCache($x);
+	}
+	public function doUpdate($x) {
+		if(!$x->_lock) {
+			throw new HException("Cannot update a not locked object");
+		}
+		$this->unmake($x);
+		$s = new StringBuf();
+		$s->add("UPDATE ");
+		$s->add($this->table_name);
+		$s->add(" SET ");
+		$cache = Reflect::field($x, "__cache__");
+		$mod = false;
+		{
+			$_g = 0; $_g1 = $this->table_infos->fields;
+			while($_g < $_g1->length) {
+				$f = $_g1[$_g];
+				++$_g;
+				$name = $f->name;
+				$v = Reflect::field($x, $name);
+				$vc = Reflect::field($cache, $name);
+				if(!_hx_equal($v, $vc) && (!sys_db_Manager_3($this, $_g, $_g1, $cache, $f, $mod, $name, $s, $v, $vc, $x) || !_hx_equal($v, $vc) && ($v === null || $vc === null || $v->compare($vc) !== 0))) {
+					if($mod) {
+						$s->add(", ");
+					} else {
+						$mod = true;
+					}
+					$s->add($this->quoteField($name));
+					$s->add(" = ");
+					$this->getCnx()->addValue($s, $v);
+					$cache->{$name} = $v;
+				}
+				unset($vc,$v,$name,$f);
+			}
+		}
+		if(!$mod) {
+			return;
+		}
+		$s->add(" WHERE ");
+		$this->addKeys($s, $x);
+		$this->unsafeExecute($s->b);
+	}
+	public function hasBinaryChanged($a, $b) {
+		return $a !== $b && ($a === null || $b === null || $a->compare($b) !== 0);
+	}
+	public function isBinary($t) {
+		return sys_db_Manager_4($this, $t);
 	}
 	public function doInsert($x) {
 		$this->unmake($x);
@@ -133,378 +484,24 @@ class sys_db_Manager {
 		}
 		$this->addToCache($x);
 	}
-	public function isBinary($t) {
-		return sys_db_Manager_0($this, $t);
+	public function quote($s) {
+		return $this->getCnx()->quote($s);
 	}
-	public function hasBinaryChanged($a, $b) {
-		return $a !== $b && ($a === null || $b === null || $a->compare($b) !== 0);
-	}
-	public function doUpdate($x) {
-		if(!$x->_lock) {
-			throw new HException("Cannot update a not locked object");
-		}
-		$this->unmake($x);
-		$s = new StringBuf();
-		$s->add("UPDATE ");
-		$s->add($this->table_name);
-		$s->add(" SET ");
-		$cache = Reflect::field($x, "__cache__");
-		$mod = false;
-		{
-			$_g = 0; $_g1 = $this->table_infos->fields;
-			while($_g < $_g1->length) {
-				$f = $_g1[$_g];
-				++$_g;
-				$name = $f->name;
-				$v = Reflect::field($x, $name);
-				$vc = Reflect::field($cache, $name);
-				if(!_hx_equal($v, $vc) && (!sys_db_Manager_1($this, $_g, $_g1, $cache, $f, $mod, $name, $s, $v, $vc, $x) || !_hx_equal($v, $vc) && ($v === null || $vc === null || $v->compare($vc) !== 0))) {
-					if($mod) {
-						$s->add(", ");
-					} else {
-						$mod = true;
-					}
-					$s->add($this->quoteField($name));
-					$s->add(" = ");
-					$this->getCnx()->addValue($s, $v);
-					$cache->{$name} = $v;
-				}
-				unset($vc,$v,$name,$f);
-			}
-		}
-		if(!$mod) {
-			return;
-		}
-		$s->add(" WHERE ");
-		$this->addKeys($s, $x);
-		$this->unsafeExecute($s->b);
-	}
-	public function doDelete($x) {
-		$s = new StringBuf();
-		$s->add("DELETE FROM ");
-		$s->add($this->table_name);
-		$s->add(" WHERE ");
-		$this->addKeys($s, $x);
-		$this->unsafeExecute($s->b);
-		$this->removeFromCache($x);
-	}
-	public function doLock($i) {
-		if($i->_lock) {
-			return;
-		}
+	public function dynamicSearch($x, $lock = null) {
 		$s = new StringBuf();
 		$s->add("SELECT * FROM ");
 		$s->add($this->table_name);
 		$s->add(" WHERE ");
-		$this->addKeys($s, $i);
-		$this->unsafeObject($s->b, true);
+		$this->addCondition($s, $x);
+		return $this->unsafeObjects($s->b, $lock);
 	}
-	public function objectToString($it) {
-		$s = new StringBuf();
-		$s->add($this->table_name);
-		if($this->table_keys->length === 1) {
-			$s->add("#");
-			$s->add(Reflect::field($it, $this->table_keys[0]));
-		} else {
-			$s->add("(");
-			$first = true;
-			{
-				$_g = 0; $_g1 = $this->table_keys;
-				while($_g < $_g1->length) {
-					$f = $_g1[$_g];
-					++$_g;
-					if($first) {
-						$first = false;
-					} else {
-						$s->add(",");
-					}
-					$s->add($this->quoteField($f));
-					$s->add(":");
-					$s->add(Reflect::field($it, $f));
-					unset($f);
-				}
-			}
-			$s->add(")");
-		}
-		return $s->b;
+	public function all($lock = null) {
+		return $this->unsafeObjects("SELECT * FROM " . $this->table_name, $lock);
 	}
-	public function cacheObject($x, $lock) {
-		$o = Type::createEmptyInstance($this->class_proto);
-		{
-			$_g = 0; $_g1 = Reflect::fields($x);
-			while($_g < $_g1->length) {
-				$f = $_g1[$_g];
-				++$_g;
-				$o->{$f} = Reflect::field($x, $f);
-				unset($f);
-			}
-		}
-		$o->_manager = $this;
-		$o->{"__cache__"} = $x;
-		$this->addToCache($o);
-		$o->_lock = $lock;
-		return $o;
-	}
-	public function make($x) {
-	}
-	public function unmake($x) {
-	}
-	public function quoteField($f) {
-		return sys_db_Manager_2($this, $f);
-	}
-	public function addKeys($s, $x) {
-		$first = true;
-		{
-			$_g = 0; $_g1 = $this->table_keys;
-			while($_g < $_g1->length) {
-				$k = $_g1[$_g];
-				++$_g;
-				if($first) {
-					$first = false;
-				} else {
-					$s->add(" AND ");
-				}
-				$s->add($this->quoteField($k));
-				$s->add(" = ");
-				$f = Reflect::field($x, $k);
-				if($f === null) {
-					throw new HException("Missing key " . $k);
-				}
-				$this->getCnx()->addValue($s, $f);
-				unset($k,$f);
-			}
-		}
-	}
-	public function unsafeExecute($sql) {
-		return $this->getCnx()->request($sql);
-	}
-	public function unsafeObject($sql, $lock) {
-		if($lock !== false) {
-			$lock = true;
-			$sql .= $this->getLockMode();
-		}
-		$r = $this->unsafeExecute($sql)->next();
-		if($r === null) {
-			return null;
-		}
-		$c = $this->getFromCache($r, $lock);
-		if($c !== null) {
-			return $c;
-		}
-		$r = $this->cacheObject($r, $lock);
-		$this->make($r);
-		return $r;
-	}
-	public function unsafeObjects($sql, $lock) {
-		if($lock !== false) {
-			$lock = true;
-			$sql .= $this->getLockMode();
-		}
-		$l = $this->unsafeExecute($sql)->results();
-		$l2 = new HList();
-		if(null == $l) throw new HException('null iterable');
-		$»it = $l->iterator();
-		while($»it->hasNext()) {
-			$x = $»it->next();
-			$c = $this->getFromCache($x, $lock);
-			if($c !== null) {
-				$l2->add($c);
-			} else {
-				$x = $this->cacheObject($x, $lock);
-				$this->make($x);
-				$l2->add($x);
-			}
-			unset($c);
-		}
-		return $l2;
-	}
-	public function unsafeCount($sql) {
-		return $this->unsafeExecute($sql)->getIntResult(0);
-	}
-	public function unsafeDelete($sql) {
-		$this->unsafeExecute($sql);
-	}
-	public function unsafeGet($id, $lock) {
-		if($lock === null) {
-			$lock = true;
-		}
-		if($this->table_keys->length !== 1) {
-			throw new HException("Invalid number of keys");
-		}
-		if($id === null) {
-			return null;
-		}
-		$x = $this->getFromCacheKey(Std::string($id) . $this->table_name);
-		if($x !== null && (!$lock || $x->_lock)) {
-			return $x;
-		}
-		$s = new StringBuf();
-		$s->add("SELECT * FROM ");
-		$s->add($this->table_name);
-		$s->add(" WHERE ");
-		$s->add($this->quoteField($this->table_keys[0]));
-		$s->add(" = ");
-		$this->getCnx()->addValue($s, $id);
-		return $this->unsafeObject($s->b, $lock);
-	}
-	public function unsafeGetWithKeys($keys, $lock) {
-		if($lock === null) {
-			$lock = true;
-		}
-		$x = $this->getFromCacheKey($this->makeCacheKey($keys));
-		if($x !== null && (!$lock || $x->_lock)) {
-			return $x;
-		}
-		$s = new StringBuf();
-		$s->add("SELECT * FROM ");
-		$s->add($this->table_name);
-		$s->add(" WHERE ");
-		$this->addKeys($s, $keys);
-		return $this->unsafeObject($s->b, $lock);
-	}
-	public function unsafeGetId($o) {
-		return (($o === null) ? null : Reflect::field($o, $this->table_keys[0]));
-	}
-	public function addCondition($s, $x) {
-		$first = true;
-		if($x !== null) {
-			$_g = 0; $_g1 = Reflect::fields($x);
-			while($_g < $_g1->length) {
-				$f = $_g1[$_g];
-				++$_g;
-				if($first) {
-					$first = false;
-				} else {
-					$s->add(" AND ");
-				}
-				$s->add($this->quoteField($f));
-				$d = Reflect::field($x, $f);
-				if($d === null) {
-					$s->add(" IS NULL");
-				} else {
-					$s->add(" = ");
-					$this->getCnx()->addValue($s, $d);
-				}
-				unset($f,$d);
-			}
-		}
-		if($first) {
-			$s->add("1");
-		}
-	}
-	public function dbClass() {
-		return $this->class_proto;
-	}
-	public function dbInfos() {
-		return $this->table_infos;
-	}
-	public function getCnx() {
-		return sys_db_Manager::$cnx;
-	}
-	public function getLockMode() {
-		return sys_db_Manager::$lockMode;
-	}
-	public function forceUpdate($o, $field) {
-		Reflect::field($o, "__cache__")->{$field} = null;
-	}
-	public function initRelation($r) {
-		$spod = Type::resolveClass($r->type);
-		if($spod === null) {
-			throw new HException("Missing spod type " . $r->type);
-		}
-		$manager = $spod->manager;
-		$hprop = "__" . $r->prop;
-		$hkey = $r->key;
-		$lock = $r->lock;
-		if($manager === null || $manager->table_keys === null) {
-			throw new HException("Invalid manager for relation " . $this->table_name . ":" . $r->prop);
-		}
-		if($manager->table_keys->length !== 1) {
-			throw new HException("Relation " . $r->prop . "(" . $r->key . ") on a multiple key table");
-		}
-		$this->class_proto->prototype->{"get_" . $r->prop} = array(new _hx_lambda(array(&$hkey, &$hprop, &$lock, &$manager, &$r, &$spod), "sys_db_Manager_3"), 'execute');
-		$this->class_proto->prototype->{"set_" . $r->prop} = array(new _hx_lambda(array(&$hkey, &$hprop, &$lock, &$manager, &$r, &$spod), "sys_db_Manager_4"), 'execute');
-	}
-	public function h__get($x, $prop, $key, $lock) {
-		$v = Reflect::field($x, $prop);
-		if($v !== null) {
-			return $v->value;
-		}
-		$x1 = $this->unsafeGet(Reflect::field($x, $key), $lock);
-		$x1->{$prop} = _hx_anonymous(array("value" => $x1));
-		return $x1;
-	}
-	public function h__set($x, $prop, $key, $v) {
-		$x->{$prop} = _hx_anonymous(array("value" => $v));
-		if($v === null) {
-			$x->{$key} = null;
-		} else {
-			$x->{$key} = Reflect::field($v, $this->table_keys[0]);
-		}
-	}
-	public function makeCacheKey($x) {
-		if($this->table_keys->length === 1) {
-			$k = Reflect::field($x, $this->table_keys[0]);
-			if($k === null) {
-				throw new HException("Missing key " . $this->table_keys[0]);
-			}
-			return Std::string($k) . $this->table_name;
-		}
-		$s = new StringBuf();
-		{
-			$_g = 0; $_g1 = $this->table_keys;
-			while($_g < $_g1->length) {
-				$k = $_g1[$_g];
-				++$_g;
-				$v = Reflect::field($x, $k);
-				if($k === null) {
-					throw new HException("Missing key " . $k);
-				}
-				$s->add($v);
-				$s->add("#");
-				unset($v,$k);
-			}
-		}
-		$s->add($this->table_name);
-		return $s->b;
-	}
-	public function addToCache($x) {
-		sys_db_Manager::$object_cache->set($this->makeCacheKey($x), $x);
-	}
-	public function removeFromCache($x) {
-		sys_db_Manager::$object_cache->remove($this->makeCacheKey($x));
-	}
-	public function getFromCacheKey($key) {
-		return sys_db_Manager::$object_cache->get($key);
-	}
-	public function getFromCache($x, $lock) {
-		$c = sys_db_Manager::$object_cache->get($this->makeCacheKey($x));
-		if($c !== null && $lock && !$c->_lock) {
-			{
-				$_g = 0; $_g1 = Reflect::fields($c);
-				while($_g < $_g1->length) {
-					$f = $_g1[$_g];
-					++$_g;
-					Reflect::deleteField($c, $f);
-					unset($f);
-				}
-			}
-			{
-				$_g = 0; $_g1 = Reflect::fields($x);
-				while($_g < $_g1->length) {
-					$f = $_g1[$_g];
-					++$_g;
-					$c->{$f} = Reflect::field($x, $f);
-					unset($f);
-				}
-			}
-			$c->_lock = true;
-			$c->_manager = $this;
-			$c->{"__cache__"} = $x;
-			$this->make($c);
-		}
-		return $c;
-	}
+	public $class_proto;
+	public $table_keys;
+	public $table_name;
+	public $table_infos;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
@@ -525,6 +522,16 @@ class sys_db_Manager {
 		sys_db_Manager::$cnx = $c;
 		sys_db_Manager::$lockMode = (($c !== null && $c->dbName() === "MySQL") ? " FOR UPDATE" : "");
 		return $c;
+	}
+	static function nullCompare($a, $b, $eq) {
+		if(sys_db_Manager::$cnx->dbName() !== "MySQL") {
+			return $a . ((($eq) ? " = " : " != ")) . $b;
+		}
+		$sql = $a . " <=> " . $b;
+		if(!$eq) {
+			$sql = "NOT(" . $sql . ")";
+		}
+		return $sql;
 	}
 	static function initialize() {
 		$l = sys_db_Manager::$init_list;
@@ -578,46 +585,7 @@ class sys_db_Manager {
 sys_db_Manager::$object_cache = new Hash();
 sys_db_Manager::$init_list = new HList();
 sys_db_Manager::$KEYWORDS = sys_db_Manager_5();
-function sys_db_Manager_0(&$»this, &$t) {
-	$»t = ($t);
-	switch($»t->index) {
-	case 16:
-	case 22:
-	case 17:
-	case 19:
-	case 18:
-	{
-		return true;
-	}break;
-	default:{
-		return false;
-	}break;
-	}
-}
-function sys_db_Manager_1(&$»this, &$_g, &$_g1, &$cache, &$f, &$mod, &$name, &$s, &$v, &$vc, &$x) {
-	$»t = ($f->t);
-	switch($»t->index) {
-	case 16:
-	case 22:
-	case 17:
-	case 19:
-	case 18:
-	{
-		return true;
-	}break;
-	default:{
-		return false;
-	}break;
-	}
-}
-function sys_db_Manager_2(&$»this, &$f) {
-	if(sys_db_Manager::$KEYWORDS->exists(strtolower($f))) {
-		return "`" . $f . "`";
-	} else {
-		return $f;
-	}
-}
-function sys_db_Manager_3(&$hkey, &$hprop, &$lock, &$manager, &$r, &$spod) {
+function sys_db_Manager_0(&$hkey, &$hprop, &$lock, &$manager, &$r, &$spod) {
 	{
 		$othis = $»this;
 		$f = Reflect::field($othis, $hprop);
@@ -636,12 +604,51 @@ function sys_db_Manager_3(&$hkey, &$hprop, &$lock, &$manager, &$r, &$spod) {
 		return $f;
 	}
 }
-function sys_db_Manager_4(&$hkey, &$hprop, &$lock, &$manager, &$r, &$spod, $f) {
+function sys_db_Manager_1(&$hkey, &$hprop, &$lock, &$manager, &$r, &$spod, $f) {
 	{
 		$othis = $»this;
 		$othis->{$hprop} = $f;
 		$othis->{$hkey} = Reflect::field($f, $manager->table_keys[0]);
 		return $f;
+	}
+}
+function sys_db_Manager_2(&$»this, &$f) {
+	if(sys_db_Manager::$KEYWORDS->exists(strtolower($f))) {
+		return "`" . $f . "`";
+	} else {
+		return $f;
+	}
+}
+function sys_db_Manager_3(&$»this, &$_g, &$_g1, &$cache, &$f, &$mod, &$name, &$s, &$v, &$vc, &$x) {
+	$»t = ($f->t);
+	switch($»t->index) {
+	case 16:
+	case 22:
+	case 17:
+	case 19:
+	case 18:
+	{
+		return true;
+	}break;
+	default:{
+		return false;
+	}break;
+	}
+}
+function sys_db_Manager_4(&$»this, &$t) {
+	$»t = ($t);
+	switch($»t->index) {
+	case 16:
+	case 22:
+	case 17:
+	case 19:
+	case 18:
+	{
+		return true;
+	}break;
+	default:{
+		return false;
+	}break;
 	}
 }
 function sys_db_Manager_5() {

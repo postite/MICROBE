@@ -9,42 +9,16 @@ class controllers_ImageBase extends microbe_controllers_GenericController {
 		$this->cachefolder = $configuration->uploadsPath . "cache";
 		$this->requestHandler = new haxigniter_server_request_BasicHandler($this->configuration);
 	}}
-	public $data;
-	public $upfolder;
-	public $cachefolder;
-	public function resize($preset, $src, $w, $h) {
-		if($src === "" || $src === null) {
-			$blankGif = "R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
-			$blankHash = haxe_Md5::encode($blankGif);
-			$this->setHeaders(Date::fromTime(0), "43", $blankHash, "image/gif");
-			php_Lib::hprint(base64_decode($blankGif));
-			return;
-		}
-		if($preset !== null) {
-			$image = new microbe_utils_ImageProcessor($this->upfolder . $src);
-			$image->cacheFolder = $this->cachefolder;
-			$image->format = microbe_utils_ImageOutputFormat::$JPG;
-			$this->resizeImage($preset, $image, null, null);
-			$cacheName2 = $image->getCacheName();
-			$imageStr = $image->getOutput(null);
-			$filename = $image->cacheFolder . "/" . $image->getCacheName();
-			$length = ((file_exists($filename)) ? filesize($filename) : Std::string(strlen($imageStr)));
-			$this->setHeaders($image->dateModified, $length, $image->hash, $image->mimeType);
-			php_Lib::hprint($imageStr);
-		} else {
-			$dateModified = sys_FileSystem::stat($this->upfolder . $src)->mtime;
-			$mime = strtolower(_hx_substr($src, _hx_last_index_of($src, ".", null) + 1, null));
-			if($mime === "jpg") {
-				$mime = "jpeg";
-			}
-			$mime = "image/" . $mime;
-			$length = filesize($this->upfolder . $src);
-			$this->setHeaders($dateModified, $length, haxe_Md5::encode($src), $mime);
-			readfile($this->upfolder . $src);
-			Sys::hexit(1);
-		}
+	public function setHeaders($dateModified, $length, $hash, $mime) {
+		header("Last-Modified" . ": " . (DateTools::format($dateModified, "%a, %d %b %Y %H:%M:%S") . " GMT"));
+		header("Expires" . ": " . (DateTools::format(new Date($dateModified->getFullYear() + 1, $dateModified->getMonth(), $dateModified->getDay(), 0, 0, 0), "%a, %d %b %Y %H:%M:%S") . " GMT"));
+		header("Cache-Control" . ": " . "public, max-age=31536000");
+		header("ETag" . ": " . ("\"" . $hash . "\""));
+		header("Pragma" . ": " . "");
+		header("Content-Type" . ": " . $mime);
+		header("Content-Length" . ": " . $length);
 	}
-	public function resizeImage($preset, $image, $w, $h) {
+	public function resizeImage($preset, $image, $w = null, $h = null) {
 		switch($preset) {
 		case "slim":{
 			$image->queueResize(300, 300);
@@ -82,15 +56,41 @@ class controllers_ImageBase extends microbe_controllers_GenericController {
 		}break;
 		}
 	}
-	public function setHeaders($dateModified, $length, $hash, $mime) {
-		header("Last-Modified" . ": " . (DateTools::format($dateModified, "%a, %d %b %Y %H:%M:%S") . " GMT"));
-		header("Expires" . ": " . (DateTools::format(new Date($dateModified->getFullYear() + 1, $dateModified->getMonth(), $dateModified->getDay(), 0, 0, 0), "%a, %d %b %Y %H:%M:%S") . " GMT"));
-		header("Cache-Control" . ": " . "public, max-age=31536000");
-		header("ETag" . ": " . ("\"" . $hash . "\""));
-		header("Pragma" . ": " . "");
-		header("Content-Type" . ": " . $mime);
-		header("Content-Length" . ": " . $length);
+	public function resize($preset = null, $src = null, $w = null, $h = null) {
+		if($src === "" || $src === null) {
+			$blankGif = "R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
+			$blankHash = haxe_Md5::encode($blankGif);
+			$this->setHeaders(Date::fromTime(0), "43", $blankHash, "image/gif");
+			php_Lib::hprint(base64_decode($blankGif));
+			return;
+		}
+		if($preset !== null) {
+			$image = new microbe_utils_ImageProcessor($this->upfolder . $src);
+			$image->cacheFolder = $this->cachefolder;
+			$image->format = microbe_utils_ImageOutputFormat::$JPG;
+			$this->resizeImage($preset, $image, null, null);
+			$cacheName2 = $image->getCacheName();
+			$imageStr = $image->getOutput(null);
+			$filename = $image->cacheFolder . "/" . $image->getCacheName();
+			$length = ((file_exists($filename)) ? filesize($filename) : Std::string(strlen($imageStr)));
+			$this->setHeaders($image->dateModified, $length, $image->hash, $image->mimeType);
+			php_Lib::hprint($imageStr);
+		} else {
+			$dateModified = sys_FileSystem::stat($this->upfolder . $src)->mtime;
+			$mime = strtolower(_hx_substr($src, _hx_last_index_of($src, ".", null) + 1, null));
+			if($mime === "jpg") {
+				$mime = "jpeg";
+			}
+			$mime = "image/" . $mime;
+			$length = filesize($this->upfolder . $src);
+			$this->setHeaders($dateModified, $length, haxe_Md5::encode($src), $mime);
+			readfile($this->upfolder . $src);
+			Sys::hexit(1);
+		}
 	}
+	public $cachefolder;
+	public $upfolder;
+	public $data;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

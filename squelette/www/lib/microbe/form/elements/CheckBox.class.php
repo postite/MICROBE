@@ -1,7 +1,7 @@
 <?php
 
 class microbe_form_elements_CheckBox extends microbe_form_FormElement {
-	public function __construct($name, $label, $value, $required, $validators, $attributes) { if(!php_Boot::$skip_constructor) {
+	public function __construct($name, $label = null, $value = null, $required = null, $validators = null, $attributes = null) { if(!php_Boot::$skip_constructor) {
 		if($attributes === null) {
 			$attributes = "";
 		}
@@ -12,7 +12,7 @@ class microbe_form_elements_CheckBox extends microbe_form_FormElement {
 		$this->name = $name;
 		$this->label = Lambda::hlist(_hx_explode("_", $name))->last();
 	}}
-	public function render($iter) {
+	public function render($iter = null) {
 		if($iter === null) {
 			$iter = 0;
 		}

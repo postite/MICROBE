@@ -1,17 +1,17 @@
--cp src
--main microbe.controllers.GenericController
-#-lib haxignitermicrobe
--D spod_macro
--lib templo:2.3.3
--lib erazor
--D haxe 3
-#--dead-code-elimination
--php www
-#--no-output
+#-cp src
+#-main microbe.controllers.GenericController
+##-lib haxignitermicrobe
+#-D spod_macro
+##-lib templo:2.3.3
+#-lib erazor
+#-D haxe 3
+##--dead-code-elimination
+#-php www
+##--no-output
 #--no-traces
---next
-
-#javascript back
+#--next
+#
+##javascript back
 #-main microbe.jsTools.BackJS
 #
 #-cp src
@@ -21,9 +21,10 @@
 #-debug
 #-lib hxs
 #-D noEmbedJS
-#--no-output
+#-D elements
+##--no-output
 #--no-traces
-
+#
 #-cmd open http://localhost:8888/index.php/pipo
 
 #### example pour synchronisation en ssl
@@ -43,7 +44,11 @@
 #### compilation to haxelib
 #-cmd  echo   $TM_PROJECT_DIRECTORY"/export.sh"
 #-cmd   $TM_PROJECT_DIRECTORY"/export.sh" microbe
+
+
 -cmd   ./export.sh microbe
+
+
 ####
 #-cmd open http://localhost:8888/index.php/pipo
 

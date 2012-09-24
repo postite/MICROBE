@@ -1,7 +1,7 @@
 <?php
 
 class microbe_Output {
-	public function __construct($spod, $_voName) {
+	public function __construct($spod, $_voName = null) {
 		if(!php_Boot::$skip_constructor) {
 		$this->data = $spod;
 		$this->voName = $_voName;
@@ -35,9 +35,9 @@ class microbe_Output {
 			}
 		}
 	}}
-	public $hash;
-	public $voName;
-	public $data;
+	public function render() {
+		return haxe_Serializer::run($this->hash);
+	}
 	public function parse() {
 		$newList = new microbe_form_MicroFieldList();
 		$creator = new microbe_MicroCreator();
@@ -45,9 +45,9 @@ class microbe_Output {
 		$creator->generate("vo." . $this->voName, $this->data->getFormule(), $newList, null);
 		return $newList;
 	}
-	public function render() {
-		return haxe_Serializer::run($this->hash);
-	}
+	public $data;
+	public $voName;
+	public $hash;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

@@ -5,22 +5,8 @@ class vo_UserVo extends sys_db_Object implements microbe_vo_Spodable{
 		if(!php_Boot::$skip_constructor) {
 		parent::__construct();
 	}}
-	public $poz;
-	public $id;
-	public $mdp;
-	public $nom;
-	public function getFormule() {
-		$formule = null;
-		$formule = new Hash();
-		$formule->set("nom", _hx_anonymous(array("classe" => "microbe.form.elements.Input", "type" => microbe_form_InstanceType::$formElement, "champs" => $this->nom)));
-		$formule->set("mdp", _hx_anonymous(array("classe" => "microbe.form.elements.Input", "type" => microbe_form_InstanceType::$formElement, "champs" => $this->mdp)));
-		return $formule;
-	}
-	public function getFields() {
-		$liste = new HList();
-		$liste->add("nom");
-		$liste->add("mdp");
-		return $liste;
+	public function getDefaultField() {
+		return $this->nom;
 	}
 	public function getHash() {
 		$h = new Hash();
@@ -28,9 +14,23 @@ class vo_UserVo extends sys_db_Object implements microbe_vo_Spodable{
 		$h->set("mdp", $this->mdp);
 		return $h;
 	}
-	public function getDefaultField() {
-		return $this->nom;
+	public function getFields() {
+		$liste = new HList();
+		$liste->add("nom");
+		$liste->add("mdp");
+		return $liste;
 	}
+	public function getFormule() {
+		$formule = null;
+		$formule = new Hash();
+		$formule->set("nom", _hx_anonymous(array("classe" => "microbe.form.elements.Input", "type" => microbe_form_InstanceType::$formElement, "champs" => $this->nom)));
+		$formule->set("mdp", _hx_anonymous(array("classe" => "microbe.form.elements.Input", "type" => microbe_form_InstanceType::$formElement, "champs" => $this->mdp)));
+		return $formule;
+	}
+	public $nom;
+	public $mdp;
+	public $id;
+	public $poz;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

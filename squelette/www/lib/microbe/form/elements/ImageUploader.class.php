@@ -1,7 +1,7 @@
 <?php
 
 class microbe_form_elements_ImageUploader extends microbe_form_elements_IframeUploader {
-	public function __construct($name, $label, $value, $required, $validators, $attributes) { if(!php_Boot::$skip_constructor) {
+	public function __construct($name, $label, $value = null, $required = null, $validators = null, $attributes = null) { if(!php_Boot::$skip_constructor) {
 		if($attributes === null) {
 			$attributes = "";
 		}
@@ -10,7 +10,7 @@ class microbe_form_elements_ImageUploader extends microbe_form_elements_IframeUp
 		}
 		parent::__construct($name,$label,$value,$required,$validators,$attributes);
 	}}
-	public function render($iter) {
+	public function render($iter = null) {
 		$n = $this->name;
 		$str = "";
 		$str .= "<div class='imageuploader' id=" . $n . ">";

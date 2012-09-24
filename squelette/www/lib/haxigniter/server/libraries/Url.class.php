@@ -5,9 +5,42 @@ class haxigniter_server_libraries_Url {
 		if(!php_Boot::$skip_constructor) {
 		$this->config = $config;
 	}}
-	public $config;
-	public $SSLInDevelopmentMode;
-	public function segmentString($uri, $separator) {
+	public function testValidUri($uri) {
+		if($this->config->permittedUriChars === null) {
+			return;
+		}
+		$regexp = "^[/" . haxigniter_common_libraries_ERegTools::quoteMeta($this->config->permittedUriChars) . "]*\$";
+		$validUrl = new EReg($regexp, "i");
+		if(!$validUrl->match($uri)) {
+			throw new HException(new haxigniter_common_exceptions_Exception("URI submitted with disallowed characters: " . $uri, null, _hx_anonymous(array("fileName" => "Url.hx", "lineNumber" => 142, "className" => "haxigniter.server.libraries.Url", "methodName" => "testValidUri"))));
+		}
+	}
+	public function uriString() {
+		$output = php_Web::getURI();
+		return haxigniter_server_libraries_Url_0($this, $output);
+	}
+	public function siteUrl($request = null, $requestArray = null) {
+		$url = $this->config->indexPath . $this->config->indexFile;
+		if($requestArray === null) {
+			$requestArray = new _hx_array(array());
+		}
+		if($request !== null) {
+			$requestArray->unshift($request);
+		}
+		$requestArray->unshift(((StringTools::endsWith($url, "/")) ? _hx_substr($url, 0, strlen($url) - 1) : $url));
+		return $requestArray->join("/");
+	}
+	public function linkUrl() {
+		return _hx_substr($this->config->indexPath, 0, strlen($this->config->indexPath) - 1);
+	}
+	public function split($uri, $glue = null) {
+		if($glue === null) {
+			$glue = "/";
+		}
+		$uri = $this->segmentString($uri, $glue);
+		return ((strlen($uri) > 0) ? _hx_explode($glue, $uri) : new _hx_array(array()));
+	}
+	public function segmentString($uri = null, $separator = null) {
 		if($separator === null) {
 			$separator = "/";
 		}
@@ -32,41 +65,8 @@ class haxigniter_server_libraries_Url {
 		}
 		return trim($uri);
 	}
-	public function split($uri, $glue) {
-		if($glue === null) {
-			$glue = "/";
-		}
-		$uri = $this->segmentString($uri, $glue);
-		return ((strlen($uri) > 0) ? _hx_explode($glue, $uri) : new _hx_array(array()));
-	}
-	public function linkUrl() {
-		return _hx_substr($this->config->indexPath, 0, strlen($this->config->indexPath) - 1);
-	}
-	public function siteUrl($request, $requestArray) {
-		$url = $this->config->indexPath . $this->config->indexFile;
-		if($requestArray === null) {
-			$requestArray = new _hx_array(array());
-		}
-		if($request !== null) {
-			$requestArray->unshift($request);
-		}
-		$requestArray->unshift(((StringTools::endsWith($url, "/")) ? _hx_substr($url, 0, strlen($url) - 1) : $url));
-		return $requestArray->join("/");
-	}
-	public function uriString() {
-		$output = php_Web::getURI();
-		return haxigniter_server_libraries_Url_0($this, $output);
-	}
-	public function testValidUri($uri) {
-		if($this->config->permittedUriChars === null) {
-			return;
-		}
-		$regexp = "^[/" . haxigniter_common_libraries_ERegTools::quoteMeta($this->config->permittedUriChars) . "]*\$";
-		$validUrl = new EReg($regexp, "i");
-		if(!$validUrl->match($uri)) {
-			throw new HException(new haxigniter_common_exceptions_Exception("URI submitted with disallowed characters: " . $uri, null, _hx_anonymous(array("fileName" => "Url.hx", "lineNumber" => 142, "className" => "haxigniter.server.libraries.Url", "methodName" => "testValidUri"))));
-		}
-	}
+	public $SSLInDevelopmentMode;
+	public $config;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
@@ -77,7 +77,7 @@ class haxigniter_server_libraries_Url {
 		else
 			throw new HException('Unable to call «'.$m.'»');
 	}
-	static function join($segments, $glue) {
+	static function join($segments, $glue = null) {
 		if($glue === null) {
 			$glue = "/";
 		}

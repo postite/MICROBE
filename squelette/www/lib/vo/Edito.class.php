@@ -5,19 +5,19 @@ class vo_Edito extends sys_db_Object implements microbe_vo_Spodable{
 		if(!php_Boot::$skip_constructor) {
 		parent::__construct();
 	}}
-	public $poz;
-	public $id;
-	public $contenu;
-	public $date;
+	public function getDefaultField() {
+		return $this->date->toString();
+	}
 	public function getFormule() {
 		$formule = null;
 		$formule = new Hash();
 		$formule->set("contenu", _hx_anonymous(array("classe" => "microbe.form.elements.AjaxArea", "type" => microbe_form_InstanceType::$formElement, "champs" => $this->contenu)));
 		return $formule;
 	}
-	public function getDefaultField() {
-		return $this->date->toString();
-	}
+	public $date;
+	public $contenu;
+	public $id;
+	public $poz;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

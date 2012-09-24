@@ -5,9 +5,8 @@ class haxe_io_BytesOutput extends haxe_io_Output {
 		if(!php_Boot::$skip_constructor) {
 		$this->b = new haxe_io_BytesBuffer();
 	}}
-	public $b;
-	public function writeByte($c) {
-		$this->b->b .= chr($c);
+	public function getBytes() {
+		return $this->b->getBytes();
 	}
 	public function writeBytes($buf, $pos, $len) {
 		{
@@ -18,9 +17,10 @@ class haxe_io_BytesOutput extends haxe_io_Output {
 		}
 		return $len;
 	}
-	public function getBytes() {
-		return $this->b->getBytes();
+	public function writeByte($c) {
+		$this->b->b .= chr($c);
 	}
+	public $b;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

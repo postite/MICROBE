@@ -18,6 +18,10 @@ class microbe_TypeFactory {
 		{
 			return Type::createInstance(_hx_qtype("microbe.factoryType.CollectionBehaviour"), new _hx_array(array()));
 		}break;
+		case 3:
+		{
+			return Type::createInstance(_hx_qtype("microbe.factoryType.DataElementBehaviour"), new _hx_array(array()));
+		}break;
 		}
 	}
 	function __toString() { return 'microbe.TypeFactory'; }

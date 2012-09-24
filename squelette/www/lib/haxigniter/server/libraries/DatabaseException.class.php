@@ -1,7 +1,7 @@
 <?php
 
 class haxigniter_server_libraries_DatabaseException extends haxigniter_common_exceptions_Exception {
-	public function __construct($message, $connection, $stack) {
+	public function __construct($message, $connection, $stack = null) {
 		if(!php_Boot::$skip_constructor) {
 		$this->connection = $connection;
 		parent::__construct($message,0,$stack);
@@ -17,6 +17,6 @@ class haxigniter_server_libraries_DatabaseException extends haxigniter_common_ex
 		else
 			throw new HException('Unable to call «'.$m.'»');
 	}
-	static $__properties__ = array("get_stack" => "getStack","get_code" => "getCode","get_message" => "getMessage");
+	static $__properties__ = array("get_message" => "getMessage","get_code" => "getCode","get_stack" => "getStack");
 	function __toString() { return 'haxigniter.server.libraries.DatabaseException'; }
 }

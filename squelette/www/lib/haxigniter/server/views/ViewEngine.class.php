@@ -6,27 +6,27 @@ class haxigniter_server_views_ViewEngine {
 		$this->templatePath = $config->viewPath;
 		$this->compiledPath = $config->cachePath;
 	}}
-	public $templatePath;
-	public $compiledPath;
-	public $templateExtension;
-	public function assign($name, $value) {
-		throw new HException("Assign() must be implemented in an inherited class.");
+	public function displayDefault($pos = null) {
+		$className = strtolower(_hx_substr($pos->className, _hx_last_index_of($pos->className, ".", null) + 1, null));
+		$this->display($className . "/" . $pos->methodName . "." . $this->templateExtension);
 	}
-	public function clearAssign($name) {
-		throw new HException("ClearAssign() must be implemented in an inherited class.");
-		return null;
+	public function display($fileName) {
+		php_Lib::hprint($this->render($fileName));
 	}
 	public function render($fileName) {
 		throw new HException("Render() must be implemented in an inherited class.");
 		return null;
 	}
-	public function display($fileName) {
-		php_Lib::hprint($this->render($fileName));
+	public function clearAssign($name) {
+		throw new HException("ClearAssign() must be implemented in an inherited class.");
+		return null;
 	}
-	public function displayDefault($pos) {
-		$className = strtolower(_hx_substr($pos->className, _hx_last_index_of($pos->className, ".", null) + 1, null));
-		$this->display($className . "/" . $pos->methodName . "." . $this->templateExtension);
+	public function assign($name, $value) {
+		throw new HException("Assign() must be implemented in an inherited class.");
 	}
+	public $templateExtension;
+	public $compiledPath;
+	public $templatePath;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

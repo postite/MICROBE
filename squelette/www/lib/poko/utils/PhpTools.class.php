@@ -11,7 +11,7 @@ class poko_utils_PhpTools {
 		$f = haxe_Log::$trace;
 		haxe_Log::$trace = array(new _hx_lambda(array(&$f), "poko_utils_PhpTools_0"), 'execute');
 	}
-	static function mail($to, $subject, $message, $headers, $additionalParameters) {
+	static function mail($to, $subject, $message, $headers = null, $additionalParameters = null) {
 		if($additionalParameters === null) {
 			$additionalParameters = "";
 		}

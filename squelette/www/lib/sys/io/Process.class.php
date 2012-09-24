@@ -17,19 +17,36 @@ class sys_io_Process {
 		$this->stdout = new sys_io__Process_Stdout($pipes[1]);
 		$this->stderr = new sys_io__Process_Stdout($pipes[2]);
 	}}
-	public $p;
-	public $st;
-	public $cl;
-	public $stdout;
-	public $stderr;
-	public $stdin;
-	public function close() {
-		if(null === $this->st) {
+	public function exitCode() {
+		if(null === $this->cl) {
 			$this->st = proc_get_status($this->p);
+			while($this->st["running"]) {
+				Sys::sleep(0.01);
+				$this->st = proc_get_status($this->p);
+			}
+			$this->close();
 		}
-		$this->replaceStream($this->stderr);
-		$this->replaceStream($this->stdout);
-		$this->cl = proc_close($this->p);
+		return sys_io_Process_0($this);
+	}
+	public function replaceStream($input) {
+		$fp = fopen("php://memory", "r+");
+		while(true) {
+			$s = fread($input->p, 8192);
+			if(($s === false) || $s === null || $s === "") {
+				break;
+			}
+			fwrite($fp, $s);
+			unset($s);
+		}
+		rewind($fp);
+		$input->p = $fp;
+	}
+	public function kill() {
+		proc_terminate($this->p);
+	}
+	public function getPid() {
+		$r = proc_get_status($this->p);
+		return $r["pid"];
 	}
 	public function sargs($args) {
 		$b = "";
@@ -48,37 +65,20 @@ class sys_io_Process {
 		}
 		return $b;
 	}
-	public function getPid() {
-		$r = proc_get_status($this->p);
-		return $r["pid"];
-	}
-	public function kill() {
-		proc_terminate($this->p);
-	}
-	public function replaceStream($input) {
-		$fp = fopen("php://memory", "r+");
-		while(true) {
-			$s = fread($input->p, 8192);
-			if(($s === false) || $s === null || $s === "") {
-				break;
-			}
-			fwrite($fp, $s);
-			unset($s);
-		}
-		rewind($fp);
-		$input->p = $fp;
-	}
-	public function exitCode() {
-		if(null === $this->cl) {
+	public function close() {
+		if(null === $this->st) {
 			$this->st = proc_get_status($this->p);
-			while($this->st["running"]) {
-				Sys::sleep(0.01);
-				$this->st = proc_get_status($this->p);
-			}
-			$this->close();
 		}
-		return sys_io_Process_0($this);
+		$this->replaceStream($this->stderr);
+		$this->replaceStream($this->stdout);
+		$this->cl = proc_close($this->p);
 	}
+	public $stdin;
+	public $stderr;
+	public $stdout;
+	public $cl;
+	public $st;
+	public $p;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

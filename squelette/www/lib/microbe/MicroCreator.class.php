@@ -4,15 +4,35 @@ class microbe_MicroCreator {
 	public function __construct() {
 		;
 	}
-	public $result;
-	public $formule;
-	public $voName;
-	public $formulaire;
-	public $data;
-	public $source;
-	public function parse() {
+	public function addToForm($formulaire) {
 	}
-	public function generate($_voName, $_formule, $liste, $form) {
+	public function record() {
+		if(null == $this->source) throw new HException('null iterable');
+		$»it = $this->source->iterator();
+		while($»it->hasNext()) {
+			$a = $»it->next();
+			$factory = new microbe_TypeFactory();
+			$behaviour = $factory->create($a->type);
+			$behaviour->record($a, $this->data);
+			unset($factory,$behaviour);
+		}
+		return $this->data;
+	}
+	public function justGet($_voName, $_formule, $liste = null) {
+		$list = new microbe_form_MicroFieldList();
+		if(null == $_formule) throw new HException('null iterable');
+		$»it = $_formule->keys();
+		while($»it->hasNext()) {
+			$field = $»it->next();
+			$item = $_formule->get($field);
+			$factory = new microbe_TypeFactory();
+			$behaviour = $factory->create($item->type);
+			$list->add($behaviour->create($_voName, $item, $field, null));
+			unset($item,$factory,$behaviour);
+		}
+		return $list;
+	}
+	public function generate($_voName, $_formule, $liste, $form = null) {
 		$this->result = $liste;
 		$this->formule = $_formule;
 		$this->voName = $_voName;
@@ -29,36 +49,14 @@ class microbe_MicroCreator {
 			unset($item,$factory,$behaviour);
 		}
 	}
-	public function justGet($_voName, $_formule, $liste) {
-		$list = new microbe_form_MicroFieldList();
-		if(null == $_formule) throw new HException('null iterable');
-		$»it = $_formule->keys();
-		while($»it->hasNext()) {
-			$field = $»it->next();
-			$item = $_formule->get($field);
-			$factory = new microbe_TypeFactory();
-			$behaviour = $factory->create($item->type);
-			$list->add($behaviour->create($_voName, $item, $field, null));
-			unset($item,$factory,$behaviour);
-		}
-		return $list;
+	public function parse() {
 	}
-	public function record() {
-		haxe_Log::trace("record", _hx_anonymous(array("fileName" => "MicroCreator.hx", "lineNumber" => 62, "className" => "microbe.MicroCreator", "methodName" => "record")));
-		if(null == $this->source) throw new HException('null iterable');
-		$»it = $this->source->iterator();
-		while($»it->hasNext()) {
-			$a = $»it->next();
-			haxe_Log::trace($a->type, _hx_anonymous(array("fileName" => "MicroCreator.hx", "lineNumber" => 64, "className" => "microbe.MicroCreator", "methodName" => "record")));
-			$factory = new microbe_TypeFactory();
-			$behaviour = $factory->create($a->type);
-			$behaviour->record($a, $this->data);
-			unset($factory,$behaviour);
-		}
-		return $this->data;
-	}
-	public function addToForm($formulaire) {
-	}
+	public $source;
+	public $data;
+	public $formulaire;
+	public $voName;
+	public $formule;
+	public $result;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

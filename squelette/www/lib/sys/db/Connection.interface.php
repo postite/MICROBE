@@ -1,14 +1,14 @@
 <?php
 
 interface sys_db_Connection {
-	function request($s);
-	function close();
-	function escape($s);
-	function quote($s);
-	function addValue($s, $v);
-	function lastInsertId();
-	function dbName();
-	function startTransaction();
-	function commit();
 	function rollback();
+	function commit();
+	function startTransaction();
+	function dbName();
+	function lastInsertId();
+	function addValue($s, $v);
+	function quote($s);
+	function escape($s);
+	function close();
+	function request($s);
 }

@@ -4,8 +4,8 @@ class microbe_Tag {
 	public function __construct() {
 		;
 	}
-	public $tag;
 	public $id;
+	public $tag;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

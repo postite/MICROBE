@@ -6,8 +6,8 @@ class haxe_FastCell {
 		$this->elt = $elt;
 		$this->next = $next;
 	}}
-	public $elt;
 	public $next;
+	public $elt;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

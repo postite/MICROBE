@@ -1,16 +1,14 @@
 <?php
 
 class microbe_form_elements_TagView extends microbe_form_FormElement {
-	public function __construct($name, $label, $tags, $tagsbyId) {
+	public function __construct($name, $label = null, $tags = null, $tagsbyId = null) {
 		if(!php_Boot::$skip_constructor) {
 		parent::__construct();
 		$this->spodTags = new HList();
 		$this->contextTags = new HList();
 		$this->name = $name;
 	}}
-	public $spodTags;
-	public $contextTags;
-	public function render($iter) {
+	public function render($iter = null) {
 		$str = "<div id='tagSelector'>";
 		$str .= "<div id='instantag'>";
 		$str .= "<input type=text id='pute'></input>";
@@ -21,6 +19,8 @@ class microbe_form_elements_TagView extends microbe_form_FormElement {
 		$str .= "</div>";
 		return $str;
 	}
+	public $contextTags;
+	public $spodTags;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

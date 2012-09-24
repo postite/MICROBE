@@ -3,7 +3,7 @@
 class haxigniter_common_types_TypeFactory {
 	public function __construct(){}
 	static $arrayDelimiter = "-";
-	static function typecastArguments($classType, $classMethod, $arguments, $offset) {
+	static function typecastArguments($classType, $classMethod, $arguments, $offset = null) {
 		if($offset === null) {
 			$offset = 0;
 		}

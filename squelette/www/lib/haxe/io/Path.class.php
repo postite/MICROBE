@@ -26,13 +26,13 @@ class haxe_io_Path {
 			$this->file = $path;
 		}
 	}}
-	public $ext;
-	public $dir;
-	public $file;
-	public $backslash;
 	public function toString() {
 		return (haxe_io_Path_0($this)) . $this->file . (haxe_io_Path_1($this));
 	}
+	public $backslash;
+	public $file;
+	public $dir;
+	public $ext;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

@@ -9,10 +9,10 @@ class haxigniter_common_types_DbID {
 		}
 		$this->intValue = $intValue;
 	}}
+	public $intValue;
 	public function toInt() {
 		return $this->intValue;
 	}
-	public $intValue;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

@@ -13,18 +13,18 @@ class controllers_Simple extends microbe_controllers_GenericController {
 		$this->view->assign("id", null);
 		$this->log("after new Simple", null);
 	}}
-	public $test;
-	public function index() {
-		$this->log("index", null);
+	public function create($posted) {
+		$this->trace($posted, null, _hx_anonymous(array("fileName" => "Simple.hx", "lineNumber" => 43, "className" => "controllers.Simple", "methodName" => "create")));
+		$this->view->display("simple.html");
 	}
 	public function show($id) {
 		$this->view->assign("id", $id);
 		$this->view->display("simple.html");
 	}
-	public function create($posted) {
-		$this->trace($posted, null, _hx_anonymous(array("fileName" => "Simple.hx", "lineNumber" => 43, "className" => "controllers.Simple", "methodName" => "create")));
-		$this->view->display("simple.html");
+	public function index() {
+		$this->log("index", null);
 	}
+	public $test;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

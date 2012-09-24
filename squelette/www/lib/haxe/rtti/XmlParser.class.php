@@ -2,162 +2,189 @@
 
 class haxe_rtti_XmlParser {
 	public function __construct() {
+		if(!isset($this->newField)) $this->newField = array(new _hx_lambda(array(&$this), "haxe_rtti_XmlParser_0"), 'execute');
 		if(!php_Boot::$skip_constructor) {
 		$this->root = new _hx_array(array());
 	}}
-	public $root;
-	public $curplatform;
-	public function sort($l) {
-		if($l === null) {
-			$l = $this->root;
-		}
-		$l->sort(array(new _hx_lambda(array(&$l), "haxe_rtti_XmlParser_0"), 'execute'));
-		{
-			$_g = 0;
-			while($_g < $l->length) {
-				$x = $l[$_g];
-				++$_g;
-				$»t = ($x);
-				switch($»t->index) {
-				case 0:
-				$l1 = $»t->params[2];
-				{
-					$this->sort($l1);
-				}break;
-				case 1:
-				$c = $»t->params[0];
-				{
-					$c->fields = $this->sortFields($c->fields);
-					$c->statics = $this->sortFields($c->statics);
-				}break;
-				case 2:
-				$e = $»t->params[0];
-				{
-				}break;
-				case 3:
-				{
-				}break;
-				}
-				unset($x);
-			}
-		}
-	}
-	public function sortFields($fl) {
-		$a = Lambda::harray($fl);
-		$a->sort(array(new _hx_lambda(array(&$a, &$fl), "haxe_rtti_XmlParser_1"), 'execute'));
-		return Lambda::hlist($a);
-	}
-	public function process($x, $platform) {
-		$this->curplatform = $platform;
-		$this->xroot(new haxe_xml_Fast($x));
-	}
-	public function mergeRights($f1, $f2) {
-		if($f1->get == haxe_rtti_Rights::$RInline && $f1->set == haxe_rtti_Rights::$RNo && $f2->get == haxe_rtti_Rights::$RNormal && $f2->set == haxe_rtti_Rights::$RMethod) {
-			$f1->get = haxe_rtti_Rights::$RNormal;
-			$f1->set = haxe_rtti_Rights::$RMethod;
-			return true;
-		}
-		return false;
-	}
-	public function mergeFields($f, $f2) {
-		return haxe_rtti_TypeApi::fieldEq($f, $f2) || $f->name === $f2->name && ($this->mergeRights($f, $f2) || $this->mergeRights($f2, $f)) && haxe_rtti_TypeApi::fieldEq($f, $f2);
-	}
-	public function mergeClasses($c, $c2) {
-		if($c->isInterface != $c2->isInterface) {
-			return false;
-		}
+	public function defplat() {
+		$l = new HList();
 		if($this->curplatform !== null) {
-			$c->platforms->add($this->curplatform);
+			$l->add($this->curplatform);
 		}
-		if($c->isExtern != $c2->isExtern) {
-			$c->isExtern = false;
-		}
-		if(null == $c2->fields) throw new HException('null iterable');
-		$»it = $c2->fields->iterator();
-		while($»it->hasNext()) {
-			$f2 = $»it->next();
-			$found = null;
-			if(null == $c->fields) throw new HException('null iterable');
-			$»it2 = $c->fields->iterator();
-			while($»it2->hasNext()) {
-				$f = $»it2->next();
-				if($this->mergeFields($f, $f2)) {
-					$found = $f;
-					break;
-				}
-			}
-			if($found === null) {
-				$c->fields->add($f2);
-			} else {
-				if($this->curplatform !== null) {
-					$found->platforms->add($this->curplatform);
-				}
-			}
-			unset($found);
-		}
-		if(null == $c2->statics) throw new HException('null iterable');
-		$»it = $c2->statics->iterator();
-		while($»it->hasNext()) {
-			$f2 = $»it->next();
-			$found = null;
-			if(null == $c->statics) throw new HException('null iterable');
-			$»it2 = $c->statics->iterator();
-			while($»it2->hasNext()) {
-				$f = $»it2->next();
-				if($this->mergeFields($f, $f2)) {
-					$found = $f;
-					break;
-				}
-			}
-			if($found === null) {
-				$c->statics->add($f2);
-			} else {
-				if($this->curplatform !== null) {
-					$found->platforms->add($this->curplatform);
-				}
-			}
-			unset($found);
-		}
-		return true;
+		return $l;
 	}
-	public function mergeEnums($e, $e2) {
-		if($e->isExtern != $e2->isExtern) {
-			return false;
+	public function xtypeparams($x) {
+		$p = new HList();
+		if(null == $x) throw new HException('null iterable');
+		$»it = $x->getElements();
+		while($»it->hasNext()) {
+			$c = $»it->next();
+			$p->add($this->xtype($c));
 		}
+		return $p;
+	}
+	public function xtype($x) {
+		return haxe_rtti_XmlParser_1($this, $x);
+	}
+	public function xtypedef($x) {
+		$doc = null;
+		$t = null;
+		if(null == $x) throw new HException('null iterable');
+		$»it = $x->getElements();
+		while($»it->hasNext()) {
+			$c = $»it->next();
+			if($c->getName() === "haxe_doc") {
+				$doc = $c->getInnerData();
+			} else {
+				if($c->getName() === "meta") {
+				} else {
+					$t = $this->xtype($c);
+				}
+			}
+		}
+		$types = new Hash();
 		if($this->curplatform !== null) {
-			$e->platforms->add($this->curplatform);
+			$types->set($this->curplatform, $t);
 		}
-		if(null == $e2->constructors) throw new HException('null iterable');
-		$»it = $e2->constructors->iterator();
-		while($»it->hasNext()) {
-			$c2 = $»it->next();
-			$found = null;
-			if(null == $e->constructors) throw new HException('null iterable');
-			$»it2 = $e->constructors->iterator();
-			while($»it2->hasNext()) {
-				$c = $»it2->next();
-				if(haxe_rtti_TypeApi::constructorEq($c, $c2)) {
-					$found = $c;
-					break;
+		return _hx_anonymous(array("path" => $this->mkPath($x->att->resolve("path")), "module" => (($x->has->resolve("module")) ? $this->mkPath($x->att->resolve("module")) : null), "doc" => $doc, "isPrivate" => $x->x->exists("private"), "params" => $this->mkTypeParams($x->att->resolve("params")), "type" => $t, "types" => $types, "platforms" => $this->defplat()));
+	}
+	public function xenumfield($x) {
+		$args = null;
+		$xdoc = $x->x->elementsNamed("haxe_doc")->next();
+		if($x->has->resolve("a")) {
+			$names = _hx_explode(":", $x->att->resolve("a"));
+			$elts = $x->getElements();
+			$args = new HList();
+			{
+				$_g = 0;
+				while($_g < $names->length) {
+					$c = $names[$_g];
+					++$_g;
+					$opt = false;
+					if(_hx_char_at($c, 0) === "?") {
+						$opt = true;
+						$c = _hx_substr($c, 1, null);
+					}
+					$args->add(_hx_anonymous(array("name" => $c, "opt" => $opt, "t" => $this->xtype($elts->next()))));
+					unset($opt,$c);
 				}
 			}
-			if($found === null) {
-				return false;
-			}
-			if($this->curplatform !== null) {
-				$found->platforms->add($this->curplatform);
-			}
-			unset($found);
 		}
-		return true;
+		return _hx_anonymous(array("name" => $x->getName(), "args" => $args, "doc" => (($xdoc === null) ? null : _hx_deref(new haxe_xml_Fast($xdoc))->getInnerData()), "platforms" => $this->defplat()));
 	}
-	public function mergeTypedefs($t, $t2) {
-		if($this->curplatform === null) {
-			return false;
+	public function xenum($x) {
+		$cl = new HList();
+		$doc = null;
+		if(null == $x) throw new HException('null iterable');
+		$»it = $x->getElements();
+		while($»it->hasNext()) {
+			$c = $»it->next();
+			if($c->getName() === "haxe_doc") {
+				$doc = $c->getInnerData();
+			} else {
+				if($c->getName() === "meta") {
+				} else {
+					$cl->add($this->xenumfield($c));
+				}
+			}
 		}
-		$t->platforms->add($this->curplatform);
-		$t->types->set($this->curplatform, $t2->type);
-		return true;
+		return _hx_anonymous(array("path" => $this->mkPath($x->att->resolve("path")), "module" => (($x->has->resolve("module")) ? $this->mkPath($x->att->resolve("module")) : null), "doc" => $doc, "isPrivate" => $x->x->exists("private"), "isExtern" => $x->x->exists("extern"), "params" => $this->mkTypeParams($x->att->resolve("params")), "constructors" => $cl, "platforms" => $this->defplat()));
+	}
+	public function xclassfield($x) {
+		$e = $x->getElements();
+		$t = $this->xtype($e->next());
+		$doc = null;
+		$»it = $e;
+		while($»it->hasNext()) {
+			$c = $»it->next();
+			switch($c->getName()) {
+			case "haxe_doc":{
+				$doc = $c->getInnerData();
+			}break;
+			case "meta":{
+			}break;
+			default:{
+				$this->xerror($c);
+			}break;
+			}
+		}
+		return _hx_anonymous(array("name" => $x->getName(), "type" => $t, "isPublic" => $x->x->exists("public"), "isOverride" => $x->x->exists("override"), "doc" => $doc, "get" => (($x->has->resolve("get")) ? $this->mkRights($x->att->resolve("get")) : haxe_rtti_Rights::$RNormal), "set" => (($x->has->resolve("set")) ? $this->mkRights($x->att->resolve("set")) : haxe_rtti_Rights::$RNormal), "params" => (($x->has->resolve("params")) ? $this->mkTypeParams($x->att->resolve("params")) : null), "platforms" => $this->defplat()));
+	}
+	public function xclass($x) {
+		$csuper = null;
+		$doc = null;
+		$tdynamic = null;
+		$interfaces = new HList();
+		$fields = new HList();
+		$statics = new HList();
+		if(null == $x) throw new HException('null iterable');
+		$»it = $x->getElements();
+		while($»it->hasNext()) {
+			$c = $»it->next();
+			switch($c->getName()) {
+			case "haxe_doc":{
+				$doc = $c->getInnerData();
+			}break;
+			case "extends":{
+				$csuper = $this->xpath($c);
+			}break;
+			case "implements":{
+				$interfaces->add($this->xpath($c));
+			}break;
+			case "haxe_dynamic":{
+				$tdynamic = $this->xtype(new haxe_xml_Fast($c->x->firstElement()));
+			}break;
+			case "meta":{
+			}break;
+			default:{
+				if($c->x->exists("static")) {
+					$statics->add($this->xclassfield($c));
+				} else {
+					$fields->add($this->xclassfield($c));
+				}
+			}break;
+			}
+		}
+		return _hx_anonymous(array("path" => $this->mkPath($x->att->resolve("path")), "module" => (($x->has->resolve("module")) ? $this->mkPath($x->att->resolve("module")) : null), "doc" => $doc, "isPrivate" => $x->x->exists("private"), "isExtern" => $x->x->exists("extern"), "isInterface" => $x->x->exists("interface"), "params" => $this->mkTypeParams($x->att->resolve("params")), "superClass" => $csuper, "interfaces" => $interfaces, "fields" => $fields, "statics" => $statics, "tdynamic" => $tdynamic, "platforms" => $this->defplat()));
+	}
+	public function xpath($x) {
+		$path = $this->mkPath($x->att->resolve("path"));
+		$params = new HList();
+		if(null == $x) throw new HException('null iterable');
+		$»it = $x->getElements();
+		while($»it->hasNext()) {
+			$c = $»it->next();
+			$params->add($this->xtype($c));
+		}
+		return _hx_anonymous(array("path" => $path, "params" => $params));
+	}
+	public function processElement($x) {
+		$c = new haxe_xml_Fast($x);
+		return haxe_rtti_XmlParser_2($this, $c, $x);
+	}
+	public function xroot($x) {
+		if(null == $x->x) throw new HException('null iterable');
+		$»it = $x->x->elements();
+		while($»it->hasNext()) {
+			$c = $»it->next();
+			$this->merge($this->processElement($c));
+		}
+	}
+	public function xerror($c) {
+		haxe_rtti_XmlParser_3($this, $c);
+	}
+	public function mkRights($r) {
+		return haxe_rtti_XmlParser_4($this, $r);
+	}
+	public function mkTypeParams($p) {
+		$pl = _hx_explode(":", $p);
+		if($pl[0] === "") {
+			return new _hx_array(array());
+		}
+		return $pl;
+	}
+	public function mkPath($p) {
+		return $p;
 	}
 	public function merge($t) {
 		$inf = haxe_rtti_TypeApi::typeInfos($t);
@@ -288,7 +315,7 @@ class haxe_rtti_XmlParser {
 						}break;
 						}
 					}
-					$msg = haxe_rtti_XmlParser_2($this, $_g, $ct, $cur, $curpack, $e, $inf, $pack, $prev, $sameType, $t, $tinf);
+					$msg = haxe_rtti_XmlParser_5($this, $_g, $ct, $cur, $curpack, $e, $inf, $pack, $prev, $sameType, $t, $tinf);
 					throw new HException("Incompatibilities between " . $tinf->path . " in " . $tinf->platforms->join(",") . " and " . $this->curplatform . " (" . $msg . ")");
 					unset($sameType,$msg);
 				}
@@ -297,176 +324,174 @@ class haxe_rtti_XmlParser {
 		}
 		$cur->push($t);
 	}
-	public function mkPath($p) {
-		return $p;
-	}
-	public function mkTypeParams($p) {
-		$pl = _hx_explode(":", $p);
-		if($pl[0] === "") {
-			return new _hx_array(array());
+	public function mergeTypedefs($t, $t2) {
+		if($this->curplatform === null) {
+			return false;
 		}
-		return $pl;
+		$t->platforms->add($this->curplatform);
+		$t->types->set($this->curplatform, $t2->type);
+		return true;
 	}
-	public function mkRights($r) {
-		return haxe_rtti_XmlParser_3($this, $r);
-	}
-	public function xerror($c) {
-		haxe_rtti_XmlParser_4($this, $c);
-	}
-	public function xroot($x) {
-		if(null == $x->x) throw new HException('null iterable');
-		$»it = $x->x->elements();
+	public function mergeEnums($e, $e2) {
+		if($e->isExtern != $e2->isExtern) {
+			return false;
+		}
+		if($this->curplatform !== null) {
+			$e->platforms->add($this->curplatform);
+		}
+		if(null == $e2->constructors) throw new HException('null iterable');
+		$»it = $e2->constructors->iterator();
 		while($»it->hasNext()) {
-			$c = $»it->next();
-			$this->merge($this->processElement($c));
-		}
-	}
-	public function processElement($x) {
-		$c = new haxe_xml_Fast($x);
-		return haxe_rtti_XmlParser_5($this, $c, $x);
-	}
-	public function xpath($x) {
-		$path = $this->mkPath($x->att->resolve("path"));
-		$params = new HList();
-		if(null == $x) throw new HException('null iterable');
-		$»it = $x->getElements();
-		while($»it->hasNext()) {
-			$c = $»it->next();
-			$params->add($this->xtype($c));
-		}
-		return _hx_anonymous(array("path" => $path, "params" => $params));
-	}
-	public function xclass($x) {
-		$csuper = null;
-		$doc = null;
-		$tdynamic = null;
-		$interfaces = new HList();
-		$fields = new HList();
-		$statics = new HList();
-		if(null == $x) throw new HException('null iterable');
-		$»it = $x->getElements();
-		while($»it->hasNext()) {
-			$c = $»it->next();
-			switch($c->getName()) {
-			case "haxe_doc":{
-				$doc = $c->getInnerData();
-			}break;
-			case "extends":{
-				$csuper = $this->xpath($c);
-			}break;
-			case "implements":{
-				$interfaces->add($this->xpath($c));
-			}break;
-			case "haxe_dynamic":{
-				$tdynamic = $this->xtype(new haxe_xml_Fast($c->x->firstElement()));
-			}break;
-			default:{
-				if($c->x->exists("static")) {
-					$statics->add($this->xclassfield($c));
-				} else {
-					$fields->add($this->xclassfield($c));
-				}
-			}break;
-			}
-		}
-		return _hx_anonymous(array("path" => $this->mkPath($x->att->resolve("path")), "module" => (($x->has->resolve("module")) ? $this->mkPath($x->att->resolve("module")) : null), "doc" => $doc, "isPrivate" => $x->x->exists("private"), "isExtern" => $x->x->exists("extern"), "isInterface" => $x->x->exists("interface"), "params" => $this->mkTypeParams($x->att->resolve("params")), "superClass" => $csuper, "interfaces" => $interfaces, "fields" => $fields, "statics" => $statics, "tdynamic" => $tdynamic, "platforms" => $this->defplat()));
-	}
-	public function xclassfield($x) {
-		$e = $x->getElements();
-		$t = $this->xtype($e->next());
-		$doc = null;
-		$»it = $e;
-		while($»it->hasNext()) {
-			$c = $»it->next();
-			switch($c->getName()) {
-			case "haxe_doc":{
-				$doc = $c->getInnerData();
-			}break;
-			default:{
-				$this->xerror($c);
-			}break;
-			}
-		}
-		return _hx_anonymous(array("name" => $x->getName(), "type" => $t, "isPublic" => $x->x->exists("public"), "isOverride" => $x->x->exists("override"), "doc" => $doc, "get" => (($x->has->resolve("get")) ? $this->mkRights($x->att->resolve("get")) : haxe_rtti_Rights::$RNormal), "set" => (($x->has->resolve("set")) ? $this->mkRights($x->att->resolve("set")) : haxe_rtti_Rights::$RNormal), "params" => (($x->has->resolve("params")) ? $this->mkTypeParams($x->att->resolve("params")) : null), "platforms" => $this->defplat()));
-	}
-	public function xenum($x) {
-		$cl = new HList();
-		$doc = null;
-		if(null == $x) throw new HException('null iterable');
-		$»it = $x->getElements();
-		while($»it->hasNext()) {
-			$c = $»it->next();
-			if($c->getName() === "haxe_doc") {
-				$doc = $c->getInnerData();
-			} else {
-				$cl->add($this->xenumfield($c));
-			}
-		}
-		return _hx_anonymous(array("path" => $this->mkPath($x->att->resolve("path")), "module" => (($x->has->resolve("module")) ? $this->mkPath($x->att->resolve("module")) : null), "doc" => $doc, "isPrivate" => $x->x->exists("private"), "isExtern" => $x->x->exists("extern"), "params" => $this->mkTypeParams($x->att->resolve("params")), "constructors" => $cl, "platforms" => $this->defplat()));
-	}
-	public function xenumfield($x) {
-		$args = null;
-		$xdoc = $x->x->elementsNamed("haxe_doc")->next();
-		if($x->has->resolve("a")) {
-			$names = _hx_explode(":", $x->att->resolve("a"));
-			$elts = $x->getElements();
-			$args = new HList();
-			{
-				$_g = 0;
-				while($_g < $names->length) {
-					$c = $names[$_g];
-					++$_g;
-					$opt = false;
-					if(_hx_char_at($c, 0) === "?") {
-						$opt = true;
-						$c = _hx_substr($c, 1, null);
-					}
-					$args->add(_hx_anonymous(array("name" => $c, "opt" => $opt, "t" => $this->xtype($elts->next()))));
-					unset($opt,$c);
+			$c2 = $»it->next();
+			$found = null;
+			if(null == $e->constructors) throw new HException('null iterable');
+			$»it2 = $e->constructors->iterator();
+			while($»it2->hasNext()) {
+				$c = $»it2->next();
+				if(haxe_rtti_TypeApi::constructorEq($c, $c2)) {
+					$found = $c;
+					break;
 				}
 			}
+			if($found === null) {
+				return false;
+			}
+			if($this->curplatform !== null) {
+				$found->platforms->add($this->curplatform);
+			}
+			unset($found);
 		}
-		return _hx_anonymous(array("name" => $x->getName(), "args" => $args, "doc" => (($xdoc === null) ? null : _hx_deref(new haxe_xml_Fast($xdoc))->getInnerData()), "platforms" => $this->defplat()));
+		return true;
 	}
-	public function xtypedef($x) {
-		$doc = null;
-		$t = null;
-		if(null == $x) throw new HException('null iterable');
-		$»it = $x->getElements();
+	public function mergeClasses($c, $c2) {
+		if($c->isInterface != $c2->isInterface) {
+			return false;
+		}
+		if($this->curplatform !== null) {
+			$c->platforms->add($this->curplatform);
+		}
+		if($c->isExtern != $c2->isExtern) {
+			$c->isExtern = false;
+		}
+		if(null == $c2->fields) throw new HException('null iterable');
+		$»it = $c2->fields->iterator();
 		while($»it->hasNext()) {
-			$c = $»it->next();
-			if($c->getName() === "haxe_doc") {
-				$doc = $c->getInnerData();
+			$f2 = $»it->next();
+			$found = null;
+			if(null == $c->fields) throw new HException('null iterable');
+			$»it2 = $c->fields->iterator();
+			while($»it2->hasNext()) {
+				$f = $»it2->next();
+				if($this->mergeFields($f, $f2)) {
+					$found = $f;
+					break;
+				}
+			}
+			if($found === null) {
+				$this->newField($c, $f2);
+				$c->fields->add($f2);
 			} else {
-				$t = $this->xtype($c);
+				if($this->curplatform !== null) {
+					$found->platforms->add($this->curplatform);
+				}
+			}
+			unset($found);
+		}
+		if(null == $c2->statics) throw new HException('null iterable');
+		$»it = $c2->statics->iterator();
+		while($»it->hasNext()) {
+			$f2 = $»it->next();
+			$found = null;
+			if(null == $c->statics) throw new HException('null iterable');
+			$»it2 = $c->statics->iterator();
+			while($»it2->hasNext()) {
+				$f = $»it2->next();
+				if($this->mergeFields($f, $f2)) {
+					$found = $f;
+					break;
+				}
+			}
+			if($found === null) {
+				$this->newField($c, $f2);
+				$c->statics->add($f2);
+			} else {
+				if($this->curplatform !== null) {
+					$found->platforms->add($this->curplatform);
+				}
+			}
+			unset($found);
+		}
+		return true;
+	}
+	public function newField($c, $f) { return call_user_func_array($this->newField, array($c, $f)); }
+	public $newField = null;
+	public function mergeFields($f, $f2) {
+		return haxe_rtti_TypeApi::fieldEq($f, $f2) || $f->name === $f2->name && ($this->mergeRights($f, $f2) || $this->mergeRights($f2, $f)) && $this->mergeDoc($f, $f2) && haxe_rtti_TypeApi::fieldEq($f, $f2);
+	}
+	public function mergeDoc($f1, $f2) {
+		if($f1->doc === null) {
+			$f2->doc = $f2->doc;
+		} else {
+			if($f2->doc === null) {
+				$f2->doc = $f1->doc;
 			}
 		}
-		$types = new Hash();
-		if($this->curplatform !== null) {
-			$types->set($this->curplatform, $t);
+		return true;
+	}
+	public function mergeRights($f1, $f2) {
+		if($f1->get == haxe_rtti_Rights::$RInline && $f1->set == haxe_rtti_Rights::$RNo && $f2->get == haxe_rtti_Rights::$RNormal && $f2->set == haxe_rtti_Rights::$RMethod) {
+			$f1->get = haxe_rtti_Rights::$RNormal;
+			$f1->set = haxe_rtti_Rights::$RMethod;
+			return true;
 		}
-		return _hx_anonymous(array("path" => $this->mkPath($x->att->resolve("path")), "module" => (($x->has->resolve("module")) ? $this->mkPath($x->att->resolve("module")) : null), "doc" => $doc, "isPrivate" => $x->x->exists("private"), "params" => $this->mkTypeParams($x->att->resolve("params")), "type" => $t, "types" => $types, "platforms" => $this->defplat()));
+		return false;
 	}
-	public function xtype($x) {
-		return haxe_rtti_XmlParser_6($this, $x);
+	public function process($x, $platform) {
+		$this->curplatform = $platform;
+		$this->xroot(new haxe_xml_Fast($x));
 	}
-	public function xtypeparams($x) {
-		$p = new HList();
-		if(null == $x) throw new HException('null iterable');
-		$»it = $x->getElements();
-		while($»it->hasNext()) {
-			$c = $»it->next();
-			$p->add($this->xtype($c));
+	public function sortFields($fl) {
+		$a = Lambda::harray($fl);
+		$a->sort(array(new _hx_lambda(array(&$a, &$fl), "haxe_rtti_XmlParser_6"), 'execute'));
+		return Lambda::hlist($a);
+	}
+	public function sort($l = null) {
+		if($l === null) {
+			$l = $this->root;
 		}
-		return $p;
-	}
-	public function defplat() {
-		$l = new HList();
-		if($this->curplatform !== null) {
-			$l->add($this->curplatform);
+		$l->sort(array(new _hx_lambda(array(&$l), "haxe_rtti_XmlParser_7"), 'execute'));
+		{
+			$_g = 0;
+			while($_g < $l->length) {
+				$x = $l[$_g];
+				++$_g;
+				$»t = ($x);
+				switch($»t->index) {
+				case 0:
+				$l1 = $»t->params[2];
+				{
+					$this->sort($l1);
+				}break;
+				case 1:
+				$c = $»t->params[0];
+				{
+					$c->fields = $this->sortFields($c->fields);
+					$c->statics = $this->sortFields($c->statics);
+				}break;
+				case 2:
+				$e = $»t->params[0];
+				{
+				}break;
+				case 3:
+				{
+				}break;
+				}
+				unset($x);
+			}
 		}
-		return $l;
 	}
+	public $curplatform;
+	public $root;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
@@ -479,96 +504,11 @@ class haxe_rtti_XmlParser {
 	}
 	function __toString() { return 'haxe.rtti.XmlParser'; }
 }
-function haxe_rtti_XmlParser_0(&$l, $e1, $e2) {
+function haxe_rtti_XmlParser_0(&$»this, $c, $f) {
 	{
-		$n1 = haxe_rtti_XmlParser_7($»this, $e1, $e2, $l);
-		$n2 = haxe_rtti_XmlParser_8($»this, $e1, $e2, $l, $n1);
-		if($n1 > $n2) {
-			return 1;
-		}
-		return -1;
 	}
 }
-function haxe_rtti_XmlParser_1(&$a, &$fl, $f1, $f2) {
-	{
-		$v1 = haxe_rtti_TypeApi::isVar($f1->type);
-		$v2 = haxe_rtti_TypeApi::isVar($f2->type);
-		if($v1 && !$v2) {
-			return -1;
-		}
-		if($v2 && !$v1) {
-			return 1;
-		}
-		if($f1->name === "new") {
-			return -1;
-		}
-		if($f2->name === "new") {
-			return 1;
-		}
-		if($f1->name > $f2->name) {
-			return 1;
-		}
-		return -1;
-	}
-}
-function haxe_rtti_XmlParser_2(&$»this, &$_g, &$ct, &$cur, &$curpack, &$e, &$inf, &$pack, &$prev, &$sameType, &$t, &$tinf) {
-	if($tinf->module !== $inf->module) {
-		return "module " . $inf->module . " should be " . $tinf->module;
-	} else {
-		if($tinf->doc !== $inf->doc) {
-			return "documentation is different";
-		} else {
-			if($tinf->isPrivate != $inf->isPrivate) {
-				return "private flag is different";
-			} else {
-				if(!$sameType) {
-					return "type kind is different";
-				} else {
-					return "could not merge definition";
-				}
-			}
-		}
-	}
-}
-function haxe_rtti_XmlParser_3(&$»this, &$r) {
-	switch($r) {
-	case "null":{
-		return haxe_rtti_Rights::$RNo;
-	}break;
-	case "method":{
-		return haxe_rtti_Rights::$RMethod;
-	}break;
-	case "dynamic":{
-		return haxe_rtti_Rights::$RDynamic;
-	}break;
-	case "inline":{
-		return haxe_rtti_Rights::$RInline;
-	}break;
-	default:{
-		return haxe_rtti_Rights::RCall($r);
-	}break;
-	}
-}
-function haxe_rtti_XmlParser_4(&$»this, &$c) {
-	throw new HException("Invalid " . $c->getName());
-}
-function haxe_rtti_XmlParser_5(&$»this, &$c, &$x) {
-	switch($c->getName()) {
-	case "class":{
-		return haxe_rtti_TypeTree::TClassdecl($»this->xclass($c));
-	}break;
-	case "enum":{
-		return haxe_rtti_TypeTree::TEnumdecl($»this->xenum($c));
-	}break;
-	case "typedef":{
-		return haxe_rtti_TypeTree::TTypedecl($»this->xtypedef($c));
-	}break;
-	default:{
-		return $»this->xerror($c);
-	}break;
-	}
-}
-function haxe_rtti_XmlParser_6(&$»this, &$x) {
+function haxe_rtti_XmlParser_1(&$»this, &$x) {
 	switch($x->getName()) {
 	case "unknown":{
 		return haxe_rtti_CType::$CUnknown;
@@ -629,7 +569,96 @@ function haxe_rtti_XmlParser_6(&$»this, &$x) {
 	}break;
 	}
 }
-function haxe_rtti_XmlParser_7(&$»this, &$e1, &$e2, &$l) {
+function haxe_rtti_XmlParser_2(&$»this, &$c, &$x) {
+	switch($c->getName()) {
+	case "class":{
+		return haxe_rtti_TypeTree::TClassdecl($»this->xclass($c));
+	}break;
+	case "enum":{
+		return haxe_rtti_TypeTree::TEnumdecl($»this->xenum($c));
+	}break;
+	case "typedef":{
+		return haxe_rtti_TypeTree::TTypedecl($»this->xtypedef($c));
+	}break;
+	default:{
+		return $»this->xerror($c);
+	}break;
+	}
+}
+function haxe_rtti_XmlParser_3(&$»this, &$c) {
+	throw new HException("Invalid " . $c->getName());
+}
+function haxe_rtti_XmlParser_4(&$»this, &$r) {
+	switch($r) {
+	case "null":{
+		return haxe_rtti_Rights::$RNo;
+	}break;
+	case "method":{
+		return haxe_rtti_Rights::$RMethod;
+	}break;
+	case "dynamic":{
+		return haxe_rtti_Rights::$RDynamic;
+	}break;
+	case "inline":{
+		return haxe_rtti_Rights::$RInline;
+	}break;
+	default:{
+		return haxe_rtti_Rights::RCall($r);
+	}break;
+	}
+}
+function haxe_rtti_XmlParser_5(&$»this, &$_g, &$ct, &$cur, &$curpack, &$e, &$inf, &$pack, &$prev, &$sameType, &$t, &$tinf) {
+	if($tinf->module !== $inf->module) {
+		return "module " . $inf->module . " should be " . $tinf->module;
+	} else {
+		if($tinf->doc !== $inf->doc) {
+			return "documentation is different";
+		} else {
+			if($tinf->isPrivate != $inf->isPrivate) {
+				return "private flag is different";
+			} else {
+				if(!$sameType) {
+					return "type kind is different";
+				} else {
+					return "could not merge definition";
+				}
+			}
+		}
+	}
+}
+function haxe_rtti_XmlParser_6(&$a, &$fl, $f1, $f2) {
+	{
+		$v1 = haxe_rtti_TypeApi::isVar($f1->type);
+		$v2 = haxe_rtti_TypeApi::isVar($f2->type);
+		if($v1 && !$v2) {
+			return -1;
+		}
+		if($v2 && !$v1) {
+			return 1;
+		}
+		if($f1->name === "new") {
+			return -1;
+		}
+		if($f2->name === "new") {
+			return 1;
+		}
+		if($f1->name > $f2->name) {
+			return 1;
+		}
+		return -1;
+	}
+}
+function haxe_rtti_XmlParser_7(&$l, $e1, $e2) {
+	{
+		$n1 = haxe_rtti_XmlParser_8($»this, $e1, $e2, $l);
+		$n2 = haxe_rtti_XmlParser_9($»this, $e1, $e2, $l, $n1);
+		if($n1 > $n2) {
+			return 1;
+		}
+		return -1;
+	}
+}
+function haxe_rtti_XmlParser_8(&$»this, &$e1, &$e2, &$l) {
 	$»t = ($e1);
 	switch($»t->index) {
 	case 0:
@@ -642,7 +671,7 @@ function haxe_rtti_XmlParser_7(&$»this, &$e1, &$e2, &$l) {
 	}break;
 	}
 }
-function haxe_rtti_XmlParser_8(&$»this, &$e1, &$e2, &$l, &$n1) {
+function haxe_rtti_XmlParser_9(&$»this, &$e1, &$e2, &$l, &$n1) {
 	$»t = ($e2);
 	switch($»t->index) {
 	case 0:

@@ -28,7 +28,7 @@ class Taxo extends Object
 	
 }
 
-class TagManager extends Manager<Taxo>
+class TaxoManager extends Manager<Taxo>
 {
 	 var currentspod:String;
 	public function new()
@@ -39,7 +39,7 @@ class TagManager extends Manager<Taxo>
 	}
 public function getTags( spod:String ) : List <Taxo >
 {
-	trace("Taxo.manager from microbe"+spod );
+	
 	var spodTable=getSpodTable(spod);
 	trace("spodTAble="+spodTable);
 	var resultSet=Manager.cnx.request("

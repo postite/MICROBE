@@ -6,8 +6,8 @@ class haxe_macro_Error {
 		$this->message = $m;
 		$this->pos = $p;
 	}}
-	public $message;
 	public $pos;
+	public $message;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

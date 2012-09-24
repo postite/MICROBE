@@ -6,16 +6,6 @@ class sys_io__Process_Stdin extends haxe_io_Output {
 		$this->p = $p;
 		$this->buf = haxe_io_Bytes::alloc(1);
 	}}
-	public $p;
-	public $buf;
-	public function close() {
-		parent::close();
-		fclose($this->p);
-	}
-	public function writeByte($c) {
-		$this->buf->b[0] = chr($c);
-		$this->writeBytes($this->buf, 0, 1);
-	}
 	public function writeBytes($b, $pos, $l) {
 		$s = $b->readString($pos, $l);
 		if(feof($this->p)) {
@@ -27,6 +17,16 @@ class sys_io__Process_Stdin extends haxe_io_Output {
 		}
 		return $r;
 	}
+	public function writeByte($c) {
+		$this->buf->b[0] = chr($c);
+		$this->writeBytes($this->buf, 0, 1);
+	}
+	public function close() {
+		parent::close();
+		fclose($this->p);
+	}
+	public $buf;
+	public $p;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
