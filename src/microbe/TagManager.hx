@@ -100,26 +100,31 @@ class TagManager
 	return cast resultSet.results();
 	//return search({spodtype:spod});
 	}
-
+	private static function GetTradRef(spod:String,spod_id:Int):Int 
+	{
+		var cap= firstUpperCase(spod);
+		var spodable:Spodable=new Api().getOne(cap,spod_id);
+		if(Std.is(spodable,Traductable)){
+	 if( cast(spodable,Traductable).id_ref!=null){
+	 	return cast(spodable,Traductable).id_ref;
+	 }
+	}
+	return spod_id;
+	}
 	private static function getTaxoBySpodID(spod:String,spod_id:Int) : List < Taxo >
 	{
 
 
-
+	var spodId:Int=spod_id;
 	var spodTable=getSpodTable(spod);
 	var cap= firstUpperCase(spod);
-	var spodable:Spodable=cast Type.resolveClass(voPackage+cap);
-	//trace("getTAxoBySpodID",spodable.id);
-	// if( cast(spodable).id_ref!=null){
-	// 	//trace("TRADUCTABLE");
-	// 	spod_id=cast(spodable,Traductable).id_ref;
-	// }
-
+	trace("spodableid="+voPackage+cap);
+	spodId=GetTradRef(spod,spod_id);
 	var resultSet=Manager.cnx.request("
 	SELECT DISTINCT TX.taxo_id , TX.tag from `taxo` AS TX
 	LEFT JOIN `tagSpod` AS TS ON TS.`tag_id`=TX.`taxo_id`
 	LEFT JOIN "+spodTable+" AS B ON TS.`spod_id`= B.`id`
-	WHERE B.id="+spod_id+" AND TX.spodtype='"+spod+"'"
+	WHERE B.id="+spodId+" AND TX.spodtype='"+spod+"'"
 	);
 	return cast (resultSet.results());
 	}
@@ -253,14 +258,17 @@ if (generateSpods)return  result.results().map(maptoSpod);
 
 ///rec / delete
 
-public static function associate(tag:String,spod:String,spodId:Int){
+public static function associate(tag:String,spod:String,spod_id:Int){
 	var id=getTaxo(tag,spod).taxo_id;
+
+	var spodId=GetTradRef(spod,spod_id);
 	Manager.cnx.request("insert into tagSpod (tag_id,spod_id) VALUES ("+id+","+spodId+") ");
 	//object("insert into tagSpod (tag_id,spod_id) VALUES ("+id+","+spodId+") ",true);
 }
 
-public static function dissociate(tag:String,spod:String,spodId:Int) : Void {
+public static function dissociate(tag:String,spod:String,spod_id:Int) : Void {
 	var id=getTaxo(tag,spod).taxo_id;
+	var spodId=GetTradRef(spod,spod_id);
 	Manager.cnx.request("DELETE  FROM tagSpod  WHERE tag_id="+id+" and spod_id="+spodId );
 }
 
