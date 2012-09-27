@@ -16,6 +16,7 @@ class haxigniter_server_request_AuthRequestDecorator extends haxigniter_server_r
 			$result = $this->requestHandler->handleRequest($controller, $url, $method, $getPostData, $requestData);
 			return $result;
 		} else {
+			haxe_Log::trace("pas identifié", _hx_anonymous(array("fileName" => "AuthRequestDecorator.hx", "lineNumber" => 39, "className" => "haxigniter.server.request.AuthRequestDecorator", "methodName" => "handleRequest")));
 			$result = $this->requestHandler->handleRequest($this->loginPage, $url, $method, $getPostData, $requestData);
 			return $result;
 		}

@@ -32,7 +32,7 @@ class AjaxDate extends AjaxElement{
 			}
 	
 	override public function setValue(val:String):Void{
-			Lib.alert("#madate_"+pos +"date val="+val);
+			//Lib.alert("#madate_"+pos +"date val="+val);
 
 			var _date:Date=null;
 				if( val==null){
@@ -42,7 +42,7 @@ class AjaxDate extends AjaxElement{
 				_date=Date.fromString(val);
 				//Lib.alert("date="+_date);
 				var format=DateTools.format(_date,"%Y-%m-%d");
-				Lib.alert("format="+format);
+				//Lib.alert("format="+format);
 				new JQuery("#madate_"+pos).val(format);
 				//return valeur;
 

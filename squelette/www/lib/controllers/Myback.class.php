@@ -8,6 +8,7 @@ class controllers_Myback extends microbe_backof_Back {
 		$this->view->assign("contenttype", null);
 	}}
 	public function index() {
+		haxe_Log::trace("index", _hx_anonymous(array("fileName" => "Myback.hx", "lineNumber" => 67, "className" => "controllers.Myback", "methodName" => "index")));
 		$this->defaultAssign();
 		$this->view->assign("content", "popopo");
 		$this->view->display("back/design.mtt");

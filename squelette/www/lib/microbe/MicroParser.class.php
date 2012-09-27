@@ -8,7 +8,7 @@ class microbe_MicroParser {
 	public function parse() {
 		$factory = new microbe_TypeFactory();
 		$behaviour = $factory->create($this->source->type);
-		null;
+		haxe_Log::trace($behaviour->parse($this->source), _hx_anonymous(array("fileName" => "MicroParser.hx", "lineNumber" => 18, "className" => "microbe.MicroParser", "methodName" => "parse")));
 	}
 	public $source;
 	public function __call($m, $a) {

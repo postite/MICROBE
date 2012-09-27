@@ -91,6 +91,7 @@ class microbe_form_FormElement {
 		}
 		$n = $this->form->name . "_" . $this->name;
 		$v = php_Web::getParams()->get($n);
+		haxe_Log::trace("v=" . Std::string(php_Web::getParams()), _hx_anonymous(array("fileName" => "FormElement.hx", "lineNumber" => 129, "className" => "microbe.form.FormElement", "methodName" => "populate")));
 		if($v !== null) {
 			$this->value = $v;
 		}

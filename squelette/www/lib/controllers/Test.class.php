@@ -10,11 +10,12 @@ class controllers_Test extends microbe_controllers_GenericController {
 	public function checkid() {
 		$formulaire = $this->creeForm();
 		$formulaire->populateElements();
+		haxe_Log::trace("olo" . Std::string(php_Web::getParams()), _hx_anonymous(array("fileName" => "Test.hx", "lineNumber" => 46, "className" => "controllers.Test", "methodName" => "checkid")));
 		if(null == $formulaire->getElements()) throw new HException('null iterable');
 		$»it = $formulaire->getElements()->iterator();
 		while($»it->hasNext()) {
 			$elem = $»it->next();
-			null;
+			haxe_Log::trace("elem=" . Std::string($elem->value), _hx_anonymous(array("fileName" => "Test.hx", "lineNumber" => 54, "className" => "controllers.Test", "methodName" => "checkid")));
 		}
 		$this->view->assign("content", $formulaire);
 		$this->view->assign("content", $formulaire);

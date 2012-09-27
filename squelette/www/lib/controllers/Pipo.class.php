@@ -20,13 +20,14 @@ class controllers_Pipo extends microbe_backof_Back {
 	public function reorder($voName) {
 		$manager = Type::resolveClass(microbe_controllers_GenericController::$appConfig->voPackage . $voName)->manager;
 		$table = $manager->dbInfos()->name;
+		haxe_Log::trace("currentVo" . $voName, _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 293, "className" => "controllers.Pipo", "methodName" => "reorder")));
 		$data = php_Web::getParams()->get("orderedList");
 		$tab = haxe_Unserializer::run($data);
 		{
 			$_g1 = 0; $_g = $tab->length;
 			while($_g1 < $_g) {
 				$i = $_g1++;
-				$this->db->query("UPDATE " . $table . " SET poz = " . _hx_string_rec($i, "") . " WHERE id = " . _hx_string_rec($tab[$i], "") . " ", null, _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 306, "className" => "controllers.Pipo", "methodName" => "reorder")));
+				$this->db->query("UPDATE " . $table . " SET poz = " . _hx_string_rec($i, "") . " WHERE id = " . _hx_string_rec($tab[$i], "") . " ", null, _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 316, "className" => "controllers.Pipo", "methodName" => "reorder")));
 				unset($i);
 			}
 		}
@@ -41,6 +42,7 @@ class controllers_Pipo extends microbe_backof_Back {
 		return;
 	}
 	public function ajoute($voName) {
+		haxe_Log::trace("ajoute", _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 267, "className" => "controllers.Pipo", "methodName" => "ajoute")));
 		$this->generator->generateComplexClassMapForm($voName, null);
 		$this->jsLib->addOnce(controllers_Pipo::$backjs);
 		$this->jsScript->add(controllers_Pipo::$backInstance . ".instance.setClassMap('" . $this->generator->getCompressedClassMap() . "');");
@@ -51,11 +53,18 @@ class controllers_Pipo extends microbe_backof_Back {
 	}
 	public function traduit($id, $voName, $lang = null) {
 		$data = $this->api->getOne($voName, $id);
-		$newData = Type::createInstance(Type::resolveClass(microbe_controllers_GenericController::$appConfig->voPackage . $voName), new _hx_array(array()));
-		_hx_deref(($newData))->id_ref = $id;
-		_hx_deref(($newData))->lang = $lang;
+		$clone = config_Config::$hclone;
 		$traduction_id = _hx_deref(($data))->getTrad($lang);
+		$newData = null;
 		if($traduction_id === 0) {
+			if($clone) {
+				$newData = $data;
+				_hx_deref(($newData))->id = null;
+			} else {
+				$newData = Type::createInstance(Type::resolveClass(microbe_controllers_GenericController::$appConfig->voPackage . $voName), new _hx_array(array()));
+			}
+			_hx_deref(($newData))->id_ref = $id;
+			_hx_deref(($newData))->lang = $lang;
 			$this->generator->generateComplexClassMapForm($voName, $newData);
 		} else {
 			$this->generator->generateComplexClassMapForm($voName, $this->api->getOne($voName, $traduction_id));
@@ -110,11 +119,12 @@ class controllers_Pipo extends microbe_backof_Back {
 		return $this->api->getOne($voName, 1);
 	}
 	public function index() {
+		haxe_Log::trace("index", _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 158, "className" => "controllers.Pipo", "methodName" => "index")));
 		$this->jsLib->add(controllers_Pipo::$backjs);
 		$this->defaultAssign();
 		$this->view->assign("content", "popopo");
 		$this->view->display("back/design.html");
-		null;
+		haxe_Log::trace("after", _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 164, "className" => "controllers.Pipo", "methodName" => "index")));
 	}
 	public function getMenu() {
 		$navig = new Nav();
@@ -124,6 +134,7 @@ class controllers_Pipo extends microbe_backof_Back {
 		return $this->api->getSearch($voName, _hx_anonymous(array("lang" => "fr")));
 	}
 	public function choix($id = null, $voName) {
+		haxe_Log::trace("choix id=" . _hx_string_rec($id, "") . " vo=" . $voName, _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 105, "className" => "controllers.Pipo", "methodName" => "choix")));
 		$data = null;
 		if($id === null) {
 			$data = $this->api->getLast($voName);
@@ -155,6 +166,7 @@ class controllers_Pipo extends microbe_backof_Back {
 		$this->view->display("back/design.html");
 	}
 	public function nav($voName) {
+		haxe_Log::trace("voName=" . $voName, _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 90, "className" => "controllers.Pipo", "methodName" => "nav")));
 		$this->defaultAssign();
 		$this->view->assign("currentVo", $voName);
 		$content = "";
@@ -193,7 +205,7 @@ class controllers_Pipo extends microbe_backof_Back {
 		else
 			throw new HException('Unable to call «'.$m.'»');
 	}
-	static $__rtti = "<class path=\"controllers.Pipo\" params=\"\">\x0A\x09<extends path=\"microbe.backof.Back\"/>\x0A\x09<backjs public=\"1\" line=\"23\" static=\"1\"><c path=\"String\"/></backjs>\x0A\x09<backInstance public=\"1\" line=\"24\" static=\"1\"><c path=\"String\"/></backInstance>\x0A\x09<api public=\"1\"><c path=\"microbe.Api\"/></api>\x0A\x09<jsScript public=\"1\"><c path=\"List\"><c path=\"String\"/></c></jsScript>\x0A\x09<jsLib public=\"1\"><c path=\"microbe.tools.JSLIB\"/></jsLib>\x0A\x09<generator><c path=\"microbe.FormGenerator\"/></generator>\x0A\x09<defaultAssign public=\"1\" set=\"method\" line=\"65\"><f a=\"\"><e path=\"Void\"/></f></defaultAssign>\x0A\x09<nav public=\"1\" set=\"method\" line=\"88\"><f a=\"voName\">\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></nav>\x0A\x09<choix public=\"1\" set=\"method\" line=\"102\"><f a=\"?id:voName\">\x0A\x09<c path=\"Int\"/>\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></choix>\x0A\x09<getVoList public=\"1\" set=\"method\" line=\"145\"><f a=\"voName\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"List\"><c path=\"microbe.vo.Spodable\"/></c>\x0A</f></getVoList>\x0A\x09<getMenu public=\"1\" set=\"method\" line=\"151\"><f a=\"\"><c path=\"List\"><t path=\"microbe.backof.NavItem\"/></c></f></getMenu>\x0A\x09<index public=\"1\" set=\"method\" line=\"156\" override=\"1\"><f a=\"\"><e path=\"Void\"/></f></index>\x0A\x09<getPage public=\"1\" set=\"method\" line=\"169\"><f a=\"voName\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"microbe.vo.Spodable\"/>\x0A</f></getPage>\x0A\x09<addCollectItem public=\"1\" set=\"method\" line=\"172\"><f a=\"\"><e path=\"Void\"/></f></addCollectItem>\x0A\x09<addCollectServerItem public=\"1\" set=\"method\" line=\"202\"><f a=\"\"><e path=\"Void\"/></f></addCollectServerItem>\x0A\x09<traduit public=\"1\" set=\"method\" line=\"223\"><f a=\"id:voName:?lang\">\x0A\x09<c path=\"Int\"/>\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></traduit>\x0A\x09<ajoute public=\"1\" set=\"method\" line=\"256\"><f a=\"voName\">\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></ajoute>\x0A\x09<rec public=\"1\" set=\"method\" line=\"272\"><f a=\"\"><e path=\"Void\"/></f></rec>\x0A\x09<delete public=\"1\" set=\"method\" line=\"276\"><f a=\"voName:id\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"Int\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></delete>\x0A\x09<reorder public=\"1\" set=\"method\" line=\"280\"><f a=\"voName\">\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></reorder>\x0A\x09<new public=\"1\" set=\"method\" line=\"31\"><f a=\"\"><e path=\"Void\"/></f></new>\x0A</class>";
+	static $__rtti = "<class path=\"controllers.Pipo\" params=\"\">\x0A\x09<extends path=\"microbe.backof.Back\"/>\x0A\x09<backjs public=\"1\" line=\"24\" static=\"1\"><c path=\"String\"/></backjs>\x0A\x09<backInstance public=\"1\" line=\"25\" static=\"1\"><c path=\"String\"/></backInstance>\x0A\x09<api public=\"1\"><c path=\"microbe.Api\"/></api>\x0A\x09<jsScript public=\"1\"><c path=\"List\"><c path=\"String\"/></c></jsScript>\x0A\x09<jsLib public=\"1\"><c path=\"microbe.tools.JSLIB\"/></jsLib>\x0A\x09<generator><c path=\"microbe.FormGenerator\"/></generator>\x0A\x09<defaultAssign public=\"1\" set=\"method\" line=\"66\"><f a=\"\"><e path=\"Void\"/></f></defaultAssign>\x0A\x09<nav public=\"1\" set=\"method\" line=\"89\"><f a=\"voName\">\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></nav>\x0A\x09<choix public=\"1\" set=\"method\" line=\"103\"><f a=\"?id:voName\">\x0A\x09<c path=\"Int\"/>\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></choix>\x0A\x09<getVoList public=\"1\" set=\"method\" line=\"146\"><f a=\"voName\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"List\"><c path=\"microbe.vo.Spodable\"/></c>\x0A</f></getVoList>\x0A\x09<getMenu public=\"1\" set=\"method\" line=\"152\"><f a=\"\"><c path=\"List\"><t path=\"microbe.backof.NavItem\"/></c></f></getMenu>\x0A\x09<index public=\"1\" set=\"method\" line=\"157\" override=\"1\"><f a=\"\"><e path=\"Void\"/></f></index>\x0A\x09<getPage public=\"1\" set=\"method\" line=\"170\"><f a=\"voName\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"microbe.vo.Spodable\"/>\x0A</f></getPage>\x0A\x09<addCollectItem public=\"1\" set=\"method\" line=\"173\"><f a=\"\"><e path=\"Void\"/></f></addCollectItem>\x0A\x09<addCollectServerItem public=\"1\" set=\"method\" line=\"203\"><f a=\"\"><e path=\"Void\"/></f></addCollectServerItem>\x0A\x09<traduit public=\"1\" set=\"method\" line=\"224\"><f a=\"id:voName:?lang\">\x0A\x09<c path=\"Int\"/>\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></traduit>\x0A\x09<ajoute public=\"1\" set=\"method\" line=\"266\"><f a=\"voName\">\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></ajoute>\x0A\x09<rec public=\"1\" set=\"method\" line=\"282\"><f a=\"\"><e path=\"Void\"/></f></rec>\x0A\x09<delete public=\"1\" set=\"method\" line=\"286\"><f a=\"voName:id\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"Int\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></delete>\x0A\x09<reorder public=\"1\" set=\"method\" line=\"290\"><f a=\"voName\">\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></reorder>\x0A\x09<new public=\"1\" set=\"method\" line=\"32\"><f a=\"\"><e path=\"Void\"/></f></new>\x0A</class>";
 	static $backjs;
 	static $backInstance = "microbe.jsTools.BackJS";
 	function __toString() { return 'controllers.Pipo'; }

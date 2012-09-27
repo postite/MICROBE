@@ -19,6 +19,7 @@ class microbe_backof_Login extends microbe_controllers_GenericController impleme
 		$this->view->display("back/design.html");
 	}
 	public function erreur($param = null) {
+		haxe_Log::trace("errur" . $param, _hx_anonymous(array("fileName" => "Login.hx", "lineNumber" => 112, "className" => "microbe.backof.Login", "methodName" => "erreur")));
 		$formulaire = $this->creeForm();
 		$formulaire->populateElements();
 		$this->defaultAssign();

@@ -29,10 +29,12 @@ class microbe_factoryType_FormElementBehaviour implements microbe_factoryType_IB
 		return $brickElement;
 	}
 	public function record($source, $data) {
+		haxe_Log::trace("FormElementBehaviour" . $source->field . "--" . $source->value, _hx_anonymous(array("fileName" => "FormElementBehaviour.hx", "lineNumber" => 36, "className" => "microbe.factoryType.FormElementBehaviour", "methodName" => "record")));
 		$data->{$source->field} = $source->value;
 		return $data;
 	}
 	public function create($voName, $element, $field, $formulaire = null) {
+		haxe_Log::trace($voName . "it s a formElement >" . Std::string($element), _hx_anonymous(array("fileName" => "FormElementBehaviour.hx", "lineNumber" => 23, "className" => "microbe.factoryType.FormElementBehaviour", "methodName" => "create")));
 		$fieldClass = Type::resolveClass($element->classe);
 		$micro = $this->creeMicroFieldListElement($field, $element, $voName, $formulaire);
 		if($formulaire !== null) {

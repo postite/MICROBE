@@ -28,6 +28,7 @@ class microbe_factoryType_SpodableBehaviour implements microbe_factoryType_IBeha
 		return $data;
 	}
 	public function create($voName, $element, $field, $formulaire = null) {
+		haxe_Log::trace("im'a spod", _hx_anonymous(array("fileName" => "SpodableBehaviour.hx", "lineNumber" => 36, "className" => "microbe.factoryType.SpodableBehaviour", "methodName" => "create")));
 		$liste = new microbe_form_MicroFieldList();
 		$fieldClass = Type::resolveClass($element->classe);
 		$instanceClass = Type::createInstance($fieldClass, new _hx_array(array()));

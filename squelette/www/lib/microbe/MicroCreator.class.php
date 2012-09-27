@@ -7,10 +7,12 @@ class microbe_MicroCreator {
 	public function addToForm($formulaire) {
 	}
 	public function record() {
+		haxe_Log::trace("record", _hx_anonymous(array("fileName" => "MicroCreator.hx", "lineNumber" => 62, "className" => "microbe.MicroCreator", "methodName" => "record")));
 		if(null == $this->source) throw new HException('null iterable');
 		$»it = $this->source->iterator();
 		while($»it->hasNext()) {
 			$a = $»it->next();
+			haxe_Log::trace($a->type, _hx_anonymous(array("fileName" => "MicroCreator.hx", "lineNumber" => 64, "className" => "microbe.MicroCreator", "methodName" => "record")));
 			$factory = new microbe_TypeFactory();
 			$behaviour = $factory->create($a->type);
 			$behaviour->record($a, $this->data);

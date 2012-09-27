@@ -20,12 +20,15 @@ class microbe_Api implements haxe_rtti_Infos{
 		$spodadelete->delete();
 	}
 	public function recClassMap() {
+		haxe_Log::trace("record" . _hx_string_rec($this->map->id, ""), _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 316, "className" => "microbe.Api", "methodName" => "recClassMap")));
 		$voInstance = null;
 		if($this->map->id !== null) {
+			haxe_Log::trace("map.id!=null", _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 319, "className" => "microbe.Api", "methodName" => "recClassMap")));
 			$voInstance = $this->getOne($this->map->voClass, $this->map->id);
 		} else {
 			$voInstance = Type::createInstance(Type::resolveClass($this->voPackage . $this->map->voClass), new _hx_array(array()));
 		}
+		haxe_Log::trace("after", _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 326, "className" => "microbe.Api", "methodName" => "recClassMap")));
 		$creator = new microbe_MicroCreator();
 		$creator->source = $this->map->fields;
 		$creator->data = $voInstance;
@@ -102,12 +105,14 @@ class microbe_Api implements haxe_rtti_Infos{
 		}catch(Exception $»e) {
 			$_ex_ = ($»e instanceof HException) ? $»e->e : $»e;
 			if(is_string($msg = $_ex_)){
-				null;
+				haxe_Log::trace("Error occurred: " . $msg, _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 210, "className" => "microbe.Api", "methodName" => "getLast")));
 			} else throw $»e;;
 		}
 		if(_hx_len($all) > 0) {
+			haxe_Log::trace("micrabeLast", _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 216, "className" => "microbe.Api", "methodName" => "getLast")));
 			return $all->last();
 		} else {
+			haxe_Log::trace("null", _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 219, "className" => "microbe.Api", "methodName" => "getLast")));
 			return null;
 		}
 	}
@@ -120,6 +125,7 @@ class microbe_Api implements haxe_rtti_Infos{
 	public function getClassMap() {
 		$cmap = php_Web::getParams()->get("map");
 		$this->map = haxe_Unserializer::run($cmap);
+		haxe_Log::trace("map=" . Std::string($this->map), _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 187, "className" => "microbe.Api", "methodName" => "getClassMap")));
 		return $this->map;
 	}
 	public function trigger($_voName, $functionName, $params = null) {
@@ -145,10 +151,13 @@ class microbe_Api implements haxe_rtti_Infos{
 			php_Lib::hprint(haxe_Serializer::run($spods));
 		}break;
 		case "spod":{
+			haxe_Log::trace("spod", _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 149, "className" => "microbe.Api", "methodName" => "tags")));
 			$args = $rest->slice(1, null);
 			$spodName = strtolower($args[0]);
+			haxe_Log::trace("spod" . $spodName, _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 154, "className" => "microbe.Api", "methodName" => "tags")));
 			$spodId = Std::parseInt(_hx_array_get($args->slice(2, null), 0));
 			$tags = microbe_TagManager::getTags($spodName, $spodId);
+			haxe_Log::trace("microbe.TagManager.getTags" . Std::string($tags), _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 159, "className" => "microbe.Api", "methodName" => "tags")));
 			php_Lib::hprint(haxe_Serializer::run($tags));
 		}break;
 		default:{

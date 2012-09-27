@@ -3,16 +3,18 @@
 class microbe_form_elements_CollectionWrapper extends microbe_form_FormElement {
 	public function __construct($_field) {
 		if(!php_Boot::$skip_constructor) {
+		haxe_Log::trace("new Collection Wrapper" . $_field, _hx_anonymous(array("fileName" => "CollectionWrapper.hx", "lineNumber" => 13, "className" => "microbe.form.elements.CollectionWrapper", "methodName" => "new")));
 		$this->field = $_field;
 		parent::__construct();
 		$this->label = $_field;
 		$this->wrapped = new HList();
-		null;
+		haxe_Log::trace("after new Collection Wrapper" . $_field, _hx_anonymous(array("fileName" => "CollectionWrapper.hx", "lineNumber" => 18, "className" => "microbe.form.elements.CollectionWrapper", "methodName" => "new")));
 	}}
 	public function removeElement($collecItem) {
 		$this->wrapped->remove($collecItem);
 	}
 	public function addElement($collecItem) {
+		haxe_Log::trace("addElement" . Std::string($collecItem), _hx_anonymous(array("fileName" => "CollectionWrapper.hx", "lineNumber" => 35, "className" => "microbe.form.elements.CollectionWrapper", "methodName" => "addElement")));
 		$collecItem->form = $this->form;
 		$this->wrapped->add($collecItem);
 	}
