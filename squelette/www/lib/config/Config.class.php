@@ -29,7 +29,7 @@ class config_Config extends haxigniter_server_Config {
 		$this->cssPath = "/microbe/css/";
 		$this->backjs = "backjs.js";
 		$this->voPackage = "vo.";
-		$this->uploadsPath = $this->applicationPath . "uploads/";
+		$this->uploadsPath = $this->applicationPath . "/uploads/";
 		$this->imagesPath = $this->uploadsPath . "images/";
 		$this->frontjsPath = "/js/";
 		$this->frontcssPath = "/css/";
@@ -53,5 +53,7 @@ class config_Config extends haxigniter_server_Config {
 		else
 			throw new HException('Unable to call «'.$m.'»');
 	}
+	static $traductable = true;
+	static $hclone = false;
 	function __toString() { return 'config.Config'; }
 }

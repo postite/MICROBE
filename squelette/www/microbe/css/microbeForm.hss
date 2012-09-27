@@ -320,7 +320,7 @@ input[type="submit"]{
 			display:none;
 			//top:$hauteurText;
 			//top:0px;
-			overflow:au;
+			overflow:auto;
 			left:0;
 			top:$hauteurText;
 			width:$largeurText;
@@ -331,7 +331,7 @@ input[type="submit"]{
 						
 					
 	 		.result{
-		!important;
+				//!important
 				font-size:19px;
 				font-family:$bree;
 	           //padding:10px 0px;

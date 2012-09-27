@@ -11,6 +11,7 @@ import php.Lib;
 import sys.db.Manager;
 import sys.db.SpodInfos;
 import vo.Traductable;
+import config.Config;
 #end
 
 #if js
@@ -102,13 +103,15 @@ class TagManager
 	}
 	private static function GetTradRef(spod:String,spod_id:Int):Int 
 	{
-		var cap= firstUpperCase(spod);
-		var spodable:Spodable=new Api().getOne(cap,spod_id);
-		if(Std.is(spodable,Traductable)){
-	 if( cast(spodable,Traductable).id_ref!=null){
-	 	return cast(spodable,Traductable).id_ref;
-	 }
-	}
+		if (Config.traductable){
+			var cap= firstUpperCase(spod);
+			var spodable:Spodable=new Api().getOne(cap,spod_id);
+			if(Std.is(spodable,Traductable)){
+		 		if( cast(spodable,Traductable).id_ref!=null){
+		 		return cast(spodable,Traductable).id_ref;
+		 		}
+			}
+		}
 	return spod_id;
 	}
 	private static function getTaxoBySpodID(spod:String,spod_id:Int) : List < Taxo >

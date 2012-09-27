@@ -8,7 +8,7 @@
 #--dead-code-elimination
 -php www
 #--no-output
---no-traces
+#--no-traces
 --next
 
 #javascript back
@@ -23,7 +23,7 @@
 -D noEmbedJS
 -D elements
 #--no-output
---no-traces
+#--no-traces
 
 -cmd open http://localhost:8888/index.php/pipo
 
@@ -46,7 +46,7 @@
 #-cmd   $TM_PROJECT_DIRECTORY"/export.sh" microbe
 
 
-#-cmd   ./export.sh microbe
+-cmd   ./export.sh microbe
 
 
 ####

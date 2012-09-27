@@ -3,7 +3,7 @@
     <tag v="js/php"/>
     <tag v="example"/>
     <description>this is an experimental framework to compile pseudo cms</description>
-    <version name="0.7">matching js --modern and haxe 3 ( 2.10)</version>
+    <version name="1">tag evoluted branch</version>
 </project>
 
 

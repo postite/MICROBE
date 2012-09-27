@@ -1,0 +1,69 @@
+Tag responsabilities
+
+
+
+
+TAXO
+	
+	crée la table taxo sur la base
+	liste les champs 
+			taxo_id
+			tag
+			spodType
+
+
+TAXOMANAGER
+	
+	//retourne les taxos pour un type de Spod
+	getTags(spod:String):List<Taxo>
+
+	//retourne un Taxo via son string
+	//devrait se nommer getTaxo ?
+	//pourquoi spod est facultatif ?
+	getTag(tag:String,?spod:String):Taxo
+
+
+	//retourne les spods concernés par le tag
+	//>pourquoi spodstring est facultatif ?
+	getSpodsByTag(tag:String,?spodstring:String) : List < Spodable >
+
+
+	
+
+	//recuperz une liste de tags pour un spod identifié
+	//ne crée pas d'instance de spod
+	getTagsBySpodID(spod:String,spod_id:Int) : List < Taxo >
+
+
+	//agit sur la table tagspod
+	//associe l'idSpod et idTag
+	//> le transformer en Spod?
+	associate(tag:String,spod:String,spodId:Int)
+
+	dissociate(tag:String,spod:String,spodId:Int) : Void
+
+
+
+
+
+	private getSpodTable(spod:String):String
+
+
+	//outils 
+
+	//permet d'instancier les spods pour générer les make/unmake
+	private maptoSpod(res:Dynamic) :Spodable
+
+
+	//rend reconnaissable le spod
+	private firstUpperCase(str:String) : String
+
+API
+
+TAGVIEW
+
+PIPO
+
+FORMGENERATOR
+
+BACKJS

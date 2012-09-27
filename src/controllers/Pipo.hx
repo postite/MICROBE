@@ -15,6 +15,7 @@ import sys.db.Manager;
 import sys.db.Object;
 import microbe.MicroCreator;
 import microbe.form.IMicrotype;
+import vo.Traductable;
 class Pipo extends Back
 	{
 		
@@ -223,14 +224,23 @@ class Pipo extends Back
 		public function traduit(id:Int,voName:String,?lang:String) 
 		{
 			var data:Spodable=api.getOne(voName,id);
+			var clone:Bool=config.Config.clone;
+			var traduction_id:Int=cast (data,vo.Traductable).getTrad(lang);
+			var newData:Traductable=null;
 			
-			var newData:Spodable= Type.createInstance(Type.resolveClass(GenericController.appConfig.voPackage+voName),[]);
+			
+			
+			if(traduction_id==0){
+				if (clone){
+				newData= cast data;
+				cast(newData,Spodable).id=null;
+				}else{
+				newData= cast Type.createInstance(Type.resolveClass(GenericController.appConfig.voPackage+voName),[]);
+					}
+
 			cast(newData,vo.Traductable).id_ref=id;
 			cast(newData,vo.Traductable).lang=lang;
-			var traduction_id:Int=cast (data,vo.Traductable).getTrad(lang);
-			if(traduction_id==0){
-
-			generator.generateComplexClassMapForm(voName,newData);//
+			generator.generateComplexClassMapForm(voName,cast newData);//
 			}else{
 				generator.generateComplexClassMapForm(voName,api.getOne(voName,traduction_id));
 			}

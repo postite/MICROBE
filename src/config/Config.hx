@@ -56,8 +56,9 @@ class Config extends haxigniter.server.Config
 	public var frontjsPath:String;
 	public var frontcssPath:String;
 
-	
-	
+	///traduction stuff
+	public static var traductable:Bool=true;
+	public static var clone:Bool=false;
 	
 	/*
 	|--------------------------------------------------------------------------
@@ -410,8 +411,10 @@ class Config extends haxigniter.server.Config
 			cssPath = "/microbe/css/";
 			backjs="backjs.js";
 			voPackage="vo.";
-			uploadsPath=applicationPath+"uploads/";
+			uploadsPath=applicationPath+"/uploads/";
 			imagesPath=uploadsPath+"images/";
+			
+
 			
 			
 			/*

@@ -5,7 +5,7 @@ class config_DevelopmentConnection extends haxigniter_server_libraries_Database 
 		$this->host = "localhost";
 		$this->user = "root";
 		$this->pass = "root";
-		$this->database = "spodmacro";
+		$this->database = "microbe";
 		$this->driver = haxigniter_server_libraries_DatabaseDriver::$mysql;
 		$this->debug = null;
 		$this->port = null;

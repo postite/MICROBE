@@ -59,7 +59,7 @@ form .collectionWrapper .deletecollection {
 form .collectionWrapper .deletecollection:hover {
 	background : #D0D0D0;
 }
-form input[type="text"] {
+form input[type=text] {
 	margin-top : 0px;
 	height : 28px;
 	background : gray;
@@ -68,10 +68,10 @@ form input[type="text"] {
 	padding : 5px;
 	width : 100%;
 }
-form input[type="file"] {
+form input[type=file] {
 	color : #fff;
 }
-form input[type="file"] input[type="submit"] {
+form input[type=file] input[type=submit] {
 	background : white;
 	font : "BreeLight";
 	border : none;
@@ -114,7 +114,7 @@ form .tailleSelector {
 form .tailleSelector .taille {
 	border : 1px solid black;
 }
-form input[type="submit"] {
+form input[type=submit] {
 	background-color : black;
 	border-style : none;
 	color : white;
@@ -251,17 +251,21 @@ form input[type="submit"] {
 	width : 120px;
 	background-color : white;
 }
+#tagSelector #instantag #results .result {
+	font-size : 19px;
+	font-family : "BreeLight";
+}
 #tagSelector #instantag #results .result a.readMore {
 	color : green;
 }
-#tagSelector #instantag #results .result option {
+#tagSelector #instantag #results .result h2 {
 	font-size : 19px;
 	margin : 0px 0px 5px 0px;
 	padding : 0px;
 	color : #1111CC;
 	font-weight : normal;
 }
-#tagSelector #instantag #results .result option a {
+#tagSelector #instantag #results .result h2 a {
 	text-decoration : none;
 	border-bottom : 1px solid #1111cc;
 }

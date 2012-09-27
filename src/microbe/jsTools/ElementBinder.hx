@@ -21,7 +21,7 @@ class ElementBinder
 	public function new()
 	{
 		//"new".Alerte();
-	Imports.pack("microbe.form.elements",false);
+	//Imports.pack("microbe.form.elements",false);
 	//Imports.pack("elements",false);
 		
 		elements= new List<AjaxElement>();

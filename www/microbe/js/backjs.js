@@ -3003,7 +3003,8 @@ microbe.ClassMapUtils.prototype = {
 		}
 	}
 	,parseCollec: function(collec) {
-		null;
+		haxe.Log.trace("<br/>collec=" + collec.getLength(),{ fileName : "ClassMapUtils.hx", lineNumber : 75, className : "microbe.ClassMapUtils", methodName : "parseCollec"});
+		haxe.Log.trace("<br/>new Collec=" + Std.string(collec),{ fileName : "ClassMapUtils.hx", lineNumber : 77, className : "microbe.ClassMapUtils", methodName : "parseCollec"});
 	}
 	,searchCollec: function(voName) {
 		this.temp = new List();
@@ -3061,12 +3062,12 @@ microbe.TagManager = $hxClasses["microbe.TagManager"] = function() {
 microbe.TagManager.__name__ = ["microbe","TagManager"];
 microbe.TagManager.currentspod = null;
 microbe.TagManager.getTags = function(spod,spodId) {
-	microbe.tools.Debug.Alerte(Std.string(spodId),{ fileName : "TagManager.hx", lineNumber : 313, className : "microbe.TagManager", methodName : "getTags"});
-	microbe.tools.Debug.Alerte(microbe.jsTools.BackJS.base_url,{ fileName : "TagManager.hx", lineNumber : 314, className : "microbe.TagManager", methodName : "getTags"});
+	microbe.tools.Debug.Alerte(Std.string(spodId),{ fileName : "TagManager.hx", lineNumber : 324, className : "microbe.TagManager", methodName : "getTags"});
+	microbe.tools.Debug.Alerte(microbe.jsTools.BackJS.base_url,{ fileName : "TagManager.hx", lineNumber : 325, className : "microbe.TagManager", methodName : "getTags"});
 	var Xreponse = null;
 	Xreponse = haxe.Http.requestUrl(microbe.jsTools.BackJS.base_url + "/index.php/gap/tags/spod/" + spod + "/id/" + spodId);
 	var reponse = haxe.Unserializer.run(Xreponse);
-	microbe.tools.Debug.Alerte(Std.string(reponse),{ fileName : "TagManager.hx", lineNumber : 320, className : "microbe.TagManager", methodName : "getTags"});
+	microbe.tools.Debug.Alerte(Std.string(reponse),{ fileName : "TagManager.hx", lineNumber : 331, className : "microbe.TagManager", methodName : "getTags"});
 	return reponse;
 }
 microbe.TagManager.addTag = function(spod,spodID,tag) {
@@ -3643,6 +3644,7 @@ microbe.form.elements.AjaxDate.__name__ = ["microbe","form","elements","AjaxDate
 microbe.form.elements.AjaxDate.__super__ = microbe.form.AjaxElement;
 microbe.form.elements.AjaxDate.prototype = $extend(microbe.form.AjaxElement.prototype,{
 	setValue: function(valeur) {
+		haxe.Log.trace("date=" + valeur,{ fileName : "AjaxDate.hx", lineNumber : 42, className : "microbe.form.elements.AjaxDate", methodName : "setValue"});
 		var _date = null;
 		if(valeur == null) valeur = DateTools.format(new Date(),"%Y-%m-%d").toString();
 		_date = HxOverrides.strDate(valeur);
@@ -3653,6 +3655,7 @@ microbe.form.elements.AjaxDate.prototype = $extend(microbe.form.AjaxElement.prot
 		var valeur = new js.JQuery("#madate_" + this.pos).val();
 		var _date = HxOverrides.strDate(valeur);
 		var format = DateTools.format(_date,"%Y-%m-%d");
+		haxe.Log.trace("format=" + format.toString(),{ fileName : "AjaxDate.hx", lineNumber : 35, className : "microbe.form.elements.AjaxDate", methodName : "getValue"});
 		return format.toString();
 	}
 	,getCollectionContainer: function() {
@@ -3931,15 +3934,16 @@ microbe.form.elements.CollectionWrapper.plusInfos = null;
 microbe.form.elements.CollectionWrapper.prototype = {
 	onSortChanged: function(e,ui) {
 		var pop = this.sort.sortable("serialize",{ attribute : "tri", key : "id"});
+		haxe.Log.trace(pop,{ fileName : "CollectionWrapper.hx", lineNumber : 124, className : "microbe.form.elements.CollectionWrapper", methodName : "onSortChanged"});
 		var liste = pop.split("&id=");
 		liste[0] = liste[0].split("id=")[1];
 		var req = new haxe.Http(microbe.jsTools.BackJS.back_url + "reorder/" + this.spod);
 		req.setParameter("orderedList",haxe.Serializer.run(liste));
 		req.onData = function(d) {
-			null;
+			haxe.Log.trace(d,{ fileName : "CollectionWrapper.hx", lineNumber : 133, className : "microbe.form.elements.CollectionWrapper", methodName : "onSortChanged"});
 		};
 		req.request(true);
-		null;
+		haxe.Log.trace("afterreorder",{ fileName : "CollectionWrapper.hx", lineNumber : 135, className : "microbe.form.elements.CollectionWrapper", methodName : "onSortChanged"});
 	}
 	,dispatchError: function() {
 		this.sort.sortable("disable");
@@ -4559,12 +4563,15 @@ microbe.jsTools.BackJS.prototype = {
 		this.spodDelete(voName,spodid);
 	}
 	,afterRecord: function(d) {
+		haxe.Log.trace("Fter Record",{ fileName : "BackJS.hx", lineNumber : 215, className : "microbe.jsTools.BackJS", methodName : "afterRecord"});
 		js.Lib.window.location.href = microbe.jsTools.BackJS.back_url + "nav/" + this.classMap.voClass + "/" + this.classMap.id;
 	}
 	,AjaxFormTraitement: function() {
 		var _g = this;
 		microbe.tools.Debug.Alerte(Std.string(this.classMap),{ fileName : "BackJS.hx", lineNumber : 203, className : "microbe.jsTools.BackJS", methodName : "AjaxFormTraitement"});
+		haxe.Log.trace("classMAp=" + Std.string(this.classMap),{ fileName : "BackJS.hx", lineNumber : 204, className : "microbe.jsTools.BackJS", methodName : "AjaxFormTraitement"});
 		var compressedValues = haxe.Serializer.run(this.classMap);
+		haxe.Log.trace("classMAp=" + Std.string(this.classMap) + "back_url=" + microbe.jsTools.BackJS.back_url,{ fileName : "BackJS.hx", lineNumber : 207, className : "microbe.jsTools.BackJS", methodName : "AjaxFormTraitement"});
 		var req = new haxe.Http(microbe.jsTools.BackJS.back_url + "rec/");
 		req.setParameter("map",compressedValues);
 		req.onData = function(d) {
@@ -4573,13 +4580,14 @@ microbe.jsTools.BackJS.prototype = {
 		req.request(true);
 	}
 	,record: function() {
+		haxe.Log.trace("clika" + Std.string(this.microbeElements),{ fileName : "BackJS.hx", lineNumber : 187, className : "microbe.jsTools.BackJS", methodName : "record"});
 		var $it0 = this.microbeElements.iterator();
 		while( $it0.hasNext() ) {
 			var mic = $it0.next();
 			if(mic.element != null) mic.microfield.value = mic.getValue();
 		}
 		this.AjaxFormTraitement();
-		null;
+		haxe.Log.trace("finrecord",{ fileName : "BackJS.hx", lineNumber : 198, className : "microbe.jsTools.BackJS", methodName : "record"});
 	}
 	,spodDelete: function(voName,id) {
 		microbe.tools.Debug.Alerte("",{ fileName : "BackJS.hx", lineNumber : 179, className : "microbe.jsTools.BackJS", methodName : "spodDelete"});
@@ -4603,15 +4611,16 @@ microbe.jsTools.BackJS.prototype = {
 	}
 	,onSortChanged: function(e,ui) {
 		var pop = this.sort.sortable("serialize",{ attribute : "tri", key : "id"});
+		haxe.Log.trace(pop,{ fileName : "BackJS.hx", lineNumber : 131, className : "microbe.jsTools.BackJS", methodName : "onSortChanged"});
 		var liste = pop.split("&id=");
 		liste[0] = liste[0].split("id=")[1];
 		var req = new haxe.Http(microbe.jsTools.BackJS.back_url + "reorder/" + this.currentVo);
 		req.setParameter("orderedList",haxe.Serializer.run(liste));
 		req.onData = function(d) {
-			null;
+			haxe.Log.trace(d,{ fileName : "BackJS.hx", lineNumber : 140, className : "microbe.jsTools.BackJS", methodName : "onSortChanged"});
 		};
 		req.request(true);
-		null;
+		haxe.Log.trace("afterreorder",{ fileName : "BackJS.hx", lineNumber : 142, className : "microbe.jsTools.BackJS", methodName : "onSortChanged"});
 	}
 	,start: function() {
 		if(this.classMap != null) {

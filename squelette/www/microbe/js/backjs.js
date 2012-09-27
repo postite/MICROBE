@@ -1,36 +1,222 @@
-var $_, $hxClasses = $hxClasses || {}, $estr = function() { return js.Boot.__string_rec(this,''); }
+var $hxClasses = $hxClasses || {},$estr = function() { return js.Boot.__string_rec(this,''); };
 function $extend(from, fields) {
 	function inherit() {}; inherit.prototype = from; var proto = new inherit();
 	for (var name in fields) proto[name] = fields[name];
 	return proto;
+}
+var DateTools = $hxClasses["DateTools"] = function() { }
+DateTools.__name__ = ["DateTools"];
+DateTools.__format_get = function(d,e) {
+	return (function($this) {
+		var $r;
+		switch(e) {
+		case "%":
+			$r = "%";
+			break;
+		case "C":
+			$r = StringTools.lpad(Std.string(d.getFullYear() / 100 | 0),"0",2);
+			break;
+		case "d":
+			$r = StringTools.lpad(Std.string(d.getDate()),"0",2);
+			break;
+		case "D":
+			$r = DateTools.__format(d,"%m/%d/%y");
+			break;
+		case "e":
+			$r = Std.string(d.getDate());
+			break;
+		case "H":case "k":
+			$r = StringTools.lpad(Std.string(d.getHours()),e == "H"?"0":" ",2);
+			break;
+		case "I":case "l":
+			$r = (function($this) {
+				var $r;
+				var hour = d.getHours() % 12;
+				$r = StringTools.lpad(Std.string(hour == 0?12:hour),e == "I"?"0":" ",2);
+				return $r;
+			}($this));
+			break;
+		case "m":
+			$r = StringTools.lpad(Std.string(d.getMonth() + 1),"0",2);
+			break;
+		case "M":
+			$r = StringTools.lpad(Std.string(d.getMinutes()),"0",2);
+			break;
+		case "n":
+			$r = "\n";
+			break;
+		case "p":
+			$r = d.getHours() > 11?"PM":"AM";
+			break;
+		case "r":
+			$r = DateTools.__format(d,"%I:%M:%S %p");
+			break;
+		case "R":
+			$r = DateTools.__format(d,"%H:%M");
+			break;
+		case "s":
+			$r = Std.string(d.getTime() / 1000 | 0);
+			break;
+		case "S":
+			$r = StringTools.lpad(Std.string(d.getSeconds()),"0",2);
+			break;
+		case "t":
+			$r = "\t";
+			break;
+		case "T":
+			$r = DateTools.__format(d,"%H:%M:%S");
+			break;
+		case "u":
+			$r = (function($this) {
+				var $r;
+				var t = d.getDay();
+				$r = t == 0?"7":Std.string(t);
+				return $r;
+			}($this));
+			break;
+		case "w":
+			$r = Std.string(d.getDay());
+			break;
+		case "y":
+			$r = StringTools.lpad(Std.string(d.getFullYear() % 100),"0",2);
+			break;
+		case "Y":
+			$r = Std.string(d.getFullYear());
+			break;
+		default:
+			$r = (function($this) {
+				var $r;
+				throw "Date.format %" + e + "- not implemented yet.";
+				return $r;
+			}($this));
+		}
+		return $r;
+	}(this));
+}
+DateTools.__format = function(d,f) {
+	var r = new StringBuf();
+	var p = 0;
+	while(true) {
+		var np = f.indexOf("%",p);
+		if(np < 0) break;
+		r.b += HxOverrides.substr(f,p,np - p);
+		r.b += Std.string(DateTools.__format_get(d,HxOverrides.substr(f,np + 1,1)));
+		p = np + 2;
+	}
+	r.b += HxOverrides.substr(f,p,f.length - p);
+	return r.b;
+}
+DateTools.format = function(d,f) {
+	return DateTools.__format(d,f);
+}
+DateTools.delta = function(d,t) {
+	return (function($this) {
+		var $r;
+		var d1 = new Date();
+		d1.setTime(d.getTime() + t);
+		$r = d1;
+		return $r;
+	}(this));
+}
+DateTools.getMonthDays = function(d) {
+	var month = d.getMonth();
+	var year = d.getFullYear();
+	if(month != 1) return DateTools.DAYS_OF_MONTH[month];
+	var isB = year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+	return isB?29:28;
+}
+DateTools.seconds = function(n) {
+	return n * 1000.0;
+}
+DateTools.minutes = function(n) {
+	return n * 60.0 * 1000.0;
+}
+DateTools.hours = function(n) {
+	return n * 60.0 * 60.0 * 1000.0;
+}
+DateTools.days = function(n) {
+	return n * 24.0 * 60.0 * 60.0 * 1000.0;
+}
+DateTools.parse = function(t) {
+	var s = t / 1000;
+	var m = s / 60;
+	var h = m / 60;
+	return { ms : t % 1000, seconds : s % 60 | 0, minutes : m % 60 | 0, hours : h % 24 | 0, days : h / 24 | 0};
+}
+DateTools.make = function(o) {
+	return o.ms + 1000.0 * (o.seconds + 60.0 * (o.minutes + 60.0 * (o.hours + 24.0 * o.days)));
+}
+var EReg = $hxClasses["EReg"] = function(r,opt) {
+	opt = opt.split("u").join("");
+	this.r = new RegExp(r,opt);
+};
+EReg.__name__ = ["EReg"];
+EReg.prototype = {
+	customReplace: function(s,f) {
+		var buf = new StringBuf();
+		while(true) {
+			if(!this.match(s)) break;
+			buf.b += Std.string(this.matchedLeft());
+			buf.b += Std.string(f(this));
+			s = this.matchedRight();
+		}
+		buf.b += Std.string(s);
+		return buf.b;
+	}
+	,replace: function(s,by) {
+		return s.replace(this.r,by);
+	}
+	,split: function(s) {
+		var d = "#__delim__#";
+		return s.replace(this.r,d).split(d);
+	}
+	,matchedPos: function() {
+		if(this.r.m == null) throw "No string matched";
+		return { pos : this.r.m.index, len : this.r.m[0].length};
+	}
+	,matchedRight: function() {
+		if(this.r.m == null) throw "No string matched";
+		var sz = this.r.m.index + this.r.m[0].length;
+		return this.r.s.substr(sz,this.r.s.length - sz);
+	}
+	,matchedLeft: function() {
+		if(this.r.m == null) throw "No string matched";
+		return this.r.s.substr(0,this.r.m.index);
+	}
+	,matched: function(n) {
+		return this.r.m != null && n >= 0 && n < this.r.m.length?this.r.m[n]:(function($this) {
+			var $r;
+			throw "EReg::matched";
+			return $r;
+		}(this));
+	}
+	,match: function(s) {
+		if(this.r.global) this.r.lastIndex = 0;
+		this.r.m = this.r.exec(s);
+		this.r.s = s;
+		return this.r.m != null;
+	}
+	,r: null
+	,__class__: EReg
 }
 var Hash = $hxClasses["Hash"] = function() {
 	this.h = { };
 };
 Hash.__name__ = ["Hash"];
 Hash.prototype = {
-	h: null
-	,set: function(key,value) {
-		this.h["$" + key] = value;
-	}
-	,get: function(key) {
-		return this.h["$" + key];
-	}
-	,exists: function(key) {
-		return this.h.hasOwnProperty("$" + key);
-	}
-	,remove: function(key) {
-		key = "$" + key;
-		if(!this.h.hasOwnProperty(key)) return false;
-		delete(this.h[key]);
-		return true;
-	}
-	,keys: function() {
-		var a = [];
-		for( var key in this.h ) {
-		if(this.h.hasOwnProperty(key)) a.push(key.substr(1));
+	toString: function() {
+		var s = new StringBuf();
+		s.b += Std.string("{");
+		var it = this.keys();
+		while( it.hasNext() ) {
+			var i = it.next();
+			s.b += Std.string(i);
+			s.b += Std.string(" => ");
+			s.b += Std.string(Std.string(this.get(i)));
+			if(it.hasNext()) s.b += Std.string(", ");
 		}
-		return a.iterator();
+		s.b += Std.string("}");
+		return s.b;
 	}
 	,iterator: function() {
 		return { ref : this.h, it : this.keys(), hasNext : function() {
@@ -40,48 +226,114 @@ Hash.prototype = {
 			return this.ref["$" + i];
 		}};
 	}
-	,toString: function() {
-		var s = new StringBuf();
-		s.b[s.b.length] = "{";
-		var it = this.keys();
-		while( it.hasNext() ) {
-			var i = it.next();
-			s.b[s.b.length] = i == null?"null":i;
-			s.b[s.b.length] = " => ";
-			s.add(Std.string(this.get(i)));
-			if(it.hasNext()) s.b[s.b.length] = ", ";
+	,keys: function() {
+		var a = [];
+		for( var key in this.h ) {
+		if(this.h.hasOwnProperty(key)) a.push(key.substr(1));
 		}
-		s.b[s.b.length] = "}";
-		return s.b.join("");
+		return HxOverrides.iter(a);
 	}
+	,remove: function(key) {
+		key = "$" + key;
+		if(!this.h.hasOwnProperty(key)) return false;
+		delete(this.h[key]);
+		return true;
+	}
+	,exists: function(key) {
+		return this.h.hasOwnProperty("$" + key);
+	}
+	,get: function(key) {
+		return this.h["$" + key];
+	}
+	,set: function(key,value) {
+		this.h["$" + key] = value;
+	}
+	,h: null
 	,__class__: Hash
+}
+var HxOverrides = $hxClasses["HxOverrides"] = function() { }
+HxOverrides.__name__ = ["HxOverrides"];
+HxOverrides.dateStr = function(date) {
+	var m = date.getMonth() + 1;
+	var d = date.getDate();
+	var h = date.getHours();
+	var mi = date.getMinutes();
+	var s = date.getSeconds();
+	return date.getFullYear() + "-" + (m < 10?"0" + m:"" + m) + "-" + (d < 10?"0" + d:"" + d) + " " + (h < 10?"0" + h:"" + h) + ":" + (mi < 10?"0" + mi:"" + mi) + ":" + (s < 10?"0" + s:"" + s);
+}
+HxOverrides.strDate = function(s) {
+	switch(s.length) {
+	case 8:
+		var k = s.split(":");
+		var d = new Date();
+		d.setTime(0);
+		d.setUTCHours(k[0]);
+		d.setUTCMinutes(k[1]);
+		d.setUTCSeconds(k[2]);
+		return d;
+	case 10:
+		var k = s.split("-");
+		return new Date(k[0],k[1] - 1,k[2],0,0,0);
+	case 19:
+		var k = s.split(" ");
+		var y = k[0].split("-");
+		var t = k[1].split(":");
+		return new Date(y[0],y[1] - 1,y[2],t[0],t[1],t[2]);
+	default:
+		throw "Invalid date format : " + s;
+	}
+}
+HxOverrides.cca = function(s,index) {
+	var x = s.charCodeAt(index);
+	if(x != x) return undefined;
+	return x;
+}
+HxOverrides.substr = function(s,pos,len) {
+	if(pos != null && pos != 0 && len != null && len < 0) return "";
+	if(len == null) len = s.length;
+	if(pos < 0) {
+		pos = s.length + pos;
+		if(pos < 0) pos = 0;
+	} else if(len < 0) len = s.length + len - pos;
+	return s.substr(pos,len);
+}
+HxOverrides.remove = function(a,obj) {
+	var i = 0;
+	var l = a.length;
+	while(i < l) {
+		if(a[i] == obj) {
+			a.splice(i,1);
+			return true;
+		}
+		i++;
+	}
+	return false;
+}
+HxOverrides.iter = function(a) {
+	return { cur : 0, arr : a, hasNext : function() {
+		return this.cur < this.arr.length;
+	}, next : function() {
+		return this.arr[this.cur++];
+	}};
 }
 var IntHash = $hxClasses["IntHash"] = function() {
 	this.h = { };
 };
 IntHash.__name__ = ["IntHash"];
 IntHash.prototype = {
-	h: null
-	,set: function(key,value) {
-		this.h[key] = value;
-	}
-	,get: function(key) {
-		return this.h[key];
-	}
-	,exists: function(key) {
-		return this.h.hasOwnProperty(key);
-	}
-	,remove: function(key) {
-		if(!this.h.hasOwnProperty(key)) return false;
-		delete(this.h[key]);
-		return true;
-	}
-	,keys: function() {
-		var a = [];
-		for( var key in this.h ) {
-		if(this.h.hasOwnProperty(key)) a.push(key | 0);
+	toString: function() {
+		var s = new StringBuf();
+		s.b += Std.string("{");
+		var it = this.keys();
+		while( it.hasNext() ) {
+			var i = it.next();
+			s.b += Std.string(i);
+			s.b += Std.string(" => ");
+			s.b += Std.string(Std.string(this.get(i)));
+			if(it.hasNext()) s.b += Std.string(", ");
 		}
-		return a.iterator();
+		s.b += Std.string("}");
+		return s.b;
 	}
 	,iterator: function() {
 		return { ref : this.h, it : this.keys(), hasNext : function() {
@@ -91,20 +343,28 @@ IntHash.prototype = {
 			return this.ref[i];
 		}};
 	}
-	,toString: function() {
-		var s = new StringBuf();
-		s.b[s.b.length] = "{";
-		var it = this.keys();
-		while( it.hasNext() ) {
-			var i = it.next();
-			s.b[s.b.length] = i == null?"null":i;
-			s.b[s.b.length] = " => ";
-			s.add(Std.string(this.get(i)));
-			if(it.hasNext()) s.b[s.b.length] = ", ";
+	,keys: function() {
+		var a = [];
+		for( var key in this.h ) {
+		if(this.h.hasOwnProperty(key)) a.push(key | 0);
 		}
-		s.b[s.b.length] = "}";
-		return s.b.join("");
+		return HxOverrides.iter(a);
 	}
+	,remove: function(key) {
+		if(!this.h.hasOwnProperty(key)) return false;
+		delete(this.h[key]);
+		return true;
+	}
+	,exists: function(key) {
+		return this.h.hasOwnProperty(key);
+	}
+	,get: function(key) {
+		return this.h[key];
+	}
+	,set: function(key,value) {
+		this.h[key] = value;
+	}
+	,h: null
 	,__class__: IntHash
 }
 var IntIter = $hxClasses["IntIter"] = function(min,max) {
@@ -113,21 +373,21 @@ var IntIter = $hxClasses["IntIter"] = function(min,max) {
 };
 IntIter.__name__ = ["IntIter"];
 IntIter.prototype = {
-	min: null
-	,max: null
+	next: function() {
+		return this.min++;
+	}
 	,hasNext: function() {
 		return this.min < this.max;
 	}
-	,next: function() {
-		return this.min++;
-	}
+	,max: null
+	,min: null
 	,__class__: IntIter
 }
 var Lambda = $hxClasses["Lambda"] = function() { }
 Lambda.__name__ = ["Lambda"];
 Lambda.array = function(it) {
 	var a = new Array();
-	var $it0 = it.iterator();
+	var $it0 = $iterator(it)();
 	while( $it0.hasNext() ) {
 		var i = $it0.next();
 		a.push(i);
@@ -136,7 +396,7 @@ Lambda.array = function(it) {
 }
 Lambda.list = function(it) {
 	var l = new List();
-	var $it0 = it.iterator();
+	var $it0 = $iterator(it)();
 	while( $it0.hasNext() ) {
 		var i = $it0.next();
 		l.add(i);
@@ -145,7 +405,7 @@ Lambda.list = function(it) {
 }
 Lambda.map = function(it,f) {
 	var l = new List();
-	var $it0 = it.iterator();
+	var $it0 = $iterator(it)();
 	while( $it0.hasNext() ) {
 		var x = $it0.next();
 		l.add(f(x));
@@ -155,7 +415,7 @@ Lambda.map = function(it,f) {
 Lambda.mapi = function(it,f) {
 	var l = new List();
 	var i = 0;
-	var $it0 = it.iterator();
+	var $it0 = $iterator(it)();
 	while( $it0.hasNext() ) {
 		var x = $it0.next();
 		l.add(f(i++,x));
@@ -164,13 +424,13 @@ Lambda.mapi = function(it,f) {
 }
 Lambda.has = function(it,elt,cmp) {
 	if(cmp == null) {
-		var $it0 = it.iterator();
+		var $it0 = $iterator(it)();
 		while( $it0.hasNext() ) {
 			var x = $it0.next();
 			if(x == elt) return true;
 		}
 	} else {
-		var $it1 = it.iterator();
+		var $it1 = $iterator(it)();
 		while( $it1.hasNext() ) {
 			var x = $it1.next();
 			if(cmp(x,elt)) return true;
@@ -179,7 +439,7 @@ Lambda.has = function(it,elt,cmp) {
 	return false;
 }
 Lambda.exists = function(it,f) {
-	var $it0 = it.iterator();
+	var $it0 = $iterator(it)();
 	while( $it0.hasNext() ) {
 		var x = $it0.next();
 		if(f(x)) return true;
@@ -187,7 +447,7 @@ Lambda.exists = function(it,f) {
 	return false;
 }
 Lambda.foreach = function(it,f) {
-	var $it0 = it.iterator();
+	var $it0 = $iterator(it)();
 	while( $it0.hasNext() ) {
 		var x = $it0.next();
 		if(!f(x)) return false;
@@ -195,7 +455,7 @@ Lambda.foreach = function(it,f) {
 	return true;
 }
 Lambda.iter = function(it,f) {
-	var $it0 = it.iterator();
+	var $it0 = $iterator(it)();
 	while( $it0.hasNext() ) {
 		var x = $it0.next();
 		f(x);
@@ -203,7 +463,7 @@ Lambda.iter = function(it,f) {
 }
 Lambda.filter = function(it,f) {
 	var l = new List();
-	var $it0 = it.iterator();
+	var $it0 = $iterator(it)();
 	while( $it0.hasNext() ) {
 		var x = $it0.next();
 		if(f(x)) l.add(x);
@@ -211,7 +471,7 @@ Lambda.filter = function(it,f) {
 	return l;
 }
 Lambda.fold = function(it,f,first) {
-	var $it0 = it.iterator();
+	var $it0 = $iterator(it)();
 	while( $it0.hasNext() ) {
 		var x = $it0.next();
 		first = f(x,first);
@@ -221,13 +481,13 @@ Lambda.fold = function(it,f,first) {
 Lambda.count = function(it,pred) {
 	var n = 0;
 	if(pred == null) {
-		var $it0 = it.iterator();
+		var $it0 = $iterator(it)();
 		while( $it0.hasNext() ) {
 			var _ = $it0.next();
 			n++;
 		}
 	} else {
-		var $it1 = it.iterator();
+		var $it1 = $iterator(it)();
 		while( $it1.hasNext() ) {
 			var x = $it1.next();
 			if(pred(x)) n++;
@@ -236,11 +496,11 @@ Lambda.count = function(it,pred) {
 	return n;
 }
 Lambda.empty = function(it) {
-	return !it.iterator().hasNext();
+	return !$iterator(it)().hasNext();
 }
 Lambda.indexOf = function(it,v) {
 	var i = 0;
-	var $it0 = it.iterator();
+	var $it0 = $iterator(it)();
 	while( $it0.hasNext() ) {
 		var v2 = $it0.next();
 		if(v == v2) return i;
@@ -250,62 +510,76 @@ Lambda.indexOf = function(it,v) {
 }
 Lambda.concat = function(a,b) {
 	var l = new List();
-	var $it0 = a.iterator();
+	var $it0 = $iterator(a)();
 	while( $it0.hasNext() ) {
 		var x = $it0.next();
 		l.add(x);
 	}
-	var $it1 = b.iterator();
+	var $it1 = $iterator(b)();
 	while( $it1.hasNext() ) {
 		var x = $it1.next();
 		l.add(x);
 	}
 	return l;
 }
-Lambda.prototype = {
-	__class__: Lambda
-}
 var List = $hxClasses["List"] = function() {
 	this.length = 0;
 };
 List.__name__ = ["List"];
 List.prototype = {
-	h: null
-	,q: null
-	,length: null
-	,add: function(item) {
-		var x = [item];
-		if(this.h == null) this.h = x; else this.q[1] = x;
-		this.q = x;
-		this.length++;
+	map: function(f) {
+		var b = new List();
+		var l = this.h;
+		while(l != null) {
+			var v = l[0];
+			l = l[1];
+			b.add(f(v));
+		}
+		return b;
 	}
-	,push: function(item) {
-		var x = [item,this.h];
-		this.h = x;
-		if(this.q == null) this.q = x;
-		this.length++;
+	,filter: function(f) {
+		var l2 = new List();
+		var l = this.h;
+		while(l != null) {
+			var v = l[0];
+			l = l[1];
+			if(f(v)) l2.add(v);
+		}
+		return l2;
 	}
-	,first: function() {
-		return this.h == null?null:this.h[0];
+	,join: function(sep) {
+		var s = new StringBuf();
+		var first = true;
+		var l = this.h;
+		while(l != null) {
+			if(first) first = false; else s.b += Std.string(sep);
+			s.b += Std.string(l[0]);
+			l = l[1];
+		}
+		return s.b;
 	}
-	,last: function() {
-		return this.q == null?null:this.q[0];
+	,toString: function() {
+		var s = new StringBuf();
+		var first = true;
+		var l = this.h;
+		s.b += Std.string("{");
+		while(l != null) {
+			if(first) first = false; else s.b += Std.string(", ");
+			s.b += Std.string(Std.string(l[0]));
+			l = l[1];
+		}
+		s.b += Std.string("}");
+		return s.b;
 	}
-	,pop: function() {
-		if(this.h == null) return null;
-		var x = this.h[0];
-		this.h = this.h[1];
-		if(this.h == null) this.q = null;
-		this.length--;
-		return x;
-	}
-	,isEmpty: function() {
-		return this.h == null;
-	}
-	,clear: function() {
-		this.h = null;
-		this.q = null;
-		this.length = 0;
+	,iterator: function() {
+		return { h : this.h, hasNext : function() {
+			return this.h != null;
+		}, next : function() {
+			if(this.h == null) return null;
+			var x = this.h[0];
+			this.h = this.h[1];
+			return x;
+		}};
 	}
 	,remove: function(v) {
 		var prev = null;
@@ -322,60 +596,43 @@ List.prototype = {
 		}
 		return false;
 	}
-	,iterator: function() {
-		return { h : this.h, hasNext : function() {
-			return this.h != null;
-		}, next : function() {
-			if(this.h == null) return null;
-			var x = this.h[0];
-			this.h = this.h[1];
-			return x;
-		}};
+	,clear: function() {
+		this.h = null;
+		this.q = null;
+		this.length = 0;
 	}
-	,toString: function() {
-		var s = new StringBuf();
-		var first = true;
-		var l = this.h;
-		s.b[s.b.length] = "{";
-		while(l != null) {
-			if(first) first = false; else s.b[s.b.length] = ", ";
-			s.add(Std.string(l[0]));
-			l = l[1];
-		}
-		s.b[s.b.length] = "}";
-		return s.b.join("");
+	,isEmpty: function() {
+		return this.h == null;
 	}
-	,join: function(sep) {
-		var s = new StringBuf();
-		var first = true;
-		var l = this.h;
-		while(l != null) {
-			if(first) first = false; else s.b[s.b.length] = sep == null?"null":sep;
-			s.add(l[0]);
-			l = l[1];
-		}
-		return s.b.join("");
+	,pop: function() {
+		if(this.h == null) return null;
+		var x = this.h[0];
+		this.h = this.h[1];
+		if(this.h == null) this.q = null;
+		this.length--;
+		return x;
 	}
-	,filter: function(f) {
-		var l2 = new List();
-		var l = this.h;
-		while(l != null) {
-			var v = l[0];
-			l = l[1];
-			if(f(v)) l2.add(v);
-		}
-		return l2;
+	,last: function() {
+		return this.q == null?null:this.q[0];
 	}
-	,map: function(f) {
-		var b = new List();
-		var l = this.h;
-		while(l != null) {
-			var v = l[0];
-			l = l[1];
-			b.add(f(v));
-		}
-		return b;
+	,first: function() {
+		return this.h == null?null:this.h[0];
 	}
+	,push: function(item) {
+		var x = [item,this.h];
+		this.h = x;
+		if(this.q == null) this.q = x;
+		this.length++;
+	}
+	,add: function(item) {
+		var x = [item];
+		if(this.h == null) this.h = x; else this.q[1] = x;
+		this.q = x;
+		this.length++;
+	}
+	,length: null
+	,q: null
+	,h: null
 	,__class__: List
 }
 var Reflect = $hxClasses["Reflect"] = function() { }
@@ -416,7 +673,7 @@ Reflect.fields = function(o) {
 	return a;
 }
 Reflect.isFunction = function(f) {
-	return typeof(f) == "function" && f.__name__ == null;
+	return typeof(f) == "function" && !(f.__name__ || f.__ename__);
 }
 Reflect.compare = function(a,b) {
 	return a == b?0:a > b?1:-1;
@@ -429,7 +686,7 @@ Reflect.compareMethods = function(f1,f2) {
 Reflect.isObject = function(v) {
 	if(v == null) return false;
 	var t = typeof(v);
-	return t == "string" || t == "object" && !v.__enum__ || t == "function" && v.__name__ != null;
+	return t == "string" || t == "object" && !v.__enum__ || t == "function" && (v.__name__ || v.__ename__);
 }
 Reflect.deleteField = function(o,f) {
 	if(!Reflect.hasField(o,f)) return false;
@@ -452,9 +709,6 @@ Reflect.makeVarArgs = function(f) {
 		return f(a);
 	};
 }
-Reflect.prototype = {
-	__class__: Reflect
-}
 var Std = $hxClasses["Std"] = function() { }
 Std.__name__ = ["Std"];
 Std["is"] = function(v,t) {
@@ -468,7 +722,7 @@ Std["int"] = function(x) {
 }
 Std.parseInt = function(x) {
 	var v = parseInt(x,10);
-	if(v == 0 && x.charCodeAt(1) == 120) v = parseInt(x);
+	if(v == 0 && (HxOverrides.cca(x,1) == 120 || HxOverrides.cca(x,1) == 88)) v = parseInt(x);
 	if(isNaN(v)) return null;
 	return v;
 }
@@ -478,25 +732,22 @@ Std.parseFloat = function(x) {
 Std.random = function(x) {
 	return Math.floor(Math.random() * x);
 }
-Std.prototype = {
-	__class__: Std
-}
 var StringBuf = $hxClasses["StringBuf"] = function() {
-	this.b = new Array();
+	this.b = "";
 };
 StringBuf.__name__ = ["StringBuf"];
 StringBuf.prototype = {
-	add: function(x) {
-		this.b[this.b.length] = x == null?"null":x;
+	toString: function() {
+		return this.b;
 	}
 	,addSub: function(s,pos,len) {
-		this.b[this.b.length] = s.substr(pos,len);
+		this.b += HxOverrides.substr(s,pos,len);
 	}
 	,addChar: function(c) {
-		this.b[this.b.length] = String.fromCharCode(c);
+		this.b += String.fromCharCode(c);
 	}
-	,toString: function() {
-		return this.b.join("");
+	,add: function(x) {
+		this.b += Std.string(x);
 	}
 	,b: null
 	,__class__: StringBuf
@@ -516,28 +767,28 @@ StringTools.htmlUnescape = function(s) {
 	return s.split("&gt;").join(">").split("&lt;").join("<").split("&amp;").join("&");
 }
 StringTools.startsWith = function(s,start) {
-	return s.length >= start.length && s.substr(0,start.length) == start;
+	return s.length >= start.length && HxOverrides.substr(s,0,start.length) == start;
 }
 StringTools.endsWith = function(s,end) {
 	var elen = end.length;
 	var slen = s.length;
-	return slen >= elen && s.substr(slen - elen,elen) == end;
+	return slen >= elen && HxOverrides.substr(s,slen - elen,elen) == end;
 }
 StringTools.isSpace = function(s,pos) {
-	var c = s.charCodeAt(pos);
+	var c = HxOverrides.cca(s,pos);
 	return c >= 9 && c <= 13 || c == 32;
 }
 StringTools.ltrim = function(s) {
 	var l = s.length;
 	var r = 0;
 	while(r < l && StringTools.isSpace(s,r)) r++;
-	if(r > 0) return s.substr(r,l - r); else return s;
+	if(r > 0) return HxOverrides.substr(s,r,l - r); else return s;
 }
 StringTools.rtrim = function(s) {
 	var l = s.length;
 	var r = 0;
 	while(r < l && StringTools.isSpace(s,l - r - 1)) r++;
-	if(r > 0) return s.substr(0,l - r); else return s;
+	if(r > 0) return HxOverrides.substr(s,0,l - r); else return s;
 }
 StringTools.trim = function(s) {
 	return StringTools.ltrim(StringTools.rtrim(s));
@@ -546,7 +797,7 @@ StringTools.rpad = function(s,c,l) {
 	var sl = s.length;
 	var cl = c.length;
 	while(sl < l) if(l - sl < cl) {
-		s += c.substr(0,l - sl);
+		s += HxOverrides.substr(c,0,l - sl);
 		sl = l;
 	} else {
 		s += c;
@@ -560,7 +811,7 @@ StringTools.lpad = function(s,c,l) {
 	if(sl >= l) return s;
 	var cl = c.length;
 	while(sl < l) if(l - sl < cl) {
-		ns += c.substr(0,l - sl);
+		ns += HxOverrides.substr(c,0,l - sl);
 		sl = l;
 	} else {
 		ns += c;
@@ -582,13 +833,10 @@ StringTools.hex = function(n,digits) {
 	return s;
 }
 StringTools.fastCodeAt = function(s,index) {
-	return s.cca(index);
+	return s.charCodeAt(index);
 }
 StringTools.isEOF = function(c) {
 	return c != c;
-}
-StringTools.prototype = {
-	__class__: StringTools
 }
 var ValueType = $hxClasses["ValueType"] = { __ename__ : ["ValueType"], __constructs__ : ["TNull","TInt","TFloat","TBool","TObject","TFunction","TClass","TEnum","TUnknown"] }
 ValueType.TNull = ["TNull",0];
@@ -618,7 +866,6 @@ var Type = $hxClasses["Type"] = function() { }
 Type.__name__ = ["Type"];
 Type.getClass = function(o) {
 	if(o == null) return null;
-	if(o.__enum__ != null) return null;
 	return o.__class__;
 }
 Type.getEnum = function(o) {
@@ -638,12 +885,12 @@ Type.getEnumName = function(e) {
 }
 Type.resolveClass = function(name) {
 	var cl = $hxClasses[name];
-	if(cl == null || cl.__name__ == null) return null;
+	if(cl == null || !cl.__name__) return null;
 	return cl;
 }
 Type.resolveEnum = function(name) {
 	var e = $hxClasses[name];
-	if(e == null || e.__ename__ == null) return null;
+	if(e == null || !e.__ename__) return null;
 	return e;
 }
 Type.createInstance = function(cl,args) {
@@ -693,22 +940,22 @@ Type.createEnumIndex = function(e,index,params) {
 Type.getInstanceFields = function(c) {
 	var a = [];
 	for(var i in c.prototype) a.push(i);
-	a.remove("__class__");
-	a.remove("__properties__");
+	HxOverrides.remove(a,"__class__");
+	HxOverrides.remove(a,"__properties__");
 	return a;
 }
 Type.getClassFields = function(c) {
 	var a = Reflect.fields(c);
-	a.remove("__name__");
-	a.remove("__interfaces__");
-	a.remove("__properties__");
-	a.remove("__super__");
-	a.remove("prototype");
+	HxOverrides.remove(a,"__name__");
+	HxOverrides.remove(a,"__interfaces__");
+	HxOverrides.remove(a,"__properties__");
+	HxOverrides.remove(a,"__super__");
+	HxOverrides.remove(a,"prototype");
 	return a;
 }
 Type.getEnumConstructs = function(e) {
 	var a = e.__constructs__;
-	return a.copy();
+	return a.slice();
 }
 Type["typeof"] = function(v) {
 	switch(typeof(v)) {
@@ -727,7 +974,7 @@ Type["typeof"] = function(v) {
 		if(c != null) return ValueType.TClass(c);
 		return ValueType.TObject;
 	case "function":
-		if(v.__name__ != null) return ValueType.TObject;
+		if(v.__name__ || v.__ename__) return ValueType.TObject;
 		return ValueType.TFunction;
 	case "undefined":
 		return ValueType.TNull;
@@ -772,30 +1019,29 @@ Type.allEnums = function(e) {
 	}
 	return all;
 }
-Type.prototype = {
-	__class__: Type
-}
 var haxe = haxe || {}
 haxe.FastList = $hxClasses["haxe.FastList"] = function() {
 };
 haxe.FastList.__name__ = ["haxe","FastList"];
 haxe.FastList.prototype = {
-	head: null
-	,add: function(item) {
-		this.head = new haxe.FastCell(item,this.head);
-	}
-	,first: function() {
-		return this.head == null?null:this.head.elt;
-	}
-	,pop: function() {
-		var k = this.head;
-		if(k == null) return null; else {
-			this.head = k.next;
-			return k.elt;
+	toString: function() {
+		var a = new Array();
+		var l = this.head;
+		while(l != null) {
+			a.push(l.elt);
+			l = l.next;
 		}
+		return "{" + a.join(",") + "}";
 	}
-	,isEmpty: function() {
-		return this.head == null;
+	,iterator: function() {
+		var l = this.head;
+		return { hasNext : function() {
+			return l != null;
+		}, next : function() {
+			var k = l;
+			l = k.next;
+			return k.elt;
+		}};
 	}
 	,remove: function(v) {
 		var prev = null;
@@ -810,25 +1056,23 @@ haxe.FastList.prototype = {
 		}
 		return l != null;
 	}
-	,iterator: function() {
-		var l = this.head;
-		return { hasNext : function() {
-			return l != null;
-		}, next : function() {
-			var k = l;
-			l = k.next;
+	,isEmpty: function() {
+		return this.head == null;
+	}
+	,pop: function() {
+		var k = this.head;
+		if(k == null) return null; else {
+			this.head = k.next;
 			return k.elt;
-		}};
-	}
-	,toString: function() {
-		var a = new Array();
-		var l = this.head;
-		while(l != null) {
-			a.push(l.elt);
-			l = l.next;
 		}
-		return "{" + a.join(",") + "}";
 	}
+	,first: function() {
+		return this.head == null?null:this.head.elt;
+	}
+	,add: function(item) {
+		this.head = new haxe.FastCell(item,this.head);
+	}
+	,head: null
 	,__class__: haxe.FastList
 }
 var feffects = feffects || {}
@@ -839,7 +1083,7 @@ feffects.Tween = $hxClasses["feffects.Tween"] = function(init,end,dur,obj,prop,e
 	this.offsetTime = 0;
 	this.obj = obj;
 	this.prop = prop;
-	if(easing != null) this.easingF = easing; else if(Reflect.isFunction(obj)) this.easingF = obj; else this.easingF = this.easingEquation.$bind(this);
+	if(easing != null) this.easingF = easing; else if(Reflect.isFunction(obj)) this.easingF = obj; else this.easingF = $bind(this,this.easingEquation);
 	this.isPlaying = false;
 };
 feffects.Tween.__name__ = ["feffects","Tween"];
@@ -880,67 +1124,15 @@ feffects.Tween.DispatchTweens = function() {
 	}
 }
 feffects.Tween.prototype = {
-	duration: null
-	,position: null
-	,reversed: null
-	,isPlaying: null
-	,initVal: null
-	,endVal: null
-	,startTime: null
-	,pauseTime: null
-	,offsetTime: null
-	,reverseTime: null
-	,updateFunc: null
-	,endFunc: null
-	,easingF: null
-	,obj: null
-	,prop: null
-	,start: function() {
-		if(feffects.Tween.timer != null) feffects.Tween.timer.stop();
-		feffects.Tween.timer = new haxe.Timer(feffects.Tween.interval);
-		this.startTime = Date.now().getTime() - feffects.Tween.jsDate;
-		if(this.duration == 0) this.endTween(); else feffects.Tween.AddTween(this);
-		this.isPlaying = true;
-		this.position = 0;
-		this.reverseTime = this.startTime;
-		this.reversed = false;
+	easingEquation: function(t,b,c,d) {
+		return c / 2 * (Math.sin(Math.PI * (t / d - 0.5)) + 1) + b;
 	}
-	,pause: function() {
-		this.pauseTime = Date.now().getTime() - feffects.Tween.jsDate;
-		feffects.Tween.setTweenPaused(this);
-		this.isPlaying = false;
+	,setEasing: function(easingFunc) {
+		if(easingFunc != null) this.easingF = easingFunc;
 	}
-	,resume: function() {
-		this.startTime += Date.now().getTime() - feffects.Tween.jsDate - this.pauseTime;
-		this.reverseTime += Date.now().getTime() - feffects.Tween.jsDate - this.pauseTime;
-		feffects.Tween.setTweenActive(this);
-		this.isPlaying = true;
-	}
-	,seek: function(ms) {
-		this.offsetTime = ms;
-	}
-	,reverse: function() {
-		this.reversed = !this.reversed;
-		if(!this.reversed) this.startTime += Date.now().getTime() - feffects.Tween.jsDate - this.reverseTime << 1;
-		this.reverseTime = Date.now().getTime() - feffects.Tween.jsDate;
-	}
-	,stop: function() {
-		feffects.Tween.RemoveTween(this);
-		this.isPlaying = false;
-	}
-	,doInterval: function() {
-		var stamp = Date.now().getTime() - feffects.Tween.jsDate;
-		var curTime = 0;
-		if(this.reversed) curTime = (this.reverseTime << 1) - stamp - this.startTime + this.offsetTime; else curTime = stamp - this.startTime + this.offsetTime;
-		var curVal = this.easingF(curTime,this.initVal,this.endVal - this.initVal,this.duration);
-		if(curTime >= this.duration || curTime <= 0) this.endTween(); else {
-			if(this.updateFunc != null) this.updateFunc(curVal);
-			if(this.prop != null) this.obj[this.prop] = curVal;
-		}
-		this.position = curTime;
-	}
-	,getCurVal: function(curTime) {
-		return this.easingF(curTime,this.initVal,this.endVal - this.initVal,this.duration);
+	,setTweenHandlers: function(update,end) {
+		this.updateFunc = update;
+		this.endFunc = end;
 	}
 	,endTween: function() {
 		feffects.Tween.RemoveTween(this);
@@ -950,23 +1142,72 @@ feffects.Tween.prototype = {
 		if(this.endFunc != null) this.endFunc(val);
 		if(this.prop != null) this.obj[this.prop] = val;
 	}
-	,setTweenHandlers: function(update,end) {
-		this.updateFunc = update;
-		this.endFunc = end;
+	,getCurVal: function(curTime) {
+		return this.easingF(curTime,this.initVal,this.endVal - this.initVal,this.duration);
 	}
-	,setEasing: function(easingFunc) {
-		if(easingFunc != null) this.easingF = easingFunc;
+	,doInterval: function() {
+		var stamp = new Date().getTime() - feffects.Tween.jsDate;
+		var curTime = 0;
+		if(this.reversed) curTime = (this.reverseTime << 1) - stamp - this.startTime + this.offsetTime; else curTime = stamp - this.startTime + this.offsetTime;
+		var curVal = this.easingF(curTime,this.initVal,this.endVal - this.initVal,this.duration);
+		if(curTime >= this.duration || curTime <= 0) this.endTween(); else {
+			if(this.updateFunc != null) this.updateFunc(curVal);
+			if(this.prop != null) this.obj[this.prop] = curVal;
+		}
+		this.position = curTime;
 	}
-	,easingEquation: function(t,b,c,d) {
-		return c / 2 * (Math.sin(Math.PI * (t / d - 0.5)) + 1) + b;
+	,stop: function() {
+		feffects.Tween.RemoveTween(this);
+		this.isPlaying = false;
 	}
+	,reverse: function() {
+		this.reversed = !this.reversed;
+		if(!this.reversed) this.startTime += new Date().getTime() - feffects.Tween.jsDate - this.reverseTime << 1;
+		this.reverseTime = new Date().getTime() - feffects.Tween.jsDate;
+	}
+	,seek: function(ms) {
+		this.offsetTime = ms;
+	}
+	,resume: function() {
+		this.startTime += new Date().getTime() - feffects.Tween.jsDate - this.pauseTime;
+		this.reverseTime += new Date().getTime() - feffects.Tween.jsDate - this.pauseTime;
+		feffects.Tween.setTweenActive(this);
+		this.isPlaying = true;
+	}
+	,pause: function() {
+		this.pauseTime = new Date().getTime() - feffects.Tween.jsDate;
+		feffects.Tween.setTweenPaused(this);
+		this.isPlaying = false;
+	}
+	,start: function() {
+		if(feffects.Tween.timer != null) feffects.Tween.timer.stop();
+		feffects.Tween.timer = new haxe.Timer(feffects.Tween.interval);
+		this.startTime = new Date().getTime() - feffects.Tween.jsDate;
+		if(this.duration == 0) this.endTween(); else feffects.Tween.AddTween(this);
+		this.isPlaying = true;
+		this.position = 0;
+		this.reverseTime = this.startTime;
+		this.reversed = false;
+	}
+	,prop: null
+	,obj: null
+	,easingF: null
+	,endFunc: null
+	,updateFunc: null
+	,reverseTime: null
+	,offsetTime: null
+	,pauseTime: null
+	,startTime: null
+	,endVal: null
+	,initVal: null
+	,isPlaying: null
+	,reversed: null
+	,position: null
+	,duration: null
 	,__class__: feffects.Tween
 }
 haxe.Public = $hxClasses["haxe.Public"] = function() { }
 haxe.Public.__name__ = ["haxe","Public"];
-haxe.Public.prototype = {
-	__class__: haxe.Public
-}
 if(!feffects.easing) feffects.easing = {}
 feffects.easing.Bounce = $hxClasses["feffects.easing.Bounce"] = function() { }
 feffects.easing.Bounce.__name__ = ["feffects","easing","Bounce"];
@@ -980,17 +1221,14 @@ feffects.easing.Bounce.easeIn = function(t,b,c,d) {
 feffects.easing.Bounce.easeInOut = function(t,b,c,d) {
 	if(t < d / 2) return (c - feffects.easing.Bounce.easeOut(d - t * 2,0,c,d)) * .5 + b; else return feffects.easing.Bounce.easeOut(t * 2 - d,0,c,d) * .5 + c * .5 + b;
 }
-feffects.easing.Bounce.prototype = {
-	__class__: feffects.easing.Bounce
-}
 haxe.FastCell = $hxClasses["haxe.FastCell"] = function(elt,next) {
 	this.elt = elt;
 	this.next = next;
 };
 haxe.FastCell.__name__ = ["haxe","FastCell"];
 haxe.FastCell.prototype = {
-	elt: null
-	,next: null
+	next: null
+	,elt: null
 	,__class__: haxe.FastCell
 }
 haxe.Http = $hxClasses["haxe.Http"] = function(url) {
@@ -1014,19 +1252,11 @@ haxe.Http.requestUrl = function(url) {
 	return r;
 }
 haxe.Http.prototype = {
-	url: null
-	,async: null
-	,postData: null
-	,headers: null
-	,params: null
-	,setHeader: function(header,value) {
-		this.headers.set(header,value);
+	onStatus: function(status) {
 	}
-	,setParameter: function(param,value) {
-		this.params.set(param,value);
+	,onError: function(msg) {
 	}
-	,setPostData: function(data) {
-		this.postData = data;
+	,onData: function(data) {
 	}
 	,request: function(post) {
 		var me = this;
@@ -1087,13 +1317,295 @@ haxe.Http.prototype = {
 		r.send(uri);
 		if(!this.async) onreadystatechange();
 	}
-	,onData: function(data) {
+	,setPostData: function(data) {
+		this.postData = data;
 	}
-	,onError: function(msg) {
+	,setParameter: function(param,value) {
+		this.params.set(param,value);
 	}
-	,onStatus: function(status) {
+	,setHeader: function(header,value) {
+		this.headers.set(header,value);
 	}
+	,params: null
+	,headers: null
+	,postData: null
+	,async: null
+	,url: null
 	,__class__: haxe.Http
+}
+haxe.Json = $hxClasses["haxe.Json"] = function() {
+};
+haxe.Json.__name__ = ["haxe","Json"];
+haxe.Json.parse = function(text) {
+	return new haxe.Json().doParse(text);
+}
+haxe.Json.stringify = function(value) {
+	return new haxe.Json().toString(value);
+}
+haxe.Json.prototype = {
+	parseString: function() {
+		var start = this.pos;
+		var buf = new StringBuf();
+		while(true) {
+			var c = this.str.charCodeAt(this.pos++);
+			if(c == 34) break;
+			if(c == 92) {
+				buf.b += HxOverrides.substr(this.str,start,this.pos - start - 1);
+				c = this.str.charCodeAt(this.pos++);
+				switch(c) {
+				case 114:
+					buf.b += String.fromCharCode(13);
+					break;
+				case 110:
+					buf.b += String.fromCharCode(10);
+					break;
+				case 116:
+					buf.b += String.fromCharCode(9);
+					break;
+				case 98:
+					buf.b += String.fromCharCode(8);
+					break;
+				case 102:
+					buf.b += String.fromCharCode(12);
+					break;
+				case 47:case 92:case 34:
+					buf.b += String.fromCharCode(c);
+					break;
+				case 117:
+					var uc = Std.parseInt("0x" + HxOverrides.substr(this.str,this.pos,4));
+					this.pos += 4;
+					buf.b += String.fromCharCode(uc);
+					break;
+				default:
+					throw "Invalid escape sequence \\" + String.fromCharCode(c) + " at position " + (this.pos - 1);
+				}
+				start = this.pos;
+			} else if(c != c) throw "Unclosed string";
+		}
+		buf.b += HxOverrides.substr(this.str,start,this.pos - start - 1);
+		return buf.b;
+	}
+	,parseRec: function() {
+		while(true) {
+			var c = this.str.charCodeAt(this.pos++);
+			switch(c) {
+			case 32:case 13:case 10:case 9:
+				break;
+			case 123:
+				var obj = { }, field = null, comma = null;
+				while(true) {
+					var c1 = this.str.charCodeAt(this.pos++);
+					switch(c1) {
+					case 32:case 13:case 10:case 9:
+						break;
+					case 125:
+						if(field != null || comma == false) this.invalidChar();
+						return obj;
+					case 58:
+						if(field == null) this.invalidChar();
+						obj[field] = this.parseRec();
+						field = null;
+						comma = true;
+						break;
+					case 44:
+						if(comma) comma = false; else this.invalidChar();
+						break;
+					case 34:
+						if(comma) this.invalidChar();
+						field = this.parseString();
+						break;
+					default:
+						this.invalidChar();
+					}
+				}
+				break;
+			case 91:
+				var arr = [], comma = null;
+				while(true) {
+					var c1 = this.str.charCodeAt(this.pos++);
+					switch(c1) {
+					case 32:case 13:case 10:case 9:
+						break;
+					case 93:
+						if(comma == false) this.invalidChar();
+						return arr;
+					case 44:
+						if(comma) comma = false; else this.invalidChar();
+						break;
+					default:
+						if(comma) this.invalidChar();
+						this.pos--;
+						arr.push(this.parseRec());
+						comma = true;
+					}
+				}
+				break;
+			case 116:
+				var save = this.pos;
+				if(this.str.charCodeAt(this.pos++) != 114 || this.str.charCodeAt(this.pos++) != 117 || this.str.charCodeAt(this.pos++) != 101) {
+					this.pos = save;
+					this.invalidChar();
+				}
+				return true;
+			case 102:
+				var save = this.pos;
+				if(this.str.charCodeAt(this.pos++) != 97 || this.str.charCodeAt(this.pos++) != 108 || this.str.charCodeAt(this.pos++) != 115 || this.str.charCodeAt(this.pos++) != 101) {
+					this.pos = save;
+					this.invalidChar();
+				}
+				return false;
+			case 110:
+				var save = this.pos;
+				if(this.str.charCodeAt(this.pos++) != 117 || this.str.charCodeAt(this.pos++) != 108 || this.str.charCodeAt(this.pos++) != 108) {
+					this.pos = save;
+					this.invalidChar();
+				}
+				return null;
+			case 34:
+				return this.parseString();
+			case 48:case 49:case 50:case 51:case 52:case 53:case 54:case 55:case 56:case 57:case 45:
+				this.pos--;
+				if(!this.reg_float.match(HxOverrides.substr(this.str,this.pos,null))) throw "Invalid float at position " + this.pos;
+				var v = this.reg_float.matched(0);
+				this.pos += v.length;
+				var f = Std.parseFloat(v);
+				var i = f | 0;
+				return i == f?i:f;
+			default:
+				this.invalidChar();
+			}
+		}
+	}
+	,nextChar: function() {
+		return this.str.charCodeAt(this.pos++);
+	}
+	,invalidChar: function() {
+		this.pos--;
+		throw "Invalid char " + this.str.charCodeAt(this.pos) + " at position " + this.pos;
+	}
+	,doParse: function(str) {
+		this.reg_float = new EReg("^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?","");
+		this.str = str;
+		this.pos = 0;
+		return this.parseRec();
+	}
+	,quote: function(s) {
+		this.buf.b += Std.string("\"");
+		var i = 0;
+		while(true) {
+			var c = s.charCodeAt(i++);
+			if(c != c) break;
+			switch(c) {
+			case 34:
+				this.buf.b += Std.string("\\\"");
+				break;
+			case 92:
+				this.buf.b += Std.string("\\\\");
+				break;
+			case 10:
+				this.buf.b += Std.string("\\n");
+				break;
+			case 13:
+				this.buf.b += Std.string("\\r");
+				break;
+			case 9:
+				this.buf.b += Std.string("\\t");
+				break;
+			case 8:
+				this.buf.b += Std.string("\\b");
+				break;
+			case 12:
+				this.buf.b += Std.string("\\f");
+				break;
+			default:
+				this.buf.b += String.fromCharCode(c);
+			}
+		}
+		this.buf.b += Std.string("\"");
+	}
+	,toStringRec: function(v) {
+		var $e = (Type["typeof"](v));
+		switch( $e[1] ) {
+		case 8:
+			this.buf.b += Std.string("\"???\"");
+			break;
+		case 4:
+			this.objString(v);
+			break;
+		case 1:
+		case 2:
+			this.buf.b += Std.string(v);
+			break;
+		case 5:
+			this.buf.b += Std.string("\"<fun>\"");
+			break;
+		case 6:
+			var c = $e[2];
+			if(c == String) this.quote(v); else if(c == Array) {
+				var v1 = v;
+				this.buf.b += Std.string("[");
+				var len = v1.length;
+				if(len > 0) {
+					this.toStringRec(v1[0]);
+					var i = 1;
+					while(i < len) {
+						this.buf.b += Std.string(",");
+						this.toStringRec(v1[i++]);
+					}
+				}
+				this.buf.b += Std.string("]");
+			} else if(c == Hash) {
+				var v1 = v;
+				var o = { };
+				var $it0 = v1.keys();
+				while( $it0.hasNext() ) {
+					var k = $it0.next();
+					o[k] = v1.get(k);
+				}
+				this.objString(o);
+			} else this.objString(v);
+			break;
+		case 7:
+			var e = $e[2];
+			this.buf.b += Std.string(v[1]);
+			break;
+		case 3:
+			this.buf.b += Std.string(v?"true":"false");
+			break;
+		case 0:
+			this.buf.b += Std.string("null");
+			break;
+		}
+	}
+	,objString: function(v) {
+		this.fieldsString(v,Reflect.fields(v));
+	}
+	,fieldsString: function(v,fields) {
+		var first = true;
+		this.buf.b += Std.string("{");
+		var _g = 0;
+		while(_g < fields.length) {
+			var f = fields[_g];
+			++_g;
+			var value = Reflect.field(v,f);
+			if(Reflect.isFunction(value)) continue;
+			if(first) first = false; else this.buf.b += Std.string(",");
+			this.quote(f);
+			this.buf.b += Std.string(":");
+			this.toStringRec(value);
+		}
+		this.buf.b += Std.string("}");
+	}
+	,toString: function(v) {
+		this.buf = new StringBuf();
+		this.toStringRec(v);
+		return this.buf.b;
+	}
+	,reg_float: null
+	,pos: null
+	,str: null
+	,buf: null
+	,__class__: haxe.Json
 }
 haxe.Log = $hxClasses["haxe.Log"] = function() { }
 haxe.Log.__name__ = ["haxe","Log"];
@@ -1102,9 +1614,6 @@ haxe.Log.trace = function(v,infos) {
 }
 haxe.Log.clear = function() {
 	js.Boot.__clear_trace();
-}
-haxe.Log.prototype = {
-	__class__: haxe.Log
 }
 haxe.Serializer = $hxClasses["haxe.Serializer"] = function() {
 	this.buf = new StringBuf();
@@ -1121,76 +1630,32 @@ haxe.Serializer.run = function(v) {
 	return s.toString();
 }
 haxe.Serializer.prototype = {
-	buf: null
-	,cache: null
-	,shash: null
-	,scount: null
-	,useCache: null
-	,useEnumIndex: null
-	,toString: function() {
-		return this.buf.b.join("");
-	}
-	,serializeString: function(s) {
-		var x = this.shash.get(s);
-		if(x != null) {
-			this.buf.add("R");
-			this.buf.add(x);
-			return;
-		}
-		this.shash.set(s,this.scount++);
-		this.buf.add("y");
-		s = StringTools.urlEncode(s);
-		this.buf.add(s.length);
-		this.buf.add(":");
-		this.buf.add(s);
-	}
-	,serializeRef: function(v) {
-		var vt = typeof(v);
-		var _g1 = 0, _g = this.cache.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			var ci = this.cache[i];
-			if(typeof(ci) == vt && ci == v) {
-				this.buf.add("r");
-				this.buf.add(i);
-				return true;
-			}
-		}
-		this.cache.push(v);
-		return false;
-	}
-	,serializeFields: function(v) {
-		var _g = 0, _g1 = Reflect.fields(v);
-		while(_g < _g1.length) {
-			var f = _g1[_g];
-			++_g;
-			this.serializeString(f);
-			this.serialize(Reflect.field(v,f));
-		}
-		this.buf.add("g");
+	serializeException: function(e) {
+		this.buf.b += Std.string("x");
+		this.serialize(e);
 	}
 	,serialize: function(v) {
 		var $e = (Type["typeof"](v));
 		switch( $e[1] ) {
 		case 0:
-			this.buf.add("n");
+			this.buf.b += Std.string("n");
 			break;
 		case 1:
 			if(v == 0) {
-				this.buf.add("z");
+				this.buf.b += Std.string("z");
 				return;
 			}
-			this.buf.add("i");
-			this.buf.add(v);
+			this.buf.b += Std.string("i");
+			this.buf.b += Std.string(v);
 			break;
 		case 2:
-			if(Math.isNaN(v)) this.buf.add("k"); else if(!Math.isFinite(v)) this.buf.add(v < 0?"m":"p"); else {
-				this.buf.add("d");
-				this.buf.add(v);
+			if(Math.isNaN(v)) this.buf.b += Std.string("k"); else if(!Math.isFinite(v)) this.buf.b += Std.string(v < 0?"m":"p"); else {
+				this.buf.b += Std.string("d");
+				this.buf.b += Std.string(v);
 			}
 			break;
 		case 3:
-			this.buf.add(v?"t":"f");
+			this.buf.b += Std.string(v?"t":"f");
 			break;
 		case 6:
 			var c = $e[2];
@@ -1202,16 +1667,16 @@ haxe.Serializer.prototype = {
 			switch(c) {
 			case Array:
 				var ucount = 0;
-				this.buf.add("a");
-				var l = v["length"];
+				this.buf.b += Std.string("a");
+				var l = v.length;
 				var _g = 0;
 				while(_g < l) {
 					var i = _g++;
 					if(v[i] == null) ucount++; else {
 						if(ucount > 0) {
-							if(ucount == 1) this.buf.add("n"); else {
-								this.buf.add("u");
-								this.buf.add(ucount);
+							if(ucount == 1) this.buf.b += Std.string("n"); else {
+								this.buf.b += Std.string("u");
+								this.buf.b += Std.string(ucount);
 							}
 							ucount = 0;
 						}
@@ -1219,30 +1684,30 @@ haxe.Serializer.prototype = {
 					}
 				}
 				if(ucount > 0) {
-					if(ucount == 1) this.buf.add("n"); else {
-						this.buf.add("u");
-						this.buf.add(ucount);
+					if(ucount == 1) this.buf.b += Std.string("n"); else {
+						this.buf.b += Std.string("u");
+						this.buf.b += Std.string(ucount);
 					}
 				}
-				this.buf.add("h");
+				this.buf.b += Std.string("h");
 				break;
 			case List:
-				this.buf.add("l");
+				this.buf.b += Std.string("l");
 				var v1 = v;
 				var $it0 = v1.iterator();
 				while( $it0.hasNext() ) {
 					var i = $it0.next();
 					this.serialize(i);
 				}
-				this.buf.add("h");
+				this.buf.b += Std.string("h");
 				break;
 			case Date:
 				var d = v;
-				this.buf.add("v");
-				this.buf.add(d.toString());
+				this.buf.b += Std.string("v");
+				this.buf.b += Std.string(HxOverrides.dateStr(d));
 				break;
 			case Hash:
-				this.buf.add("b");
+				this.buf.b += Std.string("b");
 				var v1 = v;
 				var $it1 = v1.keys();
 				while( $it1.hasNext() ) {
@@ -1250,55 +1715,62 @@ haxe.Serializer.prototype = {
 					this.serializeString(k);
 					this.serialize(v1.get(k));
 				}
-				this.buf.add("h");
+				this.buf.b += Std.string("h");
 				break;
 			case IntHash:
-				this.buf.add("q");
+				this.buf.b += Std.string("q");
 				var v1 = v;
 				var $it2 = v1.keys();
 				while( $it2.hasNext() ) {
 					var k = $it2.next();
-					this.buf.add(":");
-					this.buf.add(k);
+					this.buf.b += Std.string(":");
+					this.buf.b += Std.string(k);
 					this.serialize(v1.get(k));
 				}
-				this.buf.add("h");
+				this.buf.b += Std.string("h");
 				break;
 			case haxe.io.Bytes:
 				var v1 = v;
 				var i = 0;
 				var max = v1.length - 2;
-				var chars = "";
+				var charsBuf = new StringBuf();
 				var b64 = haxe.Serializer.BASE64;
 				while(i < max) {
 					var b1 = v1.b[i++];
 					var b2 = v1.b[i++];
 					var b3 = v1.b[i++];
-					chars += b64.charAt(b1 >> 2) + b64.charAt((b1 << 4 | b2 >> 4) & 63) + b64.charAt((b2 << 2 | b3 >> 6) & 63) + b64.charAt(b3 & 63);
+					charsBuf.b += Std.string(b64.charAt(b1 >> 2));
+					charsBuf.b += Std.string(b64.charAt((b1 << 4 | b2 >> 4) & 63));
+					charsBuf.b += Std.string(b64.charAt((b2 << 2 | b3 >> 6) & 63));
+					charsBuf.b += Std.string(b64.charAt(b3 & 63));
 				}
 				if(i == max) {
 					var b1 = v1.b[i++];
 					var b2 = v1.b[i++];
-					chars += b64.charAt(b1 >> 2) + b64.charAt((b1 << 4 | b2 >> 4) & 63) + b64.charAt(b2 << 2 & 63);
+					charsBuf.b += Std.string(b64.charAt(b1 >> 2));
+					charsBuf.b += Std.string(b64.charAt((b1 << 4 | b2 >> 4) & 63));
+					charsBuf.b += Std.string(b64.charAt(b2 << 2 & 63));
 				} else if(i == max + 1) {
 					var b1 = v1.b[i++];
-					chars += b64.charAt(b1 >> 2) + b64.charAt(b1 << 4 & 63);
+					charsBuf.b += Std.string(b64.charAt(b1 >> 2));
+					charsBuf.b += Std.string(b64.charAt(b1 << 4 & 63));
 				}
-				this.buf.add("s");
-				this.buf.add(chars.length);
-				this.buf.add(":");
-				this.buf.add(chars);
+				var chars = charsBuf.b;
+				this.buf.b += Std.string("s");
+				this.buf.b += Std.string(chars.length);
+				this.buf.b += Std.string(":");
+				this.buf.b += Std.string(chars);
 				break;
 			default:
 				this.cache.pop();
 				if(v.hxSerialize != null) {
-					this.buf.add("C");
+					this.buf.b += Std.string("C");
 					this.serializeString(Type.getClassName(c));
 					this.cache.push(v);
 					v.hxSerialize(this);
-					this.buf.add("g");
+					this.buf.b += Std.string("g");
 				} else {
-					this.buf.add("c");
+					this.buf.b += Std.string("c");
 					this.serializeString(Type.getClassName(c));
 					this.cache.push(v);
 					this.serializeFields(v);
@@ -1307,22 +1779,22 @@ haxe.Serializer.prototype = {
 			break;
 		case 4:
 			if(this.useCache && this.serializeRef(v)) return;
-			this.buf.add("o");
+			this.buf.b += Std.string("o");
 			this.serializeFields(v);
 			break;
 		case 7:
 			var e = $e[2];
 			if(this.useCache && this.serializeRef(v)) return;
 			this.cache.pop();
-			this.buf.add(this.useEnumIndex?"j":"w");
+			this.buf.b += Std.string(this.useEnumIndex?"j":"w");
 			this.serializeString(Type.getEnumName(e));
 			if(this.useEnumIndex) {
-				this.buf.add(":");
-				this.buf.add(v[1]);
+				this.buf.b += Std.string(":");
+				this.buf.b += Std.string(v[1]);
 			} else this.serializeString(v[0]);
-			this.buf.add(":");
-			var l = v["length"];
-			this.buf.add(l - 2);
+			this.buf.b += Std.string(":");
+			var l = v.length;
+			this.buf.b += Std.string(l - 2);
 			var _g = 2;
 			while(_g < l) {
 				var i = _g++;
@@ -1337,10 +1809,54 @@ haxe.Serializer.prototype = {
 			throw "Cannot serialize " + Std.string(v);
 		}
 	}
-	,serializeException: function(e) {
-		this.buf.add("x");
-		this.serialize(e);
+	,serializeFields: function(v) {
+		var _g = 0, _g1 = Reflect.fields(v);
+		while(_g < _g1.length) {
+			var f = _g1[_g];
+			++_g;
+			this.serializeString(f);
+			this.serialize(Reflect.field(v,f));
+		}
+		this.buf.b += Std.string("g");
 	}
+	,serializeRef: function(v) {
+		var vt = typeof(v);
+		var _g1 = 0, _g = this.cache.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var ci = this.cache[i];
+			if(typeof(ci) == vt && ci == v) {
+				this.buf.b += Std.string("r");
+				this.buf.b += Std.string(i);
+				return true;
+			}
+		}
+		this.cache.push(v);
+		return false;
+	}
+	,serializeString: function(s) {
+		var x = this.shash.get(s);
+		if(x != null) {
+			this.buf.b += Std.string("R");
+			this.buf.b += Std.string(x);
+			return;
+		}
+		this.shash.set(s,this.scount++);
+		this.buf.b += Std.string("y");
+		s = StringTools.urlEncode(s);
+		this.buf.b += Std.string(s.length);
+		this.buf.b += Std.string(":");
+		this.buf.b += Std.string(s);
+	}
+	,toString: function() {
+		return this.buf.b;
+	}
+	,useEnumIndex: null
+	,useCache: null
+	,scount: null
+	,shash: null
+	,cache: null
+	,buf: null
 	,__class__: haxe.Serializer
 }
 haxe.Timer = $hxClasses["haxe.Timer"] = function(time_ms) {
@@ -1365,17 +1881,17 @@ haxe.Timer.measure = function(f,pos) {
 	return r;
 }
 haxe.Timer.stamp = function() {
-	return Date.now().getTime() / 1000;
+	return new Date().getTime() / 1000;
 }
 haxe.Timer.prototype = {
-	id: null
+	run: function() {
+	}
 	,stop: function() {
 		if(this.id == null) return;
 		window.clearInterval(this.id);
 		this.id = null;
 	}
-	,run: function() {
-	}
+	,id: null
 	,__class__: haxe.Timer
 }
 haxe.Unserializer = $hxClasses["haxe.Unserializer"] = function(buf) {
@@ -1397,7 +1913,7 @@ haxe.Unserializer.initCodes = function() {
 	var _g1 = 0, _g = haxe.Unserializer.BASE64.length;
 	while(_g1 < _g) {
 		var i = _g1++;
-		codes[haxe.Unserializer.BASE64.cca(i)] = i;
+		codes[haxe.Unserializer.BASE64.charCodeAt(i)] = i;
 	}
 	return codes;
 }
@@ -1405,66 +1921,8 @@ haxe.Unserializer.run = function(v) {
 	return new haxe.Unserializer(v).unserialize();
 }
 haxe.Unserializer.prototype = {
-	buf: null
-	,pos: null
-	,length: null
-	,cache: null
-	,scache: null
-	,resolver: null
-	,setResolver: function(r) {
-		if(r == null) this.resolver = { resolveClass : function(_) {
-			return null;
-		}, resolveEnum : function(_) {
-			return null;
-		}}; else this.resolver = r;
-	}
-	,getResolver: function() {
-		return this.resolver;
-	}
-	,get: function(p) {
-		return this.buf.cca(p);
-	}
-	,readDigits: function() {
-		var k = 0;
-		var s = false;
-		var fpos = this.pos;
-		while(true) {
-			var c = this.buf.cca(this.pos);
-			if(c != c) break;
-			if(c == 45) {
-				if(this.pos != fpos) break;
-				s = true;
-				this.pos++;
-				continue;
-			}
-			if(c < 48 || c > 57) break;
-			k = k * 10 + (c - 48);
-			this.pos++;
-		}
-		if(s) k *= -1;
-		return k;
-	}
-	,unserializeObject: function(o) {
-		while(true) {
-			if(this.pos >= this.length) throw "Invalid object";
-			if(this.buf.cca(this.pos) == 103) break;
-			var k = this.unserialize();
-			if(!Std["is"](k,String)) throw "Invalid object key";
-			var v = this.unserialize();
-			o[k] = v;
-		}
-		this.pos++;
-	}
-	,unserializeEnum: function(edecl,tag) {
-		if(this.buf.cca(this.pos++) != 58) throw "Invalid enum format";
-		var nargs = this.readDigits();
-		if(nargs == 0) return Type.createEnum(edecl,tag);
-		var args = new Array();
-		while(nargs-- > 0) args.push(this.unserialize());
-		return Type.createEnum(edecl,tag,args);
-	}
-	,unserialize: function() {
-		switch(this.buf.cca(this.pos++)) {
+	unserialize: function() {
+		switch(this.buf.charCodeAt(this.pos++)) {
 		case 110:
 			return null;
 		case 116:
@@ -1478,14 +1936,14 @@ haxe.Unserializer.prototype = {
 		case 100:
 			var p1 = this.pos;
 			while(true) {
-				var c = this.buf.cca(this.pos);
+				var c = this.buf.charCodeAt(this.pos);
 				if(c >= 43 && c < 58 || c == 101 || c == 69) this.pos++; else break;
 			}
-			return Std.parseFloat(this.buf.substr(p1,this.pos - p1));
+			return Std.parseFloat(HxOverrides.substr(this.buf,p1,this.pos - p1));
 		case 121:
 			var len = this.readDigits();
-			if(this.buf.cca(this.pos++) != 58 || this.length - this.pos < len) throw "Invalid string length";
-			var s = this.buf.substr(this.pos,len);
+			if(this.buf.charCodeAt(this.pos++) != 58 || this.length - this.pos < len) throw "Invalid string length";
+			var s = HxOverrides.substr(this.buf,this.pos,len);
 			this.pos += len;
 			s = StringTools.urlDecode(s);
 			this.scache.push(s);
@@ -1501,7 +1959,7 @@ haxe.Unserializer.prototype = {
 			var a = new Array();
 			this.cache.push(a);
 			while(true) {
-				var c = this.buf.cca(this.pos);
+				var c = this.buf.charCodeAt(this.pos);
 				if(c == 104) {
 					this.pos++;
 					break;
@@ -1559,14 +2017,14 @@ haxe.Unserializer.prototype = {
 			var l = new List();
 			this.cache.push(l);
 			var buf = this.buf;
-			while(this.buf.cca(this.pos) != 104) l.add(this.unserialize());
+			while(this.buf.charCodeAt(this.pos) != 104) l.add(this.unserialize());
 			this.pos++;
 			return l;
 		case 98:
 			var h = new Hash();
 			this.cache.push(h);
 			var buf = this.buf;
-			while(this.buf.cca(this.pos) != 104) {
+			while(this.buf.charCodeAt(this.pos) != 104) {
 				var s = this.unserialize();
 				h.set(s,this.unserialize());
 			}
@@ -1576,23 +2034,23 @@ haxe.Unserializer.prototype = {
 			var h = new IntHash();
 			this.cache.push(h);
 			var buf = this.buf;
-			var c = this.buf.cca(this.pos++);
+			var c = this.buf.charCodeAt(this.pos++);
 			while(c == 58) {
 				var i = this.readDigits();
 				h.set(i,this.unserialize());
-				c = this.buf.cca(this.pos++);
+				c = this.buf.charCodeAt(this.pos++);
 			}
 			if(c != 104) throw "Invalid IntHash format";
 			return h;
 		case 118:
-			var d = Date.fromString(this.buf.substr(this.pos,19));
+			var d = HxOverrides.strDate(HxOverrides.substr(this.buf,this.pos,19));
 			this.cache.push(d);
 			this.pos += 19;
 			return d;
 		case 115:
 			var len = this.readDigits();
 			var buf = this.buf;
-			if(this.buf.cca(this.pos++) != 58 || this.length - this.pos < len) throw "Invalid bytes length";
+			if(this.buf.charCodeAt(this.pos++) != 58 || this.length - this.pos < len) throw "Invalid bytes length";
 			var codes = haxe.Unserializer.CODES;
 			if(codes == null) {
 				codes = haxe.Unserializer.initCodes();
@@ -1605,20 +2063,20 @@ haxe.Unserializer.prototype = {
 			var bytes = haxe.io.Bytes.alloc(size);
 			var bpos = 0;
 			while(i < max) {
-				var c1 = codes[buf.cca(i++)];
-				var c2 = codes[buf.cca(i++)];
+				var c1 = codes[buf.charCodeAt(i++)];
+				var c2 = codes[buf.charCodeAt(i++)];
 				bytes.b[bpos++] = (c1 << 2 | c2 >> 4) & 255;
-				var c3 = codes[buf.cca(i++)];
+				var c3 = codes[buf.charCodeAt(i++)];
 				bytes.b[bpos++] = (c2 << 4 | c3 >> 2) & 255;
-				var c4 = codes[buf.cca(i++)];
+				var c4 = codes[buf.charCodeAt(i++)];
 				bytes.b[bpos++] = (c3 << 6 | c4) & 255;
 			}
 			if(rest >= 2) {
-				var c1 = codes[buf.cca(i++)];
-				var c2 = codes[buf.cca(i++)];
+				var c1 = codes[buf.charCodeAt(i++)];
+				var c2 = codes[buf.charCodeAt(i++)];
 				bytes.b[bpos++] = (c1 << 2 | c2 >> 4) & 255;
 				if(rest == 3) {
-					var c3 = codes[buf.cca(i++)];
+					var c3 = codes[buf.charCodeAt(i++)];
 					bytes.b[bpos++] = (c2 << 4 | c3 >> 2) & 255;
 				}
 			}
@@ -1632,13 +2090,71 @@ haxe.Unserializer.prototype = {
 			var o = Type.createEmptyInstance(cl);
 			this.cache.push(o);
 			o.hxUnserialize(this);
-			if(this.buf.cca(this.pos++) != 103) throw "Invalid custom data";
+			if(this.buf.charCodeAt(this.pos++) != 103) throw "Invalid custom data";
 			return o;
 		default:
 		}
 		this.pos--;
 		throw "Invalid char " + this.buf.charAt(this.pos) + " at position " + this.pos;
 	}
+	,unserializeEnum: function(edecl,tag) {
+		if(this.buf.charCodeAt(this.pos++) != 58) throw "Invalid enum format";
+		var nargs = this.readDigits();
+		if(nargs == 0) return Type.createEnum(edecl,tag);
+		var args = new Array();
+		while(nargs-- > 0) args.push(this.unserialize());
+		return Type.createEnum(edecl,tag,args);
+	}
+	,unserializeObject: function(o) {
+		while(true) {
+			if(this.pos >= this.length) throw "Invalid object";
+			if(this.buf.charCodeAt(this.pos) == 103) break;
+			var k = this.unserialize();
+			if(!js.Boot.__instanceof(k,String)) throw "Invalid object key";
+			var v = this.unserialize();
+			o[k] = v;
+		}
+		this.pos++;
+	}
+	,readDigits: function() {
+		var k = 0;
+		var s = false;
+		var fpos = this.pos;
+		while(true) {
+			var c = this.buf.charCodeAt(this.pos);
+			if(c != c) break;
+			if(c == 45) {
+				if(this.pos != fpos) break;
+				s = true;
+				this.pos++;
+				continue;
+			}
+			if(c < 48 || c > 57) break;
+			k = k * 10 + (c - 48);
+			this.pos++;
+		}
+		if(s) k *= -1;
+		return k;
+	}
+	,get: function(p) {
+		return this.buf.charCodeAt(p);
+	}
+	,getResolver: function() {
+		return this.resolver;
+	}
+	,setResolver: function(r) {
+		if(r == null) this.resolver = { resolveClass : function(_) {
+			return null;
+		}, resolveEnum : function(_) {
+			return null;
+		}}; else this.resolver = r;
+	}
+	,resolver: null
+	,scache: null
+	,cache: null
+	,length: null
+	,pos: null
+	,buf: null
 	,__class__: haxe.Unserializer
 }
 if(!haxe.io) haxe.io = {}
@@ -1661,7 +2177,7 @@ haxe.io.Bytes.ofString = function(s) {
 	var _g1 = 0, _g = s.length;
 	while(_g1 < _g) {
 		var i = _g1++;
-		var c = s.cca(i);
+		var c = s.charCodeAt(i);
 		if(c <= 127) a.push(c); else if(c <= 2047) {
 			a.push(192 | c >> 6);
 			a.push(128 | c & 63);
@@ -1682,46 +2198,29 @@ haxe.io.Bytes.ofData = function(b) {
 	return new haxe.io.Bytes(b.length,b);
 }
 haxe.io.Bytes.prototype = {
-	length: null
-	,b: null
-	,get: function(pos) {
-		return this.b[pos];
+	getData: function() {
+		return this.b;
 	}
-	,set: function(pos,v) {
-		this.b[pos] = v & 255;
-	}
-	,blit: function(pos,src,srcpos,len) {
-		if(pos < 0 || srcpos < 0 || len < 0 || pos + len > this.length || srcpos + len > src.length) throw haxe.io.Error.OutsideBounds;
-		var b1 = this.b;
-		var b2 = src.b;
-		if(b1 == b2 && pos > srcpos) {
-			var i = len;
-			while(i > 0) {
-				i--;
-				b1[i + pos] = b2[i + srcpos];
-			}
-			return;
+	,toHex: function() {
+		var s = new StringBuf();
+		var chars = [];
+		var str = "0123456789abcdef";
+		var _g1 = 0, _g = str.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			chars.push(HxOverrides.cca(str,i));
 		}
-		var _g = 0;
-		while(_g < len) {
-			var i = _g++;
-			b1[i + pos] = b2[i + srcpos];
+		var _g1 = 0, _g = this.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var c = this.b[i];
+			s.b += String.fromCharCode(chars[c >> 4]);
+			s.b += String.fromCharCode(chars[c & 15]);
 		}
+		return s.b;
 	}
-	,sub: function(pos,len) {
-		if(pos < 0 || len < 0 || pos + len > this.length) throw haxe.io.Error.OutsideBounds;
-		return new haxe.io.Bytes(len,this.b.slice(pos,pos + len));
-	}
-	,compare: function(other) {
-		var b1 = this.b;
-		var b2 = other.b;
-		var len = this.length < other.length?this.length:other.length;
-		var _g = 0;
-		while(_g < len) {
-			var i = _g++;
-			if(b1[i] != b2[i]) return b1[i] - b2[i];
-		}
-		return this.length - other.length;
+	,toString: function() {
+		return this.readString(0,this.length);
 	}
 	,readString: function(pos,len) {
 		if(pos < 0 || len < 0 || pos + len > this.length) throw haxe.io.Error.OutsideBounds;
@@ -1746,30 +2245,47 @@ haxe.io.Bytes.prototype = {
 		}
 		return s;
 	}
-	,toString: function() {
-		return this.readString(0,this.length);
-	}
-	,toHex: function() {
-		var s = new StringBuf();
-		var chars = [];
-		var str = "0123456789abcdef";
-		var _g1 = 0, _g = str.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			chars.push(str.charCodeAt(i));
+	,compare: function(other) {
+		var b1 = this.b;
+		var b2 = other.b;
+		var len = this.length < other.length?this.length:other.length;
+		var _g = 0;
+		while(_g < len) {
+			var i = _g++;
+			if(b1[i] != b2[i]) return b1[i] - b2[i];
 		}
-		var _g1 = 0, _g = this.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			var c = this.b[i];
-			s.b[s.b.length] = String.fromCharCode(chars[c >> 4]);
-			s.b[s.b.length] = String.fromCharCode(chars[c & 15]);
+		return this.length - other.length;
+	}
+	,sub: function(pos,len) {
+		if(pos < 0 || len < 0 || pos + len > this.length) throw haxe.io.Error.OutsideBounds;
+		return new haxe.io.Bytes(len,this.b.slice(pos,pos + len));
+	}
+	,blit: function(pos,src,srcpos,len) {
+		if(pos < 0 || srcpos < 0 || len < 0 || pos + len > this.length || srcpos + len > src.length) throw haxe.io.Error.OutsideBounds;
+		var b1 = this.b;
+		var b2 = src.b;
+		if(b1 == b2 && pos > srcpos) {
+			var i = len;
+			while(i > 0) {
+				i--;
+				b1[i + pos] = b2[i + srcpos];
+			}
+			return;
 		}
-		return s.b.join("");
+		var _g = 0;
+		while(_g < len) {
+			var i = _g++;
+			b1[i + pos] = b2[i + srcpos];
+		}
 	}
-	,getData: function() {
-		return this.b;
+	,set: function(pos,v) {
+		this.b[pos] = v & 255;
 	}
+	,get: function(pos) {
+		return this.b[pos];
+	}
+	,b: null
+	,length: null
 	,__class__: haxe.io.Bytes
 }
 haxe.io.Error = $hxClasses["haxe.io.Error"] = { __ename__ : ["haxe","io","Error"], __constructs__ : ["Blocked","Overflow","OutsideBounds","Custom"] }
@@ -1786,16 +2302,13 @@ haxe.io.Error.Custom = function(e) { var $x = ["Custom",3,e]; $x.__enum__ = haxe
 if(!haxe.macro) haxe.macro = {}
 haxe.macro.Context = $hxClasses["haxe.macro.Context"] = function() { }
 haxe.macro.Context.__name__ = ["haxe","macro","Context"];
-haxe.macro.Context.prototype = {
-	__class__: haxe.macro.Context
-}
-haxe.macro.Constant = $hxClasses["haxe.macro.Constant"] = { __ename__ : ["haxe","macro","Constant"], __constructs__ : ["CInt","CFloat","CString","CIdent","CType","CRegexp"] }
+haxe.macro.Constant = $hxClasses["haxe.macro.Constant"] = { __ename__ : ["haxe","macro","Constant"], __constructs__ : ["CInt","CFloat","CString","CIdent","CRegexp","CType"] }
 haxe.macro.Constant.CInt = function(v) { var $x = ["CInt",0,v]; $x.__enum__ = haxe.macro.Constant; $x.toString = $estr; return $x; }
 haxe.macro.Constant.CFloat = function(f) { var $x = ["CFloat",1,f]; $x.__enum__ = haxe.macro.Constant; $x.toString = $estr; return $x; }
 haxe.macro.Constant.CString = function(s) { var $x = ["CString",2,s]; $x.__enum__ = haxe.macro.Constant; $x.toString = $estr; return $x; }
 haxe.macro.Constant.CIdent = function(s) { var $x = ["CIdent",3,s]; $x.__enum__ = haxe.macro.Constant; $x.toString = $estr; return $x; }
-haxe.macro.Constant.CType = function(s) { var $x = ["CType",4,s]; $x.__enum__ = haxe.macro.Constant; $x.toString = $estr; return $x; }
-haxe.macro.Constant.CRegexp = function(r,opt) { var $x = ["CRegexp",5,r,opt]; $x.__enum__ = haxe.macro.Constant; $x.toString = $estr; return $x; }
+haxe.macro.Constant.CRegexp = function(r,opt) { var $x = ["CRegexp",4,r,opt]; $x.__enum__ = haxe.macro.Constant; $x.toString = $estr; return $x; }
+haxe.macro.Constant.CType = function(s) { var $x = ["CType",5,s]; $x.__enum__ = haxe.macro.Constant; $x.toString = $estr; return $x; }
 haxe.macro.Binop = $hxClasses["haxe.macro.Binop"] = { __ename__ : ["haxe","macro","Binop"], __constructs__ : ["OpAdd","OpMult","OpDiv","OpSub","OpAssign","OpEq","OpNotEq","OpGt","OpGte","OpLt","OpLte","OpAnd","OpOr","OpXor","OpBoolAnd","OpBoolOr","OpShl","OpShr","OpUShr","OpMod","OpAssignOp","OpInterval"] }
 haxe.macro.Binop.OpAdd = ["OpAdd",0];
 haxe.macro.Binop.OpAdd.toString = $estr;
@@ -1877,41 +2390,41 @@ haxe.macro.Unop.OpNeg.__enum__ = haxe.macro.Unop;
 haxe.macro.Unop.OpNegBits = ["OpNegBits",4];
 haxe.macro.Unop.OpNegBits.toString = $estr;
 haxe.macro.Unop.OpNegBits.__enum__ = haxe.macro.Unop;
-haxe.macro.ExprDef = $hxClasses["haxe.macro.ExprDef"] = { __ename__ : ["haxe","macro","ExprDef"], __constructs__ : ["EConst","EArray","EBinop","EField","EType","EParenthesis","EObjectDecl","EArrayDecl","ECall","ENew","EUnop","EVars","EFunction","EBlock","EFor","EIn","EIf","EWhile","ESwitch","ETry","EReturn","EBreak","EContinue","EUntyped","EThrow","ECast","EDisplay","EDisplayNew","ETernary","ECheckType"] }
+haxe.macro.ExprDef = $hxClasses["haxe.macro.ExprDef"] = { __ename__ : ["haxe","macro","ExprDef"], __constructs__ : ["EConst","EArray","EBinop","EField","EParenthesis","EObjectDecl","EArrayDecl","ECall","ENew","EUnop","EVars","EFunction","EBlock","EFor","EIn","EIf","EWhile","ESwitch","ETry","EReturn","EBreak","EContinue","EUntyped","EThrow","ECast","EDisplay","EDisplayNew","ETernary","ECheckType","EType"] }
 haxe.macro.ExprDef.EConst = function(c) { var $x = ["EConst",0,c]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
 haxe.macro.ExprDef.EArray = function(e1,e2) { var $x = ["EArray",1,e1,e2]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
 haxe.macro.ExprDef.EBinop = function(op,e1,e2) { var $x = ["EBinop",2,op,e1,e2]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
 haxe.macro.ExprDef.EField = function(e,field) { var $x = ["EField",3,e,field]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.EType = function(e,field) { var $x = ["EType",4,e,field]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.EParenthesis = function(e) { var $x = ["EParenthesis",5,e]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.EObjectDecl = function(fields) { var $x = ["EObjectDecl",6,fields]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.EArrayDecl = function(values) { var $x = ["EArrayDecl",7,values]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.ECall = function(e,params) { var $x = ["ECall",8,e,params]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.ENew = function(t,params) { var $x = ["ENew",9,t,params]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.EUnop = function(op,postFix,e) { var $x = ["EUnop",10,op,postFix,e]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.EVars = function(vars) { var $x = ["EVars",11,vars]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.EFunction = function(name,f) { var $x = ["EFunction",12,name,f]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.EBlock = function(exprs) { var $x = ["EBlock",13,exprs]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.EFor = function(it,expr) { var $x = ["EFor",14,it,expr]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.EIn = function(e1,e2) { var $x = ["EIn",15,e1,e2]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.EIf = function(econd,eif,eelse) { var $x = ["EIf",16,econd,eif,eelse]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.EWhile = function(econd,e,normalWhile) { var $x = ["EWhile",17,econd,e,normalWhile]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.ESwitch = function(e,cases,edef) { var $x = ["ESwitch",18,e,cases,edef]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.ETry = function(e,catches) { var $x = ["ETry",19,e,catches]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.EReturn = function(e) { var $x = ["EReturn",20,e]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.EBreak = ["EBreak",21];
+haxe.macro.ExprDef.EParenthesis = function(e) { var $x = ["EParenthesis",4,e]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.EObjectDecl = function(fields) { var $x = ["EObjectDecl",5,fields]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.EArrayDecl = function(values) { var $x = ["EArrayDecl",6,values]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.ECall = function(e,params) { var $x = ["ECall",7,e,params]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.ENew = function(t,params) { var $x = ["ENew",8,t,params]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.EUnop = function(op,postFix,e) { var $x = ["EUnop",9,op,postFix,e]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.EVars = function(vars) { var $x = ["EVars",10,vars]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.EFunction = function(name,f) { var $x = ["EFunction",11,name,f]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.EBlock = function(exprs) { var $x = ["EBlock",12,exprs]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.EFor = function(it,expr) { var $x = ["EFor",13,it,expr]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.EIn = function(e1,e2) { var $x = ["EIn",14,e1,e2]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.EIf = function(econd,eif,eelse) { var $x = ["EIf",15,econd,eif,eelse]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.EWhile = function(econd,e,normalWhile) { var $x = ["EWhile",16,econd,e,normalWhile]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.ESwitch = function(e,cases,edef) { var $x = ["ESwitch",17,e,cases,edef]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.ETry = function(e,catches) { var $x = ["ETry",18,e,catches]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.EReturn = function(e) { var $x = ["EReturn",19,e]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.EBreak = ["EBreak",20];
 haxe.macro.ExprDef.EBreak.toString = $estr;
 haxe.macro.ExprDef.EBreak.__enum__ = haxe.macro.ExprDef;
-haxe.macro.ExprDef.EContinue = ["EContinue",22];
+haxe.macro.ExprDef.EContinue = ["EContinue",21];
 haxe.macro.ExprDef.EContinue.toString = $estr;
 haxe.macro.ExprDef.EContinue.__enum__ = haxe.macro.ExprDef;
-haxe.macro.ExprDef.EUntyped = function(e) { var $x = ["EUntyped",23,e]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.EThrow = function(e) { var $x = ["EThrow",24,e]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.ECast = function(e,t) { var $x = ["ECast",25,e,t]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.EDisplay = function(e,isCall) { var $x = ["EDisplay",26,e,isCall]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.EDisplayNew = function(t) { var $x = ["EDisplayNew",27,t]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.ETernary = function(econd,eif,eelse) { var $x = ["ETernary",28,econd,eif,eelse]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ExprDef.ECheckType = function(e,t) { var $x = ["ECheckType",29,e,t]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.EUntyped = function(e) { var $x = ["EUntyped",22,e]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.EThrow = function(e) { var $x = ["EThrow",23,e]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.ECast = function(e,t) { var $x = ["ECast",24,e,t]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.EDisplay = function(e,isCall) { var $x = ["EDisplay",25,e,isCall]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.EDisplayNew = function(t) { var $x = ["EDisplayNew",26,t]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.ETernary = function(econd,eif,eelse) { var $x = ["ETernary",27,econd,eif,eelse]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.ECheckType = function(e,t) { var $x = ["ECheckType",28,e,t]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
+haxe.macro.ExprDef.EType = function(e,field) { var $x = ["EType",29,e,field]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
 haxe.macro.ComplexType = $hxClasses["haxe.macro.ComplexType"] = { __ename__ : ["haxe","macro","ComplexType"], __constructs__ : ["TPath","TFunction","TAnonymous","TParent","TExtend","TOptional"] }
 haxe.macro.ComplexType.TPath = function(p) { var $x = ["TPath",0,p]; $x.__enum__ = haxe.macro.ComplexType; $x.toString = $estr; return $x; }
 haxe.macro.ComplexType.TFunction = function(args,ret) { var $x = ["TFunction",1,args,ret]; $x.__enum__ = haxe.macro.ComplexType; $x.toString = $estr; return $x; }
@@ -1959,8 +2472,8 @@ haxe.macro.Error = $hxClasses["haxe.macro.Error"] = function(m,p) {
 };
 haxe.macro.Error.__name__ = ["haxe","macro","Error"];
 haxe.macro.Error.prototype = {
-	message: null
-	,pos: null
+	pos: null
+	,message: null
 	,__class__: haxe.macro.Error
 }
 var hxs = hxs || {}
@@ -1969,59 +2482,13 @@ hxs.core.SignalBase = $hxClasses["hxs.core.SignalBase"] = function(caller) {
 	this.slots = new hxs.core.PriorityQueue();
 	this.target = caller;
 	this.isMuted = false;
-	if(!Std["is"](caller,hxs.core.SignalBase)) this.onChanged = new hxs.Signal(this);
+	if(!js.Boot.__instanceof(caller,hxs.core.SignalBase)) this.onChanged = new hxs.Signal(this);
 };
 hxs.core.SignalBase.__name__ = ["hxs","core","SignalBase"];
 hxs.core.SignalBase.prototype = {
-	slots: null
-	,target: null
-	,isMuted: null
-	,onChanged: null
-	,add: function(listener,priority,runCount) {
-		if(runCount == null) runCount = -1;
-		if(priority == null) priority = 0;
-		this.remove(listener);
-		this.slots.add(new hxs.core.Slot(listener,hxs.core.SignalType.NORMAL,runCount),priority);
-		this.onChanged.dispatch();
-	}
-	,addOnce: function(listener,priority) {
-		if(priority == null) priority = 0;
-		this.add(listener,priority,1);
-	}
-	,addAdvanced: function(listener,priority,runCount) {
-		if(runCount == null) runCount = -1;
-		if(priority == null) priority = 0;
-		this.remove(listener);
-		this.slots.add(new hxs.core.Slot(listener,hxs.core.SignalType.ADVANCED,runCount),priority);
-	}
-	,addVoid: function(listener,priority,runCount) {
-		if(runCount == null) runCount = -1;
-		if(priority == null) priority = 0;
-		this.remove(listener);
-		this.slots.add(new hxs.core.Slot(listener,hxs.core.SignalType.VOID,runCount),priority);
-	}
-	,remove: function(listener) {
-		var $it0 = this.slots.iterator();
-		while( $it0.hasNext() ) {
-			var i = $it0.next();
-			if(i.listener == listener) this.slots.remove(i);
-		}
-	}
-	,removeAll: function() {
-		this.slots = new hxs.core.PriorityQueue();
-	}
-	,mute: function() {
-		this.isMuted = true;
-	}
-	,unmute: function() {
-		this.isMuted = false;
-	}
-	,muteSlot: function(listener) {
-		var _g = 0, _g1 = this.slots.items;
-		while(_g < _g1.length) {
-			var i = _g1[_g];
-			++_g;
-			if(i.item.listener == listener) i.item.mute();
+	onFireSlot: function(slot) {
+		if(slot.remainingCalls != -1) {
+			if(--slot.remainingCalls <= 0) this.remove(slot.listener);
 		}
 	}
 	,unmuteSlot: function(listener) {
@@ -2032,11 +2499,57 @@ hxs.core.SignalBase.prototype = {
 			if(i.item.listener == listener) i.item.unmute();
 		}
 	}
-	,onFireSlot: function(slot) {
-		if(slot.remainingCalls != -1) {
-			if(--slot.remainingCalls <= 0) this.remove(slot.listener);
+	,muteSlot: function(listener) {
+		var _g = 0, _g1 = this.slots.items;
+		while(_g < _g1.length) {
+			var i = _g1[_g];
+			++_g;
+			if(i.item.listener == listener) i.item.mute();
 		}
 	}
+	,unmute: function() {
+		this.isMuted = false;
+	}
+	,mute: function() {
+		this.isMuted = true;
+	}
+	,removeAll: function() {
+		this.slots = new hxs.core.PriorityQueue();
+	}
+	,remove: function(listener) {
+		var $it0 = this.slots.iterator();
+		while( $it0.hasNext() ) {
+			var i = $it0.next();
+			if(i.listener == listener) this.slots.remove(i);
+		}
+	}
+	,addVoid: function(listener,priority,runCount) {
+		if(runCount == null) runCount = -1;
+		if(priority == null) priority = 0;
+		this.remove(listener);
+		this.slots.add(new hxs.core.Slot(listener,hxs.core.SignalType.VOID,runCount),priority);
+	}
+	,addAdvanced: function(listener,priority,runCount) {
+		if(runCount == null) runCount = -1;
+		if(priority == null) priority = 0;
+		this.remove(listener);
+		this.slots.add(new hxs.core.Slot(listener,hxs.core.SignalType.ADVANCED,runCount),priority);
+	}
+	,addOnce: function(listener,priority) {
+		if(priority == null) priority = 0;
+		this.add(listener,priority,1);
+	}
+	,add: function(listener,priority,runCount) {
+		if(runCount == null) runCount = -1;
+		if(priority == null) priority = 0;
+		this.remove(listener);
+		this.slots.add(new hxs.core.Slot(listener,hxs.core.SignalType.NORMAL,runCount),priority);
+		this.onChanged.dispatch();
+	}
+	,onChanged: null
+	,isMuted: null
+	,target: null
+	,slots: null
 	,__class__: hxs.core.SignalBase
 }
 hxs.Signal = $hxClasses["hxs.Signal"] = function(caller) {
@@ -2045,7 +2558,13 @@ hxs.Signal = $hxClasses["hxs.Signal"] = function(caller) {
 hxs.Signal.__name__ = ["hxs","Signal"];
 hxs.Signal.__super__ = hxs.core.SignalBase;
 hxs.Signal.prototype = $extend(hxs.core.SignalBase.prototype,{
-	dispatch: function() {
+	getTrigger: function() {
+		var _this = this;
+		return new hxs.extras.Trigger(function() {
+			_this.dispatch();
+		});
+	}
+	,dispatch: function() {
 		var $it0 = this.slots.iterator();
 		while( $it0.hasNext() ) {
 			var slot = $it0.next();
@@ -2065,12 +2584,6 @@ hxs.Signal.prototype = $extend(hxs.core.SignalBase.prototype,{
 			this.onFireSlot(slot);
 		}
 	}
-	,getTrigger: function() {
-		var _this = this;
-		return new hxs.extras.Trigger(function() {
-			_this.dispatch();
-		});
-	}
 	,__class__: hxs.Signal
 });
 hxs.Signal1 = $hxClasses["hxs.Signal1"] = function(caller) {
@@ -2079,7 +2592,13 @@ hxs.Signal1 = $hxClasses["hxs.Signal1"] = function(caller) {
 hxs.Signal1.__name__ = ["hxs","Signal1"];
 hxs.Signal1.__super__ = hxs.core.SignalBase;
 hxs.Signal1.prototype = $extend(hxs.core.SignalBase.prototype,{
-	dispatch: function(a) {
+	getTrigger: function(a) {
+		var _this = this;
+		return new hxs.extras.Trigger(function() {
+			_this.dispatch(a);
+		});
+	}
+	,dispatch: function(a) {
 		var $it0 = this.slots.iterator();
 		while( $it0.hasNext() ) {
 			var slot = $it0.next();
@@ -2099,12 +2618,6 @@ hxs.Signal1.prototype = $extend(hxs.core.SignalBase.prototype,{
 			this.onFireSlot(slot);
 		}
 	}
-	,getTrigger: function(a) {
-		var _this = this;
-		return new hxs.extras.Trigger(function() {
-			_this.dispatch(a);
-		});
-	}
 	,__class__: hxs.Signal1
 });
 hxs.Signal4 = $hxClasses["hxs.Signal4"] = function(caller) {
@@ -2113,7 +2626,13 @@ hxs.Signal4 = $hxClasses["hxs.Signal4"] = function(caller) {
 hxs.Signal4.__name__ = ["hxs","Signal4"];
 hxs.Signal4.__super__ = hxs.core.SignalBase;
 hxs.Signal4.prototype = $extend(hxs.core.SignalBase.prototype,{
-	dispatch: function(a,b,c,d) {
+	getTrigger: function(a,b,c,d) {
+		var _this = this;
+		return new hxs.extras.Trigger(function() {
+			_this.dispatch(a,b,c,d);
+		});
+	}
+	,dispatch: function(a,b,c,d) {
 		var $it0 = this.slots.iterator();
 		while( $it0.hasNext() ) {
 			var slot = $it0.next();
@@ -2133,12 +2652,6 @@ hxs.Signal4.prototype = $extend(hxs.core.SignalBase.prototype,{
 			this.onFireSlot(slot);
 		}
 	}
-	,getTrigger: function(a,b,c,d) {
-		var _this = this;
-		return new hxs.extras.Trigger(function() {
-			_this.dispatch(a,b,c,d);
-		});
-	}
 	,__class__: hxs.Signal4
 });
 hxs.core.Info = $hxClasses["hxs.core.Info"] = function(signal,slot) {
@@ -2148,9 +2661,9 @@ hxs.core.Info = $hxClasses["hxs.core.Info"] = function(signal,slot) {
 };
 hxs.core.Info.__name__ = ["hxs","core","Info"];
 hxs.core.Info.prototype = {
-	target: null
+	slot: null
 	,signal: null
-	,slot: null
+	,target: null
 	,__class__: hxs.core.Info
 }
 hxs.core.PriorityQueue = $hxClasses["hxs.core.PriorityQueue"] = function() {
@@ -2158,46 +2671,18 @@ hxs.core.PriorityQueue = $hxClasses["hxs.core.PriorityQueue"] = function() {
 };
 hxs.core.PriorityQueue.__name__ = ["hxs","core","PriorityQueue"];
 hxs.core.PriorityQueue.prototype = {
-	currentIterator: null
-	,items: null
-	,length: null
-	,iterator: function() {
-		return this.currentIterator = new hxs.core.PriorityQueueIterator(this.items);
-	}
-	,peek: function() {
-		return this.items[0].item;
-	}
-	,front: function() {
-		return this.items.shift().item;
-	}
-	,back: function() {
-		return this.items.pop().item;
-	}
-	,add: function(item,priority) {
-		if(priority == null) priority = 0;
-		var data = { item : item, priority : priority};
-		if(data.priority < 0) data.priority = 0;
-		var c = this.items.length;
-		while(c-- > 0) if(this.items[c].priority >= priority) break;
-		this.items.insert(c + 1,data);
-		return data;
-	}
-	,remove: function(item) {
-		var _g = 0, _g1 = this.items;
-		while(_g < _g1.length) {
-			var i = _g1[_g];
+	resort: function() {
+		var a = this.items.slice();
+		this.items = [];
+		var _g = 0;
+		while(_g < a.length) {
+			var i = a[_g];
 			++_g;
-			if(i.item == item) this.items.remove(i);
+			this.add(i.item,i.priority);
 		}
 	}
-	,getPriority: function(item) {
-		var _g = 0, _g1 = this.items;
-		while(_g < _g1.length) {
-			var i = _g1[_g];
-			++_g;
-			if(i.item == item) return i.priority;
-		}
-		return -1;
+	,getLength: function() {
+		return this.items.length;
 	}
 	,setPriority: function(item,priority) {
 		var _g = 0, _g1 = this.items;
@@ -2208,39 +2693,67 @@ hxs.core.PriorityQueue.prototype = {
 		}
 		this.resort();
 	}
-	,getLength: function() {
-		return this.items.length;
-	}
-	,resort: function() {
-		var a = this.items.copy();
-		this.items = [];
-		var _g = 0;
-		while(_g < a.length) {
-			var i = a[_g];
+	,getPriority: function(item) {
+		var _g = 0, _g1 = this.items;
+		while(_g < _g1.length) {
+			var i = _g1[_g];
 			++_g;
-			this.add(i.item,i.priority);
+			if(i.item == item) return i.priority;
+		}
+		return -1;
+	}
+	,remove: function(item) {
+		var _g = 0, _g1 = this.items;
+		while(_g < _g1.length) {
+			var i = _g1[_g];
+			++_g;
+			if(i.item == item) HxOverrides.remove(this.items,i);
 		}
 	}
+	,add: function(item,priority) {
+		if(priority == null) priority = 0;
+		var data = { item : item, priority : priority};
+		if(data.priority < 0) data.priority = 0;
+		var c = this.items.length;
+		while(c-- > 0) if(this.items[c].priority >= priority) break;
+		this.items.splice(c + 1,0,data);
+		return data;
+	}
+	,back: function() {
+		return this.items.pop().item;
+	}
+	,front: function() {
+		return this.items.shift().item;
+	}
+	,peek: function() {
+		return this.items[0].item;
+	}
+	,iterator: function() {
+		return this.currentIterator = new hxs.core.PriorityQueueIterator(this.items);
+	}
+	,length: null
+	,items: null
+	,currentIterator: null
 	,__class__: hxs.core.PriorityQueue
 	,__properties__: {get_length:"getLength"}
 }
 hxs.core.PriorityQueueIterator = $hxClasses["hxs.core.PriorityQueueIterator"] = function(q) {
-	this.q = q.copy();
+	this.q = q.slice();
 	this.reset();
 };
 hxs.core.PriorityQueueIterator.__name__ = ["hxs","core","PriorityQueueIterator"];
 hxs.core.PriorityQueueIterator.prototype = {
-	q: null
-	,i: null
-	,reset: function() {
-		this.i = 0;
+	next: function() {
+		return this.q[this.i++].item;
 	}
 	,hasNext: function() {
 		return this.i < this.q.length;
 	}
-	,next: function() {
-		return this.q[this.i++].item;
+	,reset: function() {
+		this.i = 0;
 	}
+	,i: null
+	,q: null
 	,__class__: hxs.core.PriorityQueueIterator
 }
 hxs.core.SignalType = $hxClasses["hxs.core.SignalType"] = { __ename__ : ["hxs","core","SignalType"], __constructs__ : ["NORMAL","ADVANCED","VOID"] }
@@ -2261,16 +2774,16 @@ hxs.core.Slot = $hxClasses["hxs.core.Slot"] = function(listener,type,remainingCa
 };
 hxs.core.Slot.__name__ = ["hxs","core","Slot"];
 hxs.core.Slot.prototype = {
-	listener: null
-	,type: null
-	,remainingCalls: null
-	,isMuted: null
+	unmute: function() {
+		this.isMuted = false;
+	}
 	,mute: function() {
 		this.isMuted = true;
 	}
-	,unmute: function() {
-		this.isMuted = false;
-	}
+	,isMuted: null
+	,remainingCalls: null
+	,type: null
+	,listener: null
 	,__class__: hxs.core.Slot
 }
 if(!hxs.extras) hxs.extras = {}
@@ -2279,10 +2792,10 @@ hxs.extras.Trigger = $hxClasses["hxs.extras.Trigger"] = function(closure) {
 };
 hxs.extras.Trigger.__name__ = ["hxs","extras","Trigger"];
 hxs.extras.Trigger.prototype = {
-	closure: null
-	,dispatch: function() {
+	dispatch: function() {
 		this.closure();
 	}
+	,closure: null
 	,__class__: hxs.extras.Trigger
 }
 var javascriptOutils = javascriptOutils || {}
@@ -2315,22 +2828,31 @@ js.Boot.__unhtml = function(s) {
 js.Boot.__trace = function(v,i) {
 	var msg = i != null?i.fileName + ":" + i.lineNumber + ": ":"";
 	msg += js.Boot.__string_rec(v,"");
-	var d = document.getElementById("haxe:trace");
-	if(d != null) d.innerHTML += js.Boot.__unhtml(msg) + "<br/>"; else if(typeof(console) != "undefined" && console.log != null) console.log(msg);
+	var d;
+	if(typeof(document) != "undefined" && (d = document.getElementById("haxe:trace")) != null) d.innerHTML += js.Boot.__unhtml(msg) + "<br/>"; else if(typeof(console) != "undefined" && console.log != null) console.log(msg);
 }
 js.Boot.__clear_trace = function() {
 	var d = document.getElementById("haxe:trace");
 	if(d != null) d.innerHTML = "";
 }
+js.Boot.isClass = function(o) {
+	return o.__name__;
+}
+js.Boot.isEnum = function(e) {
+	return e.__ename__;
+}
+js.Boot.getClass = function(o) {
+	return o.__class__;
+}
 js.Boot.__string_rec = function(o,s) {
 	if(o == null) return "null";
 	if(s.length >= 5) return "<...>";
 	var t = typeof(o);
-	if(t == "function" && (o.__name__ != null || o.__ename__ != null)) t = "object";
+	if(t == "function" && (o.__name__ || o.__ename__)) t = "object";
 	switch(t) {
 	case "object":
 		if(o instanceof Array) {
-			if(o.__enum__ != null) {
+			if(o.__enum__) {
 				if(o.length == 2) return o[0];
 				var str = o[0] + "(";
 				s += "\t";
@@ -2425,74 +2947,21 @@ js.Boot.__instanceof = function(o,cl) {
 		return true;
 	default:
 		if(o == null) return false;
-		return o.__enum__ == cl || cl == Class && o.__name__ != null || cl == Enum && o.__ename__ != null;
+		if(cl == Class && o.__name__ != null) return true; else null;
+		if(cl == Enum && o.__ename__ != null) return true; else null;
+		return o.__enum__ == cl;
 	}
 }
-js.Boot.__init = function() {
-	js.Lib.isIE = typeof document!='undefined' && document.all != null && typeof window!='undefined' && window.opera == null;
-	js.Lib.isOpera = typeof window!='undefined' && window.opera != null;
-	Array.prototype.copy = Array.prototype.slice;
-	Array.prototype.insert = function(i,x) {
-		this.splice(i,0,x);
-	};
-	Array.prototype.remove = Array.prototype.indexOf?function(obj) {
-		var idx = this.indexOf(obj);
-		if(idx == -1) return false;
-		this.splice(idx,1);
-		return true;
-	}:function(obj) {
-		var i = 0;
-		var l = this.length;
-		while(i < l) {
-			if(this[i] == obj) {
-				this.splice(i,1);
-				return true;
-			}
-			i++;
-		}
-		return false;
-	};
-	Array.prototype.iterator = function() {
-		return { cur : 0, arr : this, hasNext : function() {
-			return this.cur < this.arr.length;
-		}, next : function() {
-			return this.arr[this.cur++];
-		}};
-	};
-	if(String.prototype.cca == null) String.prototype.cca = String.prototype.charCodeAt;
-	String.prototype.charCodeAt = function(i) {
-		var x = this.cca(i);
-		if(x != x) return undefined;
-		return x;
-	};
-	var oldsub = String.prototype.substr;
-	String.prototype.substr = function(pos,len) {
-		if(pos != null && pos != 0 && len != null && len < 0) return "";
-		if(len == null) len = this.length;
-		if(pos < 0) {
-			pos = this.length + pos;
-			if(pos < 0) pos = 0;
-		} else if(len < 0) len = this.length + len - pos;
-		return oldsub.apply(this,[pos,len]);
-	};
-	Function.prototype["$bind"] = function(o) {
-		var f = function() {
-			return f.method.apply(f.scope,arguments);
-		};
-		f.scope = o;
-		f.method = this;
-		return f;
-	};
-}
-js.Boot.prototype = {
-	__class__: js.Boot
+js.Boot.__cast = function(o,t) {
+	if(js.Boot.__instanceof(o,t)) return o; else throw "Cannot cast " + Std.string(o) + " to " + Std.string(t);
 }
 js.Lib = $hxClasses["js.Lib"] = function() { }
 js.Lib.__name__ = ["js","Lib"];
-js.Lib.isIE = null;
-js.Lib.isOpera = null;
 js.Lib.document = null;
 js.Lib.window = null;
+js.Lib.debug = function() {
+	debugger;
+}
 js.Lib.alert = function(v) {
 	alert(js.Boot.__string_rec(v,""));
 }
@@ -2502,22 +2971,19 @@ js.Lib.eval = function(code) {
 js.Lib.setErrorHandler = function(f) {
 	js.Lib.onerror = f;
 }
-js.Lib.prototype = {
-	__class__: js.Lib
-}
 var microbe = microbe || {}
 microbe.ClassMap = $hxClasses["microbe.ClassMap"] = function() {
 };
 microbe.ClassMap.__name__ = ["microbe","ClassMap"];
 microbe.ClassMap.prototype = {
-	id: null
-	,voClass: null
-	,fields: null
-	,submit: null
-	,action: null
-	,toString: function() {
+	toString: function() {
 		return this.fields.toString();
 	}
+	,action: null
+	,submit: null
+	,fields: null
+	,voClass: null
+	,id: null
 	,__class__: microbe.ClassMap
 }
 microbe.ClassMapUtils = $hxClasses["microbe.ClassMapUtils"] = function(_map) {
@@ -2527,17 +2993,47 @@ microbe.ClassMapUtils = $hxClasses["microbe.ClassMapUtils"] = function(_map) {
 };
 microbe.ClassMapUtils.__name__ = ["microbe","ClassMapUtils"];
 microbe.ClassMapUtils.prototype = {
-	currentCollec: null
-	,map: null
-	,mapFields: null
-	,currentVoName: null
-	,temp: null
-	,removeInCurrent: function(list) {
-		this.currentCollec.remove(list);
+	searchCollecAlgo: function(item) {
+		if(item.type == microbe.form.InstanceType.collection && item.voName == this.currentVoName) {
+			this.temp.add(item);
+			return true;
+		} else {
+			if(js.Boot.__instanceof(item,microbe.form.MicroFieldList)) item.filter($bind(this,this.searchCollecAlgo));
+			return false;
+		}
+	}
+	,parseCollec: function(collec) {
+		haxe.Log.trace("<br/>collec=" + collec.getLength(),{ fileName : "ClassMapUtils.hx", lineNumber : 75, className : "microbe.ClassMapUtils", methodName : "parseCollec"});
+		haxe.Log.trace("<br/>new Collec=" + Std.string(collec),{ fileName : "ClassMapUtils.hx", lineNumber : 77, className : "microbe.ClassMapUtils", methodName : "parseCollec"});
+	}
+	,searchCollec: function(voName) {
+		this.temp = new List();
+		this.currentVoName = voName;
+		var result = this.mapFields.filter($bind(this,this.searchCollecAlgo));
+		this.currentCollec = result.first();
+		return this.currentCollec;
+	}
+	,addinCollecAt: function(item,pos) {
+		var tab = Lambda.array(this.currentCollec.fields);
+		tab.splice(pos,0,item);
+		this.currentCollec.fields = Lambda.list(tab);
+	}
+	,addInCollec: function(item) {
+		this.currentCollec.add(item);
+	}
+	,searchinCollecById: function(collectItemid) {
+		return this.currentCollec.filter(function(item) {
+			js.Lib.alert("item=" + Std.string(item));
+			if(item.id == collectItemid) {
+				js.Lib.alert("Trouvé" + Std.string(item.id));
+				return true;
+			}
+			return false;
+		}).first();
 	}
 	,searchinCollecByPos: function(pos) {
 		return this.currentCollec.filter(function(item) {
-			js.Lib.alert("item=" + item);
+			js.Lib.alert("item=" + Std.string(item));
 			if(item.pos == pos) {
 				js.Lib.alert("Trouvé" + pos);
 				return true;
@@ -2545,56 +3041,33 @@ microbe.ClassMapUtils.prototype = {
 			return false;
 		}).first();
 	}
-	,searchinCollecById: function(collectItemid) {
-		return this.currentCollec.filter(function(item) {
-			js.Lib.alert("item=" + item);
-			if(item.id == collectItemid) {
-				js.Lib.alert("Trouvé" + item.id);
-				return true;
-			}
-			return false;
-		}).first();
+	,removeInCurrent: function(list) {
+		this.currentCollec.remove(list);
 	}
-	,addInCollec: function(item) {
-		this.currentCollec.add(item);
-	}
-	,addinCollecAt: function(item,pos) {
-		var tab = Lambda.array(this.currentCollec.fields);
-		tab.insert(pos,item);
-		this.currentCollec.fields = Lambda.list(tab);
-	}
-	,searchCollec: function(voName) {
-		this.temp = new List();
-		this.currentVoName = voName;
-		var result = this.mapFields.filter(this.searchCollecAlgo.$bind(this));
-		this.currentCollec = result.first();
-		return this.currentCollec;
-	}
-	,parseCollec: function(collec) {
-		haxe.Log.trace("<br/>collec=" + collec.getLength(),{ fileName : "ClassMapUtils.hx", lineNumber : 75, className : "microbe.ClassMapUtils", methodName : "parseCollec"});
-		haxe.Log.trace("<br/>new Collec=" + collec,{ fileName : "ClassMapUtils.hx", lineNumber : 77, className : "microbe.ClassMapUtils", methodName : "parseCollec"});
-	}
-	,searchCollecAlgo: function(item) {
-		if(item.type == microbe.form.InstanceType.collection && item.voName == this.currentVoName) {
-			this.temp.add(item);
-			return true;
-		} else {
-			if(Std["is"](item,microbe.form.MicroFieldList)) item.filter(this.searchCollecAlgo.$bind(this));
-			return false;
-		}
-	}
+	,temp: null
+	,currentVoName: null
+	,mapFields: null
+	,map: null
+	,currentCollec: null
 	,__class__: microbe.ClassMapUtils
+}
+microbe.ImportHelper = $hxClasses["microbe.ImportHelper"] = function() {
+};
+microbe.ImportHelper.__name__ = ["microbe","ImportHelper"];
+microbe.ImportHelper.prototype = {
+	__class__: microbe.ImportHelper
 }
 microbe.TagManager = $hxClasses["microbe.TagManager"] = function() {
 };
 microbe.TagManager.__name__ = ["microbe","TagManager"];
+microbe.TagManager.currentspod = null;
 microbe.TagManager.getTags = function(spod,spodId) {
-	microbe.tools.Debug.Alerte(Std.string(spodId),{ fileName : "TagManager.hx", lineNumber : 79, className : "microbe.TagManager", methodName : "getTags"});
-	microbe.tools.Debug.Alerte(microbe.jsTools.BackJS.base_url,{ fileName : "TagManager.hx", lineNumber : 80, className : "microbe.TagManager", methodName : "getTags"});
+	microbe.tools.Debug.Alerte(Std.string(spodId),{ fileName : "TagManager.hx", lineNumber : 324, className : "microbe.TagManager", methodName : "getTags"});
+	microbe.tools.Debug.Alerte(microbe.jsTools.BackJS.base_url,{ fileName : "TagManager.hx", lineNumber : 325, className : "microbe.TagManager", methodName : "getTags"});
 	var Xreponse = null;
 	Xreponse = haxe.Http.requestUrl(microbe.jsTools.BackJS.base_url + "/index.php/gap/tags/spod/" + spod + "/id/" + spodId);
 	var reponse = haxe.Unserializer.run(Xreponse);
-	microbe.tools.Debug.Alerte(Std.string(reponse),{ fileName : "TagManager.hx", lineNumber : 86, className : "microbe.TagManager", methodName : "getTags"});
+	microbe.tools.Debug.Alerte(Std.string(reponse),{ fileName : "TagManager.hx", lineNumber : 331, className : "microbe.TagManager", methodName : "getTags"});
 	return reponse;
 }
 microbe.TagManager.addTag = function(spod,spodID,tag) {
@@ -2623,21 +3096,21 @@ microbe.Tag = $hxClasses["microbe.Tag"] = function() {
 };
 microbe.Tag.__name__ = ["microbe","Tag"];
 microbe.Tag.prototype = {
-	tag: null
-	,id: null
+	id: null
+	,tag: null
 	,__class__: microbe.Tag
 }
 if(!microbe.form) microbe.form = {}
 microbe.form.AjaxElement = $hxClasses["microbe.form.AjaxElement"] = function(_microfield,_iter) {
 	microbe.tools.Debug.Alerte("new",{ fileName : "AjaxElement.hx", lineNumber : 23, className : "microbe.form.AjaxElement", methodName : "new"});
-	if(Std["is"](_microfield,microbe.form.Microfield)) {
+	if(js.Boot.__instanceof(_microfield,microbe.form.Microfield)) {
 		this.microfield = _microfield;
 		this.id = _microfield.elementId;
 		this.field = _microfield.field;
 		this.element = _microfield.element;
 		this.value = _microfield.value;
 	}
-	if(Std["is"](_microfield,microbe.form.MicroFieldList)) {
+	if(js.Boot.__instanceof(_microfield,microbe.form.MicroFieldList)) {
 		this.microfieldliste = _microfield;
 		this.id = _microfield.elementId;
 		this.field = _microfield.field;
@@ -2651,30 +3124,30 @@ microbe.form.AjaxElement = $hxClasses["microbe.form.AjaxElement"] = function(_mi
 };
 microbe.form.AjaxElement.__name__ = ["microbe","form","AjaxElement"];
 microbe.form.AjaxElement.prototype = {
-	id: null
-	,microfield: null
-	,microfieldliste: null
-	,field: null
-	,element: null
-	,value: null
-	,pos: null
-	,voName: null
-	,spodId: null
-	,focus: function() {
-		new js.JQuery("#" + this.id).addClass("borded");
+	setValue: function(val) {
+	}
+	,getValue: function() {
+		return "null";
+	}
+	,output: function() {
+		return "yop";
 	}
 	,getForm: function() {
 		var p = new js.JQuery("#" + this.id).parents("form");
 		return p.attr("id");
 	}
-	,output: function() {
-		return "yop";
+	,focus: function() {
+		new js.JQuery("#" + this.id).addClass("borded");
 	}
-	,getValue: function() {
-		return "null";
-	}
-	,setValue: function(val) {
-	}
+	,spodId: null
+	,voName: null
+	,pos: null
+	,value: null
+	,element: null
+	,field: null
+	,microfieldliste: null
+	,microfield: null
+	,id: null
 	,__class__: microbe.form.AjaxElement
 }
 microbe.form.Form = $hxClasses["microbe.form.Form"] = function(name,action,method) {
@@ -2695,120 +3168,54 @@ microbe.form.Form = $hxClasses["microbe.form.Form"] = function(name,action,metho
 };
 microbe.form.Form.__name__ = ["microbe","form","Form"];
 microbe.form.Form.prototype = {
-	id: null
-	,name: null
-	,action: null
-	,method: null
-	,elements: null
-	,fieldsets: null
-	,forcePopulate: null
-	,submitButton: null
-	,deleteButton: null
-	,extraErrors: null
-	,requiredClass: null
-	,requiredErrorClass: null
-	,invalidErrorClass: null
-	,labelRequiredIndicator: null
-	,defaultClass: null
-	,submittedButtonName: null
-	,wymEditorCount: null
-	,addElement: function(element,fieldSetKey) {
-		if(fieldSetKey == null) fieldSetKey = "__default";
-		element.form = this;
-		this.elements.add(element);
-		if(fieldSetKey != null && this.fieldsets.exists(fieldSetKey)) this.fieldsets.get(fieldSetKey).elements.add(element);
-		if(Std["is"](element,microbe.form.elements.RichtextWym)) this.wymEditorCount++;
-		return element;
+	toString: function() {
+		return this.getPreview();
 	}
-	,removeElement: function(element) {
-		if(this.elements.remove(element)) {
-			element.form = null;
-			var $it0 = this.fieldsets.iterator();
-			while( $it0.hasNext() ) {
-				var fs = $it0.next();
-				fs.elements.remove(element);
-			}
-			return true;
+	,getPreview: function() {
+		var s = new StringBuf();
+		s.b += Std.string(this.getOpenTag());
+		if(this.isSubmitted()) s.b += Std.string(this.getErrors());
+		s.b += Std.string("<ul>\n");
+		var $it0 = this.getElements().iterator();
+		while( $it0.hasNext() ) {
+			var element = $it0.next();
+			if(element != this.submitButton || element != this.deleteButton) s.b += Std.string("\t" + element.getPreview() + "\n");
 		}
+		if(this.submitButton != null) {
+			this.submitButton.form = this;
+			s.b += Std.string(this.submitButton.getPreview());
+		}
+		if(this.deleteButton != null) {
+			this.deleteButton.form = this;
+			s.b += Std.string(this.deleteButton.render());
+		}
+		s.b += Std.string("</ul>\n");
+		s.b += Std.string(this.getCloseTag());
+		return s.b;
+	}
+	,getErrors: function() {
+		if(!this.isSubmitted()) return "";
+		var s = new StringBuf();
+		var errors = this.getErrorsList();
+		if(errors.length > 0) {
+			s.b += Std.string("<ul class=\"formErrors\" >");
+			var $it0 = errors.iterator();
+			while( $it0.hasNext() ) {
+				var error = $it0.next();
+				s.b += Std.string("<li>" + error + "</li>");
+			}
+			s.b += Std.string("</ul>");
+		}
+		return s.b;
+	}
+	,getSubmittedValue: function() {
+		return "";
+	}
+	,isSubmitted: function() {
 		return false;
 	}
-	,setSubmitButton: function(el) {
-		return this.submitButton = el;
-	}
-	,setDeleteButton: function(el) {
-		return this.deleteButton = el;
-	}
-	,addFieldset: function(fieldSetKey,fieldSet) {
-		fieldSet.form = this;
-		this.fieldsets.set(fieldSetKey,fieldSet);
-	}
-	,getFieldsets: function() {
-		return this.fieldsets;
-	}
-	,getLabel: function(elementName) {
-		return this.getElement(elementName).getLabel();
-	}
-	,getElement: function(name) {
-		var $it0 = this.elements.iterator();
-		while( $it0.hasNext() ) {
-			var element = $it0.next();
-			if(element.name == name) return element;
-		}
-		throw "Cannot access Form Element: '" + name + "'";
-		return null;
-	}
-	,getValueOf: function(elementName) {
-		return this.getElement(elementName).value;
-	}
-	,getElementTyped: function(name,type) {
-		var o = this.getElement(name);
-		return o;
-	}
-	,getData: function() {
-		var data = { };
-		var $it0 = this.getElements().iterator();
-		while( $it0.hasNext() ) {
-			var element = $it0.next();
-			data[element.name] = element.value;
-		}
-		return data;
-	}
-	,populateElements: function() {
-		var element;
-		var $it0 = this.getElements().iterator();
-		while( $it0.hasNext() ) {
-			var element1 = $it0.next();
-			element1.populate();
-		}
-	}
-	,clearData: function() {
-		var element;
-		var $it0 = this.getElements().iterator();
-		while( $it0.hasNext() ) {
-			var element1 = $it0.next();
-			element1.value = null;
-		}
-	}
-	,getOpenTag: function() {
-		return "<form id=\"" + this.id + "\" name=\"" + this.name + "\" method=\"" + this.method + "\" action=\"" + this.action + "\" enctype=\"multipart/form-data\" >";
-	}
-	,getCloseTag: function() {
-		var s = new StringBuf();
-		s.add("<input type=\"hidden\" name=\"" + this.name + "_formSubmitted\" value=\"true\" /></form>");
-		return s.b.join("");
-	}
-	,isValid: function() {
-		var valid = true;
-		var $it0 = this.getElements().iterator();
-		while( $it0.hasNext() ) {
-			var element = $it0.next();
-			if(!element.isValid()) valid = false;
-		}
-		if(this.extraErrors.length > 0) valid = false;
-		return valid;
-	}
-	,addError: function(error) {
-		this.extraErrors.add(error);
+	,getElements: function() {
+		return this.elements;
 	}
 	,getErrorsList: function() {
 		this.isValid();
@@ -2829,55 +3236,121 @@ microbe.form.Form.prototype = {
 		}
 		return errors;
 	}
-	,getElements: function() {
-		return this.elements;
+	,addError: function(error) {
+		this.extraErrors.add(error);
 	}
-	,isSubmitted: function() {
-		return false;
-	}
-	,getSubmittedValue: function() {
-		return "";
-	}
-	,getErrors: function() {
-		if(!this.isSubmitted()) return "";
-		var s = new StringBuf();
-		var errors = this.getErrorsList();
-		if(errors.length > 0) {
-			s.b[s.b.length] = "<ul class=\"formErrors\" >";
-			var $it0 = errors.iterator();
-			while( $it0.hasNext() ) {
-				var error = $it0.next();
-				s.add("<li>" + error + "</li>");
-			}
-			s.b[s.b.length] = "</ul>";
-		}
-		return s.b.join("");
-	}
-	,getPreview: function() {
-		var s = new StringBuf();
-		s.add(this.getOpenTag());
-		if(this.isSubmitted()) s.add(this.getErrors());
-		s.b[s.b.length] = "<ul>\n";
+	,isValid: function() {
+		var valid = true;
 		var $it0 = this.getElements().iterator();
 		while( $it0.hasNext() ) {
 			var element = $it0.next();
-			if(element != this.submitButton || element != this.deleteButton) s.add("\t" + element.getPreview() + "\n");
+			if(!element.isValid()) valid = false;
 		}
-		if(this.submitButton != null) {
-			this.submitButton.form = this;
-			s.add(this.submitButton.getPreview());
-		}
-		if(this.deleteButton != null) {
-			this.deleteButton.form = this;
-			s.add(this.deleteButton.render());
-		}
-		s.b[s.b.length] = "</ul>\n";
-		s.add(this.getCloseTag());
-		return s.b.join("");
+		if(this.extraErrors.length > 0) valid = false;
+		return valid;
 	}
-	,toString: function() {
-		return this.getPreview();
+	,getCloseTag: function() {
+		var s = new StringBuf();
+		s.b += Std.string("<input type=\"hidden\" name=\"" + this.name + "_formSubmitted\" value=\"true\" /></form>");
+		return s.b;
 	}
+	,getOpenTag: function() {
+		return "<form id=\"" + this.id + "\" name=\"" + this.name + "\" method=\"" + Std.string(this.method) + "\" action=\"" + this.action + "\" enctype=\"multipart/form-data\" >";
+	}
+	,clearData: function() {
+		var element;
+		var $it0 = this.getElements().iterator();
+		while( $it0.hasNext() ) {
+			var element1 = $it0.next();
+			element1.value = null;
+		}
+	}
+	,populateElements: function() {
+		var element;
+		var $it0 = this.getElements().iterator();
+		while( $it0.hasNext() ) {
+			var element1 = $it0.next();
+			element1.populate();
+		}
+	}
+	,getData: function() {
+		var data = { };
+		var $it0 = this.getElements().iterator();
+		while( $it0.hasNext() ) {
+			var element = $it0.next();
+			data[element.name] = element.value;
+		}
+		return data;
+	}
+	,getElementTyped: function(name,type) {
+		var o = this.getElement(name);
+		return o;
+	}
+	,getValueOf: function(elementName) {
+		return this.getElement(elementName).value;
+	}
+	,getElement: function(name) {
+		var $it0 = this.elements.iterator();
+		while( $it0.hasNext() ) {
+			var element = $it0.next();
+			if(element.name == name) return element;
+		}
+		throw "Cannot access Form Element: '" + name + "'";
+		return null;
+	}
+	,getLabel: function(elementName) {
+		return this.getElement(elementName).getLabel();
+	}
+	,getFieldsets: function() {
+		return this.fieldsets;
+	}
+	,addFieldset: function(fieldSetKey,fieldSet) {
+		fieldSet.form = this;
+		this.fieldsets.set(fieldSetKey,fieldSet);
+	}
+	,setDeleteButton: function(el) {
+		return this.deleteButton = el;
+	}
+	,setSubmitButton: function(el) {
+		return this.submitButton = el;
+	}
+	,removeElement: function(element) {
+		if(this.elements.remove(element)) {
+			element.form = null;
+			var $it0 = this.fieldsets.iterator();
+			while( $it0.hasNext() ) {
+				var fs = $it0.next();
+				fs.elements.remove(element);
+			}
+			return true;
+		}
+		return false;
+	}
+	,addElement: function(element,fieldSetKey) {
+		if(fieldSetKey == null) fieldSetKey = "__default";
+		element.form = this;
+		this.elements.add(element);
+		if(fieldSetKey != null && this.fieldsets.exists(fieldSetKey)) this.fieldsets.get(fieldSetKey).elements.add(element);
+		if(js.Boot.__instanceof(element,microbe.form.elements.RichtextWym)) this.wymEditorCount++;
+		return element;
+	}
+	,wymEditorCount: null
+	,submittedButtonName: null
+	,defaultClass: null
+	,labelRequiredIndicator: null
+	,invalidErrorClass: null
+	,requiredErrorClass: null
+	,requiredClass: null
+	,extraErrors: null
+	,deleteButton: null
+	,submitButton: null
+	,forcePopulate: null
+	,fieldsets: null
+	,elements: null
+	,method: null
+	,action: null
+	,name: null
+	,id: null
 	,__class__: microbe.form.Form
 }
 microbe.form.FieldSet = $hxClasses["microbe.form.FieldSet"] = function(name,label,visible) {
@@ -2891,17 +3364,17 @@ microbe.form.FieldSet = $hxClasses["microbe.form.FieldSet"] = function(name,labe
 };
 microbe.form.FieldSet.__name__ = ["microbe","form","FieldSet"];
 microbe.form.FieldSet.prototype = {
-	name: null
-	,form: null
-	,label: null
-	,visible: null
-	,elements: null
+	getCloseTag: function() {
+		return "</fieldset>";
+	}
 	,getOpenTag: function() {
 		return "<fieldset id=\"" + this.form.name + "_" + this.name + "\" name=\"" + this.form.name + "_" + this.name + "\" class=\"" + (this.visible?"":"fieldsetNoDisplay") + "\" ><legend>" + this.label + "</legend>";
 	}
-	,getCloseTag: function() {
-		return "</fieldset>";
-	}
+	,elements: null
+	,visible: null
+	,label: null
+	,form: null
+	,name: null
 	,__class__: microbe.form.FieldSet
 }
 microbe.form.FormMethod = $hxClasses["microbe.form.FormMethod"] = { __ename__ : ["microbe","form","FormMethod"], __constructs__ : ["GET","POST"] }
@@ -2919,18 +3392,81 @@ microbe.form.FormElement = $hxClasses["microbe.form.FormElement"] = function() {
 };
 microbe.form.FormElement.__name__ = ["microbe","form","FormElement"];
 microbe.form.FormElement.prototype = {
-	form: null
-	,name: null
-	,label: null
-	,description: null
-	,value: null
-	,required: null
-	,errors: null
-	,attributes: null
-	,active: null
-	,validators: null
-	,cssClass: null
-	,inited: null
+	safeString: function(s) {
+		return s == null?"":StringTools.htmlEscape(Std.string(s)).split("\"").join("&quot;");
+	}
+	,test: function() {
+		this.init();
+		return "popoop" + this.form.name;
+	}
+	,getClasses: function() {
+		var css = this.cssClass != null?this.cssClass:this.form.defaultClass;
+		if(this.required && this.form.isSubmitted()) {
+			if(this.value == "") css += " " + this.form.requiredErrorClass;
+			if(!this.isValid()) css += " " + this.form.invalidErrorClass;
+		}
+		return StringTools.trim(css);
+	}
+	,getLabel: function() {
+		var n = this.form.name + "_" + this.name;
+		if(this.label != null) return "<label for=\"" + n + "\" class=\"" + this.getLabelClasses() + "\" id=\"" + n + "Label\">" + this.label + (this.required?this.form.labelRequiredIndicator:null) + "</label>";
+		return null;
+	}
+	,getLabelClasses: function() {
+		var css = "";
+		var requiredSet = false;
+		if(this.required) {
+			css = this.form.requiredClass;
+			if(this.form.isSubmitted() && this.required && this.value == "") {
+				css = this.form.requiredErrorClass;
+				requiredSet = true;
+			}
+		}
+		if(!requiredSet && this.form.isSubmitted() && !this.isValid()) css = this.form.invalidErrorClass;
+		if(this.cssClass != null) css += css == ""?this.cssClass:" " + this.cssClass;
+		return css;
+	}
+	,getType: function() {
+		return Std.string(Type.getClass(this));
+	}
+	,getPreview: function() {
+		return "<li><span>" + this.getLabel() + "</span><div>" + this.render() + "</div></li>";
+	}
+	,remove: function() {
+		if(this.form != null) return this.form.removeElement(this);
+		return false;
+	}
+	,render: function(iter) {
+		if(!this.inited) this.init();
+		return this.value;
+	}
+	,getErrors: function() {
+		this.isValid();
+		var $it0 = this.validators.iterator();
+		while( $it0.hasNext() ) {
+			var val = $it0.next();
+			var $it1 = val.errors.iterator();
+			while( $it1.hasNext() ) {
+				var err = $it1.next();
+				this.errors.add("<span class=\"formErrorsField\">" + this.label + "</span> : " + err);
+			}
+		}
+		return this.errors;
+	}
+	,populate: function() {
+	}
+	,bindEvent: function(event,method,params,isMethodGlobal) {
+		if(isMethodGlobal == null) isMethodGlobal = false;
+	}
+	,addValidator: function(validator) {
+		this.validators.add(validator);
+	}
+	,init: function() {
+		this.inited = true;
+	}
+	,checkValid: function() {
+		this.value == "";
+	}
 	,isValid: function() {
 		this.errors.clear();
 		if(this.active == false) return true;
@@ -2951,80 +3487,18 @@ microbe.form.FormElement.prototype = {
 		}
 		return true;
 	}
-	,checkValid: function() {
-		this.value == "";
-	}
-	,init: function() {
-		this.inited = true;
-	}
-	,addValidator: function(validator) {
-		this.validators.add(validator);
-	}
-	,bindEvent: function(event,method,params,isMethodGlobal) {
-		if(isMethodGlobal == null) isMethodGlobal = false;
-	}
-	,populate: function() {
-	}
-	,getErrors: function() {
-		this.isValid();
-		var $it0 = this.validators.iterator();
-		while( $it0.hasNext() ) {
-			var val = $it0.next();
-			var $it1 = val.errors.iterator();
-			while( $it1.hasNext() ) {
-				var err = $it1.next();
-				this.errors.add("<span class=\"formErrorsField\">" + this.label + "</span> : " + err);
-			}
-		}
-		return this.errors;
-	}
-	,render: function(iter) {
-		if(!this.inited) this.init();
-		return this.value;
-	}
-	,remove: function() {
-		if(this.form != null) return this.form.removeElement(this);
-		return false;
-	}
-	,getPreview: function() {
-		return "<li><span>" + this.getLabel() + "</span><div>" + this.render() + "</div></li>";
-	}
-	,getType: function() {
-		return Std.string(Type.getClass(this));
-	}
-	,getLabelClasses: function() {
-		var css = "";
-		var requiredSet = false;
-		if(this.required) {
-			css = this.form.requiredClass;
-			if(this.form.isSubmitted() && this.required && this.value == "") {
-				css = this.form.requiredErrorClass;
-				requiredSet = true;
-			}
-		}
-		if(!requiredSet && this.form.isSubmitted() && !this.isValid()) css = this.form.invalidErrorClass;
-		if(this.cssClass != null) css += css == ""?this.cssClass:" " + this.cssClass;
-		return css;
-	}
-	,getLabel: function() {
-		var n = this.form.name + "_" + this.name;
-		return "<label for=\"" + n + "\" class=\"" + this.getLabelClasses() + "\" id=\"" + n + "Label\">" + this.label + (this.required?this.form.labelRequiredIndicator:null) + "</label>";
-	}
-	,getClasses: function() {
-		var css = this.cssClass != null?this.cssClass:this.form.defaultClass;
-		if(this.required && this.form.isSubmitted()) {
-			if(this.value == "") css += " " + this.form.requiredErrorClass;
-			if(!this.isValid()) css += " " + this.form.invalidErrorClass;
-		}
-		return StringTools.trim(css);
-	}
-	,test: function() {
-		this.init();
-		return "popoop" + this.form.name;
-	}
-	,safeString: function(s) {
-		return s == null?"":StringTools.htmlEscape(Std.string(s)).split("\"").join("&quot;");
-	}
+	,inited: null
+	,cssClass: null
+	,validators: null
+	,active: null
+	,attributes: null
+	,errors: null
+	,required: null
+	,value: null
+	,description: null
+	,label: null
+	,name: null
+	,form: null
 	,__class__: microbe.form.FormElement
 }
 microbe.form.Formatter = $hxClasses["microbe.form.Formatter"] = function() { }
@@ -3033,7 +3507,7 @@ microbe.form.Formatter.prototype = {
 	format: null
 	,__class__: microbe.form.Formatter
 }
-microbe.form.InstanceType = $hxClasses["microbe.form.InstanceType"] = { __ename__ : ["microbe","form","InstanceType"], __constructs__ : ["formElement","collection","spodable"] }
+microbe.form.InstanceType = $hxClasses["microbe.form.InstanceType"] = { __ename__ : ["microbe","form","InstanceType"], __constructs__ : ["formElement","collection","spodable","dataElement"] }
 microbe.form.InstanceType.formElement = ["formElement",0];
 microbe.form.InstanceType.formElement.toString = $estr;
 microbe.form.InstanceType.formElement.__enum__ = microbe.form.InstanceType;
@@ -3043,14 +3517,17 @@ microbe.form.InstanceType.collection.__enum__ = microbe.form.InstanceType;
 microbe.form.InstanceType.spodable = ["spodable",2];
 microbe.form.InstanceType.spodable.toString = $estr;
 microbe.form.InstanceType.spodable.__enum__ = microbe.form.InstanceType;
+microbe.form.InstanceType.dataElement = ["dataElement",3];
+microbe.form.InstanceType.dataElement.toString = $estr;
+microbe.form.InstanceType.dataElement.__enum__ = microbe.form.InstanceType;
 microbe.form.IMicrotype = $hxClasses["microbe.form.IMicrotype"] = function() { }
 microbe.form.IMicrotype.__name__ = ["microbe","form","IMicrotype"];
 microbe.form.IMicrotype.prototype = {
-	voName: null
-	,field: null
-	,value: null
+	toString: null
 	,type: null
-	,toString: null
+	,value: null
+	,field: null
+	,voName: null
 	,__class__: microbe.form.IMicrotype
 }
 microbe.form.MicroFieldList = $hxClasses["microbe.form.MicroFieldList"] = function() {
@@ -3059,50 +3536,51 @@ microbe.form.MicroFieldList = $hxClasses["microbe.form.MicroFieldList"] = functi
 microbe.form.MicroFieldList.__name__ = ["microbe","form","MicroFieldList"];
 microbe.form.MicroFieldList.__interfaces__ = [microbe.form.IMicrotype];
 microbe.form.MicroFieldList.prototype = {
-	field: null
-	,voName: null
-	,value: null
-	,id: null
-	,elementId: null
-	,type: null
-	,fields: null
-	,indent: null
-	,length: null
-	,pos: null
-	,taggable: null
-	,getLength: function() {
-		return this.fields.length;
+	toString: function() {
+		this.indent++;
+		return "MICROFIELDLIST: " + this.voName + ", TYPE:" + Std.string(this.type) + ", FIELD:" + this.field + "  ID:" + this.id + ",ElementId:" + this.elementId + " pos=" + this.pos + " VALUE:" + this.value + "\n" + this.fields.toString() + "\n";
+		return "";
+	}
+	,map: function(f) {
+		return this.fields.map(f);
+	}
+	,filter: function(f) {
+		return this.fields.filter(f);
+	}
+	,remove: function(v) {
+		return this.fields.remove(v);
+	}
+	,next: function() {
+		return this.fields.iterator().next();
+	}
+	,last: function() {
+		return this.fields.last();
+	}
+	,first: function() {
+		return this.fields.first();
+	}
+	,iterator: function() {
+		return this.fields.iterator();
 	}
 	,add: function(item) {
 		this.fields.add(item);
 		return item;
 	}
-	,iterator: function() {
-		return this.fields.iterator();
+	,getLength: function() {
+		return this.fields.length;
 	}
-	,first: function() {
-		return this.fields.first();
-	}
-	,last: function() {
-		return this.fields.last();
-	}
-	,next: function() {
-		return this.fields.iterator().next();
-	}
-	,remove: function(v) {
-		return this.fields.remove(v);
-	}
-	,filter: function(f) {
-		return this.fields.filter(f);
-	}
-	,map: function(f) {
-		return this.fields.map(f);
-	}
-	,toString: function() {
-		this.indent++;
-		return "MICROFIELDLIST: " + this.voName + ", TYPE:" + this.type + ", FIELD:" + this.field + "  ID:" + this.id + ",ElementId:" + this.elementId + " pos=" + this.pos + " VALUE:" + this.value + "\n" + this.fields.toString() + "\n";
-		return "";
-	}
+	,traductable: null
+	,taggable: null
+	,pos: null
+	,length: null
+	,indent: null
+	,fields: null
+	,type: null
+	,elementId: null
+	,id: null
+	,value: null
+	,voName: null
+	,field: null
 	,__class__: microbe.form.MicroFieldList
 	,__properties__: {get_length:"getLength"}
 }
@@ -3111,16 +3589,16 @@ microbe.form.Microfield = $hxClasses["microbe.form.Microfield"] = function() {
 microbe.form.Microfield.__name__ = ["microbe","form","Microfield"];
 microbe.form.Microfield.__interfaces__ = [microbe.form.IMicrotype];
 microbe.form.Microfield.prototype = {
-	voName: null
-	,field: null
-	,element: null
-	,elementId: null
-	,value: null
-	,type: null
-	,toString: function() {
-		return "\nMICROFIELD :type:" + this.type + "\nfield:" + this.field + ",\nvoName:" + this.voName + ",\nelement:" + this.element + ", \nelementId:" + this.elementId + "\nvalue:" + this.value + "\n";
+	toString: function() {
+		return "\nMICROFIELD :type:" + Std.string(this.type) + "\nfield:" + this.field + ",\nvoName:" + this.voName + ",\nelement:" + this.element + ", \nelementId:" + this.elementId + "\nvalue:" + this.value + "\n";
 		return "";
 	}
+	,type: null
+	,value: null
+	,elementId: null
+	,element: null
+	,field: null
+	,voName: null
 	,__class__: microbe.form.Microfield
 }
 microbe.form.Validator = $hxClasses["microbe.form.Validator"] = function() {
@@ -3128,14 +3606,14 @@ microbe.form.Validator = $hxClasses["microbe.form.Validator"] = function() {
 };
 microbe.form.Validator.__name__ = ["microbe","form","Validator"];
 microbe.form.Validator.prototype = {
-	errors: null
+	reset: function() {
+		this.errors.clear();
+	}
 	,isValid: function(value) {
 		this.errors.clear();
 		return true;
 	}
-	,reset: function() {
-		this.errors.clear();
-	}
+	,errors: null
 	,__class__: microbe.form.Validator
 }
 if(!microbe.form.elements) microbe.form.elements = {}
@@ -3145,16 +3623,16 @@ microbe.form.elements.AjaxArea = $hxClasses["microbe.form.elements.AjaxArea"] = 
 microbe.form.elements.AjaxArea.__name__ = ["microbe","form","elements","AjaxArea"];
 microbe.form.elements.AjaxArea.__super__ = microbe.form.AjaxElement;
 microbe.form.elements.AjaxArea.prototype = $extend(microbe.form.AjaxElement.prototype,{
-	moduleid: null
+	setValue: function(val) {
+		microbe.tools.Debug.Alerte(val,{ fileName : "AjaxArea.hx", lineNumber : 79, className : "microbe.form.elements.AjaxArea", methodName : "setValue"});
+		new js.JQuery("#" + this.id).val(val);
+	}
 	,getValue: function() {
 		var val = new js.JQuery("#" + this.id).val();
 		microbe.tools.Debug.Alerte(val,{ fileName : "AjaxArea.hx", lineNumber : 75, className : "microbe.form.elements.AjaxArea", methodName : "getValue"});
 		return val;
 	}
-	,setValue: function(val) {
-		microbe.tools.Debug.Alerte(val,{ fileName : "AjaxArea.hx", lineNumber : 79, className : "microbe.form.elements.AjaxArea", methodName : "setValue"});
-		new js.JQuery("#" + this.id).val(val);
-	}
+	,moduleid: null
 	,__class__: microbe.form.elements.AjaxArea
 });
 microbe.form.elements.AjaxDate = $hxClasses["microbe.form.elements.AjaxDate"] = function(_microfield,_iter) {
@@ -3165,18 +3643,25 @@ microbe.form.elements.AjaxDate = $hxClasses["microbe.form.elements.AjaxDate"] = 
 microbe.form.elements.AjaxDate.__name__ = ["microbe","form","elements","AjaxDate"];
 microbe.form.elements.AjaxDate.__super__ = microbe.form.AjaxElement;
 microbe.form.elements.AjaxDate.prototype = $extend(microbe.form.AjaxElement.prototype,{
-	getCollectionContainer: function() {
-		var p = new js.JQuery("#" + this.id).parents(".collection");
-		if(p.attr("pos") != null) return p.attr("pos");
-		return "0";
+	setValue: function(valeur) {
+		haxe.Log.trace("date=" + valeur,{ fileName : "AjaxDate.hx", lineNumber : 42, className : "microbe.form.elements.AjaxDate", methodName : "setValue"});
+		var _date = null;
+		if(valeur == null) valeur = DateTools.format(new Date(),"%Y-%m-%d").toString();
+		_date = HxOverrides.strDate(valeur);
+		var format = DateTools.format(_date,"%Y-%m-%d");
+		new js.JQuery("#madate_" + this.pos).val(format);
 	}
 	,getValue: function() {
 		var valeur = new js.JQuery("#madate_" + this.pos).val();
-		return valeur;
+		var _date = HxOverrides.strDate(valeur);
+		var format = DateTools.format(_date,"%Y-%m-%d");
+		haxe.Log.trace("format=" + format.toString(),{ fileName : "AjaxDate.hx", lineNumber : 35, className : "microbe.form.elements.AjaxDate", methodName : "getValue"});
+		return format.toString();
 	}
-	,setValue: function(val) {
-		if(val == null) val = Date.now().toString();
-		var valeur = new js.JQuery("#madate_" + this.pos).val(val);
+	,getCollectionContainer: function() {
+		var p = new js.JQuery("#" + this.id).parents(".collection");
+		if(p.attr("pos") != null) return p.attr("pos");
+		return "0";
 	}
 	,__class__: microbe.form.elements.AjaxDate
 });
@@ -3189,29 +3674,32 @@ microbe.form.elements.AjaxEditor = $hxClasses["microbe.form.elements.AjaxEditor"
 	this.base_url = js.Lib.window.location.protocol + "//" + js.Lib.window.location.host;
 	var wymOptions = { };
 	wymOptions.skin = "compact";
-	wymOptions.html = "hello la compagnie";
+	wymOptions.html = "";
 	this.wym = new $(".editor:visible");
+	wymOptions.postInit = function() {
+		this.wym.embed();
+	};
 	this.wym.wymeditor(wymOptions);
 };
 microbe.form.elements.AjaxEditor.__name__ = ["microbe","form","elements","AjaxEditor"];
 microbe.form.elements.AjaxEditor.self = null;
 microbe.form.elements.AjaxEditor.__super__ = microbe.form.AjaxElement;
 microbe.form.elements.AjaxEditor.prototype = $extend(microbe.form.AjaxElement.prototype,{
-	formDefaultAction: null
-	,base_url: null
-	,ed: null
-	,wym: null
-	,transformed: null
-	,getValue: function() {
-		js.JQuery.wymeditors(0).update();
-		return new js.JQuery("#" + this.id).attr("value");
+	setValue: function(val) {
+		new js.JQuery("#" + this.id).attr("value",this.value);
 	}
 	,output: function() {
 		return "yeah from js";
 	}
-	,setValue: function(val) {
-		new js.JQuery("#" + this.id).attr("value",this.value);
+	,getValue: function() {
+		js.JQuery.wymeditors(0).update();
+		return new js.JQuery("#" + this.id).attr("value");
 	}
+	,transformed: null
+	,wym: null
+	,ed: null
+	,base_url: null
+	,formDefaultAction: null
 	,__class__: microbe.form.elements.AjaxEditor
 });
 microbe.form.elements.AjaxInput = $hxClasses["microbe.form.elements.AjaxInput"] = function(_microfield) {
@@ -3220,13 +3708,13 @@ microbe.form.elements.AjaxInput = $hxClasses["microbe.form.elements.AjaxInput"] 
 microbe.form.elements.AjaxInput.__name__ = ["microbe","form","elements","AjaxInput"];
 microbe.form.elements.AjaxInput.__super__ = microbe.form.AjaxElement;
 microbe.form.elements.AjaxInput.prototype = $extend(microbe.form.AjaxElement.prototype,{
-	moduleid: null
+	setValue: function(val) {
+		new js.JQuery("#" + this.id).attr("value",val);
+	}
 	,getValue: function() {
 		return new js.JQuery("#" + this.id).attr("value");
 	}
-	,setValue: function(val) {
-		new js.JQuery("#" + this.id).attr("value",val);
-	}
+	,moduleid: null
 	,__class__: microbe.form.elements.AjaxInput
 });
 microbe.form.elements.AjaxUploader = $hxClasses["microbe.form.elements.AjaxUploader"] = function(_microfield,_iter) {
@@ -3235,63 +3723,27 @@ microbe.form.elements.AjaxUploader = $hxClasses["microbe.form.elements.AjaxUploa
 	this.self = this;
 	this.base_url = js.Lib.window.location.protocol + "//" + js.Lib.window.location.host;
 	this.makeIframeUniq();
-	this.getBouton().click(this.testUpload.$bind(this));
+	this.getBouton().click($bind(this,this.testUpload));
 };
 microbe.form.elements.AjaxUploader.__name__ = ["microbe","form","elements","AjaxUploader"];
 microbe.form.elements.AjaxUploader.__super__ = microbe.form.AjaxElement;
 microbe.form.elements.AjaxUploader.prototype = $extend(microbe.form.AjaxElement.prototype,{
-	self: null
-	,formDefaultAction: null
-	,base_url: null
-	,uploadtarget: null
-	,_composantName: null
-	,uniqIframe: null
-	,composantName: null
-	,init: function(e) {
-		this.getCollectionContainer();
+	setValue: function(val) {
+		if(val != null) this.getpreview().attr("src",js.Lib.window.location.protocol + "//" + js.Lib.window.location.host + "/index.php/imageBase/resize/thumb/" + val); else this.getpreview().attr("src","/microbe/css/assets/blankframe.png");
+		this.getRetour().attr("value",val);
 	}
-	,getComposant: function() {
-		return this._composantName;
-	}
-	,setComposant: function(val) {
-		this._composantName = val;
-		return this._composantName;
-	}
-	,testUpload: function(e) {
-		this.DisableForm();
-		this.formDefaultAction = new js.JQuery("#" + this.getForm()).attr("target");
-		new js.JQuery("#" + this.getForm()).attr("target",this.getIframe());
-		js.Lib.alert(new js.JQuery("#" + this.getForm()).attr("target"));
-		new js.JQuery("#" + this.id + " #" + this.getIframe()).load(this.onLoad.$bind(this));
-		new js.JQuery("#" + this.getForm()).attr("action","/index.php/upload");
-		new js.JQuery("#" + this.getForm()).submit();
-	}
-	,onLoad: function(e) {
-		var p = new js.JQuery("#" + this.id + " #" + this.getIframe()).contents().text();
-		this.setValue(p);
-		this.getpreview().fadeTo(0,0);
-		this.getpreview().fadeTo(600,1);
-		new js.JQuery("#" + this.getForm()).attr("target",this.formDefaultAction);
-		this.enableForm();
-	}
-	,getBouton: function() {
-		return new js.JQuery("#" + this.id + " #uploadButton");
-	}
-	,getRetour: function() {
-		var retour = new js.JQuery("#" + this.id + " #" + this.getComposant() + "retour" + this.getCollectionContainer());
+	,getValue: function() {
+		var retour = this.getRetour().attr("value");
 		return retour;
 	}
-	,getInputName: function() {
-		var inputName = new js.JQuery("#" + this.id + " #" + this.getComposant() + "fileinput").attr("name");
-		return inputName;
+	,enableForm: function() {
+		new js.JQuery("input").attr("disabled","");
 	}
-	,getpreview: function() {
-		return new js.JQuery("#" + this.id + " #" + this.getComposant() + "preview" + this.getCollectionContainer());
+	,DisableForm: function() {
+		new js.JQuery("#" + this.getForm() + " input[name!='" + this.getInputName() + "']").attr("disabled","disabled");
 	}
-	,getCollectionContainer: function() {
-		var p = new js.JQuery("#" + this.id).parents(".collection");
-		if(p.attr("pos") != null) return p.attr("pos");
-		return "";
+	,getIframe: function() {
+		return this.uniqIframe;
 	}
 	,makeIframeUniq: function() {
 		var ifr = new js.JQuery("#" + this.id + " #" + this.getComposant() + "upload_target" + this.getCollectionContainer());
@@ -3301,23 +3753,59 @@ microbe.form.elements.AjaxUploader.prototype = $extend(microbe.form.AjaxElement.
 		ifr[0].contentWindow.name = this.uniqIframe;
 		js.Lib.alert("uniq=" + this.uniqIframe);
 	}
-	,getIframe: function() {
-		return this.uniqIframe;
+	,getCollectionContainer: function() {
+		var p = new js.JQuery("#" + this.id).parents(".collection");
+		if(p.attr("pos") != null) return p.attr("pos");
+		return "";
 	}
-	,DisableForm: function() {
-		new js.JQuery("#" + this.getForm() + " input[name!='" + this.getInputName() + "']").attr("disabled","disabled");
+	,getpreview: function() {
+		return new js.JQuery("#" + this.id + " #" + this.getComposant() + "preview" + this.getCollectionContainer());
 	}
-	,enableForm: function() {
-		new js.JQuery("input").attr("disabled","");
+	,getInputName: function() {
+		var inputName = new js.JQuery("#" + this.id + " #" + this.getComposant() + "fileinput").attr("name");
+		return inputName;
 	}
-	,getValue: function() {
-		var retour = this.getRetour().attr("value");
+	,getRetour: function() {
+		var retour = new js.JQuery("#" + this.id + " #" + this.getComposant() + "retour" + this.getCollectionContainer());
 		return retour;
 	}
-	,setValue: function(val) {
-		if(val != null) this.getpreview().attr("src",js.Lib.window.location.protocol + "//" + js.Lib.window.location.host + "/index.php/imageBase/resize/thumb/" + val); else this.getpreview().attr("src","/microbe/css/assets/blankframe.png");
-		this.getRetour().attr("value",val);
+	,getBouton: function() {
+		return new js.JQuery("#" + this.id + " #uploadButton");
 	}
+	,onLoad: function(e) {
+		var p = new js.JQuery("#" + this.id + " #" + this.getIframe()).contents().text();
+		this.setValue(p);
+		this.getpreview().fadeTo(0,0);
+		this.getpreview().fadeTo(600,1);
+		new js.JQuery("#" + this.getForm()).attr("target",this.formDefaultAction);
+		this.enableForm();
+	}
+	,testUpload: function(e) {
+		this.DisableForm();
+		this.formDefaultAction = new js.JQuery("#" + this.getForm()).attr("target");
+		new js.JQuery("#" + this.getForm()).attr("target",this.getIframe());
+		js.Lib.alert(new js.JQuery("#" + this.getForm()).attr("target"));
+		new js.JQuery("#" + this.id + " #" + this.getIframe()).load($bind(this,this.onLoad));
+		new js.JQuery("#" + this.getForm()).attr("action","/index.php/upload");
+		new js.JQuery("#" + this.getForm()).submit();
+	}
+	,setComposant: function(val) {
+		this._composantName = val;
+		return this._composantName;
+	}
+	,getComposant: function() {
+		return this._composantName;
+	}
+	,init: function(e) {
+		this.getCollectionContainer();
+	}
+	,composantName: null
+	,uniqIframe: null
+	,_composantName: null
+	,uploadtarget: null
+	,base_url: null
+	,formDefaultAction: null
+	,self: null
 	,__class__: microbe.form.elements.AjaxUploader
 	,__properties__: {set_composantName:"setComposant",get_composantName:"getComposant"}
 });
@@ -3332,30 +3820,30 @@ microbe.form.elements.Button = $hxClasses["microbe.form.elements.Button"] = func
 microbe.form.elements.Button.__name__ = ["microbe","form","elements","Button"];
 microbe.form.elements.Button.__super__ = microbe.form.FormElement;
 microbe.form.elements.Button.prototype = $extend(microbe.form.FormElement.prototype,{
-	type: null
-	,link: null
-	,isValid: function() {
-		return true;
+	populate: function() {
+		microbe.form.FormElement.prototype.populate.call(this);
+		var n = this.form.name + "_" + this.name;
 	}
-	,render: function(iter) {
-		var _onClick = "";
-		if(this.link != null) _onClick = " onclick=" + this.link;
-		return "<button type=\"" + this.type + "\" class=\"" + this.getClasses() + "\" name=\"" + this.form.name + "_" + this.name + "\" id=\"" + this.form.name + "_" + this.name + "\" value=\"" + this.value + "\" " + _onClick + " >" + this.label + "</button>";
-	}
-	,toString: function() {
-		return this.render();
+	,getPreview: function() {
+		return "<tr><td></td><td>" + this.render() + "<td></tr>";
 	}
 	,getLabel: function() {
 		var n = this.form.name + "_" + this.name;
 		return "<label for=\"" + n + "\" ></label>";
 	}
-	,getPreview: function() {
-		return "<tr><td></td><td>" + this.render() + "<td></tr>";
+	,toString: function() {
+		return this.render();
 	}
-	,populate: function() {
-		microbe.form.FormElement.prototype.populate.call(this);
-		var n = this.form.name + "_" + this.name;
+	,render: function(iter) {
+		var _onClick = "";
+		if(this.link != null) _onClick = " onclick=" + this.link;
+		return "<button type=\"" + Std.string(this.type) + "\" class=\"" + this.getClasses() + "\" name=\"" + this.form.name + "_" + this.name + "\" id=\"" + this.form.name + "_" + this.name + "\" value=\"" + Std.string(this.value) + "\" " + _onClick + " >" + this.label + "</button>";
 	}
+	,isValid: function() {
+		return true;
+	}
+	,link: null
+	,type: null
 	,__class__: microbe.form.elements.Button
 });
 microbe.form.elements.ButtonType = $hxClasses["microbe.form.elements.ButtonType"] = { __ename__ : ["microbe","form","elements","ButtonType"], __constructs__ : ["SUBMIT","BUTTON","RESET"] }
@@ -3375,17 +3863,17 @@ microbe.form.elements.CheckBox = $hxClasses["microbe.form.elements.CheckBox"] = 
 microbe.form.elements.CheckBox.__name__ = ["microbe","form","elements","CheckBox"];
 microbe.form.elements.CheckBox.__super__ = microbe.form.AjaxElement;
 microbe.form.elements.CheckBox.prototype = $extend(microbe.form.AjaxElement.prototype,{
-	getValue: function() {
+	setValue: function(val) {
+		"set_" + Std.string(microbe.tools.Debug.Alerte(val,{ fileName : "CheckBox.hx", lineNumber : 42, className : "microbe.form.elements.CheckBox", methodName : "setValue"}));
+		var etat;
+		if(val == "true") etat = "checked"; else etat = "";
+		new js.JQuery("#" + this.id).attr("checked",etat);
+	}
+	,getValue: function() {
 		var valeur = new js.JQuery("#" + this.id).attr("checked");
 		var val;
 		if(valeur == true) val = "true"; else val = "false";
 		return val;
-	}
-	,setValue: function(val) {
-		"set_" + microbe.tools.Debug.Alerte(val,{ fileName : "CheckBox.hx", lineNumber : 42, className : "microbe.form.elements.CheckBox", methodName : "setValue"});
-		var etat;
-		if(val == "true") etat = "checked"; else etat = "";
-		new js.JQuery("#" + this.id).attr("checked",etat);
 	}
 	,__class__: microbe.form.elements.CheckBox
 });
@@ -3394,39 +3882,39 @@ microbe.form.elements.CollectionElement = $hxClasses["microbe.form.elements.Coll
 	this.elementid = this.id + _pos;
 	this.pos = _pos;
 	this.collItemId = this.getCollecItemId(new js.JQuery("#" + this.elementid).attr("tri"));
-	microbe.tools.Debug.Alerte(Std.string("collecItemId=" + this.collItemId),{ fileName : "CollectionElement.hx", lineNumber : 100, className : "microbe.form.elements.CollectionElement", methodName : "new"});
-	new js.JQuery("#" + this.elementid + " .deletecollection").bind("click",this.beforedelete.$bind(this));
+	microbe.tools.Debug.Alerte(Std.string("collecItemId=" + this.collItemId),{ fileName : "CollectionElement.hx", lineNumber : 101, className : "microbe.form.elements.CollectionElement", methodName : "new"});
+	new js.JQuery("#" + this.elementid + " .deletecollection").bind("click",$bind(this,this.beforedelete));
 };
 microbe.form.elements.CollectionElement.__name__ = ["microbe","form","elements","CollectionElement"];
 microbe.form.elements.CollectionElement.__super__ = microbe.form.AjaxElement;
 microbe.form.elements.CollectionElement.prototype = $extend(microbe.form.AjaxElement.prototype,{
-	elementid: null
-	,collItemId: null
-	,getCollecItemId: function(tri) {
-		var splited = Lambda.list(tri.split("_")).last();
-		return Std.parseInt(splited);
-	}
-	,beforedelete: function(e) {
-		var target = new js.JQuery(e.target);
-		microbe.tools.Debug.Alerte(target.attr("id"),{ fileName : "CollectionElement.hx", lineNumber : 114, className : "microbe.form.elements.CollectionElement", methodName : "beforedelete"});
-		target.text("sure?");
-		target.unbind("click",this.beforedelete.$bind(this));
-		target.click(this.delete.$bind(this));
-	}
-	,'delete': function(e) {
-		microbe.tools.Debug.Alerte("delete",{ fileName : "CollectionElement.hx", lineNumber : 120, className : "microbe.form.elements.CollectionElement", methodName : "delete"});
-		Std.string("id=" + this.collItemId);
-		microbe.form.elements.CollectionElement.deleteSignal.dispatch(this.elementid,this.voName,this.pos,this.collItemId);
-	}
-	,active: function() {
-		new js.JQuery("#uploadButton");
+	setValue: function(val) {
+		new js.JQuery("#" + this.id).attr("value",val);
 	}
 	,getValue: function() {
 		return new js.JQuery("#" + this.id).attr("value");
 	}
-	,setValue: function(val) {
-		new js.JQuery("#" + this.id).attr("value",val);
+	,active: function() {
+		new js.JQuery("#uploadButton");
 	}
+	,'delete': function(e) {
+		microbe.tools.Debug.Alerte("delete",{ fileName : "CollectionElement.hx", lineNumber : 121, className : "microbe.form.elements.CollectionElement", methodName : "delete"});
+		Std.string("id=" + this.collItemId);
+		microbe.form.elements.CollectionElement.deleteSignal.dispatch(this.elementid,this.voName,this.pos,this.collItemId);
+	}
+	,beforedelete: function(e) {
+		var target = new js.JQuery(e.target);
+		microbe.tools.Debug.Alerte(target.attr("id"),{ fileName : "CollectionElement.hx", lineNumber : 115, className : "microbe.form.elements.CollectionElement", methodName : "beforedelete"});
+		target.text("sure?");
+		target.unbind("click",$bind(this,this.beforedelete));
+		target.click($bind(this,this.delete));
+	}
+	,getCollecItemId: function(tri) {
+		var splited = Lambda.list(tri.split("_")).last();
+		return Std.parseInt(splited);
+	}
+	,collItemId: null
+	,elementid: null
 	,__class__: microbe.form.elements.CollectionElement
 });
 microbe.form.elements.CollectionWrapper = $hxClasses["microbe.form.elements.CollectionWrapper"] = function() {
@@ -3435,8 +3923,8 @@ microbe.form.elements.CollectionWrapper = $hxClasses["microbe.form.elements.Coll
 	this.createPlusBouton();
 	microbe.form.elements.CollectionWrapper.plusInfos = new hxs.Signal1();
 	var sortoptions = { };
-	sortoptions.update = this.onSortChanged.$bind(this);
-	sortoptions.start = this.onSortStart.$bind(this);
+	sortoptions.update = $bind(this,this.onSortChanged);
+	sortoptions.start = $bind(this,this.onSortStart);
 	sortoptions.placeholder = "placeHolder";
 	sortoptions.opacity = .2;
 	this.sort = new $(".collectionWrapper").sortable(sortoptions);
@@ -3444,44 +3932,7 @@ microbe.form.elements.CollectionWrapper = $hxClasses["microbe.form.elements.Coll
 microbe.form.elements.CollectionWrapper.__name__ = ["microbe","form","elements","CollectionWrapper"];
 microbe.form.elements.CollectionWrapper.plusInfos = null;
 microbe.form.elements.CollectionWrapper.prototype = {
-	me: null
-	,plus: null
-	,clone: null
-	,sort: null
-	,spod: null
-	,createPlusBouton: function() {
-		var plusString = microbe.form.elements.PlusCollectionButton.create("plusbutton");
-		this.me.append(plusString);
-		var plus = new microbe.form.elements.PlusCollectionButton(this.me.find(".plusbutton"));
-		microbe.form.elements.PlusCollectionButton.sign.add(this.onPLUS.$bind(this));
-		plus.init();
-	}
-	,onPLUS: function(s) {
-		microbe.tools.Debug.Alerte("onPlus",{ fileName : "CollectionWrapper.hx", lineNumber : 97, className : "microbe.form.elements.CollectionWrapper", methodName : "onPLUS"});
-		this.clone = this.me.children(".collection").last().clone();
-		var collength = this.me.children(".collection").length;
-		this.clone.attr("id",this.clone.attr("name"));
-		microbe.form.elements.CollectionWrapper.plusInfos.dispatch({ collectionName : this.clone.attr("name"), graine : collength, target : this});
-	}
-	,notify: function(newColl) {
-		microbe.tools.Debug.Alerte("notify",{ fileName : "CollectionWrapper.hx", lineNumber : 106, className : "microbe.form.elements.CollectionWrapper", methodName : "notify"});
-		this.me.append(newColl);
-	}
-	,onSortStart: function(e,ui) {
-		var childs = this.me.children(".collection");
-		var $it0 = childs.iterator();
-		while( $it0.hasNext() ) {
-			var a = $it0.next();
-			var value = Lambda.list(a.attr("tri").split("_")).last().length;
-			if(value == 0) return this.dispatchError();
-		}
-		return;
-	}
-	,dispatchError: function() {
-		this.sort.sortable("disable");
-		js.Lib.alert("Veuilez enregistrer avant de réarranger l'ordre !");
-	}
-	,onSortChanged: function(e,ui) {
+	onSortChanged: function(e,ui) {
 		var pop = this.sort.sortable("serialize",{ attribute : "tri", key : "id"});
 		haxe.Log.trace(pop,{ fileName : "CollectionWrapper.hx", lineNumber : 124, className : "microbe.form.elements.CollectionWrapper", methodName : "onSortChanged"});
 		var liste = pop.split("&id=");
@@ -3494,42 +3945,79 @@ microbe.form.elements.CollectionWrapper.prototype = {
 		req.request(true);
 		haxe.Log.trace("afterreorder",{ fileName : "CollectionWrapper.hx", lineNumber : 135, className : "microbe.form.elements.CollectionWrapper", methodName : "onSortChanged"});
 	}
+	,dispatchError: function() {
+		this.sort.sortable("disable");
+		js.Lib.alert("Veuilez enregistrer avant de réarranger l'ordre !");
+	}
+	,onSortStart: function(e,ui) {
+		var childs = this.me.children(".collection");
+		var $it0 = childs.iterator();
+		while( $it0.hasNext() ) {
+			var a = $it0.next();
+			var value = Lambda.list(a.attr("tri").split("_")).last().length;
+			if(value == 0) return this.dispatchError();
+		}
+		return;
+	}
+	,notify: function(newColl) {
+		microbe.tools.Debug.Alerte("notify",{ fileName : "CollectionWrapper.hx", lineNumber : 106, className : "microbe.form.elements.CollectionWrapper", methodName : "notify"});
+		this.me.append(newColl);
+	}
+	,onPLUS: function(s) {
+		microbe.tools.Debug.Alerte("onPlus",{ fileName : "CollectionWrapper.hx", lineNumber : 97, className : "microbe.form.elements.CollectionWrapper", methodName : "onPLUS"});
+		this.clone = this.me.children(".collection").last().clone();
+		var collength = this.me.children(".collection").length;
+		this.clone.attr("id",this.clone.attr("name"));
+		microbe.form.elements.CollectionWrapper.plusInfos.dispatch({ collectionName : this.clone.attr("name"), graine : collength, target : this});
+	}
+	,createPlusBouton: function() {
+		var plusString = microbe.form.elements.PlusCollectionButton.create("plusbutton");
+		this.me.append(plusString);
+		var plus = new microbe.form.elements.PlusCollectionButton(this.me.find(".plusbutton"));
+		microbe.form.elements.PlusCollectionButton.sign.add($bind(this,this.onPLUS));
+		plus.init();
+	}
+	,spod: null
+	,sort: null
+	,clone: null
+	,plus: null
+	,me: null
 	,__class__: microbe.form.elements.CollectionWrapper
 }
 microbe.form.elements.DeleteButton = $hxClasses["microbe.form.elements.DeleteButton"] = function(id) {
 	microbe.form.AjaxElement.call(this,null);
 	microbe.form.elements.DeleteButton.sign = new hxs.Signal();
 	this.elementid = id;
-	new js.JQuery("#" + this.elementid).bind("click",this.onClick.$bind(this));
+	new js.JQuery("#" + this.elementid).bind("click",$bind(this,this.onClick));
 };
 microbe.form.elements.DeleteButton.__name__ = ["microbe","form","elements","DeleteButton"];
 microbe.form.elements.DeleteButton.sign = null;
 microbe.form.elements.DeleteButton.__super__ = microbe.form.AjaxElement;
 microbe.form.elements.DeleteButton.prototype = $extend(microbe.form.AjaxElement.prototype,{
-	elementid: null
-	,tooltip: null
-	,start: null
-	,buttonwidth: null
+	onTool: function(e) {
+		microbe.form.elements.DeleteButton.sign.dispatch();
+	}
+	,fini: function(e) {
+		new js.JQuery("#" + this.elementid + " span").first().text("oui");
+		new js.JQuery("#" + this.elementid).css("width","120px").css("text-align","left");
+		new js.JQuery("#" + this.elementid).bind("click",$bind(this,this.onTool));
+	}
+	,anime: function(e) {
+		new js.JQuery(".tooltip").css("left",e + "px");
+	}
 	,onClick: function(event) {
 		new js.JQuery("#" + this.elementid).append("<div class='tooltip'><span>sure ?</span></div>");
 		var tooltip = new js.JQuery(".tooltip");
 		tooltip.css("top","0");
 		this.buttonwidth = new js.JQuery("#" + this.elementid).outerWidth();
 		var maTween = new feffects.Tween(this.start,this.start + this.buttonwidth / 2,500,feffects.easing.Bounce.easeOut);
-		maTween.setTweenHandlers(this.anime.$bind(this),this.fini.$bind(this));
+		maTween.setTweenHandlers($bind(this,this.anime),$bind(this,this.fini));
 		maTween.start();
 	}
-	,anime: function(e) {
-		new js.JQuery(".tooltip").css("left",e + "px");
-	}
-	,fini: function(e) {
-		new js.JQuery("#" + this.elementid + " span").first().text("oui");
-		new js.JQuery("#" + this.elementid).css("width","120px").css("text-align","left");
-		new js.JQuery("#" + this.elementid).bind("click",this.onTool.$bind(this));
-	}
-	,onTool: function(e) {
-		microbe.form.elements.DeleteButton.sign.dispatch();
-	}
+	,buttonwidth: null
+	,start: null
+	,tooltip: null
+	,elementid: null
 	,__class__: microbe.form.elements.DeleteButton
 });
 microbe.form.elements.FakeElement = $hxClasses["microbe.form.elements.FakeElement"] = function(name,value,required,display,attributes) {
@@ -3546,17 +4034,17 @@ microbe.form.elements.FakeElement = $hxClasses["microbe.form.elements.FakeElemen
 microbe.form.elements.FakeElement.__name__ = ["microbe","form","elements","FakeElement"];
 microbe.form.elements.FakeElement.__super__ = microbe.form.FormElement;
 microbe.form.elements.FakeElement.prototype = $extend(microbe.form.FormElement.prototype,{
-	display: null
-	,render: function(iter) {
-		var n = this.name;
-		return n;
+	toString: function() {
+		return this.render();
 	}
 	,getPreview: function() {
 		return this.render();
 	}
-	,toString: function() {
-		return this.render();
+	,render: function(iter) {
+		var n = this.name;
+		return n;
 	}
+	,display: null
 	,__class__: microbe.form.elements.FakeElement
 });
 microbe.form.elements.Hidden = $hxClasses["microbe.form.elements.Hidden"] = function(_microfield) {
@@ -3565,43 +4053,54 @@ microbe.form.elements.Hidden = $hxClasses["microbe.form.elements.Hidden"] = func
 microbe.form.elements.Hidden.__name__ = ["microbe","form","elements","Hidden"];
 microbe.form.elements.Hidden.__super__ = microbe.form.AjaxElement;
 microbe.form.elements.Hidden.prototype = $extend(microbe.form.AjaxElement.prototype,{
-	moduleid: null
-	,getValue: function() {
-		return new js.JQuery("#" + this.id).attr("value");
-	}
-	,setValue: function(val) {
+	setValue: function(val) {
 		js.Lib.alert("val=" + val);
 		new js.JQuery("#" + this.id).attr("value",val);
 	}
+	,getValue: function() {
+		return new js.JQuery("#" + this.id).attr("value");
+	}
+	,moduleid: null
 	,__class__: microbe.form.elements.Hidden
 });
 microbe.form.elements.IframeUploader = $hxClasses["microbe.form.elements.IframeUploader"] = function(_microfield,_iter) {
 	microbe.form.AjaxElement.call(this,_microfield,_iter);
 	this.base_url = js.Lib.window.location.protocol + "//" + js.Lib.window.location.host;
-	this.getBouton().click(this.testUpload.$bind(this));
+	this.getBouton().click($bind(this,this.testUpload));
 };
 microbe.form.elements.IframeUploader.__name__ = ["microbe","form","elements","IframeUploader"];
 microbe.form.elements.IframeUploader.__super__ = microbe.form.AjaxElement;
 microbe.form.elements.IframeUploader.prototype = $extend(microbe.form.AjaxElement.prototype,{
-	self: null
-	,formDefaultAction: null
-	,base_url: null
-	,uploadtarget: null
-	,init: function(e) {
+	setValue: function(val) {
+		if(val != null) this.getpreview().attr("src",js.Lib.window.location.protocol + "//" + js.Lib.window.location.host + "/index.php/imageBase/resize/thumb/" + val); else this.getpreview().attr("src","/microbe/css/assets/blankframe.png");
+		this.getRetour().attr("value",val);
 	}
-	,testUpload: function(e) {
-		this.DisableForm();
-		this.disableStatus();
-		this.formDefaultAction = new js.JQuery("#" + this.getForm()).attr("target");
-		var iframe = "<iframe id='uploadtarget' name='uploadtarget' style='width:0;height:0;border:0px solid #fff;'></iframe>";
-		new js.JQuery("#" + this.id).append(iframe);
-		new js.JQuery("#" + this.getForm()).attr("target","uploadtarget");
-		new js.JQuery("#" + this.id + " #" + this.getIframe()).load(this.onLoad.$bind(this));
-		new js.JQuery("#" + this.getForm()).attr("action","/index.php/upload");
-		new js.JQuery("#" + this.getForm()).submit();
+	,getValue: function() {
+		var retour = this.getRetour().attr("value");
+		return retour;
 	}
-	,disableStatus: function() {
-		new js.JQuery("#" + this.id + " p.status").remove();
+	,enableForm: function() {
+		new js.JQuery("input").attr("disabled","");
+	}
+	,DisableForm: function() {
+		new js.JQuery("#" + this.getForm() + " input[name!='" + this.getInputName() + "']").attr("disabled","disabled");
+	}
+	,getIframe: function() {
+		return "uploadtarget";
+	}
+	,getpreview: function() {
+		return new js.JQuery("#" + this.id + " #preview");
+	}
+	,getInputName: function() {
+		var inputName = new js.JQuery("#" + this.id + " #fileinput").attr("name");
+		return inputName;
+	}
+	,getRetour: function() {
+		var retour = new js.JQuery("#" + this.id + " #retour");
+		return retour;
+	}
+	,getBouton: function() {
+		return new js.JQuery("#" + this.id + " #uploadButton");
 	}
 	,onLoad: function(e) {
 		var p = new js.JQuery("#" + this.id + " #" + this.getIframe()).contents().text();
@@ -3617,57 +4116,46 @@ microbe.form.elements.IframeUploader.prototype = $extend(microbe.form.AjaxElemen
 		new js.JQuery("#" + this.getForm()).attr("target",this.formDefaultAction);
 		this.enableForm();
 	}
-	,getBouton: function() {
-		return new js.JQuery("#" + this.id + " #uploadButton");
+	,disableStatus: function() {
+		new js.JQuery("#" + this.id + " p.status").remove();
 	}
-	,getRetour: function() {
-		var retour = new js.JQuery("#" + this.id + " #retour");
-		return retour;
+	,testUpload: function(e) {
+		this.DisableForm();
+		this.disableStatus();
+		this.formDefaultAction = new js.JQuery("#" + this.getForm()).attr("target");
+		var iframe = "<iframe id='uploadtarget' name='uploadtarget' style='width:0;height:0;border:0px solid #fff;'></iframe>";
+		new js.JQuery("#" + this.id).append(iframe);
+		new js.JQuery("#" + this.getForm()).attr("target","uploadtarget");
+		new js.JQuery("#" + this.id + " #" + this.getIframe()).load($bind(this,this.onLoad));
+		new js.JQuery("#" + this.getForm()).attr("action","/index.php/upload");
+		new js.JQuery("#" + this.getForm()).submit();
 	}
-	,getInputName: function() {
-		var inputName = new js.JQuery("#" + this.id + " #fileinput").attr("name");
-		return inputName;
+	,init: function(e) {
 	}
-	,getpreview: function() {
-		return new js.JQuery("#" + this.id + " #preview");
-	}
-	,getIframe: function() {
-		return "uploadtarget";
-	}
-	,DisableForm: function() {
-		new js.JQuery("#" + this.getForm() + " input[name!='" + this.getInputName() + "']").attr("disabled","disabled");
-	}
-	,enableForm: function() {
-		new js.JQuery("input").attr("disabled","");
-	}
-	,getValue: function() {
-		var retour = this.getRetour().attr("value");
-		return retour;
-	}
-	,setValue: function(val) {
-		if(val != null) this.getpreview().attr("src",js.Lib.window.location.protocol + "//" + js.Lib.window.location.host + "/index.php/imageBase/resize/thumb/" + val); else this.getpreview().attr("src","/microbe/css/assets/blankframe.png");
-		this.getRetour().attr("value",val);
-	}
+	,uploadtarget: null
+	,base_url: null
+	,formDefaultAction: null
+	,self: null
 	,__class__: microbe.form.elements.IframeUploader
 });
 microbe.form.elements.ImageUploader = $hxClasses["microbe.form.elements.ImageUploader"] = function(_microfield,_iter) {
 	microbe.form.elements.IframeUploader.call(this,_microfield,_iter);
-	new js.JQuery("#" + this.id + " .file_input_button").click(this.onFake.$bind(this));
-	new js.JQuery("#" + this.id + " #cancel").click(this.onVide.$bind(this));
+	new js.JQuery("#" + this.id + " .file_input_button").click($bind(this,this.onFake));
+	new js.JQuery("#" + this.id + " #cancel").click($bind(this,this.onVide));
 };
 microbe.form.elements.ImageUploader.__name__ = ["microbe","form","elements","ImageUploader"];
 microbe.form.elements.ImageUploader.__super__ = microbe.form.elements.IframeUploader;
 microbe.form.elements.ImageUploader.prototype = $extend(microbe.form.elements.IframeUploader.prototype,{
-	onVide: function(e) {
-		this.setValue(null);
+	setValue: function(val) {
+		if(val != null) this.getpreview().attr("src",js.Lib.window.location.protocol + "//" + js.Lib.window.location.host + "/index.php/imageBase/resize/modele/" + val); else this.getpreview().attr("src","/microbe/css/assets/blankframe.png");
+		this.getRetour().attr("value",val);
 	}
 	,onFake: function(e) {
 		e.preventDefault();
 		new js.JQuery("#" + this.id + " .hiddenfileinput").trigger("click");
 	}
-	,setValue: function(val) {
-		if(val != null) this.getpreview().attr("src",js.Lib.window.location.protocol + "//" + js.Lib.window.location.host + "/index.php/imageBase/resize/modele/" + val); else this.getpreview().attr("src","/microbe/css/assets/blankframe.png");
-		this.getRetour().attr("value",val);
+	,onVide: function(e) {
+		this.setValue(null);
 	}
 	,__class__: microbe.form.elements.ImageUploader
 });
@@ -3689,12 +4177,9 @@ microbe.form.elements.Input = $hxClasses["microbe.form.elements.Input"] = functi
 microbe.form.elements.Input.__name__ = ["microbe","form","elements","Input"];
 microbe.form.elements.Input.__super__ = microbe.form.FormElement;
 microbe.form.elements.Input.prototype = $extend(microbe.form.FormElement.prototype,{
-	password: null
-	,width: null
-	,showLabelAsDefaultValue: null
-	,useSizeValues: null
-	,printRequired: null
-	,formatter: null
+	toString: function() {
+		return this.render();
+	}
 	,render: function(iter) {
 		var n = this.form.name + "_" + this.name;
 		var tType = this.password?"password":"text";
@@ -3703,29 +4188,32 @@ microbe.form.elements.Input.prototype = $extend(microbe.form.FormElement.prototy
 		var style = this.useSizeValues?"style=\"width:" + this.width + "px\"":"";
 		return "<input " + style + " class=\"" + this.getClasses() + "\" type=\"" + tType + "\" name=\"" + n + "\" id=\"" + n + "\" value=\"" + this.safeString(this.value) + "\"  " + this.attributes + " />" + (this.required && this.form.isSubmitted() && this.printRequired?" required":null);
 	}
-	,toString: function() {
-		return this.render();
-	}
+	,formatter: null
+	,printRequired: null
+	,useSizeValues: null
+	,showLabelAsDefaultValue: null
+	,width: null
+	,password: null
 	,__class__: microbe.form.elements.Input
 });
 microbe.form.elements.Mock = $hxClasses["microbe.form.elements.Mock"] = function(_microfield) {
 	microbe.form.AjaxElement.call(this,_microfield);
 	microbe.tools.Debug.Alerte(this.id,{ fileName : "Mock.hx", lineNumber : 48, className : "microbe.form.elements.Mock", methodName : "new"});
-	var pop = new js.JQuery("#" + this.id + "test").click(this.onFake.$bind(this));
+	var pop = new js.JQuery("#" + this.id + "test").click($bind(this,this.onFake));
 };
 microbe.form.elements.Mock.__name__ = ["microbe","form","elements","Mock"];
 microbe.form.elements.Mock.__super__ = microbe.form.AjaxElement;
 microbe.form.elements.Mock.prototype = $extend(microbe.form.AjaxElement.prototype,{
-	onFake: function(e) {
-		microbe.tools.Debug.Alerte("onFake",{ fileName : "Mock.hx", lineNumber : 55, className : "microbe.form.elements.Mock", methodName : "onFake"});
+	setValue: function(val) {
+		microbe.tools.Debug.Alerte("",{ fileName : "Mock.hx", lineNumber : 64, className : "microbe.form.elements.Mock", methodName : "setValue"});
+		new js.JQuery("#" + this.id).attr("value",val);
 	}
 	,getValue: function() {
 		microbe.tools.Debug.Alerte("",{ fileName : "Mock.hx", lineNumber : 59, className : "microbe.form.elements.Mock", methodName : "getValue"});
 		return new js.JQuery("#" + this.id).attr("value");
 	}
-	,setValue: function(val) {
-		microbe.tools.Debug.Alerte("",{ fileName : "Mock.hx", lineNumber : 64, className : "microbe.form.elements.Mock", methodName : "setValue"});
-		new js.JQuery("#" + this.id).attr("value",val);
+	,onFake: function(e) {
+		microbe.tools.Debug.Alerte("onFake",{ fileName : "Mock.hx", lineNumber : 55, className : "microbe.form.elements.Mock", methodName : "onFake"});
 	}
 	,__class__: microbe.form.elements.Mock
 });
@@ -3739,18 +4227,18 @@ microbe.form.elements.PlusCollectionButton.create = function(classe) {
 	return "<button type=\"BUTTON\" class=\"" + classe + "\">plus</button>";
 }
 microbe.form.elements.PlusCollectionButton.prototype = {
-	transport: null
-	,elementid: null
-	,me: null
+	init: function() {
+		this.me.click($bind(this,this.onClick));
+	}
 	,onClick: function(e) {
 		e.stopImmediatePropagation();
 		microbe.form.elements.PlusCollectionButton.sign.dispatch("transport");
 		microbe.tools.Debug.Alerte(Std.string(microbe.form.elements.PlusCollectionButton.cont),{ fileName : "PlusCollectionButton.hx", lineNumber : 74, className : "microbe.form.elements.PlusCollectionButton", methodName : "onClick"});
 		microbe.form.elements.PlusCollectionButton.cont++;
 	}
-	,init: function() {
-		this.me.click(this.onClick.$bind(this));
-	}
+	,me: null
+	,elementid: null
+	,transport: null
 	,__class__: microbe.form.elements.PlusCollectionButton
 }
 microbe.form.elements.RichtextWym = $hxClasses["microbe.form.elements.RichtextWym"] = function(_microfield) {
@@ -3762,57 +4250,97 @@ microbe.form.elements.RichtextWym.__name__ = ["microbe","form","elements","Richt
 microbe.form.elements.RichtextWym.self = null;
 microbe.form.elements.RichtextWym.__super__ = microbe.form.AjaxElement;
 microbe.form.elements.RichtextWym.prototype = $extend(microbe.form.AjaxElement.prototype,{
-	formDefaultAction: null
-	,base_url: null
-	,getValue: function() {
-		return wym.html;
+	setValue: function(val) {
+		__js__("wym.html(" + val + ")");
 	}
 	,output: function() {
 		return "yeah from js";
 	}
-	,setValue: function(val) {
-		__js__("wym.html(" + val + ")");
+	,getValue: function() {
+		return wym.html;
 	}
+	,base_url: null
+	,formDefaultAction: null
 	,__class__: microbe.form.elements.RichtextWym
 });
 microbe.form.elements.TagView = $hxClasses["microbe.form.elements.TagView"] = function(_microfield,_iter) {
 	microbe.form.AjaxElement.call(this,_microfield,_iter);
-	new js.JQuery("#addTag").click(this.onAdd.$bind(this));
-	new js.JQuery("#tagSelector select").change(this.onSelect.$bind(this));
-	microbe.tools.Debug.Alerte("new",{ fileName : "TagView.hx", lineNumber : 25, className : "microbe.form.elements.TagView", methodName : "new"});
+	new js.JQuery("#addTag").click($bind(this,this.onAdd));
+	new js.JQuery("#tagSelector select").change($bind(this,this.onSelect));
 	this.init();
 };
 microbe.form.elements.TagView.__name__ = ["microbe","form","elements","TagView"];
 microbe.form.elements.TagView.__super__ = microbe.form.AjaxElement;
 microbe.form.elements.TagView.prototype = $extend(microbe.form.AjaxElement.prototype,{
-	spodTags: null
-	,contextTags: null
-	,fullTags: null
-	,filtre: null
-	,init: function() {
-		this.getTags(this.voName,this.spodId);
-		microbe.tools.Debug.Alerte(Std.string(this.spodTags),{ fileName : "TagView.hx", lineNumber : 32, className : "microbe.form.elements.TagView", methodName : "init"});
-		this.afficheTags();
-		microbe.tools.Debug.Alerte(Std.string(this.contextTags),{ fileName : "TagView.hx", lineNumber : 34, className : "microbe.form.elements.TagView", methodName : "init"});
-		this.populateTags();
-		microbe.tools.Debug.Alerte(Std.string(this.fullTags),{ fileName : "TagView.hx", lineNumber : 36, className : "microbe.form.elements.TagView", methodName : "init"});
-		new js.JQuery("#tagSelector #pute").keyup(this.onType.$bind(this));
-		new js.JQuery("#tagSelector #results").blur(this.onBlur.$bind(this));
+	onAdd: function(e) {
+		var newTag = new js.JQuery("#tagSelector #pute").val();
+		js.Lib.alert("add" + newTag);
+		js.Lib.alert(microbe.TagManager.addTag(this.voName,this.spodId,newTag));
+		js.Lib.alert("afetr");
+		this.init();
 	}
-	,onBlur: function(e) {
-		new js.JQuery("#tagSelector #results").hide();
+	,populateTags: function() {
+		new js.JQuery("#tagSelector select").empty();
+		this.fullTags = new List();
+		var str = "";
+		var $it0 = this.spodTags.iterator();
+		while( $it0.hasNext() ) {
+			var tag = $it0.next();
+			this.fullTags.add(tag.tag);
+		}
+		new js.JQuery("#tagSelector select").append(str);
 	}
-	,onType: function(e) {
-		var filtered = this.findinSpodTags();
-		this.showResults(filtered);
+	,compareTags: function() {
+		var $it0 = this.spodTags.iterator();
+		while( $it0.hasNext() ) {
+			var dispo = $it0.next();
+			if(Lambda.has(this.contextTags,dispo)) this.spodTags.remove(dispo);
+		}
 	}
-	,findinSpodTags: function() {
-		return Lambda.filter(this.fullTags,this.subFind.$bind(this));
+	,remove: function(e) {
+		var tag = new js.JQuery(e.currentTarget).parent(".tagitem").children(".tag").text();
+		microbe.TagManager.removeTagFromSpod(this.voName,this.spodId,tag);
+		this.init();
 	}
-	,subFind: function(item) {
-		var filtre = new js.JQuery("#tagSelector #pute").val();
-		if(Std.string(item).substr(0,filtre.length) == filtre) return true;
-		return false;
+	,afficheTags: function() {
+		new js.JQuery("#tagSelector .tagitem").remove();
+		var str = "";
+		str += "<ul class='tags'>";
+		var $it0 = this.contextTags.iterator();
+		while( $it0.hasNext() ) {
+			var tag = $it0.next();
+			str += "<li class='tagitem'><div class='tag'>" + tag.tag + "</div><div class='minus'></div></li>";
+		}
+		str += "</ul>";
+		new js.JQuery("#tagSelector").append(str);
+		new js.JQuery("#tagSelector .tagitem .minus").click($bind(this,this.remove));
+	}
+	,getTags: function(spod,spodId) {
+		microbe.tools.Debug.Alerte("",{ fileName : "TagView.hx", lineNumber : 111, className : "microbe.form.elements.TagView", methodName : "getTags"});
+		if(spodId != null) {
+			var context = microbe.TagManager.getTags(spod,spodId);
+			microbe.tools.Debug.Alerte("",{ fileName : "TagView.hx", lineNumber : 116, className : "microbe.form.elements.TagView", methodName : "getTags"});
+			var tags = microbe.TagManager.getTags(spod);
+			microbe.tools.Debug.Alerte("",{ fileName : "TagView.hx", lineNumber : 118, className : "microbe.form.elements.TagView", methodName : "getTags"});
+			this.contextTags = context;
+			microbe.tools.Debug.Alerte("",{ fileName : "TagView.hx", lineNumber : 120, className : "microbe.form.elements.TagView", methodName : "getTags"});
+			this.spodTags = tags;
+		} else {
+			microbe.tools.Debug.Alerte("",{ fileName : "TagView.hx", lineNumber : 123, className : "microbe.form.elements.TagView", methodName : "getTags"});
+			this.contextTags = new List();
+			this.spodTags = new List();
+		}
+	}
+	,createResultsDiv: function() {
+		var str = "<div id='results'></div>";
+		var div = new js.JQuery("#tagSelector").append(str);
+	}
+	,reload: function() {
+	}
+	,onSelect: function(e) {
+		js.Lib.alert("pop");
+		var selected = new js.JQuery("#tagSelector select option:selected");
+		new js.JQuery("#tagSelector #pute").val(selected.text());
 	}
 	,showResults: function(data) {
 		if(data.length > 0) {
@@ -3826,80 +4354,38 @@ microbe.form.elements.TagView.prototype = $extend(microbe.form.AjaxElement.proto
 			}
 			new js.JQuery("#tagSelector #results").html(resultHtml);
 			new js.JQuery("#tagSelector #results").css("display","block");
-			new js.JQuery("#tagSelector #results .result").click(this.onSelect.$bind(this));
+			new js.JQuery("#tagSelector #results .result").click($bind(this,this.onSelect));
 		} else new js.JQuery("#tagSelector #results").css("display","none");
 	}
-	,onSelect: function(e) {
-		js.Lib.alert("pop");
-		var selected = new js.JQuery("#tagSelector select option:selected");
-		new js.JQuery("#tagSelector #pute").val(selected.text());
+	,subFind: function(item) {
+		var filtre = new js.JQuery("#tagSelector #pute").val();
+		if(HxOverrides.substr(Std.string(item),0,filtre.length) == filtre) return true;
+		return false;
 	}
-	,reload: function() {
+	,findinSpodTags: function() {
+		return Lambda.filter(this.fullTags,$bind(this,this.subFind));
 	}
-	,createResultsDiv: function() {
-		var str = "<div id='results'></div>";
-		var div = new js.JQuery("#tagSelector").append(str);
+	,onType: function(e) {
+		var filtered = this.findinSpodTags();
+		this.showResults(filtered);
 	}
-	,getTags: function(spod,spodId) {
-		microbe.tools.Debug.Alerte("",{ fileName : "TagView.hx", lineNumber : 109, className : "microbe.form.elements.TagView", methodName : "getTags"});
-		if(spodId != null) {
-			microbe.tools.Debug.Alerte(spod,{ fileName : "TagView.hx", lineNumber : 112, className : "microbe.form.elements.TagView", methodName : "getTags"});
-			var context = microbe.TagManager.getTags(spod,spodId);
-			microbe.tools.Debug.Alerte("",{ fileName : "TagView.hx", lineNumber : 114, className : "microbe.form.elements.TagView", methodName : "getTags"});
-			var tags = microbe.TagManager.getTags(spod);
-			microbe.tools.Debug.Alerte("",{ fileName : "TagView.hx", lineNumber : 116, className : "microbe.form.elements.TagView", methodName : "getTags"});
-			this.contextTags = context;
-			microbe.tools.Debug.Alerte("",{ fileName : "TagView.hx", lineNumber : 118, className : "microbe.form.elements.TagView", methodName : "getTags"});
-			this.spodTags = tags;
-		} else {
-			microbe.tools.Debug.Alerte("",{ fileName : "TagView.hx", lineNumber : 121, className : "microbe.form.elements.TagView", methodName : "getTags"});
-			this.contextTags = new List();
-			this.spodTags = new List();
-		}
+	,onBlur: function(e) {
+		new js.JQuery("#tagSelector #results").hide();
 	}
-	,afficheTags: function() {
-		new js.JQuery("#tagSelector .tagitem").remove();
-		var str = "";
-		str += "<ul class='tags'>";
-		var $it0 = this.contextTags.iterator();
-		while( $it0.hasNext() ) {
-			var tag = $it0.next();
-			str += "<li class='tagitem'><div class='tag'>" + tag.tag + "</div><div class='minus'></div></li>";
-		}
-		str += "</ul>";
-		new js.JQuery("#tagSelector").append(str);
-		new js.JQuery("#tagSelector .tagitem .minus").click(this.remove.$bind(this));
+	,init: function() {
+		this.getTags(this.voName,this.spodId);
+		microbe.tools.Debug.Alerte(Std.string(this.spodTags),{ fileName : "TagView.hx", lineNumber : 33, className : "microbe.form.elements.TagView", methodName : "init"});
+		this.afficheTags();
+		microbe.tools.Debug.Alerte(Std.string(this.contextTags),{ fileName : "TagView.hx", lineNumber : 35, className : "microbe.form.elements.TagView", methodName : "init"});
+		this.populateTags();
+		microbe.tools.Debug.Alerte(Std.string(this.fullTags),{ fileName : "TagView.hx", lineNumber : 37, className : "microbe.form.elements.TagView", methodName : "init"});
+		new js.JQuery("#tagSelector #pute").keyup($bind(this,this.onType));
+		new js.JQuery("#tagSelector #results").blur($bind(this,this.onBlur));
 	}
-	,remove: function(e) {
-		var tag = new js.JQuery(e.currentTarget).parent(".tagitem").children(".tag").text();
-		microbe.TagManager.removeTagFromSpod(this.voName,this.spodId,tag);
-		this.init();
-	}
-	,compareTags: function() {
-		var $it0 = this.spodTags.iterator();
-		while( $it0.hasNext() ) {
-			var dispo = $it0.next();
-			if(Lambda.has(this.contextTags,dispo)) this.spodTags.remove(dispo);
-		}
-	}
-	,populateTags: function() {
-		new js.JQuery("#tagSelector select").empty();
-		this.fullTags = new List();
-		var str = "";
-		var $it0 = this.spodTags.iterator();
-		while( $it0.hasNext() ) {
-			var tag = $it0.next();
-			this.fullTags.add(tag.tag);
-		}
-		new js.JQuery("#tagSelector select").append(str);
-	}
-	,onAdd: function(e) {
-		var newTag = new js.JQuery("#tagSelector #pute").val();
-		js.Lib.alert("add" + newTag);
-		js.Lib.alert(microbe.TagManager.addTag(this.voName,this.spodId,newTag));
-		js.Lib.alert("afetr");
-		this.init();
-	}
+	,filtre: null
+	,fullTags: null
+	,contextTags: null
+	,spodTags: null
 	,__class__: microbe.form.elements.TagView
 });
 microbe.form.elements.TestCrossAjax = $hxClasses["microbe.form.elements.TestCrossAjax"] = function(_microfield,_iter) {
@@ -3907,25 +4393,60 @@ microbe.form.elements.TestCrossAjax = $hxClasses["microbe.form.elements.TestCros
 	microbe.form.AjaxElement.call(this,_microfield,_iter);
 	this.self = this;
 	this.base_url = js.Lib.window.location.protocol + "//" + js.Lib.window.location.host;
-	this.getBouton().click(this.testUpload.$bind(this));
+	this.getBouton().click($bind(this,this.testUpload));
 };
 microbe.form.elements.TestCrossAjax.__name__ = ["microbe","form","elements","TestCrossAjax"];
 microbe.form.elements.TestCrossAjax.__super__ = microbe.form.AjaxElement;
 microbe.form.elements.TestCrossAjax.prototype = $extend(microbe.form.AjaxElement.prototype,{
-	self: null
-	,formDefaultAction: null
-	,base_url: null
-	,uploadtarget: null
-	,init: function(e) {
-		this.getCollectionContainer();
+	output: function() {
+		return "yeah from js";
 	}
-	,testUpload: function(e) {
-		this.DisableEnableForm();
-		new js.JQuery("#" + this.getForm()).attr("target",this.getIframe());
-		new js.JQuery("#" + this.getIframe()).load(this.onLoad.$bind(this));
-		this.formDefaultAction = new js.JQuery("#" + this.getForm()).attr("action");
-		new js.JQuery("#" + this.getForm()).attr("action","http://localhost:8888/index.php/upload");
-		new js.JQuery("#" + this.getForm()).submit();
+	,setValue: function(val) {
+		this.getpreview().attr("src",js.Lib.window.location.protocol + "//" + js.Lib.window.location.host + "/index.php/imageBase/resize/thumb/" + val);
+		this.getRetour().attr("value",val);
+	}
+	,getValue: function() {
+		return new js.JQuery("#retour" + this.getCollectionContainer()).attr("value");
+	}
+	,setpreview: function(source) {
+		this.getpreview().css("width","300px");
+		this.getpreview().attr("src",source);
+		this.getpreview().fadeTo(0,0);
+		this.getpreview().fadeTo(600,1);
+	}
+	,getCollectionContainer: function() {
+		var p = new js.JQuery("#" + this.id).parents(".collection");
+		if(p.attr("pos") != null) return p.attr("pos");
+		return "";
+	}
+	,getpreview: function() {
+		return new js.JQuery("#" + this.id + " #preview" + this.getCollectionContainer());
+	}
+	,getInputName: function() {
+		return new js.JQuery("#" + this.id + " #fileinput").attr("name");
+	}
+	,getRetour: function() {
+		return new js.JQuery("#" + this.id + " #retour" + this.getCollectionContainer());
+	}
+	,getBouton: function() {
+		return new js.JQuery("#" + this.id + " #uploadButton");
+	}
+	,active: function() {
+		new js.JQuery("#uploadButton");
+	}
+	,getIframe: function() {
+		var ifr = new js.JQuery("#" + "upload_target" + this.getCollectionContainer()).attr("id");
+		return ifr;
+	}
+	,creeIframe: function() {
+		new js.JQuery("#" + "myFrame").remove();
+		new js.JQuery("<iframe id=\"myFrame\" />").appendTo("body");
+	}
+	,enableForm: function() {
+		new js.JQuery("input").attr("disabled","");
+	}
+	,DisableEnableForm: function() {
+		new js.JQuery("#" + this.getForm() + " input[name!='" + this.getInputName() + "']").attr("disabled","disabled");
 	}
 	,onLoad: function(e) {
 		var p = new js.JQuery("#" + this.getIframe()).contents().text();
@@ -3934,56 +4455,21 @@ microbe.form.elements.TestCrossAjax.prototype = $extend(microbe.form.AjaxElement
 		this.getpreview().fadeTo(600,1);
 		this.enableForm();
 	}
-	,DisableEnableForm: function() {
-		new js.JQuery("#" + this.getForm() + " input[name!='" + this.getInputName() + "']").attr("disabled","disabled");
+	,testUpload: function(e) {
+		this.DisableEnableForm();
+		new js.JQuery("#" + this.getForm()).attr("target",this.getIframe());
+		new js.JQuery("#" + this.getIframe()).load($bind(this,this.onLoad));
+		this.formDefaultAction = new js.JQuery("#" + this.getForm()).attr("action");
+		new js.JQuery("#" + this.getForm()).attr("action","http://localhost:8888/index.php/upload");
+		new js.JQuery("#" + this.getForm()).submit();
 	}
-	,enableForm: function() {
-		new js.JQuery("input").attr("disabled","");
+	,init: function(e) {
+		this.getCollectionContainer();
 	}
-	,creeIframe: function() {
-		new js.JQuery("#" + "myFrame").remove();
-		new js.JQuery("<iframe id=\"myFrame\" />").appendTo("body");
-	}
-	,getIframe: function() {
-		var ifr = new js.JQuery("#" + "upload_target" + this.getCollectionContainer()).attr("id");
-		return ifr;
-	}
-	,active: function() {
-		new js.JQuery("#uploadButton");
-	}
-	,getBouton: function() {
-		return new js.JQuery("#" + this.id + " #uploadButton");
-	}
-	,getRetour: function() {
-		return new js.JQuery("#" + this.id + " #retour" + this.getCollectionContainer());
-	}
-	,getInputName: function() {
-		return new js.JQuery("#" + this.id + " #fileinput").attr("name");
-	}
-	,getpreview: function() {
-		return new js.JQuery("#" + this.id + " #preview" + this.getCollectionContainer());
-	}
-	,getCollectionContainer: function() {
-		var p = new js.JQuery("#" + this.id).parents(".collection");
-		if(p.attr("pos") != null) return p.attr("pos");
-		return "";
-	}
-	,setpreview: function(source) {
-		this.getpreview().css("width","300px");
-		this.getpreview().attr("src",source);
-		this.getpreview().fadeTo(0,0);
-		this.getpreview().fadeTo(600,1);
-	}
-	,getValue: function() {
-		return new js.JQuery("#retour" + this.getCollectionContainer()).attr("value");
-	}
-	,setValue: function(val) {
-		this.getpreview().attr("src",js.Lib.window.location.protocol + "//" + js.Lib.window.location.host + "/index.php/imageBase/resize/thumb/" + val);
-		this.getRetour().attr("value",val);
-	}
-	,output: function() {
-		return "yeah from js";
-	}
+	,uploadtarget: null
+	,base_url: null
+	,formDefaultAction: null
+	,self: null
 	,__class__: microbe.form.elements.TestCrossAjax
 });
 if(!microbe.form.validators) microbe.form.validators = {}
@@ -3995,22 +4481,21 @@ microbe.form.validators.BoolValidator = $hxClasses["microbe.form.validators.Bool
 microbe.form.validators.BoolValidator.__name__ = ["microbe","form","validators","BoolValidator"];
 microbe.form.validators.BoolValidator.__super__ = microbe.form.Validator;
 microbe.form.validators.BoolValidator.prototype = $extend(microbe.form.Validator.prototype,{
-	errorNotValid: null
-	,valid: null
-	,isValid: function(value) {
+	isValid: function(value) {
 		if(!this.valid) this.errors.push(this.errorNotValid);
 		return this.valid;
 	}
+	,valid: null
+	,errorNotValid: null
 	,__class__: microbe.form.validators.BoolValidator
 });
 if(!microbe.jsTools) microbe.jsTools = {}
 microbe.jsTools.BackJS = $hxClasses["microbe.jsTools.BackJS"] = function() {
-	microbe.tools.Debug.Alerte("new",{ fileName : "BackJS.hx", lineNumber : 59, className : "microbe.jsTools.BackJS", methodName : "new"});
+	microbe.tools.Mytrace.setRedirection();
 	new js.JQuery("document").ready(function(e) {
 		microbe.jsTools.BackJS.getInstance().init();
 	});
 };
-$hxExpose(microbe.jsTools.BackJS, "microbe.jsTools.BackJS");
 microbe.jsTools.BackJS.__name__ = ["microbe","jsTools","BackJS"];
 microbe.jsTools.BackJS.__properties__ = {get_instance:"getInstance"}
 microbe.jsTools.BackJS.instance = null;
@@ -4022,12 +4507,120 @@ microbe.jsTools.BackJS.getInstance = function() {
 	return microbe.jsTools.BackJS.instance;
 }
 microbe.jsTools.BackJS.prototype = {
-	currentVo: null
-	,classMap: null
-	,microbeElements: null
-	,sort: null
-	,init: function() {
-		this.start();
+	parseplusCollec: function(liste,pos) {
+		var microfield = liste.fields.first();
+		var $it0 = microfield.iterator();
+		while( $it0.hasNext() ) {
+			var elements = $it0.next();
+			this.microbeElements.createElement(elements);
+		}
+		this.microbeElements.createCollectionElement(microfield,pos);
+		var maputil = new microbe.ClassMapUtils(this.classMap);
+		maputil.searchCollec(microfield.voName);
+		maputil.addInCollec(microfield);
+		this.classMap.fields = maputil.mapFields;
+		microbe.tools.Debug.Alerte(Std.string(microfield),{ fileName : "BackJS.hx", lineNumber : 295, className : "microbe.jsTools.BackJS", methodName : "parseplusCollec"});
+	}
+	,onAddItemPlus: function(x,PI) {
+		var raw = null;
+		try {
+			raw = haxe.Unserializer.run(x);
+		} catch( err ) {
+			if( js.Boot.__instanceof(err,String) ) {
+				microbe.tools.Debug.Alerte(err,{ fileName : "BackJS.hx", lineNumber : 274, className : "microbe.jsTools.BackJS", methodName : "onAddItemPlus"});
+			} else throw(err);
+		}
+		PI.target.notify(raw.element);
+		this.parseplusCollec(raw.microliste,PI.graine);
+	}
+	,PlusCollection: function(plusInfos) {
+		var _g = this;
+		this._plusInfos = plusInfos;
+		microbe.tools.Debug.Alerte(Std.string("name" + plusInfos.collectionName + "graine=" + plusInfos.graine),{ fileName : "BackJS.hx", lineNumber : 250, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
+		var req = new haxe.Http(microbe.jsTools.BackJS.back_url + "addCollectServerItem/");
+		microbe.tools.Debug.Alerte(microbe.jsTools.BackJS.back_url,{ fileName : "BackJS.hx", lineNumber : 253, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
+		req.setParameter("name",plusInfos.collectionName);
+		req.setParameter("voParent",this.classMap.voClass);
+		req.setParameter("voParentId",Std.string(this.classMap.id));
+		req.setParameter("graine",Std.string(plusInfos.graine));
+		req.onError = js.Lib.alert;
+		req.onData = function(x) {
+			_g.onAddItemPlus(x,_g._plusInfos);
+		};
+		req.request(true);
+		microbe.tools.Debug.Alerte("end",{ fileName : "BackJS.hx", lineNumber : 261, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
+	}
+	,_plusInfos: null
+	,deleteCollection: function(id,voName,pos,collecItemId) {
+		var maputil = new microbe.ClassMapUtils(this.classMap);
+		maputil.searchCollec(voName);
+		var microListe = maputil.searchinCollecById(collecItemId);
+		var spodid = microListe.id;
+		maputil.removeInCurrent(microListe);
+		new js.JQuery("#" + id).fadeOut(1000,function() {
+			new js.JQuery("#" + id).remove();
+		});
+		this.spodDelete(voName,spodid);
+	}
+	,afterRecord: function(d) {
+		haxe.Log.trace("Fter Record",{ fileName : "BackJS.hx", lineNumber : 215, className : "microbe.jsTools.BackJS", methodName : "afterRecord"});
+		js.Lib.window.location.href = microbe.jsTools.BackJS.back_url + "nav/" + this.classMap.voClass + "/" + this.classMap.id;
+	}
+	,AjaxFormTraitement: function() {
+		var _g = this;
+		microbe.tools.Debug.Alerte(Std.string(this.classMap),{ fileName : "BackJS.hx", lineNumber : 203, className : "microbe.jsTools.BackJS", methodName : "AjaxFormTraitement"});
+		haxe.Log.trace("classMAp=" + Std.string(this.classMap),{ fileName : "BackJS.hx", lineNumber : 204, className : "microbe.jsTools.BackJS", methodName : "AjaxFormTraitement"});
+		var compressedValues = haxe.Serializer.run(this.classMap);
+		haxe.Log.trace("classMAp=" + Std.string(this.classMap) + "back_url=" + microbe.jsTools.BackJS.back_url,{ fileName : "BackJS.hx", lineNumber : 207, className : "microbe.jsTools.BackJS", methodName : "AjaxFormTraitement"});
+		var req = new haxe.Http(microbe.jsTools.BackJS.back_url + "rec/");
+		req.setParameter("map",compressedValues);
+		req.onData = function(d) {
+			_g.afterRecord(d);
+		};
+		req.request(true);
+	}
+	,record: function() {
+		haxe.Log.trace("clika" + Std.string(this.microbeElements),{ fileName : "BackJS.hx", lineNumber : 187, className : "microbe.jsTools.BackJS", methodName : "record"});
+		var $it0 = this.microbeElements.iterator();
+		while( $it0.hasNext() ) {
+			var mic = $it0.next();
+			if(mic.element != null) mic.microfield.value = mic.getValue();
+		}
+		this.AjaxFormTraitement();
+		haxe.Log.trace("finrecord",{ fileName : "BackJS.hx", lineNumber : 198, className : "microbe.jsTools.BackJS", methodName : "record"});
+	}
+	,spodDelete: function(voName,id) {
+		microbe.tools.Debug.Alerte("",{ fileName : "BackJS.hx", lineNumber : 179, className : "microbe.jsTools.BackJS", methodName : "spodDelete"});
+		var reponse = haxe.Http.requestUrl(microbe.jsTools.BackJS.back_url + "delete/" + voName + "/" + id);
+	}
+	,deleteSpod: function() {
+		js.Lib.window.location.href = microbe.jsTools.BackJS.back_url + "delete/" + this.classMap.voClass + "/" + this.classMap.id;
+	}
+	,onAjoute: function(e) {
+		microbe.tools.Debug.Alerte("ajoute",{ fileName : "BackJS.hx", lineNumber : 165, className : "microbe.jsTools.BackJS", methodName : "onAjoute"});
+		js.Lib.window.location.href = microbe.jsTools.BackJS.back_url + "ajoute/" + this.currentVo;
+	}
+	,listen: function() {
+		microbe.tools.Debug.Alerte("listen",{ fileName : "BackJS.hx", lineNumber : 155, className : "microbe.jsTools.BackJS", methodName : "listen"});
+		microbe.form.elements.CollectionElement.deleteSignal.add($bind(this,this.deleteCollection));
+		microbe.form.elements.DeleteButton.sign.add($bind(this,this.deleteSpod));
+		new js.JQuery(".ajout").click($bind(this,this.onAjoute));
+	}
+	,setClassMap: function(compressedMap) {
+		this.classMap = haxe.Unserializer.run(compressedMap);
+	}
+	,onSortChanged: function(e,ui) {
+		var pop = this.sort.sortable("serialize",{ attribute : "tri", key : "id"});
+		haxe.Log.trace(pop,{ fileName : "BackJS.hx", lineNumber : 131, className : "microbe.jsTools.BackJS", methodName : "onSortChanged"});
+		var liste = pop.split("&id=");
+		liste[0] = liste[0].split("id=")[1];
+		var req = new haxe.Http(microbe.jsTools.BackJS.back_url + "reorder/" + this.currentVo);
+		req.setParameter("orderedList",haxe.Serializer.run(liste));
+		req.onData = function(d) {
+			haxe.Log.trace(d,{ fileName : "BackJS.hx", lineNumber : 140, className : "microbe.jsTools.BackJS", methodName : "onSortChanged"});
+		};
+		req.request(true);
+		haxe.Log.trace("afterreorder",{ fileName : "BackJS.hx", lineNumber : 142, className : "microbe.jsTools.BackJS", methodName : "onSortChanged"});
 	}
 	,start: function() {
 		if(this.classMap != null) {
@@ -4041,132 +4634,22 @@ microbe.jsTools.BackJS.prototype = {
 			var parser = new microbe.jsTools.MapParser(this.microbeElements);
 			parser.parse(this.classMap);
 			var wrapper = new microbe.form.elements.CollectionWrapper();
-			microbe.form.elements.CollectionWrapper.plusInfos.add(this.PlusCollection.$bind(this));
+			microbe.form.elements.CollectionWrapper.plusInfos.add($bind(this,this.PlusCollection));
 			var sortoptions = { };
 			sortoptions.placeholder = "placeHolder";
 			sortoptions.opacity = .2;
-			sortoptions.update = this.onSortChanged.$bind(this);
+			sortoptions.update = $bind(this,this.onSortChanged);
 			this.sort = new $("#leftCol .itemslist").sortable(sortoptions);
 			this.listen();
 		}
 	}
-	,onSortChanged: function(e,ui) {
-		var pop = this.sort.sortable("serialize",{ attribute : "tri", key : "id"});
-		haxe.Log.trace(pop,{ fileName : "BackJS.hx", lineNumber : 118, className : "microbe.jsTools.BackJS", methodName : "onSortChanged"});
-		var liste = pop.split("&id=");
-		liste[0] = liste[0].split("id=")[1];
-		var req = new haxe.Http(microbe.jsTools.BackJS.back_url + "reorder/" + this.currentVo);
-		req.setParameter("orderedList",haxe.Serializer.run(liste));
-		req.onData = function(d) {
-			haxe.Log.trace(d,{ fileName : "BackJS.hx", lineNumber : 127, className : "microbe.jsTools.BackJS", methodName : "onSortChanged"});
-		};
-		req.request(true);
-		haxe.Log.trace("afterreorder",{ fileName : "BackJS.hx", lineNumber : 129, className : "microbe.jsTools.BackJS", methodName : "onSortChanged"});
+	,init: function() {
+		this.start();
 	}
-	,setClassMap: function(compressedMap) {
-		this.classMap = haxe.Unserializer.run(compressedMap);
-	}
-	,listen: function() {
-		microbe.tools.Debug.Alerte("listen",{ fileName : "BackJS.hx", lineNumber : 142, className : "microbe.jsTools.BackJS", methodName : "listen"});
-		microbe.form.elements.CollectionElement.deleteSignal.add(this.deleteCollection.$bind(this));
-		microbe.form.elements.DeleteButton.sign.add(this.deleteSpod.$bind(this));
-		new js.JQuery(".ajout").click(this.onAjoute.$bind(this));
-	}
-	,onAjoute: function(e) {
-		microbe.tools.Debug.Alerte("ajoute",{ fileName : "BackJS.hx", lineNumber : 152, className : "microbe.jsTools.BackJS", methodName : "onAjoute"});
-		js.Lib.window.location.href = microbe.jsTools.BackJS.back_url + "ajoute/" + this.currentVo;
-	}
-	,deleteSpod: function() {
-		microbe.tools.Debug.Alerte("sur?",{ fileName : "BackJS.hx", lineNumber : 159, className : "microbe.jsTools.BackJS", methodName : "deleteSpod"});
-		js.Lib.window.location.href = microbe.jsTools.BackJS.back_url + "delete/" + this.classMap.voClass + "/" + this.classMap.id;
-	}
-	,spodDelete: function(voName,id) {
-		microbe.tools.Debug.Alerte("",{ fileName : "BackJS.hx", lineNumber : 166, className : "microbe.jsTools.BackJS", methodName : "spodDelete"});
-		var reponse = haxe.Http.requestUrl(microbe.jsTools.BackJS.back_url + "delete/" + voName + "/" + id);
-	}
-	,record: function() {
-		haxe.Log.trace("clika" + this.microbeElements,{ fileName : "BackJS.hx", lineNumber : 174, className : "microbe.jsTools.BackJS", methodName : "record"});
-		microbe.tools.Debug.Alerte("record",{ fileName : "BackJS.hx", lineNumber : 175, className : "microbe.jsTools.BackJS", methodName : "record"});
-		var $it0 = this.microbeElements.iterator();
-		while( $it0.hasNext() ) {
-			var mic = $it0.next();
-			haxe.Log.trace("micVAlue=" + mic.getValue(),{ fileName : "BackJS.hx", lineNumber : 178, className : "microbe.jsTools.BackJS", methodName : "record"});
-			mic.microfield.value = mic.getValue();
-		}
-		this.AjaxFormTraitement();
-		haxe.Log.trace("finrecord",{ fileName : "BackJS.hx", lineNumber : 182, className : "microbe.jsTools.BackJS", methodName : "record"});
-	}
-	,AjaxFormTraitement: function() {
-		var me = this;
-		microbe.tools.Debug.Alerte(Std.string(this.classMap),{ fileName : "BackJS.hx", lineNumber : 187, className : "microbe.jsTools.BackJS", methodName : "AjaxFormTraitement"});
-		var compressedValues = haxe.Serializer.run(this.classMap);
-		haxe.Log.trace("classMAp=" + this.classMap + "back_url=" + microbe.jsTools.BackJS.back_url,{ fileName : "BackJS.hx", lineNumber : 190, className : "microbe.jsTools.BackJS", methodName : "AjaxFormTraitement"});
-		var req = new haxe.Http(microbe.jsTools.BackJS.back_url + "rec/");
-		req.setParameter("map",compressedValues);
-		req.onData = function(d) {
-			me.afterRecord(d);
-		};
-		req.request(true);
-	}
-	,afterRecord: function(d) {
-		haxe.Log.trace("Fter Record",{ fileName : "BackJS.hx", lineNumber : 198, className : "microbe.jsTools.BackJS", methodName : "afterRecord"});
-		js.Lib.window.location.href = microbe.jsTools.BackJS.back_url + "nav/" + this.classMap.voClass + "/" + this.classMap.id;
-	}
-	,deleteCollection: function(id,voName,pos,collecItemId) {
-		var maputil = new microbe.ClassMapUtils(this.classMap);
-		maputil.searchCollec(voName);
-		var microListe = maputil.searchinCollecById(collecItemId);
-		var spodid = microListe.id;
-		maputil.removeInCurrent(microListe);
-		new js.JQuery("#" + id).fadeOut(1000,function() {
-			new js.JQuery("#" + id).remove();
-		});
-		this.spodDelete(voName,spodid);
-	}
-	,_plusInfos: null
-	,PlusCollection: function(plusInfos) {
-		var me = this;
-		this._plusInfos = plusInfos;
-		microbe.tools.Debug.Alerte(Std.string("name" + plusInfos.collectionName + "graine=" + plusInfos.graine),{ fileName : "BackJS.hx", lineNumber : 233, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
-		var req = new haxe.Http(microbe.jsTools.BackJS.back_url + "addCollectServerItem/");
-		microbe.tools.Debug.Alerte(microbe.jsTools.BackJS.back_url,{ fileName : "BackJS.hx", lineNumber : 236, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
-		req.setParameter("name",plusInfos.collectionName);
-		req.setParameter("voParent",this.classMap.voClass);
-		req.setParameter("voParentId",Std.string(this.classMap.id));
-		req.setParameter("graine",Std.string(plusInfos.graine));
-		req.onError = js.Lib.alert;
-		req.onData = function(x) {
-			me.onAddItemPlus(x,me._plusInfos);
-		};
-		req.request(true);
-		microbe.tools.Debug.Alerte("end",{ fileName : "BackJS.hx", lineNumber : 244, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
-	}
-	,onAddItemPlus: function(x,PI) {
-		var raw = null;
-		try {
-			raw = haxe.Unserializer.run(x);
-		} catch( err ) {
-			if( js.Boot.__instanceof(err,String) ) {
-				microbe.tools.Debug.Alerte(err,{ fileName : "BackJS.hx", lineNumber : 257, className : "microbe.jsTools.BackJS", methodName : "onAddItemPlus"});
-			} else throw(err);
-		}
-		PI.target.notify(raw.element);
-		this.parseplusCollec(raw.microliste,PI.graine);
-	}
-	,parseplusCollec: function(liste,pos) {
-		var microfield = liste.fields.first();
-		var $it0 = microfield.iterator();
-		while( $it0.hasNext() ) {
-			var elements = $it0.next();
-			this.microbeElements.createElement(elements);
-		}
-		this.microbeElements.createCollectionElement(microfield,pos);
-		var maputil = new microbe.ClassMapUtils(this.classMap);
-		maputil.searchCollec(microfield.voName);
-		maputil.addInCollec(microfield);
-		this.classMap.fields = maputil.mapFields;
-		microbe.tools.Debug.Alerte(Std.string(microfield),{ fileName : "BackJS.hx", lineNumber : 278, className : "microbe.jsTools.BackJS", methodName : "parseplusCollec"});
-	}
+	,sort: null
+	,microbeElements: null
+	,classMap: null
+	,currentVo: null
 	,__class__: microbe.jsTools.BackJS
 }
 microbe.jsTools.ElementBinder = $hxClasses["microbe.jsTools.ElementBinder"] = function() {
@@ -4174,24 +4657,27 @@ microbe.jsTools.ElementBinder = $hxClasses["microbe.jsTools.ElementBinder"] = fu
 };
 microbe.jsTools.ElementBinder.__name__ = ["microbe","jsTools","ElementBinder"];
 microbe.jsTools.ElementBinder.prototype = {
-	elements: null
-	,createCollectionElement: function(microChamps,position) {
-		var d = Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[microChamps,position]);
-		microbe.tools.Debug.Alerte(Std.string(position + "-pos"),{ fileName : "ElementBinder.hx", lineNumber : 32, className : "microbe.jsTools.ElementBinder", methodName : "createCollectionElement"});
-	}
-	,createElement: function(microChamps) {
-		microbe.tools.Debug.Alerte(Std.string(microChamps.element),{ fileName : "ElementBinder.hx", lineNumber : 38, className : "microbe.jsTools.ElementBinder", methodName : "createElement"});
-		var classe = Type.resolveClass(microChamps.element);
-		microbe.tools.Debug.Alerte(Std.string(classe),{ fileName : "ElementBinder.hx", lineNumber : 40, className : "microbe.jsTools.ElementBinder", methodName : "createElement"});
-		var d = Type.createInstance(Type.resolveClass(microChamps.element),[microChamps]);
-		this.add(d);
+	iterator: function() {
+		return this.elements.iterator();
 	}
 	,add: function(element) {
 		this.elements.add(element);
 	}
-	,iterator: function() {
-		return this.elements.iterator();
+	,createElement: function(microChamps) {
+		if(microChamps.element != null) {
+			var classe = Type.resolveClass(microChamps.element);
+			var d = Type.createInstance(classe,[microChamps]);
+			this.add(d);
+		} else {
+			var fake = new microbe.form.AjaxElement(microChamps);
+			this.add(fake);
+		}
 	}
+	,createCollectionElement: function(microChamps,position) {
+		var d = Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[microChamps,position]);
+		microbe.tools.Debug.Alerte(Std.string(position + "-pos"),{ fileName : "ElementBinder.hx", lineNumber : 34, className : "microbe.jsTools.ElementBinder", methodName : "createCollectionElement"});
+	}
+	,elements: null
 	,__class__: microbe.jsTools.ElementBinder
 }
 microbe.jsTools.MapParser = $hxClasses["microbe.jsTools.MapParser"] = function(_microbeElements) {
@@ -4199,8 +4685,28 @@ microbe.jsTools.MapParser = $hxClasses["microbe.jsTools.MapParser"] = function(_
 };
 microbe.jsTools.MapParser.__name__ = ["microbe","jsTools","MapParser"];
 microbe.jsTools.MapParser.prototype = {
-	map: null
-	,microbeElements: null
+	recurMap: function(liste) {
+		microbe.tools.Debug.Alerte("recurMap",{ fileName : "MapParser.hx", lineNumber : 48, className : "microbe.jsTools.MapParser", methodName : "recurMap"});
+		var pos = 0;
+		var $it0 = liste.iterator();
+		while( $it0.hasNext() ) {
+			var chps = $it0.next();
+			if(js.Boot.__instanceof(chps,microbe.form.MicroFieldList)) {
+				if(chps.type == microbe.form.InstanceType.collection) {
+					var $it1 = (js.Boot.__cast(chps , microbe.form.MicroFieldList)).fields.iterator();
+					while( $it1.hasNext() ) {
+						var item = $it1.next();
+						this.microbeElements.createCollectionElement(chps,pos);
+						pos++;
+					}
+				}
+				this.recurMap(js.Boot.__cast(chps , microbe.form.MicroFieldList));
+			} else {
+				var microChamps = chps;
+				this.microbeElements.createElement(microChamps);
+			}
+		}
+	}
 	,parse: function(_map) {
 		microbe.tools.Debug.Alerte("",{ fileName : "MapParser.hx", lineNumber : 30, className : "microbe.jsTools.MapParser", methodName : "parse"});
 		this.map = _map;
@@ -4208,48 +4714,13 @@ microbe.jsTools.MapParser.prototype = {
 		this.recurMap(liste);
 		microbe.tools.Debug.Alerte("afterparse",{ fileName : "MapParser.hx", lineNumber : 41, className : "microbe.jsTools.MapParser", methodName : "parse"});
 	}
-	,recurMap: function(liste) {
-		microbe.tools.Debug.Alerte("recurMap",{ fileName : "MapParser.hx", lineNumber : 48, className : "microbe.jsTools.MapParser", methodName : "recurMap"});
-		var pos = 0;
-		var $it0 = liste.iterator();
-		while( $it0.hasNext() ) {
-			var chps = $it0.next();
-			if(Std["is"](chps,microbe.form.MicroFieldList)) {
-				if(chps.type == microbe.form.InstanceType.collection) {
-					var $it1 = ((function($this) {
-						var $r;
-						var $t = chps;
-						if(Std["is"]($t,microbe.form.MicroFieldList)) $t; else throw "Class cast error";
-						$r = $t;
-						return $r;
-					}(this))).fields.iterator();
-					while( $it1.hasNext() ) {
-						var item = $it1.next();
-						this.microbeElements.createCollectionElement(chps,pos);
-						pos++;
-					}
-				}
-				this.recurMap((function($this) {
-					var $r;
-					var $t = chps;
-					if(Std["is"]($t,microbe.form.MicroFieldList)) $t; else throw "Class cast error";
-					$r = $t;
-					return $r;
-				}(this)));
-			} else {
-				var microChamps = chps;
-				this.microbeElements.createElement(microChamps);
-			}
-		}
-	}
+	,microbeElements: null
+	,map: null
 	,__class__: microbe.jsTools.MapParser
 }
 if(!microbe.macroUtils) microbe.macroUtils = {}
 microbe.macroUtils.Imports = $hxClasses["microbe.macroUtils.Imports"] = function() { }
 microbe.macroUtils.Imports.__name__ = ["microbe","macroUtils","Imports"];
-microbe.macroUtils.Imports.prototype = {
-	__class__: microbe.macroUtils.Imports
-}
 if(!microbe.notification) microbe.notification = {}
 microbe.notification.NoteType = $hxClasses["microbe.notification.NoteType"] = { __ename__ : ["microbe","notification","NoteType"], __constructs__ : ["alerte","message","erreur"] }
 microbe.notification.NoteType.alerte = ["alerte",0];
@@ -4267,24 +4738,19 @@ microbe.notification.Note = $hxClasses["microbe.notification.Note"] = function(t
 };
 microbe.notification.Note.__name__ = ["microbe","notification","Note"];
 microbe.notification.Note.prototype = {
-	_text: null
-	,box: null
-	,jBox: null
-	,noteType: null
-	,color: null
-	,getType: function() {
-		switch( (this.noteType)[1] ) {
-		case 0:
-			this.color = "#0af";
-			break;
-		case 1:
-			this.color = "#33cc33";
-			break;
-		case 2:
-			this.color = "#cc3300";
-			break;
-		}
-		return this.color;
+	onDone: function() {
+		this.jBox.animate({ right : -400},300);
+	}
+	,onNote: function() {
+		new js.JQuery("body").animate({ top : 0},3000,$bind(this,this.onDone));
+	}
+	,execute: function() {
+		new js.JQuery("body").append(this.jBox);
+		this.jBox.animate({ right : 0},300,$bind(this,this.onNote));
+	}
+	,text: function(val) {
+		this._text = val;
+		this.createBox();
 	}
 	,createBox: function() {
 		var _box = "<div class='note'>" + this._text + "</div>";
@@ -4299,20 +4765,25 @@ microbe.notification.Note.prototype = {
 		this.jBox.css("display","block");
 		return this.jBox;
 	}
-	,text: function(val) {
-		this._text = val;
-		this.createBox();
+	,getType: function() {
+		switch( (this.noteType)[1] ) {
+		case 0:
+			this.color = "#0af";
+			break;
+		case 1:
+			this.color = "#33cc33";
+			break;
+		case 2:
+			this.color = "#cc3300";
+			break;
+		}
+		return this.color;
 	}
-	,execute: function() {
-		new js.JQuery("body").append(this.jBox);
-		this.jBox.animate({ right : 0},300,this.onNote.$bind(this));
-	}
-	,onNote: function() {
-		new js.JQuery("body").animate({ top : 0},3000,this.onDone.$bind(this));
-	}
-	,onDone: function() {
-		this.jBox.animate({ right : -400},300);
-	}
+	,color: null
+	,noteType: null
+	,jBox: null
+	,box: null
+	,_text: null
 	,__class__: microbe.notification.Note
 }
 if(!microbe.tools) microbe.tools = {}
@@ -4320,17 +4791,22 @@ microbe.tools.Debug = $hxClasses["microbe.tools.Debug"] = function() { }
 microbe.tools.Debug.__name__ = ["microbe","tools","Debug"];
 microbe.tools.Debug.Alerte = function(str,pos) {
 }
-microbe.tools.Debug.prototype = {
-	__class__: microbe.tools.Debug
+microbe.tools.Mytrace = $hxClasses["microbe.tools.Mytrace"] = function() { }
+microbe.tools.Mytrace.__name__ = ["microbe","tools","Mytrace"];
+microbe.tools.Mytrace.setRedirection = function() {
+	haxe.Log.trace = microbe.tools.Mytrace.mytrace;
+}
+microbe.tools.Mytrace.mytrace = function(v,inf) {
+	console.log(Std.string(v) + " ::> \n " + inf.fileName + " " + inf.lineNumber + " " + inf.methodName);
 }
 if(!microbe.vo) microbe.vo = {}
 microbe.vo.Spodable = $hxClasses["microbe.vo.Spodable"] = function() { }
 microbe.vo.Spodable.__name__ = ["microbe","vo","Spodable"];
 microbe.vo.Spodable.prototype = {
-	poz: null
-	,getFormule: null
+	id: null
 	,getDefaultField: null
-	,id: null
+	,getFormule: null
+	,poz: null
 	,__class__: microbe.vo.Spodable
 }
 microbe.vo.Taggable = $hxClasses["microbe.vo.Taggable"] = function() { }
@@ -4339,103 +4815,61 @@ microbe.vo.Taggable.prototype = {
 	getTags: null
 	,__class__: microbe.vo.Taggable
 }
-js.Boot.__res = {}
-js.Boot.__init();
-{
-	var d = Date;
-	d.now = function() {
-		return new Date();
-	};
-	d.fromTime = function(t) {
-		var d1 = new Date();
-		d1["setTime"](t);
-		return d1;
-	};
-	d.fromString = function(s) {
-		switch(s.length) {
-		case 8:
-			var k = s.split(":");
-			var d1 = new Date();
-			d1["setTime"](0);
-			d1["setUTCHours"](k[0]);
-			d1["setUTCMinutes"](k[1]);
-			d1["setUTCSeconds"](k[2]);
-			return d1;
-		case 10:
-			var k = s.split("-");
-			return new Date(k[0],k[1] - 1,k[2],0,0,0);
-		case 19:
-			var k = s.split(" ");
-			var y = k[0].split("-");
-			var t = k[1].split(":");
-			return new Date(y[0],y[1] - 1,y[2],t[0],t[1],t[2]);
-		default:
-			throw "Invalid date format : " + s;
-		}
-	};
-	d.prototype["toString"] = function() {
-		var date = this;
-		var m = date.getMonth() + 1;
-		var d1 = date.getDate();
-		var h = date.getHours();
-		var mi = date.getMinutes();
-		var s = date.getSeconds();
-		return date.getFullYear() + "-" + (m < 10?"0" + m:"" + m) + "-" + (d1 < 10?"0" + d1:"" + d1) + " " + (h < 10?"0" + h:"" + h) + ":" + (mi < 10?"0" + mi:"" + mi) + ":" + (s < 10?"0" + s:"" + s);
-	};
-	d.prototype.__class__ = $hxClasses["Date"] = d;
-	d.__name__ = ["Date"];
-}
-{
-	Math.__name__ = ["Math"];
-	Math.NaN = Number["NaN"];
-	Math.NEGATIVE_INFINITY = Number["NEGATIVE_INFINITY"];
-	Math.POSITIVE_INFINITY = Number["POSITIVE_INFINITY"];
-	$hxClasses["Math"] = Math;
-	Math.isFinite = function(i) {
-		return isFinite(i);
-	};
-	Math.isNaN = function(i) {
-		return isNaN(i);
+function $iterator(o) { if( o instanceof Array ) return function() { return HxOverrides.iter(o); }; return typeof(o.iterator) == 'function' ? $bind(o,o.iterator) : o.iterator; };
+var $_;
+function $bind(o,m) { var f = function(){ return f.method.apply(f.scope, arguments); }; f.scope = o; f.method = m; return f; };
+if(Array.prototype.indexOf) HxOverrides.remove = function(a,o) {
+	var i = a.indexOf(o);
+	if(i == -1) return false;
+	a.splice(i,1);
+	return true;
+}; else null;
+Math.__name__ = ["Math"];
+Math.NaN = Number.NaN;
+Math.NEGATIVE_INFINITY = Number.NEGATIVE_INFINITY;
+Math.POSITIVE_INFINITY = Number.POSITIVE_INFINITY;
+$hxClasses.Math = Math;
+Math.isFinite = function(i) {
+	return isFinite(i);
+};
+Math.isNaN = function(i) {
+	return isNaN(i);
+};
+String.prototype.__class__ = $hxClasses.String = String;
+String.__name__ = ["String"];
+Array.prototype.__class__ = $hxClasses.Array = Array;
+Array.__name__ = ["Array"];
+Date.prototype.__class__ = $hxClasses.Date = Date;
+Date.__name__ = ["Date"];
+var Int = $hxClasses.Int = { __name__ : ["Int"]};
+var Dynamic = $hxClasses.Dynamic = { __name__ : ["Dynamic"]};
+var Float = $hxClasses.Float = Number;
+Float.__name__ = ["Float"];
+var Bool = $hxClasses.Bool = Boolean;
+Bool.__ename__ = ["Bool"];
+var Class = $hxClasses.Class = { __name__ : ["Class"]};
+var Enum = { };
+var Void = $hxClasses.Void = { __ename__ : ["Void"]};
+if(typeof(JSON) != "undefined") haxe.Json = JSON;
+var q = window.jQuery;
+js.JQuery = q;
+q.fn.iterator = function() {
+	return { pos : 0, j : this, hasNext : function() {
+		return this.pos < this.j.length;
+	}, next : function() {
+		return $(this.j[this.pos++]);
+	}};
+};
+if(typeof document != "undefined") js.Lib.document = document;
+if(typeof window != "undefined") {
+	js.Lib.window = window;
+	js.Lib.window.onerror = function(msg,url,line) {
+		var f = js.Lib.onerror;
+		if(f == null) return false;
+		return f(msg,[url + ":" + line]);
 	};
 }
-{
-	String.prototype.__class__ = $hxClasses["String"] = String;
-	String.__name__ = ["String"];
-	Array.prototype.__class__ = $hxClasses["Array"] = Array;
-	Array.__name__ = ["Array"];
-	var Int = $hxClasses["Int"] = { __name__ : ["Int"]};
-	var Dynamic = $hxClasses["Dynamic"] = { __name__ : ["Dynamic"]};
-	var Float = $hxClasses["Float"] = Number;
-	Float.__name__ = ["Float"];
-	var Bool = $hxClasses["Bool"] = Boolean;
-	Bool.__ename__ = ["Bool"];
-	var Class = $hxClasses["Class"] = { __name__ : ["Class"]};
-	var Enum = { };
-	var Void = $hxClasses["Void"] = { __ename__ : ["Void"]};
-}
-{
-	var q = window.jQuery;
-	js.JQuery = q;
-	q.fn.iterator = function() {
-		return { pos : 0, j : this, hasNext : function() {
-			return this.pos < this.j.length;
-		}, next : function() {
-			return $(this.j[this.pos++]);
-		}};
-	};
-}
-{
-	if(typeof document != "undefined") js.Lib.document = document;
-	if(typeof window != "undefined") {
-		js.Lib.window = window;
-		js.Lib.window.onerror = function(msg,url,line) {
-			var f = js.Lib.onerror;
-			if(f == null) return false;
-			return f(msg,[url + ":" + line]);
-		};
-	}
-}
-js["XMLHttpRequest"] = window.XMLHttpRequest?XMLHttpRequest:window.ActiveXObject?function() {
+js.XMLHttpRequest = window.XMLHttpRequest?XMLHttpRequest:window.ActiveXObject?function() {
 	try {
 		return new ActiveXObject("Msxml2.XMLHTTP");
 	} catch( e ) {
@@ -4452,13 +4886,12 @@ js["XMLHttpRequest"] = window.XMLHttpRequest?XMLHttpRequest:window.ActiveXObject
 }(this));
 var Editor = WYMeditor.editor;
 var Wymeditor=window.jQuery;
-{
-	var Sortable = window.jQuery;
-	var SortableEvent={create:"sortcreate",sortstart:"start",sort:"sort",change:"sortchange",sortbeforeStop:"beforeStop",stop:"sortstop",update:"sortupdate",receive:"sortreceive",remove:"sortremove",over:"sortover",out:"sortout",activate:"sortactivate",deactivate:"sortdeactivate"}
-}
+var Sortable = window.jQuery;
+var SortableEvent={create:"sortcreate",sortstart:"start",sort:"sort",change:"sortchange",sortbeforeStop:"beforeStop",stop:"sortstop",update:"sortupdate",receive:"sortreceive",remove:"sortremove",over:"sortover",out:"sortout",activate:"sortactivate",deactivate:"sortdeactivate"}
+DateTools.DAYS_OF_MONTH = [31,28,31,30,31,30,31,31,30,31,30,31];
 feffects.Tween.aTweens = new haxe.FastList();
 feffects.Tween.aPaused = new haxe.FastList();
-feffects.Tween.jsDate = Date.now().getTime();
+feffects.Tween.jsDate = new Date().getTime();
 feffects.Tween.interval = 10;
 haxe.Serializer.USE_CACHE = false;
 haxe.Serializer.USE_ENUM_INDEX = false;
@@ -4467,6 +4900,7 @@ haxe.Unserializer.DEFAULT_RESOLVER = Type;
 haxe.Unserializer.BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%:";
 haxe.Unserializer.CODES = null;
 js.Lib.onerror = null;
+microbe.TagManager.voPackage = "vo.";
 microbe.TagManager.debug = 1;
 microbe.form.AjaxElement.debug = false;
 microbe.form.elements.AjaxArea.debug = 0;
@@ -4487,14 +4921,5 @@ microbe.jsTools.ElementBinder.debug = 0;
 microbe.jsTools.MapParser.debug = 0;
 microbe.tools.Debug.debug = false;
 microbe.jsTools.BackJS.main();
-function $hxExpose(src, path) {
-	var o = window;
-	var parts = path.split(".");
-	for(var ii = 0; ii < parts.length-1; ++ii) {
-		var p = parts[ii];
-		if(typeof o[p] == "undefined") o[p] = {};
-		o = o[p];
-	}
-	o[parts[parts.length-1]] = src;
-}
+
 //@ sourceMappingURL=backjs.js.map
