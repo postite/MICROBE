@@ -10,8 +10,10 @@
 # echo "$NEWLIBVERSION" > "$SRCPATH/$LIBNAME.version"
 
 lib=$1
+version=$2
 targetd=$TM_PROJECT_DIRECTORY"/release"
 echo $1
+echo $2
 echo "→ Assembling the 'release.zip' package"
 	rm -rf $targetd $targetd.zip
 	mkdir -p $targetd
@@ -47,7 +49,7 @@ echo "→ Assembling the 'release.zip' package"
 		
 		else
 			zip -r release.zip Source
-			haxelib remove $lib
+			haxelib remove $lib/$version
 			haxelib test release.zip
 			#echo "	Did not find 7z - release packacke won't be assembled"
 			#echo "	You can try to do it manually or install p7zip-full"

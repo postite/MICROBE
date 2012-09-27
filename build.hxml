@@ -46,7 +46,7 @@
 #-cmd   $TM_PROJECT_DIRECTORY"/export.sh" microbe
 
 
--cmd   ./export.sh microbe
+-cmd   ./export.sh microbe 1
 
 
 ####
