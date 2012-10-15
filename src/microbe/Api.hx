@@ -194,13 +194,17 @@ class Api implements haxe.rtti.Infos
 			//trace("getOne="+_vo+"id="+id);
 			return cast getManager(_vo).unsafeGet(id);
 		}
-			public function getLast(_vo:String) : Spodable {
+			public function getLast(_vo:String,?search:Dynamic) : Spodable {
 				//var inst:Object= cast this.createInstance(_vo);
 				//trace("getOne="+_vo+"id="+id);
 				var all=null;
 				try {
 				    // ...
-				all= cast getManager(_vo).all();
+				    if( search!=null){
+				all= cast getManager(_vo).dynamicSearch(search);
+				}else{
+					all= cast getManager(_vo).all();
+				}
 				
 				} catch( msg : String ) {
 				    trace("Error occurred: " + msg);
@@ -226,7 +230,7 @@ class Api implements haxe.rtti.Infos
 			return compressed;
 		//	Lib.print(compressed);
 		}
-		
+
 		public function getAllorded(_vo:String):List<Spodable>{
 		//public function getAllorded(_vo:String):Dynamic{
 
@@ -251,7 +255,7 @@ class Api implements haxe.rtti.Infos
 			}
 			
 				
-			 liste =cast manager.unsafeObjects("SELECT * FROM "+table+" ORDER BY poz",true);
+			liste =cast manager.unsafeObjects("SELECT * FROM "+table+" ORDER BY poz",true);
 			
 			return  cast liste;
 			
