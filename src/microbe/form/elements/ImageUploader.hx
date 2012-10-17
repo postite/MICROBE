@@ -80,7 +80,8 @@ class ImageUploader extends IframeUploader {
 	override public function setValue(val:String):Void{
 	//	Lib.alert("setValueimageuploader" +val);
 		//Lib.alert("composantNAme="+this.composantName);
-		if (val!=null){
+
+		if (val!=null && val.length>0){
 	getpreview().attr("src",Lib.window.location.protocol+"//"+Lib.window.location.host+"/index.php/imageBase/resize/modele/"+val);
 }else{
 	getpreview().attr("src","/microbe/css/assets/blankframe.png");
