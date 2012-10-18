@@ -207,7 +207,7 @@ var  result:sys.db.ResultSet=Manager.cnx.request(str.toString());
 
 
 ///why? 
-Lib.print(result.getIntResult(0));
+//Lib.print(result.getIntResult(0));
 //return  result.results();
 return result.getIntResult(0);
 }
