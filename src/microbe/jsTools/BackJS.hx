@@ -67,7 +67,7 @@ class BackJS
 	
 	microbe.tools.Mytrace.setRedirection();
 
-	Imports.pack("microbe.form.elements",false);
+	//Imports.pack("microbe.form.elements",false);
 	//base_url=Lib.window.location.protocol+"//"+Lib.window.location.host;
 	//back_url=base_url+"/index.php/pipo/"; //TODO replace pipo par config
 	new JQuery("document").ready(function(e):Void{instance.init();});
