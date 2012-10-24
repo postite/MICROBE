@@ -40,9 +40,9 @@ class microbe_TagManager {
 	}
 	static function getTaxos($spod) {
 		$spodTable = microbe_TagManager::getSpodTable($spod);
-		haxe_Log::trace("spodTAble=" . $spodTable, _hx_anonymous(array("fileName" => "TagManager.hx", "lineNumber" => 91, "className" => "microbe.TagManager", "methodName" => "getTaxos")));
+		haxe_Log::trace("spodTAble=" . $spodTable, _hx_anonymous(array("fileName" => "TagManager.hx", "lineNumber" => 93, "className" => "microbe.TagManager", "methodName" => "getTaxos")));
 		$resultSet = sys_db_Manager::$cnx->request("\x0A\x09\x09SELECT distinct TX.* from taxo AS TX\x0A\x09\x09JOIN tagSpod AS TS ON TS.tag_id=TX.taxo_id\x0A\x09\x09JOIN " . $spodTable . " AS SP ON SP.id=TS.spod_id\x0A\x09\x09WHERE TX.spodtype='" . strtolower($spod) . "'");
-		haxe_Log::trace("resultSet=" . Std::string($resultSet) . "spodTAble=" . $spodTable, _hx_anonymous(array("fileName" => "TagManager.hx", "lineNumber" => 99, "className" => "microbe.TagManager", "methodName" => "getTaxos")));
+		haxe_Log::trace("resultSet=" . Std::string($resultSet) . "spodTAble=" . $spodTable, _hx_anonymous(array("fileName" => "TagManager.hx", "lineNumber" => 101, "className" => "microbe.TagManager", "methodName" => "getTaxos")));
 		return $resultSet->results();
 	}
 	static function GetTradRef($spod, $spod_id) {
@@ -61,13 +61,15 @@ class microbe_TagManager {
 		$spodId = $spod_id;
 		$spodTable = microbe_TagManager::getSpodTable($spod);
 		$cap = microbe_TagManager::firstUpperCase($spod);
-		haxe_Log::trace("spodableid=" . microbe_TagManager::$voPackage . $cap, _hx_anonymous(array("fileName" => "TagManager.hx", "lineNumber" => 124, "className" => "microbe.TagManager", "methodName" => "getTaxoBySpodID")));
 		$spodId = microbe_TagManager::GetTradRef($spod, $spod_id);
-		$resultSet = sys_db_Manager::$cnx->request("\x0A\x09SELECT DISTINCT TX.taxo_id , TX.tag from `taxo` AS TX\x0A\x09LEFT JOIN `tagSpod` AS TS ON TS.`tag_id`=TX.`taxo_id`\x0A\x09LEFT JOIN " . $spodTable . " AS B ON TS.`spod_id`= B.`id`\x0A\x09WHERE B.id=" . _hx_string_rec($spodId, "") . " AND TX.spodtype='" . $spod . "'");
+		haxe_Log::trace("before", _hx_anonymous(array("fileName" => "TagManager.hx", "lineNumber" => 133, "className" => "microbe.TagManager", "methodName" => "getTaxoBySpodID")));
+		$resultSet = sys_db_Manager::$cnx->request("SELECT DISTINCT TX.taxo_id, TX.tag FROM taxo AS TX LEFT JOIN tagSpod AS TS ON TS.tag_id=TX.taxo_id LEFT JOIN " . $spodTable . " AS B ON TS.spod_id= B.id\x09WHERE B.id=" . _hx_string_rec($spodId, "") . " AND TX.spodtype='" . $spod . "'");
 		return $resultSet->results();
+		haxe_Log::trace("after", _hx_anonymous(array("fileName" => "TagManager.hx", "lineNumber" => 139, "className" => "microbe.TagManager", "methodName" => "getTaxoBySpodID")));
+		return null;
 	}
 	static function getTagsById($spod, $spodId) {
-		haxe_Log::trace("getTags", _hx_anonymous(array("fileName" => "TagManager.hx", "lineNumber" => 137, "className" => "microbe.TagManager", "methodName" => "getTagsById")));
+		haxe_Log::trace("getTags", _hx_anonymous(array("fileName" => "TagManager.hx", "lineNumber" => 145, "className" => "microbe.TagManager", "methodName" => "getTagsById")));
 		$liste = microbe_TagManager::getTaxoBySpodID($spod, $spodId);
 		$tags = new HList();
 		if(null == $liste) throw new HException('null iterable');
@@ -119,7 +121,6 @@ class microbe_TagManager {
 		}
 		$str->add(" id in (Select `spod_id` \x0Afrom tagSpod \x0Awhere tag_id \x0Ain (\x0ASelect taxo_id \x0Afrom taxo \x0Awhere tag='" . $tag . "' and spodtype='" . strtolower($spod) . "')) ");
 		$result = sys_db_Manager::$cnx->request($str->b);
-		php_Lib::hprint($result->getIntResult(0));
 		return $result->getIntResult(0);
 	}
 	static function specialsearch($tag, $spod, $_search, $tri, $generateSpods = null) {
@@ -185,20 +186,20 @@ class microbe_TagManager {
 		$»it = $formule->keys();
 		while($»it->hasNext()) {
 			$key = $»it->next();
-			haxe_Log::trace("key=" . $key, _hx_anonymous(array("fileName" => "TagManager.hx", "lineNumber" => 286, "className" => "microbe.TagManager", "methodName" => "maptoSpod")));
+			haxe_Log::trace("key=" . $key, _hx_anonymous(array("fileName" => "TagManager.hx", "lineNumber" => 294, "className" => "microbe.TagManager", "methodName" => "maptoSpod")));
 			$spod->{$key} = Reflect::field($res, $key);
 		}
 		return $spod;
 	}
 	static function getSpodTable($spod) {
-		haxe_Log::trace("getSpoTable" . $spod, _hx_anonymous(array("fileName" => "TagManager.hx", "lineNumber" => 296, "className" => "microbe.TagManager", "methodName" => "getSpodTable")));
+		haxe_Log::trace("getSpoTable" . $spod, _hx_anonymous(array("fileName" => "TagManager.hx", "lineNumber" => 304, "className" => "microbe.TagManager", "methodName" => "getSpodTable")));
 		$voPackage = "vo.";
 		$cap = microbe_TagManager::firstUpperCase($spod);
 		$spodable = Type::resolveClass($voPackage . $cap);
 		microbe_TagManager::$currentInstance = $spodable;
-		haxe_Log::trace("spodable" . Std::string($spodable), _hx_anonymous(array("fileName" => "TagManager.hx", "lineNumber" => 301, "className" => "microbe.TagManager", "methodName" => "getSpodTable")));
+		haxe_Log::trace("spodable" . Std::string($spodable), _hx_anonymous(array("fileName" => "TagManager.hx", "lineNumber" => 309, "className" => "microbe.TagManager", "methodName" => "getSpodTable")));
 		$manager = Reflect::field($spodable, "manager");
-		haxe_Log::trace("manager" . Std::string($manager), _hx_anonymous(array("fileName" => "TagManager.hx", "lineNumber" => 303, "className" => "microbe.TagManager", "methodName" => "getSpodTable")));
+		haxe_Log::trace("manager" . Std::string($manager), _hx_anonymous(array("fileName" => "TagManager.hx", "lineNumber" => 311, "className" => "microbe.TagManager", "methodName" => "getSpodTable")));
 		$spodinfos = $manager->dbInfos();
 		return $spodinfos->name;
 	}

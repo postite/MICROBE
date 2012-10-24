@@ -144,6 +144,7 @@ class Api implements haxe.rtti.Infos
 						
 					
 							Lib.print(haxe.Serializer.run(spods));
+
 							//Lib.print(haxe.Serializer.run("heho"));
 					case "spod":
 					trace("spod");
@@ -157,6 +158,9 @@ class Api implements haxe.rtti.Infos
 						
 						var tags=microbe.TagManager.getTags(spodName,spodId);
 						trace("microbe.TagManager.getTags"+tags);
+						trace("length="+tags.length);
+						
+						//Lib.print("zouhhhhha"+"spodName="+spodName+"spodId="+spodId+"----");
 						Lib.print(haxe.Serializer.run(tags));
 						//Lib.print(haxe.Serializer.run("heho"+spodName));
 					default:
@@ -198,14 +202,17 @@ class Api implements haxe.rtti.Infos
 			//trace("getOne="+_vo+"id="+id);
 			return cast getManager(_vo).unsafeGet(id);
 		}
-			public function getLast(_vo:String) : Spodable {
+			public function getLast(_vo:String,?search:Dynamic) : Spodable {
 				//var inst:Object= cast this.createInstance(_vo);
 				//trace("getOne="+_vo+"id="+id);
 				var all=null;
 				try {
 				    // ...
-				all= cast getManager(_vo).all();
-				
+				    if( search!=null){
+				    	all= cast getManager(_vo).dynamicSearch(search);
+				    	}else{
+					all= cast getManager(_vo).all();
+					}
 				} catch( msg : String ) {
 				    trace("Error occurred: " + msg);
 				}

@@ -137,7 +137,7 @@ class controllers_Pipo extends microbe_backof_Back {
 		haxe_Log::trace("choix id=" . _hx_string_rec($id, "") . " vo=" . $voName, _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 105, "className" => "controllers.Pipo", "methodName" => "choix")));
 		$data = null;
 		if($id === null) {
-			$data = $this->api->getLast($voName);
+			$data = $this->api->getLast($voName, null);
 		} else {
 			$data = $this->api->getOne($voName, $id);
 		}

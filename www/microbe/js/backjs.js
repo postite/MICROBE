@@ -3062,12 +3062,12 @@ microbe.TagManager = $hxClasses["microbe.TagManager"] = function() {
 microbe.TagManager.__name__ = ["microbe","TagManager"];
 microbe.TagManager.currentspod = null;
 microbe.TagManager.getTags = function(spod,spodId) {
-	microbe.tools.Debug.Alerte(Std.string(spodId),{ fileName : "TagManager.hx", lineNumber : 324, className : "microbe.TagManager", methodName : "getTags"});
-	microbe.tools.Debug.Alerte(microbe.jsTools.BackJS.base_url,{ fileName : "TagManager.hx", lineNumber : 325, className : "microbe.TagManager", methodName : "getTags"});
+	microbe.tools.Debug.Alerte(Std.string(spodId),{ fileName : "TagManager.hx", lineNumber : 332, className : "microbe.TagManager", methodName : "getTags"});
+	microbe.tools.Debug.Alerte(microbe.jsTools.BackJS.base_url,{ fileName : "TagManager.hx", lineNumber : 333, className : "microbe.TagManager", methodName : "getTags"});
 	var Xreponse = null;
 	Xreponse = haxe.Http.requestUrl(microbe.jsTools.BackJS.base_url + "/index.php/gap/tags/spod/" + spod + "/id/" + spodId);
 	var reponse = haxe.Unserializer.run(Xreponse);
-	microbe.tools.Debug.Alerte(Std.string(reponse),{ fileName : "TagManager.hx", lineNumber : 331, className : "microbe.TagManager", methodName : "getTags"});
+	microbe.tools.Debug.Alerte(Std.string(reponse),{ fileName : "TagManager.hx", lineNumber : 339, className : "microbe.TagManager", methodName : "getTags"});
 	return reponse;
 }
 microbe.TagManager.addTag = function(spod,spodID,tag) {
@@ -4147,7 +4147,7 @@ microbe.form.elements.ImageUploader.__name__ = ["microbe","form","elements","Ima
 microbe.form.elements.ImageUploader.__super__ = microbe.form.elements.IframeUploader;
 microbe.form.elements.ImageUploader.prototype = $extend(microbe.form.elements.IframeUploader.prototype,{
 	setValue: function(val) {
-		if(val != null) this.getpreview().attr("src",js.Lib.window.location.protocol + "//" + js.Lib.window.location.host + "/index.php/imageBase/resize/modele/" + val); else this.getpreview().attr("src","/microbe/css/assets/blankframe.png");
+		if(val != null && val.length > 0) this.getpreview().attr("src",js.Lib.window.location.protocol + "//" + js.Lib.window.location.host + "/index.php/imageBase/resize/modele/" + val); else this.getpreview().attr("src","/microbe/css/assets/blankframe.png");
 		this.getRetour().attr("value",val);
 	}
 	,onFake: function(e) {
@@ -4274,9 +4274,10 @@ microbe.form.elements.TagView.__super__ = microbe.form.AjaxElement;
 microbe.form.elements.TagView.prototype = $extend(microbe.form.AjaxElement.prototype,{
 	onAdd: function(e) {
 		var newTag = new js.JQuery("#tagSelector #pute").val();
-		js.Lib.alert("add" + newTag);
+		haxe.Log.trace("add" + newTag,{ fileName : "TagView.hx", lineNumber : 177, className : "microbe.form.elements.TagView", methodName : "onAdd"});
+		haxe.Log.trace("spodId=" + this.spodId,{ fileName : "TagView.hx", lineNumber : 178, className : "microbe.form.elements.TagView", methodName : "onAdd"});
 		js.Lib.alert(microbe.TagManager.addTag(this.voName,this.spodId,newTag));
-		js.Lib.alert("afetr");
+		haxe.Log.trace("after",{ fileName : "TagView.hx", lineNumber : 180, className : "microbe.form.elements.TagView", methodName : "onAdd"});
 		this.init();
 	}
 	,populateTags: function() {

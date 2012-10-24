@@ -68,6 +68,8 @@ class TagManager
 		}else{
 		liste = getTaxos(spod);
 		}
+		
+
 		var tags= new List<Tag>();
 		for (tax in liste ){
 			var tag= new Tag();
@@ -103,7 +105,10 @@ class TagManager
 	}
 	private static function GetTradRef(spod:String,spod_id:Int):Int 
 	{
+
+		/// un peu limite comme condition....
 		if (Config.traductable){
+			//Lib.print("config.traductable");
 			var cap= firstUpperCase(spod);
 			var spodable:Spodable=new Api().getOne(cap,spod_id);
 			if(Std.is(spodable,Traductable)){
@@ -121,15 +126,18 @@ class TagManager
 	var spodId:Int=spod_id;
 	var spodTable=getSpodTable(spod);
 	var cap= firstUpperCase(spod);
-	trace("spodableid="+voPackage+cap);
+	//trace("spodableid="+voPackage+cap);
+
 	spodId=GetTradRef(spod,spod_id);
-	var resultSet=Manager.cnx.request("
-	SELECT DISTINCT TX.taxo_id , TX.tag from `taxo` AS TX
-	LEFT JOIN `tagSpod` AS TS ON TS.`tag_id`=TX.`taxo_id`
-	LEFT JOIN "+spodTable+" AS B ON TS.`spod_id`= B.`id`
-	WHERE B.id="+spodId+" AND TX.spodtype='"+spod+"'"
-	);
+	
+	trace("before");
+	//Lib.print( "spodID="+spod_id+"spodTable="+spodTable+"cap="+spod);
+	var resultSet=Manager.cnx.request("SELECT DISTINCT TX.taxo_id, TX.tag FROM taxo AS TX LEFT JOIN tagSpod AS TS ON TS.tag_id=TX.taxo_id LEFT JOIN "+spodTable+" AS B ON TS.spod_id= B.id	WHERE B.id="+spodId+" AND TX.spodtype='"+spod+"'");
+	
+	//Lib.print(resultSet.results().length);
 	return cast (resultSet.results());
+	trace("after");
+	return null;
 	}
 	
 	

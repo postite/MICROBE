@@ -174,9 +174,10 @@ class TagView extends AjaxElement
 	//	new JQuery("#tagSelector #tags").append("<option>"+newTag+"</option>");
 	////Lib.alert( "spodId="+this.spodId);
 //Lib.alert(this.voName+"_"+this.spodId+"_"+newTag);
-	Lib.alert("add"+newTag);
+	trace("add"+newTag);
+	trace("spodId="+this.spodId);
 	Lib.alert(TagManager.addTag(this.voName,this.spodId,newTag));
-	Lib.alert("afetr");
+	trace("after");
 	init();
 
 	}

@@ -25,7 +25,7 @@
 #--no-output
 #--no-traces
 
--cmd open http://localhost:8888/index.php/pipo
+#-cmd open http://localhost:8888/index.php/pipo
 
 #### example pour synchronisation en ssl
 #-cmd 	rsync -Haurov --delete --exclude 'lib' --exclude 'thieum'  -e ssh /Users/postite/Dropbox/TAMBOUR/www/  postite@ssh.alwaysdata.com:www
