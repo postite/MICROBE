@@ -45,7 +45,7 @@ class BackJS
 	
 	var sort:Sortable;
 	
-	public static function main() : Void {
+	public static function main() : Void { 
 		//à voir avec cette histoire de Singleton
 		instance=new BackJS();
 	}
