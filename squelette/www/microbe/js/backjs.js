@@ -4,6 +4,148 @@ function $extend(from, fields) {
 	for (var name in fields) proto[name] = fields[name];
 	return proto;
 }
+var DateTools = $hxClasses["DateTools"] = function() { }
+DateTools.__name__ = ["DateTools"];
+DateTools.__format_get = function(d,e) {
+	return (function($this) {
+		var $r;
+		switch(e) {
+		case "%":
+			$r = "%";
+			break;
+		case "C":
+			$r = StringTools.lpad(Std.string(d.getFullYear() / 100 | 0),"0",2);
+			break;
+		case "d":
+			$r = StringTools.lpad(Std.string(d.getDate()),"0",2);
+			break;
+		case "D":
+			$r = DateTools.__format(d,"%m/%d/%y");
+			break;
+		case "e":
+			$r = Std.string(d.getDate());
+			break;
+		case "H":case "k":
+			$r = StringTools.lpad(Std.string(d.getHours()),e == "H"?"0":" ",2);
+			break;
+		case "I":case "l":
+			$r = (function($this) {
+				var $r;
+				var hour = d.getHours() % 12;
+				$r = StringTools.lpad(Std.string(hour == 0?12:hour),e == "I"?"0":" ",2);
+				return $r;
+			}($this));
+			break;
+		case "m":
+			$r = StringTools.lpad(Std.string(d.getMonth() + 1),"0",2);
+			break;
+		case "M":
+			$r = StringTools.lpad(Std.string(d.getMinutes()),"0",2);
+			break;
+		case "n":
+			$r = "\n";
+			break;
+		case "p":
+			$r = d.getHours() > 11?"PM":"AM";
+			break;
+		case "r":
+			$r = DateTools.__format(d,"%I:%M:%S %p");
+			break;
+		case "R":
+			$r = DateTools.__format(d,"%H:%M");
+			break;
+		case "s":
+			$r = Std.string(d.getTime() / 1000 | 0);
+			break;
+		case "S":
+			$r = StringTools.lpad(Std.string(d.getSeconds()),"0",2);
+			break;
+		case "t":
+			$r = "\t";
+			break;
+		case "T":
+			$r = DateTools.__format(d,"%H:%M:%S");
+			break;
+		case "u":
+			$r = (function($this) {
+				var $r;
+				var t = d.getDay();
+				$r = t == 0?"7":Std.string(t);
+				return $r;
+			}($this));
+			break;
+		case "w":
+			$r = Std.string(d.getDay());
+			break;
+		case "y":
+			$r = StringTools.lpad(Std.string(d.getFullYear() % 100),"0",2);
+			break;
+		case "Y":
+			$r = Std.string(d.getFullYear());
+			break;
+		default:
+			$r = (function($this) {
+				var $r;
+				throw "Date.format %" + e + "- not implemented yet.";
+				return $r;
+			}($this));
+		}
+		return $r;
+	}(this));
+}
+DateTools.__format = function(d,f) {
+	var r = new StringBuf();
+	var p = 0;
+	while(true) {
+		var np = f.indexOf("%",p);
+		if(np < 0) break;
+		r.b += HxOverrides.substr(f,p,np - p);
+		r.b += Std.string(DateTools.__format_get(d,HxOverrides.substr(f,np + 1,1)));
+		p = np + 2;
+	}
+	r.b += HxOverrides.substr(f,p,f.length - p);
+	return r.b;
+}
+DateTools.format = function(d,f) {
+	return DateTools.__format(d,f);
+}
+DateTools.delta = function(d,t) {
+	return (function($this) {
+		var $r;
+		var d1 = new Date();
+		d1.setTime(d.getTime() + t);
+		$r = d1;
+		return $r;
+	}(this));
+}
+DateTools.getMonthDays = function(d) {
+	var month = d.getMonth();
+	var year = d.getFullYear();
+	if(month != 1) return DateTools.DAYS_OF_MONTH[month];
+	var isB = year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+	return isB?29:28;
+}
+DateTools.seconds = function(n) {
+	return n * 1000.0;
+}
+DateTools.minutes = function(n) {
+	return n * 60.0 * 1000.0;
+}
+DateTools.hours = function(n) {
+	return n * 60.0 * 60.0 * 1000.0;
+}
+DateTools.days = function(n) {
+	return n * 24.0 * 60.0 * 60.0 * 1000.0;
+}
+DateTools.parse = function(t) {
+	var s = t / 1000;
+	var m = s / 60;
+	var h = m / 60;
+	return { ms : t % 1000, seconds : s % 60 | 0, minutes : m % 60 | 0, hours : h % 24 | 0, days : h / 24 | 0};
+}
+DateTools.make = function(o) {
+	return o.ms + 1000.0 * (o.seconds + 60.0 * (o.minutes + 60.0 * (o.hours + 24.0 * o.days)));
+}
 var EReg = $hxClasses["EReg"] = function(r,opt) {
 	opt = opt.split("u").join("");
 	this.r = new RegExp(r,opt);
@@ -3359,6 +3501,12 @@ microbe.form.FormElement.prototype = {
 	,form: null
 	,__class__: microbe.form.FormElement
 }
+microbe.form.Formatter = $hxClasses["microbe.form.Formatter"] = function() { }
+microbe.form.Formatter.__name__ = ["microbe","form","Formatter"];
+microbe.form.Formatter.prototype = {
+	format: null
+	,__class__: microbe.form.Formatter
+}
 microbe.form.InstanceType = $hxClasses["microbe.form.InstanceType"] = { __ename__ : ["microbe","form","InstanceType"], __constructs__ : ["formElement","collection","spodable","dataElement"] }
 microbe.form.InstanceType.formElement = ["formElement",0];
 microbe.form.InstanceType.formElement.toString = $estr;
@@ -3469,6 +3617,266 @@ microbe.form.Validator.prototype = {
 	,__class__: microbe.form.Validator
 }
 if(!microbe.form.elements) microbe.form.elements = {}
+microbe.form.elements.AjaxArea = $hxClasses["microbe.form.elements.AjaxArea"] = function(_microfield) {
+	microbe.form.AjaxElement.call(this,_microfield);
+};
+microbe.form.elements.AjaxArea.__name__ = ["microbe","form","elements","AjaxArea"];
+microbe.form.elements.AjaxArea.__super__ = microbe.form.AjaxElement;
+microbe.form.elements.AjaxArea.prototype = $extend(microbe.form.AjaxElement.prototype,{
+	setValue: function(val) {
+		microbe.tools.Debug.Alerte(val,{ fileName : "AjaxArea.hx", lineNumber : 79, className : "microbe.form.elements.AjaxArea", methodName : "setValue"});
+		new js.JQuery("#" + this.id).val(val);
+	}
+	,getValue: function() {
+		var val = new js.JQuery("#" + this.id).val();
+		microbe.tools.Debug.Alerte(val,{ fileName : "AjaxArea.hx", lineNumber : 75, className : "microbe.form.elements.AjaxArea", methodName : "getValue"});
+		return val;
+	}
+	,moduleid: null
+	,__class__: microbe.form.elements.AjaxArea
+});
+microbe.form.elements.AjaxDate = $hxClasses["microbe.form.elements.AjaxDate"] = function(_microfield,_iter) {
+	this.id = _microfield.elementId;
+	this.pos = Std.parseInt(this.getCollectionContainer());
+	microbe.form.AjaxElement.call(this,_microfield,_iter);
+};
+microbe.form.elements.AjaxDate.__name__ = ["microbe","form","elements","AjaxDate"];
+microbe.form.elements.AjaxDate.__super__ = microbe.form.AjaxElement;
+microbe.form.elements.AjaxDate.prototype = $extend(microbe.form.AjaxElement.prototype,{
+	setValue: function(valeur) {
+		haxe.Log.trace("date=" + valeur,{ fileName : "AjaxDate.hx", lineNumber : 42, className : "microbe.form.elements.AjaxDate", methodName : "setValue"});
+		var _date = null;
+		if(valeur == null) valeur = DateTools.format(new Date(),"%Y-%m-%d").toString();
+		_date = HxOverrides.strDate(valeur);
+		var format = DateTools.format(_date,"%Y-%m-%d");
+		new js.JQuery("#madate_" + this.pos).val(format);
+	}
+	,getValue: function() {
+		var valeur = new js.JQuery("#madate_" + this.pos).val();
+		var _date = HxOverrides.strDate(valeur);
+		var format = DateTools.format(_date,"%Y-%m-%d");
+		haxe.Log.trace("format=" + format.toString(),{ fileName : "AjaxDate.hx", lineNumber : 35, className : "microbe.form.elements.AjaxDate", methodName : "getValue"});
+		return format.toString();
+	}
+	,getCollectionContainer: function() {
+		var p = new js.JQuery("#" + this.id).parents(".collection");
+		if(p.attr("pos") != null) return p.attr("pos");
+		return "0";
+	}
+	,__class__: microbe.form.elements.AjaxDate
+});
+microbe.form.elements.AjaxEditor = $hxClasses["microbe.form.elements.AjaxEditor"] = function(_microfield,iter) {
+	microbe.form.AjaxElement.call(this,_microfield);
+	this.pos = iter;
+	microbe.form.elements.AjaxEditor.self = this;
+	this.ed = "editor";
+	this.value = "carrotte";
+	this.base_url = js.Lib.window.location.protocol + "//" + js.Lib.window.location.host;
+	var wymOptions = { };
+	wymOptions.skin = "compact";
+	wymOptions.html = "";
+	this.wym = new $(".editor:visible");
+	wymOptions.postInit = function() {
+		this.wym.embed();
+	};
+	this.wym.wymeditor(wymOptions);
+};
+microbe.form.elements.AjaxEditor.__name__ = ["microbe","form","elements","AjaxEditor"];
+microbe.form.elements.AjaxEditor.self = null;
+microbe.form.elements.AjaxEditor.__super__ = microbe.form.AjaxElement;
+microbe.form.elements.AjaxEditor.prototype = $extend(microbe.form.AjaxElement.prototype,{
+	setValue: function(val) {
+		new js.JQuery("#" + this.id).attr("value",this.value);
+	}
+	,output: function() {
+		return "yeah from js";
+	}
+	,getValue: function() {
+		js.JQuery.wymeditors(0).update();
+		return new js.JQuery("#" + this.id).attr("value");
+	}
+	,transformed: null
+	,wym: null
+	,ed: null
+	,base_url: null
+	,formDefaultAction: null
+	,__class__: microbe.form.elements.AjaxEditor
+});
+microbe.form.elements.AjaxInput = $hxClasses["microbe.form.elements.AjaxInput"] = function(_microfield) {
+	microbe.form.AjaxElement.call(this,_microfield);
+};
+microbe.form.elements.AjaxInput.__name__ = ["microbe","form","elements","AjaxInput"];
+microbe.form.elements.AjaxInput.__super__ = microbe.form.AjaxElement;
+microbe.form.elements.AjaxInput.prototype = $extend(microbe.form.AjaxElement.prototype,{
+	setValue: function(val) {
+		new js.JQuery("#" + this.id).attr("value",val);
+	}
+	,getValue: function() {
+		return new js.JQuery("#" + this.id).attr("value");
+	}
+	,moduleid: null
+	,__class__: microbe.form.elements.AjaxInput
+});
+microbe.form.elements.AjaxUploader = $hxClasses["microbe.form.elements.AjaxUploader"] = function(_microfield,_iter) {
+	this.setComposant("AjaxUploader");
+	microbe.form.AjaxElement.call(this,_microfield,_iter);
+	this.self = this;
+	this.base_url = js.Lib.window.location.protocol + "//" + js.Lib.window.location.host;
+	this.makeIframeUniq();
+	this.getBouton().click($bind(this,this.testUpload));
+};
+microbe.form.elements.AjaxUploader.__name__ = ["microbe","form","elements","AjaxUploader"];
+microbe.form.elements.AjaxUploader.__super__ = microbe.form.AjaxElement;
+microbe.form.elements.AjaxUploader.prototype = $extend(microbe.form.AjaxElement.prototype,{
+	setValue: function(val) {
+		if(val != null) this.getpreview().attr("src",js.Lib.window.location.protocol + "//" + js.Lib.window.location.host + "/index.php/imageBase/resize/thumb/" + val); else this.getpreview().attr("src","/microbe/css/assets/blankframe.png");
+		this.getRetour().attr("value",val);
+	}
+	,getValue: function() {
+		var retour = this.getRetour().attr("value");
+		return retour;
+	}
+	,enableForm: function() {
+		new js.JQuery("input").attr("disabled","");
+	}
+	,DisableForm: function() {
+		new js.JQuery("#" + this.getForm() + " input[name!='" + this.getInputName() + "']").attr("disabled","disabled");
+	}
+	,getIframe: function() {
+		return this.uniqIframe;
+	}
+	,makeIframeUniq: function() {
+		var ifr = new js.JQuery("#" + this.id + " #" + this.getComposant() + "upload_target" + this.getCollectionContainer());
+		var oldid = ifr.attr("id");
+		ifr.attr("id",oldid + (Math.random() * 2000 | 0));
+		this.uniqIframe = ifr.attr("id");
+		ifr[0].contentWindow.name = this.uniqIframe;
+		js.Lib.alert("uniq=" + this.uniqIframe);
+	}
+	,getCollectionContainer: function() {
+		var p = new js.JQuery("#" + this.id).parents(".collection");
+		if(p.attr("pos") != null) return p.attr("pos");
+		return "";
+	}
+	,getpreview: function() {
+		return new js.JQuery("#" + this.id + " #" + this.getComposant() + "preview" + this.getCollectionContainer());
+	}
+	,getInputName: function() {
+		var inputName = new js.JQuery("#" + this.id + " #" + this.getComposant() + "fileinput").attr("name");
+		return inputName;
+	}
+	,getRetour: function() {
+		var retour = new js.JQuery("#" + this.id + " #" + this.getComposant() + "retour" + this.getCollectionContainer());
+		return retour;
+	}
+	,getBouton: function() {
+		return new js.JQuery("#" + this.id + " #uploadButton");
+	}
+	,onLoad: function(e) {
+		var p = new js.JQuery("#" + this.id + " #" + this.getIframe()).contents().text();
+		this.setValue(p);
+		this.getpreview().fadeTo(0,0);
+		this.getpreview().fadeTo(600,1);
+		new js.JQuery("#" + this.getForm()).attr("target",this.formDefaultAction);
+		this.enableForm();
+	}
+	,testUpload: function(e) {
+		this.DisableForm();
+		this.formDefaultAction = new js.JQuery("#" + this.getForm()).attr("target");
+		new js.JQuery("#" + this.getForm()).attr("target",this.getIframe());
+		js.Lib.alert(new js.JQuery("#" + this.getForm()).attr("target"));
+		new js.JQuery("#" + this.id + " #" + this.getIframe()).load($bind(this,this.onLoad));
+		new js.JQuery("#" + this.getForm()).attr("action","/index.php/upload");
+		new js.JQuery("#" + this.getForm()).submit();
+	}
+	,setComposant: function(val) {
+		this._composantName = val;
+		return this._composantName;
+	}
+	,getComposant: function() {
+		return this._composantName;
+	}
+	,init: function(e) {
+		this.getCollectionContainer();
+	}
+	,composantName: null
+	,uniqIframe: null
+	,_composantName: null
+	,uploadtarget: null
+	,base_url: null
+	,formDefaultAction: null
+	,self: null
+	,__class__: microbe.form.elements.AjaxUploader
+	,__properties__: {set_composantName:"setComposant",get_composantName:"getComposant"}
+});
+microbe.form.elements.Button = $hxClasses["microbe.form.elements.Button"] = function(name,label,value,type,link) {
+	microbe.form.FormElement.call(this);
+	this.name = name;
+	this.label = label;
+	this.value = value;
+	this.link = link;
+	this.type = type == null?microbe.form.elements.ButtonType.SUBMIT:type;
+};
+microbe.form.elements.Button.__name__ = ["microbe","form","elements","Button"];
+microbe.form.elements.Button.__super__ = microbe.form.FormElement;
+microbe.form.elements.Button.prototype = $extend(microbe.form.FormElement.prototype,{
+	populate: function() {
+		microbe.form.FormElement.prototype.populate.call(this);
+		var n = this.form.name + "_" + this.name;
+	}
+	,getPreview: function() {
+		return "<tr><td></td><td>" + this.render() + "<td></tr>";
+	}
+	,getLabel: function() {
+		var n = this.form.name + "_" + this.name;
+		return "<label for=\"" + n + "\" ></label>";
+	}
+	,toString: function() {
+		return this.render();
+	}
+	,render: function(iter) {
+		var _onClick = "";
+		if(this.link != null) _onClick = " onclick=" + this.link;
+		return "<button type=\"" + Std.string(this.type) + "\" class=\"" + this.getClasses() + "\" name=\"" + this.form.name + "_" + this.name + "\" id=\"" + this.form.name + "_" + this.name + "\" value=\"" + Std.string(this.value) + "\" " + _onClick + " >" + this.label + "</button>";
+	}
+	,isValid: function() {
+		return true;
+	}
+	,link: null
+	,type: null
+	,__class__: microbe.form.elements.Button
+});
+microbe.form.elements.ButtonType = $hxClasses["microbe.form.elements.ButtonType"] = { __ename__ : ["microbe","form","elements","ButtonType"], __constructs__ : ["SUBMIT","BUTTON","RESET"] }
+microbe.form.elements.ButtonType.SUBMIT = ["SUBMIT",0];
+microbe.form.elements.ButtonType.SUBMIT.toString = $estr;
+microbe.form.elements.ButtonType.SUBMIT.__enum__ = microbe.form.elements.ButtonType;
+microbe.form.elements.ButtonType.BUTTON = ["BUTTON",1];
+microbe.form.elements.ButtonType.BUTTON.toString = $estr;
+microbe.form.elements.ButtonType.BUTTON.__enum__ = microbe.form.elements.ButtonType;
+microbe.form.elements.ButtonType.RESET = ["RESET",2];
+microbe.form.elements.ButtonType.RESET.toString = $estr;
+microbe.form.elements.ButtonType.RESET.__enum__ = microbe.form.elements.ButtonType;
+microbe.form.elements.CheckBox = $hxClasses["microbe.form.elements.CheckBox"] = function(_microfield,_iter) {
+	microbe.form.AjaxElement.call(this,_microfield,_iter);
+	microbe.tools.Debug.Alerte(this.id,{ fileName : "CheckBox.hx", lineNumber : 17, className : "microbe.form.elements.CheckBox", methodName : "new"});
+};
+microbe.form.elements.CheckBox.__name__ = ["microbe","form","elements","CheckBox"];
+microbe.form.elements.CheckBox.__super__ = microbe.form.AjaxElement;
+microbe.form.elements.CheckBox.prototype = $extend(microbe.form.AjaxElement.prototype,{
+	setValue: function(val) {
+		"set_" + Std.string(microbe.tools.Debug.Alerte(val,{ fileName : "CheckBox.hx", lineNumber : 42, className : "microbe.form.elements.CheckBox", methodName : "setValue"}));
+		var etat;
+		if(val == "true") etat = "checked"; else etat = "";
+		new js.JQuery("#" + this.id).attr("checked",etat);
+	}
+	,getValue: function() {
+		var valeur = new js.JQuery("#" + this.id).attr("checked");
+		var val;
+		if(valeur == true) val = "true"; else val = "false";
+		return val;
+	}
+	,__class__: microbe.form.elements.CheckBox
+});
 microbe.form.elements.CollectionElement = $hxClasses["microbe.form.elements.CollectionElement"] = function(_liste,_pos) {
 	microbe.form.AjaxElement.call(this,_liste,_pos);
 	this.elementid = this.id + _pos;
@@ -3611,6 +4019,203 @@ microbe.form.elements.DeleteButton.prototype = $extend(microbe.form.AjaxElement.
 	,tooltip: null
 	,elementid: null
 	,__class__: microbe.form.elements.DeleteButton
+});
+microbe.form.elements.FakeElement = $hxClasses["microbe.form.elements.FakeElement"] = function(name,value,required,display,attributes) {
+	if(attributes == null) attributes = "";
+	if(display == null) display = false;
+	if(required == null) required = false;
+	microbe.form.FormElement.call(this);
+	this.name = name;
+	this.value = value;
+	this.required = required;
+	this.display = display;
+	this.attributes = attributes;
+};
+microbe.form.elements.FakeElement.__name__ = ["microbe","form","elements","FakeElement"];
+microbe.form.elements.FakeElement.__super__ = microbe.form.FormElement;
+microbe.form.elements.FakeElement.prototype = $extend(microbe.form.FormElement.prototype,{
+	toString: function() {
+		return this.render();
+	}
+	,getPreview: function() {
+		return this.render();
+	}
+	,render: function(iter) {
+		var n = this.name;
+		return n;
+	}
+	,display: null
+	,__class__: microbe.form.elements.FakeElement
+});
+microbe.form.elements.Hidden = $hxClasses["microbe.form.elements.Hidden"] = function(_microfield) {
+	microbe.form.AjaxElement.call(this,_microfield);
+};
+microbe.form.elements.Hidden.__name__ = ["microbe","form","elements","Hidden"];
+microbe.form.elements.Hidden.__super__ = microbe.form.AjaxElement;
+microbe.form.elements.Hidden.prototype = $extend(microbe.form.AjaxElement.prototype,{
+	setValue: function(val) {
+		js.Lib.alert("val=" + val);
+		new js.JQuery("#" + this.id).attr("value",val);
+	}
+	,getValue: function() {
+		return new js.JQuery("#" + this.id).attr("value");
+	}
+	,moduleid: null
+	,__class__: microbe.form.elements.Hidden
+});
+microbe.form.elements.IframeUploader = $hxClasses["microbe.form.elements.IframeUploader"] = function(_microfield,_iter) {
+	microbe.form.AjaxElement.call(this,_microfield,_iter);
+	this.base_url = js.Lib.window.location.protocol + "//" + js.Lib.window.location.host;
+	this.getBouton().click($bind(this,this.testUpload));
+};
+microbe.form.elements.IframeUploader.__name__ = ["microbe","form","elements","IframeUploader"];
+microbe.form.elements.IframeUploader.__super__ = microbe.form.AjaxElement;
+microbe.form.elements.IframeUploader.prototype = $extend(microbe.form.AjaxElement.prototype,{
+	setValue: function(val) {
+		if(val != null) this.getpreview().attr("src",js.Lib.window.location.protocol + "//" + js.Lib.window.location.host + "/index.php/imageBase/resize/thumb/" + val); else this.getpreview().attr("src","/microbe/css/assets/blankframe.png");
+		this.getRetour().attr("value",val);
+	}
+	,getValue: function() {
+		var retour = this.getRetour().attr("value");
+		return retour;
+	}
+	,enableForm: function() {
+		new js.JQuery("input").attr("disabled","");
+	}
+	,DisableForm: function() {
+		new js.JQuery("#" + this.getForm() + " input[name!='" + this.getInputName() + "']").attr("disabled","disabled");
+	}
+	,getIframe: function() {
+		return "uploadtarget";
+	}
+	,getpreview: function() {
+		return new js.JQuery("#" + this.id + " #preview");
+	}
+	,getInputName: function() {
+		var inputName = new js.JQuery("#" + this.id + " #fileinput").attr("name");
+		return inputName;
+	}
+	,getRetour: function() {
+		var retour = new js.JQuery("#" + this.id + " #retour");
+		return retour;
+	}
+	,getBouton: function() {
+		return new js.JQuery("#" + this.id + " #uploadButton");
+	}
+	,onLoad: function(e) {
+		var p = new js.JQuery("#" + this.id + " #" + this.getIframe()).contents().text();
+		if(p == "tooBig") {
+			var status = new js.JQuery("<p class='status'>");
+			status.text("le fichier est trop lourd");
+			var res = new js.JQuery("#" + this.id).append(status);
+		}
+		new js.JQuery("#" + this.id + " #" + this.getIframe()).remove();
+		this.setValue(p);
+		this.getpreview().fadeTo(0,0);
+		this.getpreview().fadeTo(600,1);
+		new js.JQuery("#" + this.getForm()).attr("target",this.formDefaultAction);
+		this.enableForm();
+	}
+	,disableStatus: function() {
+		new js.JQuery("#" + this.id + " p.status").remove();
+	}
+	,testUpload: function(e) {
+		this.DisableForm();
+		this.disableStatus();
+		this.formDefaultAction = new js.JQuery("#" + this.getForm()).attr("target");
+		var iframe = "<iframe id='uploadtarget' name='uploadtarget' style='width:0;height:0;border:0px solid #fff;'></iframe>";
+		new js.JQuery("#" + this.id).append(iframe);
+		new js.JQuery("#" + this.getForm()).attr("target","uploadtarget");
+		new js.JQuery("#" + this.id + " #" + this.getIframe()).load($bind(this,this.onLoad));
+		new js.JQuery("#" + this.getForm()).attr("action","/index.php/upload");
+		new js.JQuery("#" + this.getForm()).submit();
+	}
+	,init: function(e) {
+	}
+	,uploadtarget: null
+	,base_url: null
+	,formDefaultAction: null
+	,self: null
+	,__class__: microbe.form.elements.IframeUploader
+});
+microbe.form.elements.ImageUploader = $hxClasses["microbe.form.elements.ImageUploader"] = function(_microfield,_iter) {
+	microbe.form.elements.IframeUploader.call(this,_microfield,_iter);
+	new js.JQuery("#" + this.id + " .file_input_button").click($bind(this,this.onFake));
+	new js.JQuery("#" + this.id + " #cancel").click($bind(this,this.onVide));
+};
+microbe.form.elements.ImageUploader.__name__ = ["microbe","form","elements","ImageUploader"];
+microbe.form.elements.ImageUploader.__super__ = microbe.form.elements.IframeUploader;
+microbe.form.elements.ImageUploader.prototype = $extend(microbe.form.elements.IframeUploader.prototype,{
+	setValue: function(val) {
+		if(val != null && val.length > 0) this.getpreview().attr("src",js.Lib.window.location.protocol + "//" + js.Lib.window.location.host + "/index.php/imageBase/resize/modele/" + val); else this.getpreview().attr("src","/microbe/css/assets/blankframe.png");
+		this.getRetour().attr("value",val);
+	}
+	,onFake: function(e) {
+		e.preventDefault();
+		new js.JQuery("#" + this.id + " .hiddenfileinput").trigger("click");
+	}
+	,onVide: function(e) {
+		this.setValue(null);
+	}
+	,__class__: microbe.form.elements.ImageUploader
+});
+microbe.form.elements.Input = $hxClasses["microbe.form.elements.Input"] = function(name,label,value,required,validators,attributes) {
+	if(attributes == null) attributes = "";
+	if(required == null) required = false;
+	microbe.form.FormElement.call(this);
+	this.name = name;
+	this.label = label;
+	this.value = value;
+	this.required = required;
+	this.attributes = attributes;
+	this.password = false;
+	this.showLabelAsDefaultValue = false;
+	this.useSizeValues = false;
+	this.printRequired = false;
+	this.width = 180;
+};
+microbe.form.elements.Input.__name__ = ["microbe","form","elements","Input"];
+microbe.form.elements.Input.__super__ = microbe.form.FormElement;
+microbe.form.elements.Input.prototype = $extend(microbe.form.FormElement.prototype,{
+	toString: function() {
+		return this.render();
+	}
+	,render: function(iter) {
+		var n = this.form.name + "_" + this.name;
+		var tType = this.password?"password":"text";
+		if(this.showLabelAsDefaultValue && this.value == this.label) this.addValidator(new microbe.form.validators.BoolValidator(false,"Not valid"));
+		if((this.value == null || this.value == "") && this.showLabelAsDefaultValue) this.value = this.label;
+		var style = this.useSizeValues?"style=\"width:" + this.width + "px\"":"";
+		return "<input " + style + " class=\"" + this.getClasses() + "\" type=\"" + tType + "\" name=\"" + n + "\" id=\"" + n + "\" value=\"" + this.safeString(this.value) + "\"  " + this.attributes + " />" + (this.required && this.form.isSubmitted() && this.printRequired?" required":null);
+	}
+	,formatter: null
+	,printRequired: null
+	,useSizeValues: null
+	,showLabelAsDefaultValue: null
+	,width: null
+	,password: null
+	,__class__: microbe.form.elements.Input
+});
+microbe.form.elements.Mock = $hxClasses["microbe.form.elements.Mock"] = function(_microfield) {
+	microbe.form.AjaxElement.call(this,_microfield);
+	microbe.tools.Debug.Alerte(this.id,{ fileName : "Mock.hx", lineNumber : 48, className : "microbe.form.elements.Mock", methodName : "new"});
+	var pop = new js.JQuery("#" + this.id + "test").click($bind(this,this.onFake));
+};
+microbe.form.elements.Mock.__name__ = ["microbe","form","elements","Mock"];
+microbe.form.elements.Mock.__super__ = microbe.form.AjaxElement;
+microbe.form.elements.Mock.prototype = $extend(microbe.form.AjaxElement.prototype,{
+	setValue: function(val) {
+		microbe.tools.Debug.Alerte("",{ fileName : "Mock.hx", lineNumber : 64, className : "microbe.form.elements.Mock", methodName : "setValue"});
+		new js.JQuery("#" + this.id).attr("value",val);
+	}
+	,getValue: function() {
+		microbe.tools.Debug.Alerte("",{ fileName : "Mock.hx", lineNumber : 59, className : "microbe.form.elements.Mock", methodName : "getValue"});
+		return new js.JQuery("#" + this.id).attr("value");
+	}
+	,onFake: function(e) {
+		microbe.tools.Debug.Alerte("onFake",{ fileName : "Mock.hx", lineNumber : 55, className : "microbe.form.elements.Mock", methodName : "onFake"});
+	}
+	,__class__: microbe.form.elements.Mock
 });
 microbe.form.elements.PlusCollectionButton = $hxClasses["microbe.form.elements.PlusCollectionButton"] = function(_me) {
 	this.me = _me;
@@ -3783,6 +4388,107 @@ microbe.form.elements.TagView.prototype = $extend(microbe.form.AjaxElement.proto
 	,contextTags: null
 	,spodTags: null
 	,__class__: microbe.form.elements.TagView
+});
+microbe.form.elements.TestCrossAjax = $hxClasses["microbe.form.elements.TestCrossAjax"] = function(_microfield,_iter) {
+	microbe.tools.Debug.Alerte("",{ fileName : "TestCrossAjax.hx", lineNumber : 48, className : "microbe.form.elements.TestCrossAjax", methodName : "new"});
+	microbe.form.AjaxElement.call(this,_microfield,_iter);
+	this.self = this;
+	this.base_url = js.Lib.window.location.protocol + "//" + js.Lib.window.location.host;
+	this.getBouton().click($bind(this,this.testUpload));
+};
+microbe.form.elements.TestCrossAjax.__name__ = ["microbe","form","elements","TestCrossAjax"];
+microbe.form.elements.TestCrossAjax.__super__ = microbe.form.AjaxElement;
+microbe.form.elements.TestCrossAjax.prototype = $extend(microbe.form.AjaxElement.prototype,{
+	output: function() {
+		return "yeah from js";
+	}
+	,setValue: function(val) {
+		this.getpreview().attr("src",js.Lib.window.location.protocol + "//" + js.Lib.window.location.host + "/index.php/imageBase/resize/thumb/" + val);
+		this.getRetour().attr("value",val);
+	}
+	,getValue: function() {
+		return new js.JQuery("#retour" + this.getCollectionContainer()).attr("value");
+	}
+	,setpreview: function(source) {
+		this.getpreview().css("width","300px");
+		this.getpreview().attr("src",source);
+		this.getpreview().fadeTo(0,0);
+		this.getpreview().fadeTo(600,1);
+	}
+	,getCollectionContainer: function() {
+		var p = new js.JQuery("#" + this.id).parents(".collection");
+		if(p.attr("pos") != null) return p.attr("pos");
+		return "";
+	}
+	,getpreview: function() {
+		return new js.JQuery("#" + this.id + " #preview" + this.getCollectionContainer());
+	}
+	,getInputName: function() {
+		return new js.JQuery("#" + this.id + " #fileinput").attr("name");
+	}
+	,getRetour: function() {
+		return new js.JQuery("#" + this.id + " #retour" + this.getCollectionContainer());
+	}
+	,getBouton: function() {
+		return new js.JQuery("#" + this.id + " #uploadButton");
+	}
+	,active: function() {
+		new js.JQuery("#uploadButton");
+	}
+	,getIframe: function() {
+		var ifr = new js.JQuery("#" + "upload_target" + this.getCollectionContainer()).attr("id");
+		return ifr;
+	}
+	,creeIframe: function() {
+		new js.JQuery("#" + "myFrame").remove();
+		new js.JQuery("<iframe id=\"myFrame\" />").appendTo("body");
+	}
+	,enableForm: function() {
+		new js.JQuery("input").attr("disabled","");
+	}
+	,DisableEnableForm: function() {
+		new js.JQuery("#" + this.getForm() + " input[name!='" + this.getInputName() + "']").attr("disabled","disabled");
+	}
+	,onLoad: function(e) {
+		var p = new js.JQuery("#" + this.getIframe()).contents().text();
+		this.setValue(p);
+		this.getpreview().fadeTo(0,0);
+		this.getpreview().fadeTo(600,1);
+		this.enableForm();
+	}
+	,testUpload: function(e) {
+		this.DisableEnableForm();
+		new js.JQuery("#" + this.getForm()).attr("target",this.getIframe());
+		new js.JQuery("#" + this.getIframe()).load($bind(this,this.onLoad));
+		this.formDefaultAction = new js.JQuery("#" + this.getForm()).attr("action");
+		new js.JQuery("#" + this.getForm()).attr("action","http://localhost:8888/index.php/upload");
+		new js.JQuery("#" + this.getForm()).submit();
+	}
+	,init: function(e) {
+		this.getCollectionContainer();
+	}
+	,uploadtarget: null
+	,base_url: null
+	,formDefaultAction: null
+	,self: null
+	,__class__: microbe.form.elements.TestCrossAjax
+});
+if(!microbe.form.validators) microbe.form.validators = {}
+microbe.form.validators.BoolValidator = $hxClasses["microbe.form.validators.BoolValidator"] = function(valid,error) {
+	microbe.form.Validator.call(this);
+	this.valid = valid;
+	if(error != null) this.errorNotValid = error; else this.errorNotValid = "Not valid.";
+};
+microbe.form.validators.BoolValidator.__name__ = ["microbe","form","validators","BoolValidator"];
+microbe.form.validators.BoolValidator.__super__ = microbe.form.Validator;
+microbe.form.validators.BoolValidator.prototype = $extend(microbe.form.Validator.prototype,{
+	isValid: function(value) {
+		if(!this.valid) this.errors.push(this.errorNotValid);
+		return this.valid;
+	}
+	,valid: null
+	,errorNotValid: null
+	,__class__: microbe.form.validators.BoolValidator
 });
 var mpartial = mpartial || {}
 mpartial.Partial = $hxClasses["mpartial.Partial"] = function() { }
@@ -4183,6 +4889,8 @@ js.XMLHttpRequest = window.XMLHttpRequest?XMLHttpRequest:window.ActiveXObject?fu
 	throw "Unable to create XMLHttpRequest object.";
 	return $r;
 }(this));
+var Editor = WYMeditor.editor;
+var Wymeditor=window.jQuery;
 /*!
  * jQuery UI 1.8.14
  *
@@ -4388,6 +5096,7 @@ _uiHash:function(a){var b=a||this;return{helper:b.helper,placeholder:b.placehold
 ;;
 var Sortable = window.jQuery;
 var SortableEvent={create:"sortcreate",sortstart:"start",sort:"sort",change:"sortchange",sortbeforeStop:"beforeStop",stop:"sortstop",update:"sortupdate",receive:"sortreceive",remove:"sortremove",over:"sortover",out:"sortout",activate:"sortactivate",deactivate:"sortdeactivate"}
+DateTools.DAYS_OF_MONTH = [31,28,31,30,31,30,31,31,30,31,30,31];
 feffects.Tween.aTweens = new haxe.FastList();
 feffects.Tween.aPaused = new haxe.FastList();
 feffects.Tween.jsDate = new Date().getTime();
@@ -4402,12 +5111,17 @@ js.Lib.onerror = null;
 microbe.TagManager.voPackage = "vo.";
 microbe.TagManager.debug = 1;
 microbe.form.AjaxElement.debug = false;
+microbe.form.elements.AjaxArea.debug = 0;
+microbe.form.elements.CheckBox.debug = false;
 microbe.form.elements.CollectionElement.debug = 0;
 microbe.form.elements.CollectionElement.deleteSignal = new hxs.Signal4();
 microbe.form.elements.CollectionWrapper.debug = 1;
+microbe.form.elements.ImageUploader.debug = true;
+microbe.form.elements.Mock.debug = 1;
 microbe.form.elements.PlusCollectionButton.debug = 0;
 microbe.form.elements.PlusCollectionButton.cont = 0;
 microbe.form.elements.TagView.debug = 1;
+microbe.form.elements.TestCrossAjax.debug = false;
 microbe.jsTools.BackJS.debug = 1;
 microbe.jsTools.BackJS.base_url = js.Lib.window.location.protocol + "//" + js.Lib.window.location.host;
 microbe.jsTools.BackJS.back_url = microbe.jsTools.BackJS.base_url + "/index.php/pipo/";
