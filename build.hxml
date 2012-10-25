@@ -13,7 +13,7 @@
 
 #javascript back
 -main microbe.jsTools.BackJS
-
+-lib mpartial
 -cp src
 -js www/microbe/js/backjs.js
 -lib feffects

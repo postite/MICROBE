@@ -23,7 +23,7 @@ import microbe.ImportHelper;
 #end
 
 @:expose("microbe.jsTools.BackJS")
-class BackJS  implements mpartial.Partial
+class BackJS
 {
 	
 	public static var debug=1;
