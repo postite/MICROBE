@@ -221,6 +221,7 @@ return result.getIntResult(0);
 }
 public static function specialsearch(tag:String,spod:String,_search:Dynamic,tri:{ ?orderBy : Array<String>, ?limit : Array<Int> },?generateSpods:Bool=true):List<microbe.vo.Spodable> 
 {
+	var langRef=false;
 	var table=getSpodTable(spod);
 	currentspod=firstUpperCase(spod);
 	var str= new StringBuf();
@@ -235,6 +236,7 @@ public static function specialsearch(tag:String,spod:String,_search:Dynamic,tri:
       //trace(key +"="+Reflect.field(_search,key));
       var value=Reflect.field(_search,key);
       if( Std.is(value,String)){
+      	if(key=="lang" && value!="fr")langRef=true;
      str.add(key +"='"+value+"'");
       }else{
         str.add(key +"="+value);
@@ -245,7 +247,8 @@ public static function specialsearch(tag:String,spod:String,_search:Dynamic,tri:
     
     str.add(" ");
 }
-str.add(" id in (Select `spod_id` 
+if (!langRef){str.add(" id in ");}else{str.add(" id_ref in ");}
+str.add("(Select `spod_id` 
 from tagSpod 
 where tag_id 
 in (
@@ -260,7 +263,6 @@ str.add(" LIMIT "+tri.limit.join(","));
 }
 var  result:sys.db.ResultSet=Manager.cnx.request(str.toString());
 if (generateSpods)return  result.results().map(maptoSpod);
-
 	return cast result.results();
 }
 
