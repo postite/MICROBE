@@ -56,7 +56,7 @@ class microbe_form_FormElement {
 		return Std::string(Type::getClass($this));
 	}
 	public function getPreview() {
-		return "<li><span>" . $this->getLabel() . "</span><div>" . $this->render(null) . "</div></li>";
+		return "<li><span class='labelsp'>" . $this->getLabel() . "</span><div>" . $this->render(null) . "</div></li>";
 	}
 	public function remove() {
 		if($this->form !== null) {

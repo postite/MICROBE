@@ -16,6 +16,7 @@ import sys.db.Object;
 import microbe.MicroCreator;
 import microbe.form.IMicrotype;
 import vo.Traductable;
+
 class Pipo extends Back
 	{
 		
@@ -73,6 +74,7 @@ class Pipo extends Back
 				jsLib.addOnce(backjs);
 				jsLib.addOnce(GenericController.appConfig.jsPath+"jquery-ui-1.8.14.custom.min.js");
 				this.view.assign("menu", getMenu());
+				this.view.assign("localClass",null);
 				/*this.view.assign("chemins", this.chemins);
 				this.view.assign("menu", null);*/
 				//this.view.assign("content", null);
@@ -130,7 +132,7 @@ class Pipo extends Back
 					//return traduit(voName,data.id);
 
 				}
-
+				this.view.assign("localClass",voName);
 				this.view.assign("linken",url.siteUrl()+"/pipo/traduit/"+data.id+"/"+voName+"/en");
 
 				this.view.assign("tradContent",generator.renderForm());

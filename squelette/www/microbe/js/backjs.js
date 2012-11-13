@@ -3430,7 +3430,7 @@ microbe.form.FormElement.prototype = {
 		return Std.string(Type.getClass(this));
 	}
 	,getPreview: function() {
-		return "<li><span>" + this.getLabel() + "</span><div>" + this.render() + "</div></li>";
+		return "<li><span class='labelsp'>" + this.getLabel() + "</span><div>" + this.render() + "</div></li>";
 	}
 	,remove: function() {
 		if(this.form != null) return this.form.removeElement(this);
@@ -3670,34 +3670,54 @@ microbe.form.elements.AjaxEditor = $hxClasses["microbe.form.elements.AjaxEditor"
 	this.pos = iter;
 	microbe.form.elements.AjaxEditor.self = this;
 	this.ed = "editor";
-	this.value = "carrotte";
+	haxe.Log.trace("new wym",{ fileName : "AjaxEditor.hx", lineNumber : 117, className : "microbe.form.elements.AjaxEditor", methodName : "new"});
 	this.base_url = js.Lib.window.location.protocol + "//" + js.Lib.window.location.host;
-	var wymOptions = { };
-	wymOptions.skin = "compact";
-	wymOptions.html = "";
+	this.wymOptions = { };
+	this.wymOptions.skin = "compact";
+	this.wymOptions.html = this.value;
 	this.wym = new $(".editor:visible");
-	wymOptions.postInit = function() {
-		this.wym.embed();
-	};
-	this.wym.wymeditor(wymOptions);
+	haxe.Log.trace("after new wym",{ fileName : "AjaxEditor.hx", lineNumber : 153, className : "microbe.form.elements.AjaxEditor", methodName : "new"});
 };
 microbe.form.elements.AjaxEditor.__name__ = ["microbe","form","elements","AjaxEditor"];
 microbe.form.elements.AjaxEditor.self = null;
 microbe.form.elements.AjaxEditor.__super__ = microbe.form.AjaxElement;
 microbe.form.elements.AjaxEditor.prototype = $extend(microbe.form.AjaxElement.prototype,{
-	setValue: function(val) {
-		new js.JQuery("#" + this.id).attr("value",this.value);
+	waitForIt: function(val) {
+		if(this.wym != null) {
+			this.wymOptions.html = val.toString();
+			this.wym.wymeditor(this.wymOptions);
+			this.t.stop();
+		} else {
+			js.Lib.alert("else");
+			this.t = haxe.Timer.delay((function(f,a1) {
+				return function() {
+					return f(a1);
+				};
+			})($bind(this,this.waitForIt),val),500);
+		}
+	}
+	,setValue: function(val) {
+		haxe.Log.trace("set wym",{ fileName : "AjaxEditor.hx", lineNumber : 181, className : "microbe.form.elements.AjaxEditor", methodName : "setValue"});
+		new js.JQuery("#" + this.id).attr("value",val);
+		this.t = haxe.Timer.delay((function(f,a1) {
+			return function() {
+				return f(a1);
+			};
+		})($bind(this,this.waitForIt),val),500);
 	}
 	,output: function() {
 		return "yeah from js";
 	}
 	,getValue: function() {
+		haxe.Log.trace("wym",{ fileName : "AjaxEditor.hx", lineNumber : 172, className : "microbe.form.elements.AjaxEditor", methodName : "getValue"});
 		js.JQuery.wymeditors(0).update();
 		return new js.JQuery("#" + this.id).attr("value");
 	}
 	,transformed: null
+	,wymOptions: null
 	,wym: null
 	,ed: null
+	,t: null
 	,base_url: null
 	,formDefaultAction: null
 	,__class__: microbe.form.elements.AjaxEditor

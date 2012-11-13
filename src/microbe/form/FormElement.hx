@@ -169,7 +169,8 @@ class FormElement
 			return "<tr><td>" + getLabel() + "</td><td>" + this.render() + "<td></tr>";
 		}*/
 	public function getPreview():String{
-		return "<li><span>" + getLabel() + "</span><div>" + this.render() + "</div></li>";
+		return "<li><span class='labelsp'>" + getLabel() + "</span><div>" + this.render() + "</div></li>";
+		//return "<li><div>" + this.render() + "</div></li>";
 	}
 	
 	public function getType():String
