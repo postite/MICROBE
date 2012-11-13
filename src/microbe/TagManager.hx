@@ -178,6 +178,7 @@ where tag='"+tag+"' and spodtype='"+spod+"')");
 
  public static function specialcount(tag:String,spod:String,_search:Dynamic):Int
 {
+	var langRef=false;
 	var table=getSpodTable(spod);
 	currentspod=firstUpperCase(spod);
 	var str= new StringBuf();
@@ -192,6 +193,7 @@ where tag='"+tag+"' and spodtype='"+spod+"')");
    		  //trace(key +"="+Reflect.field(_search,key));
    		  var value=Reflect.field(_search,key);
    		 	 if( Std.is(value,String)){
+   		 	 	if(key=="lang" && value!="fr")langRef=true;
    		 	str.add(key +"='"+value+"'");
    		 	 }else{
    		 	   str.add(key +"="+value);
@@ -202,7 +204,8 @@ where tag='"+tag+"' and spodtype='"+spod+"')");
     
     str.add(" ");
 	}
-str.add(" id in (Select `spod_id` 
+if (!langRef){str.add(" id in ");}else{str.add(" id_ref in ");}
+str.add("(Select `spod_id`
 from tagSpod 
 where tag_id 
 in (
