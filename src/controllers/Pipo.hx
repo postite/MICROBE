@@ -141,7 +141,11 @@ class Pipo extends Back
 
 
 				this.view.assign("tradContent",generator.renderForm());
+				if(Std.is(data,microbe.vo.Taggable)){
 				this.view.assign ("tradCloud",generator.renderCloud());
+				} else{
+					this.view.assign ("tradCloud","");
+				}
 				this.view.assign("content",this.view.render("back/TradContent.html"));
 					}else{
 			this.view.assign("content", generator.render());
