@@ -10,7 +10,7 @@ import vo.Taxo;
 import php.Lib;
 import sys.db.Manager;
 import sys.db.SpodInfos;
-import vo.Traductable;
+import microbe.vo.Traductable;
 import config.Config;
 #end
 
@@ -40,17 +40,17 @@ class TagManager
 	//trace("tag_id="+tag_id);
 	
 	var spodTable=getSpodTable(spodstring);
-
-	var resultSet=Manager.cnx.request("
+	var manager=getManager(spodstring);
+	var query="
 	SELECT  DISTINCT B.* from  "+spodTable+" AS B
 	LEFT JOIN `tagSpod` AS TS ON TS.`spod_id`=B.id 
 	LEFT JOIN  `taxo` AS TX ON TX.`taxo_id`= TS.`tag_id`  
 	WHERE TX.taxo_id="+tag_id
-	);
+	;
 	
 
-	var maped:List<Spodable>= resultSet.results().map(maptoSpod);
-
+	//var maped:List<Spodable>= resultSet.results().map(maptoSpod);
+	var maped:List<Spodable>=cast manager.unsafeObjects(query,false);
 	//Lib.print(liste);
 	//Object
 	//return cast(resultSet.results());
@@ -226,7 +226,10 @@ public static function specialsearch(tag:String,spod:String,_search:Dynamic,tri:
 {
 	var langRef=false;
 	var table=getSpodTable(spod);
+	
 	currentspod=firstUpperCase(spod);
+	
+	var manager:Manager<sys.db.Object>=cast getManager(spod);
 	var str= new StringBuf();
 	str.add("Select * from "+table);
  	str.add(" ");
@@ -264,9 +267,10 @@ str.add(" ORDER BY "+tri.orderBy.join(","));
 if (tri.limit!=null)
 str.add(" LIMIT "+tri.limit.join(","));
 }
-var  result:sys.db.ResultSet=Manager.cnx.request(str.toString());
-if (generateSpods)return  result.results().map(maptoSpod);
-	return cast result.results();
+// var  result:sys.db.ResultSet=Manager.cnx.request(str.toString());
+// if (generateSpods)return  result.results().map(maptoSpod);
+// 	return cast result.results();
+return cast  manager.unsafeObjects(str.toString(),false);
 }
 
 
@@ -293,14 +297,18 @@ public static function dissociate(tag:String,spod:String,spod_id:Int) : Void {
 
 static function maptoSpod(res:Dynamic) :Spodable{
 	var spod:Spodable= Type.createInstance(Type.resolveClass("vo."+currentspod),[]);
+	var manager:Manager<sys.db.Object>= cast Reflect.field(spod,"manager");
 	var formule= spod.getFormule();
 	Reflect.setField(spod, "id",Reflect.field(res,"id"));
+
 	for (key in formule.keys()){
 		trace("key="+key);
 		
 	//	if( Reflect.field(res,key)!=null)
 		Reflect.setField(spod, key,Reflect.field(res,key));
+
 	}
+	
 	return spod;
 	}
 
@@ -320,6 +328,14 @@ static function maptoSpod(res:Dynamic) :Spodable{
 
 	
 }
+ static function getManager(spod:String):Manager<sys.db.Object>
+ {
+ 	var voPackage="vo.";
+	var cap= firstUpperCase(spod);
+	var spodable:Spodable=cast Type.resolveClass(voPackage+cap);
+ 	var manager:Manager<sys.db.Object>= cast Reflect.field(spodable,"manager");
+ 	return cast manager;
+ }
 // mets la premiere lettre en majustucule afin d'etre Resolvée par Type.resolveClass
 static function firstUpperCase(str:String) : String {
 var firstChar:String = str.substr(0, 1);
