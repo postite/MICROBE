@@ -187,7 +187,7 @@ class AjaxEditor extends AjaxElement
 	t=Timer.delay(callback(waitForIt,val),500);
 	}
 
-	function waitForIt(val:String) 
+	function waitForIt(?val:String="") 
 	{
 		
 		if (wym!=null){
