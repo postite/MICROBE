@@ -1,123 +1,167 @@
 .microtrace {
-	z-index : 10;
-	width : 250px;
-	color : #cc3300;
-	font-size : 10px;
-	font-family : "monaco";
+  z-index: 10;
+  width: 250px;
+  color: #cc3300;
+  font-size: 10px;
+  font-family: "monaco";
 }
 .microfieldTrace {
-	width : 250px;
-	color : #22990E;
-	font-size : 10px;
-	font-family : "monaco";
+  width: 250px;
+  color: #22990E;
+  font-size: 10px;
+  font-family: "monaco";
+}
+.clearfix {
+  zoom: 1;
+}
+.clearfix:after {
+  display: block;
+  visibility: hidden;
+  height: 0;
+  clear: both;
+  content: ".";
+}
+.blackblockhover {
+  background-color: #0AF;
+  cursor: hand;
+}
+.bigblackblock {
+  display: inline-block;
+  background-color: black;
+  color: white;
+  padding-left: 5px;
+  padding-right: 5px;
+  line-height: 28px;
+  font-size: 16px;
+  height: 28px;
+  font-family: "BreeLight";
+  font-weight: 100;
+  font-size: 16px;
+  font-family: "HelveticaNeueLTStd45Light";
+  font-weight: 100;
 }
 #global {
-	position : absolute;
-	width : 100%;
+  zoom: 1;
+  position: relative;
+  height: 100%;
+}
+#global:after {
+  display: block;
+  visibility: hidden;
+  height: 0;
+  clear: both;
+  content: ".";
+}
+#global.login {
+  width: 400px;
+  margin: 0px auto;
 }
 #menu {
-	width : 600px;
-	margin : 0px auto;
-	margin-bottom : 50px;
-	overflow : auto;
+  /*background-color:#C0C0C0;*/
+
+  width: 600px;
+  margin: 0px auto;
+  margin-bottom: 50px;
+  overflow: auto;
 }
 #menu .menuitem {
-	position : relative;
-	float : left;
-	background-color : black;
-	margin-right : 2px;
-	margin-bottom : 2px;
-	color : #fff;
-	width : 140px;
-	height : 140px;
+  position: relative;
+  float: left;
+  background-color: black;
+  margin-right: 2px;
+  margin-bottom: 2px;
+  color: #fff;
+  width: 140px;
+  height: 140px;
 }
 #menu .menuitem h {
-	position : absolute;
-	color : white;
-	font-family : "HelveticaNeueLTStd45Light";
-	font-weight : 100;
-	text-indent : 10px;
-	bottom : 10px;
+  position: absolute;
+  color: white;
+  font-family: "HelveticaNeueLTStd45Light";
+  font-weight: 100;
+  text-indent: 10px;
+  bottom: 10px;
 }
 #menu .menuitem:hover {
-	background-color : #00aaff;
+  background-color: #00aaff;
 }
 #menu .menuitem a {
-	color : #fff;
+  color: #fff;
 }
 #menu .menuitem a:hover {
-	color : #ccc;
+  color: #ccc;
 }
 #contenu {
-	width : 600px;
-	margin : 0px auto;
+  width: 600px;
+  margin: 0px auto;
+  overflow: visible;
 }
 #leftCol {
-	position : absolute;
-	left : 0;
+  /*background-color:#E2E2E2;*/
+
+  position: absolute;
+  left: 0;
 }
 #leftCol .ajout {
-	display : inline-block;
-	zoom : 1;
-	*display : inline;
-	background-color : black;
-	color : white;
-	padding-left : 5px;
-	padding-right : 5px;
-	line-height : 28px;
-	font-size : 16px;
-	height : 28px;
-	font-family : "BreeLight";
-	font-weight : 100;
-	font-size : 16px;
-	font-family : "HelveticaNeueLTStd45Light";
-	font-weight : 100;
-	width : 150px;
-	text-indent : 24px;
-	margin-bottom : 30px;
+  display: inline-block;
+  background-color: black;
+  color: white;
+  padding-left: 5px;
+  padding-right: 5px;
+  line-height: 28px;
+  font-size: 16px;
+  height: 28px;
+  font-family: "BreeLight";
+  font-weight: 100;
+  font-size: 16px;
+  font-family: "HelveticaNeueLTStd45Light";
+  font-weight: 100;
+  width: 150px;
+  text-indent: 24px;
+  margin-bottom: 30px;
 }
 #leftCol .ajout:hover {
-	background-color : #0AF;
-	cursor : hand;
+  background-color: #00aaff;
+  cursor: hand;
 }
 #leftCol .itemslist {
-	margin-left : 24px;
-	font-family : "BreeLight";
-	font-weight : 100;
-	font-size : 16px;
+  margin-left: 24px;
+  font-family: "BreeLight";
+  font-weight: 100;
+  font-size: 16px;
 }
 #leftCol .itemslist li {
-	margin-bottom : 5px;
-	width : 100px;
-	height : 50px;
-	border-bottom : 1px solid black;
+  margin-bottom: 5px;
+  width: 100px;
+  height: 50px;
+  border-bottom: 1px solid black;
 }
 #leftCol .itemslist li h {
-	color : black;
-	line-height : 16px;
+  color: black;
+  line-height: 16px;
 }
 #leftCol .itemslist li:active {
-	position : relative;
-	background-color : #00aaff;
+  position: relative;
+  background-color: #00aaff;
 }
 #leftCol .itemslist li:hover {
-	position : relative;
-	background-color : #00aaff;
+  position: relative;
+  background-color: #00aaff;
 }
 #leftCol .itemslist li:hover h {
-	position : absolute;
-	bottom : 2px;
-	color : white;
+  position: absolute;
+  bottom: 2px;
+  color: white;
 }
 #leftCol .placeHolder {
-	list-style : none;
-	display : block;
-	width : 100px;
-	height : 50px;
-	border : 1px dashed gray;
+  list-style: none;
+  display: block;
+  width: 100px;
+  height: 50px;
+  border: 1px dashed gray;
 }
 #centerCol {
-	background-color : #F3F3F3;
-	float : left;
-	width : 100%;
+  background-color: #F3F3F3;
+  float: left;
+  width: 100%;
 }

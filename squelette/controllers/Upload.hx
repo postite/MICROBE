@@ -14,7 +14,8 @@ import haxigniter.server.libraries.DebugLevel;
 import haxigniter.server.request.RestHandler;
 import haxigniter.server.views.ViewEngine;
 
-class Upload implements haxigniter.server.Controller, implements haxe.rtti.Infos
+  #if haxe3 @:rttiInfos #end
+class Upload implements haxigniter.server.Controller #if !haxe3 , implements haxe.rtti.Infos #end
 {
 	public var requestHandler : RequestHandler;
 	public var contentHandler : ContentHandler;

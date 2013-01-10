@@ -26,7 +26,8 @@ import php.Web;
  * NOTE: Controllers called by haXigniter can only have the starting character capitalized!
  *       MyController is never called, so it's excepted.
  */
-class GenericController implements haxigniter.server.Controller, implements haxe.rtti.Infos
+ #if haxe3 @:rttiInfos #end
+class GenericController implements haxigniter.server.Controller  #if !haxe3 , implements haxe.rtti.Infos #end
 {
 	/* --- Starting with the Controller interface implementation --- */
 	

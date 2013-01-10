@@ -328,6 +328,7 @@ class Pipo extends Back
 						///ça peut etre plus efficace avec un When then
 						for (i in 0...tab.length) {  
 						           db.query("UPDATE "+table+" SET poz = "+i+" WHERE id = "+tab[i]+" ");
+						         
 						          }
 						
 			

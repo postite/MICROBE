@@ -40,8 +40,8 @@ enum ACTION
 	DELETE;
 }
 
-
-class Api implements haxe.rtti.Infos
+  #if haxe3 @:rttiInfos #end
+class Api #if !haxe3  implements haxe.rtti.Infos #end
 {
 	
 		private var map:ClassMap;
@@ -238,7 +238,7 @@ class Api implements haxe.rtti.Infos
 		//	Lib.print(compressed);
 		}
 		
-		public function getAllorded(_vo:String):List<Spodable>{
+		public function getAllorded(_vo:String,?arg:Array<Dynamic>):List<Spodable>{
 		//public function getAllorded(_vo:String):Dynamic{
 
 			var stringVo = voPackage+_vo; 
@@ -256,7 +256,7 @@ class Api implements haxe.rtti.Infos
 
 			for (a in Type.getClassFields(Type.resolveClass(stringVo))){
 				if (a=="getAllorded"){
-					liste= Reflect.callMethod( Type.resolveClass(stringVo), "getAllorded", []);
+					liste= Reflect.callMethod( Type.resolveClass(stringVo), "getAllorded", arg);
 					return  cast liste;
 				}
 			}

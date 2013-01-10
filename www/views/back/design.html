@@ -21,9 +21,10 @@
 </head>
 
 <body>
-	<div id="haxe:trace"></div>
-	<div id="global @localClass">
 	
+	<div id="global" class="@localClass">
+		
+		@if( custom){@include('back/custom.html')}
 			
 		@if(menu!=null){
 			<div id="menu">

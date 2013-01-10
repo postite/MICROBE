@@ -4,7 +4,7 @@
 -D spod_macro
 #-lib templo:2.3.3
 -lib erazor
--D haxe 3
+-D haxe3
 #--dead-code-elimination
 -php www
 #--no-output
@@ -50,7 +50,7 @@
 
 
 ####
-#-cmd open http://localhost:8888/index.php/pipo
+-cmd open http://localhost:8888/index.php/pipo
 
 
 #-cmd open http://postite.alwaysdata.net/

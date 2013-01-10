@@ -3062,12 +3062,12 @@ microbe.TagManager = $hxClasses["microbe.TagManager"] = function() {
 microbe.TagManager.__name__ = ["microbe","TagManager"];
 microbe.TagManager.currentspod = null;
 microbe.TagManager.getTags = function(spod,spodId) {
-	microbe.tools.Debug.Alerte(Std.string(spodId),{ fileName : "TagManager.hx", lineNumber : 332, className : "microbe.TagManager", methodName : "getTags"});
-	microbe.tools.Debug.Alerte(microbe.jsTools.BackJS.base_url,{ fileName : "TagManager.hx", lineNumber : 333, className : "microbe.TagManager", methodName : "getTags"});
+	microbe.tools.Debug.Alerte(Std.string(spodId),{ fileName : "TagManager.hx", lineNumber : 353, className : "microbe.TagManager", methodName : "getTags"});
+	microbe.tools.Debug.Alerte(microbe.jsTools.BackJS.base_url,{ fileName : "TagManager.hx", lineNumber : 354, className : "microbe.TagManager", methodName : "getTags"});
 	var Xreponse = null;
 	Xreponse = haxe.Http.requestUrl(microbe.jsTools.BackJS.base_url + "/index.php/gap/tags/spod/" + spod + "/id/" + spodId);
 	var reponse = haxe.Unserializer.run(Xreponse);
-	microbe.tools.Debug.Alerte(Std.string(reponse),{ fileName : "TagManager.hx", lineNumber : 339, className : "microbe.TagManager", methodName : "getTags"});
+	microbe.tools.Debug.Alerte(Std.string(reponse),{ fileName : "TagManager.hx", lineNumber : 360, className : "microbe.TagManager", methodName : "getTags"});
 	return reponse;
 }
 microbe.TagManager.addTag = function(spod,spodID,tag) {
@@ -3683,6 +3683,7 @@ microbe.form.elements.AjaxEditor.self = null;
 microbe.form.elements.AjaxEditor.__super__ = microbe.form.AjaxElement;
 microbe.form.elements.AjaxEditor.prototype = $extend(microbe.form.AjaxElement.prototype,{
 	waitForIt: function(val) {
+		if(val == null) val = "";
 		if(this.wym != null) {
 			this.wymOptions.html = val.toString();
 			this.wym.wymeditor(this.wymOptions);

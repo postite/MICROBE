@@ -8,7 +8,7 @@ class microbe_backof_Login extends microbe_controllers_GenericController impleme
 		$this->url = new haxigniter_server_libraries_Url($this->configuration);
 	}}
 	public function success($result) {
-		$this->trace("result.next=" . Std::string($result), null, _hx_anonymous(array("fileName" => "Login.hx", "lineNumber" => 128, "className" => "microbe.backof.Login", "methodName" => "success")));
+		$this->trace("result.next=" . Std::string($result), null, _hx_anonymous(array("fileName" => "Login.hx", "lineNumber" => 126, "className" => "microbe.backof.Login", "methodName" => "success")));
 		$this->defaultAssign();
 		$formulaire2 = new microbe_form_Form("cool", null, null);
 		$this->session->user = $result;
@@ -19,7 +19,7 @@ class microbe_backof_Login extends microbe_controllers_GenericController impleme
 		$this->view->display("back/design.html");
 	}
 	public function erreur($param = null) {
-		haxe_Log::trace("errur" . $param, _hx_anonymous(array("fileName" => "Login.hx", "lineNumber" => 112, "className" => "microbe.backof.Login", "methodName" => "erreur")));
+		haxe_Log::trace("errur" . $param, _hx_anonymous(array("fileName" => "Login.hx", "lineNumber" => 110, "className" => "microbe.backof.Login", "methodName" => "erreur")));
 		$formulaire = $this->creeForm();
 		$formulaire->populateElements();
 		$this->defaultAssign();
@@ -32,7 +32,7 @@ class microbe_backof_Login extends microbe_controllers_GenericController impleme
 		$formulaire->populateElements();
 		$this->defaultAssign();
 		$this->view->assign("content", $formulaire);
-		$result = $this->db->query("SELECT * FROM user WHERE nom LIKE '" . $formulaire->getValueOf("login") . "' AND mdp LIKE '" . $formulaire->getValueOf("mdp") . "'", null, _hx_anonymous(array("fileName" => "Login.hx", "lineNumber" => 97, "className" => "microbe.backof.Login", "methodName" => "checkid")));
+		$result = $this->db->query("SELECT * FROM user WHERE nom LIKE '" . $formulaire->getValueOf("login") . "' AND mdp LIKE '" . $formulaire->getValueOf("mdp") . "'", null, _hx_anonymous(array("fileName" => "Login.hx", "lineNumber" => 95, "className" => "microbe.backof.Login", "methodName" => "checkid")));
 		if($result->getLength() > 0) {
 			$u = $result->next();
 			$this->success($u);
@@ -57,10 +57,12 @@ class microbe_backof_Login extends microbe_controllers_GenericController impleme
 		return $formulaire;
 	}
 	public function defaultAssign() {
+		$this->view->assign("customLogo", null);
 		$this->view->assign("page", null);
 		$this->view->assign("link", $this->url->siteUrl(null, null));
 		$this->view->assign("backpage", $this->url->siteUrl(null, null) . "/pipo");
 		$this->view->assign("title", "microbe admin");
+		$this->view->assign("localClass", "login");
 		$this->view->assign("menu", null);
 		$this->view->assign("currentVo", null);
 		$this->view->assign("jsScript", null);
@@ -80,6 +82,6 @@ class microbe_backof_Login extends microbe_controllers_GenericController impleme
 		else
 			throw new HException('Unable to call «'.$m.'»');
 	}
-	static $__rtti = "<class path=\"microbe.backof.Login\" params=\"\">\x0A\x09<extends path=\"microbe.controllers.GenericController\"/>\x0A\x09<implements path=\"haxigniter.server.Controller\"/>\x0A\x09<url><c path=\"haxigniter.server.libraries.Url\"/></url>\x0A\x09<defaultAssign set=\"method\" line=\"43\"><f a=\"\"><e path=\"Void\"/></f></defaultAssign>\x0A\x09<creeForm set=\"method\" line=\"68\"><f a=\"\"><c path=\"microbe.form.Form\"/></f></creeForm>\x0A\x09<index public=\"1\" set=\"method\" line=\"76\"><f a=\"\"><e path=\"Void\"/></f></index>\x0A\x09<checkid public=\"1\" set=\"method\" line=\"88\"><f a=\"?pop\">\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></checkid>\x0A\x09<erreur public=\"1\" set=\"method\" line=\"111\"><f a=\"?param\">\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></erreur>\x0A\x09<success public=\"1\" set=\"method\" line=\"122\"><f a=\"result\">\x0A\x09<c path=\"vo.UserVo\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></success>\x0A\x09<new public=\"1\" set=\"method\" line=\"37\"><f a=\"\"><e path=\"Void\"/></f></new>\x0A</class>";
+	static $__rtti = "<class path=\"microbe.backof.Login\" params=\"\">\x0A\x09<extends path=\"microbe.controllers.GenericController\"/>\x0A\x09<implements path=\"haxigniter.server.Controller\"/>\x0A\x09<url><c path=\"haxigniter.server.libraries.Url\"/></url>\x0A\x09<defaultAssign set=\"method\" line=\"40\"><f a=\"\"><e path=\"Void\"/></f></defaultAssign>\x0A\x09<creeForm set=\"method\" line=\"66\"><f a=\"\"><c path=\"microbe.form.Form\"/></f></creeForm>\x0A\x09<index public=\"1\" set=\"method\" line=\"74\"><f a=\"\"><e path=\"Void\"/></f></index>\x0A\x09<checkid public=\"1\" set=\"method\" line=\"86\"><f a=\"?pop\">\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></checkid>\x0A\x09<erreur public=\"1\" set=\"method\" line=\"109\"><f a=\"?param\">\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></erreur>\x0A\x09<success public=\"1\" set=\"method\" line=\"120\"><f a=\"result\">\x0A\x09<c path=\"vo.UserVo\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></success>\x0A\x09<new public=\"1\" set=\"method\" line=\"34\"><f a=\"\"><e path=\"Void\"/></f></new>\x0A</class>";
 	function __toString() { return 'microbe.backof.Login'; }
 }
