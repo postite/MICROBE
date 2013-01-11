@@ -6,6 +6,5 @@ class haxe_macro_Constant extends Enum {
 	public static function CInt($v) { return new haxe_macro_Constant("CInt", 0, array($v)); }
 	public static function CRegexp($r, $opt) { return new haxe_macro_Constant("CRegexp", 4, array($r, $opt)); }
 	public static function CString($s) { return new haxe_macro_Constant("CString", 2, array($s)); }
-	public static function CType($s) { return new haxe_macro_Constant("CType", 5, array($s)); }
-	public static $__constructors = array(1 => 'CFloat', 3 => 'CIdent', 0 => 'CInt', 4 => 'CRegexp', 2 => 'CString', 5 => 'CType');
+	public static $__constructors = array(1 => 'CFloat', 3 => 'CIdent', 0 => 'CInt', 4 => 'CRegexp', 2 => 'CString');
 	}
