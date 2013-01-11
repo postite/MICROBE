@@ -13,7 +13,7 @@ import microbe.form.Form;
 import microbe.form.Microfield;
 import microbe.form.IMicrotype;
 import microbe.form.elements.CollectionElement;
-
+import microbe.tools.Mytrace;
 class CollectionBehaviour implements IBehaviour
 {
 	public var data:Spodable;
@@ -21,7 +21,7 @@ class CollectionBehaviour implements IBehaviour
 	var tempPos:IntHash<Int>;
 	public function new()
 	{
-
+		Mytrace.setRedirection();
 	}
 	public function parse(source:IMicrotype):String{
 		return "im a Collection";
@@ -286,7 +286,7 @@ class CollectionBehaviour implements IBehaviour
 
 
 	public function record(source:IMicrotype,data:Spodable) : Spodable {
-		trace("record collection"+data.id);
+		trace("record collection"+data);
 		
 //<positions>		
 	//	tempPos=new IntHash<Int>();
@@ -304,7 +304,7 @@ class CollectionBehaviour implements IBehaviour
 				trace("data.id==NULL");
 			for(a in castedsource.iterator()){
 				trace("bip="+a.type);//spodable
-				var  data=Type.createInstance(Type.resolveClass(GenericController.appConfig.voPackage+castedsource.voName),[]);
+				var  data:Spodable=Type.createInstance(Type.resolveClass(GenericController.appConfig.voPackage+castedsource.voName),[]);
 				
 				var parser=new MicroCreator();
 				parser.source=cast a;
@@ -312,6 +312,8 @@ class CollectionBehaviour implements IBehaviour
 				var child:Object=cast parser.record();
 				trace("child_titre="+Reflect.field(child,"titre"));
 				Reflect.callMethod(child, "set_rel", [data]);
+				trace( "fakespod.id="+cast (data).id);
+				
 				childRefs.add(child);
 				
 			}

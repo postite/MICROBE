@@ -8,6 +8,7 @@ class microbe_factoryType_SpodableBehaviour implements microbe_factoryType_IBeha
 	public function delete($voName, $id) {
 	}
 	public function record($source, $data) {
+		haxe_Log::trace("spodable", _hx_anonymous(array("fileName" => "SpodableBehaviour.hx", "lineNumber" => 52, "className" => "microbe.factoryType.SpodableBehaviour", "methodName" => "record")));
 		$voInstance = null;
 		$castedsource = $source;
 		if($data->id === null) {

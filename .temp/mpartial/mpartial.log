@@ -1,9 +1,9 @@
 @ mpartial.PartialsMacro.init
- 165 default targets, [js,debug]
- 166 custom targets, []
- 167 final targets, [js,debug]
+ 170 default targets, [js,debug]
+ 171 custom targets, []
+ 172 final targets, [js,debug]
 @ mpartial.parser.PartialClassParser.new
-  76 class microbe.jsTools.BackJS
-  92 implements Partial :true
+  78 class microbe.jsTools.BackJS
+  94 implements Partial :true
 @ mpartial.parser.PartialClassParser.build
- 126 hasMetaPartials, false
+ 128 hasMetaPartials, false

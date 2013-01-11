@@ -49,11 +49,12 @@ microbe.tools.Mytrace.setRedirection();
 		return liste;
 	}
 	public function record(source:IMicrotype,data:Spodable) : Spodable {
-		//trace("spodable");
+		trace("spodable");
 		var voInstance=null;
 			var castedsource:MicroFieldList= cast source;
 			if(data.id==null){
 			 voInstance=Type.createInstance(Type.resolveClass(GenericController.appConfig.voPackage+castedsource.voName),[]);
+			
 			}else{
 			 voInstance=Reflect.callMethod(data, Reflect.field(data, "get_"+source.field), [voInstance]);	
 			}
@@ -66,6 +67,7 @@ microbe.tools.Mytrace.setRedirection();
 				var child:Object=cast parser.record();
 				if (cast(child).id==null){
 				child.insert();
+
 				}else{
 				child.update();
 				}

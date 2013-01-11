@@ -11,7 +11,7 @@ class Mytrace {
         #end
 
         #if php
-        		microbe.controllers.GenericController.appDebug.log(v +" ::> \n " +inf.fileName +" "+inf.lineNumber+" "+inf.methodName);
+        		microbe.controllers.GenericController.appDebug.log(v +" ::> " +inf.fileName +" "+inf.lineNumber+" "+inf.methodName);
         #end
     }
 
