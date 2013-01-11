@@ -328,7 +328,11 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 		
 		}else{
 		voInstance=Type.createInstance(Type.resolveClass(voPackage +map.voClass),[]);
+		cast (voInstance).insert();
+			cast(voInstance).id= microbe.controllers.GenericController.appDb.connection.lastInsertId();
+			trace("MONID="+cast(voInstance).id);
 		
+		//voInstance.update();
 		}
 		trace("after");
 	//cast(voInstance).insert();
