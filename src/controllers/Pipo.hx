@@ -156,8 +156,10 @@ class Pipo extends Back
 		
 		public function getVoList(voName:String):List<Spodable>{
 		//	return 	spodeur.getRecordList(voName);
-		return api.getSearch(voName,{lang:"fr"});
-		// return api.getAllorded(voName);
+		//if traducatble 
+		//return api.getSearch(voName,{lang:"fr"});
+		//default better ..
+		return api.getAllorded(voName);
 		}
 		
 		public function getMenu():List<NavItem>{
