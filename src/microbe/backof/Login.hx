@@ -44,6 +44,7 @@ class Login extends GenericController, implements Controller
 		this.view.assign("backpage",url.siteUrl()+"/pipo");
 		this.view.assign("title","microbe admin");
 		this.view.assign("localClass","login");
+		this.view.assign("custom",true);
 		/*this.view.assign("chemins", this.chemins);
 		this.view.assign("menu", null);*/
 		//this.view.assign("content", null);
