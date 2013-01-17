@@ -4516,6 +4516,7 @@ mpartial.Partial = $hxClasses["mpartial.Partial"] = function() { }
 mpartial.Partial.__name__ = ["mpartial","Partial"];
 if(!microbe.jsTools) microbe.jsTools = {}
 microbe.jsTools.BackJS = $hxClasses["microbe.jsTools.BackJS"] = function() {
+	this.injected();
 	microbe.tools.Mytrace.setRedirection();
 	new js.JQuery("document").ready(function(e) {
 		microbe.jsTools.BackJS.getInstance().init();
@@ -4545,7 +4546,7 @@ microbe.jsTools.BackJS.prototype = {
 		maputil.searchCollec(microfield.voName);
 		maputil.addInCollec(microfield);
 		this.classMap.fields = maputil.mapFields;
-		microbe.tools.Debug.Alerte(Std.string(microfield),{ fileName : "BackJS.hx", lineNumber : 295, className : "microbe.jsTools.BackJS", methodName : "parseplusCollec"});
+		microbe.tools.Debug.Alerte(Std.string(microfield),{ fileName : "BackJS.hx", lineNumber : 298, className : "microbe.jsTools.BackJS", methodName : "parseplusCollec"});
 	}
 	,onAddItemPlus: function(x,PI) {
 		var raw = null;
@@ -4553,7 +4554,7 @@ microbe.jsTools.BackJS.prototype = {
 			raw = haxe.Unserializer.run(x);
 		} catch( err ) {
 			if( js.Boot.__instanceof(err,String) ) {
-				microbe.tools.Debug.Alerte(err,{ fileName : "BackJS.hx", lineNumber : 274, className : "microbe.jsTools.BackJS", methodName : "onAddItemPlus"});
+				microbe.tools.Debug.Alerte(err,{ fileName : "BackJS.hx", lineNumber : 277, className : "microbe.jsTools.BackJS", methodName : "onAddItemPlus"});
 			} else throw(err);
 		}
 		PI.target.notify(raw.element);
@@ -4562,9 +4563,9 @@ microbe.jsTools.BackJS.prototype = {
 	,PlusCollection: function(plusInfos) {
 		var _g = this;
 		this._plusInfos = plusInfos;
-		microbe.tools.Debug.Alerte(Std.string("name" + plusInfos.collectionName + "graine=" + plusInfos.graine),{ fileName : "BackJS.hx", lineNumber : 250, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
+		microbe.tools.Debug.Alerte(Std.string("name" + plusInfos.collectionName + "graine=" + plusInfos.graine),{ fileName : "BackJS.hx", lineNumber : 253, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
 		var req = new haxe.Http(microbe.jsTools.BackJS.back_url + "addCollectServerItem/");
-		microbe.tools.Debug.Alerte(microbe.jsTools.BackJS.back_url,{ fileName : "BackJS.hx", lineNumber : 253, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
+		microbe.tools.Debug.Alerte(microbe.jsTools.BackJS.back_url,{ fileName : "BackJS.hx", lineNumber : 256, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
 		req.setParameter("name",plusInfos.collectionName);
 		req.setParameter("voParent",this.classMap.voClass);
 		req.setParameter("voParentId",Std.string(this.classMap.id));
@@ -4574,7 +4575,7 @@ microbe.jsTools.BackJS.prototype = {
 			_g.onAddItemPlus(x,_g._plusInfos);
 		};
 		req.request(true);
-		microbe.tools.Debug.Alerte("end",{ fileName : "BackJS.hx", lineNumber : 261, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
+		microbe.tools.Debug.Alerte("end",{ fileName : "BackJS.hx", lineNumber : 264, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
 	}
 	,_plusInfos: null
 	,deleteCollection: function(id,voName,pos,collecItemId) {
@@ -4589,15 +4590,15 @@ microbe.jsTools.BackJS.prototype = {
 		this.spodDelete(voName,spodid);
 	}
 	,afterRecord: function(d) {
-		haxe.Log.trace("Fter Record",{ fileName : "BackJS.hx", lineNumber : 215, className : "microbe.jsTools.BackJS", methodName : "afterRecord"});
+		haxe.Log.trace("Fter Record",{ fileName : "BackJS.hx", lineNumber : 218, className : "microbe.jsTools.BackJS", methodName : "afterRecord"});
 		js.Lib.window.location.href = microbe.jsTools.BackJS.back_url + "nav/" + this.classMap.voClass + "/" + this.classMap.id;
 	}
 	,AjaxFormTraitement: function() {
 		var _g = this;
-		microbe.tools.Debug.Alerte(Std.string(this.classMap),{ fileName : "BackJS.hx", lineNumber : 203, className : "microbe.jsTools.BackJS", methodName : "AjaxFormTraitement"});
-		haxe.Log.trace("classMAp=" + Std.string(this.classMap),{ fileName : "BackJS.hx", lineNumber : 204, className : "microbe.jsTools.BackJS", methodName : "AjaxFormTraitement"});
+		microbe.tools.Debug.Alerte(Std.string(this.classMap),{ fileName : "BackJS.hx", lineNumber : 206, className : "microbe.jsTools.BackJS", methodName : "AjaxFormTraitement"});
+		haxe.Log.trace("classMAp=" + Std.string(this.classMap),{ fileName : "BackJS.hx", lineNumber : 207, className : "microbe.jsTools.BackJS", methodName : "AjaxFormTraitement"});
 		var compressedValues = haxe.Serializer.run(this.classMap);
-		haxe.Log.trace("classMAp=" + Std.string(this.classMap) + "back_url=" + microbe.jsTools.BackJS.back_url,{ fileName : "BackJS.hx", lineNumber : 207, className : "microbe.jsTools.BackJS", methodName : "AjaxFormTraitement"});
+		haxe.Log.trace("classMAp=" + Std.string(this.classMap) + "back_url=" + microbe.jsTools.BackJS.back_url,{ fileName : "BackJS.hx", lineNumber : 210, className : "microbe.jsTools.BackJS", methodName : "AjaxFormTraitement"});
 		var req = new haxe.Http(microbe.jsTools.BackJS.back_url + "rec/");
 		req.setParameter("map",compressedValues);
 		req.onData = function(d) {
@@ -4606,28 +4607,28 @@ microbe.jsTools.BackJS.prototype = {
 		req.request(true);
 	}
 	,record: function() {
-		haxe.Log.trace("clika" + Std.string(this.microbeElements),{ fileName : "BackJS.hx", lineNumber : 187, className : "microbe.jsTools.BackJS", methodName : "record"});
+		haxe.Log.trace("clika" + Std.string(this.microbeElements),{ fileName : "BackJS.hx", lineNumber : 190, className : "microbe.jsTools.BackJS", methodName : "record"});
 		var $it0 = this.microbeElements.iterator();
 		while( $it0.hasNext() ) {
 			var mic = $it0.next();
 			if(mic.element != null) mic.microfield.value = mic.getValue();
 		}
 		this.AjaxFormTraitement();
-		haxe.Log.trace("finrecord",{ fileName : "BackJS.hx", lineNumber : 198, className : "microbe.jsTools.BackJS", methodName : "record"});
+		haxe.Log.trace("finrecord",{ fileName : "BackJS.hx", lineNumber : 201, className : "microbe.jsTools.BackJS", methodName : "record"});
 	}
 	,spodDelete: function(voName,id) {
-		microbe.tools.Debug.Alerte("",{ fileName : "BackJS.hx", lineNumber : 179, className : "microbe.jsTools.BackJS", methodName : "spodDelete"});
+		microbe.tools.Debug.Alerte("",{ fileName : "BackJS.hx", lineNumber : 182, className : "microbe.jsTools.BackJS", methodName : "spodDelete"});
 		var reponse = haxe.Http.requestUrl(microbe.jsTools.BackJS.back_url + "delete/" + voName + "/" + id);
 	}
 	,deleteSpod: function() {
 		js.Lib.window.location.href = microbe.jsTools.BackJS.back_url + "delete/" + this.classMap.voClass + "/" + this.classMap.id;
 	}
 	,onAjoute: function(e) {
-		microbe.tools.Debug.Alerte("ajoute",{ fileName : "BackJS.hx", lineNumber : 165, className : "microbe.jsTools.BackJS", methodName : "onAjoute"});
+		microbe.tools.Debug.Alerte("ajoute",{ fileName : "BackJS.hx", lineNumber : 168, className : "microbe.jsTools.BackJS", methodName : "onAjoute"});
 		js.Lib.window.location.href = microbe.jsTools.BackJS.back_url + "ajoute/" + this.currentVo;
 	}
 	,listen: function() {
-		microbe.tools.Debug.Alerte("listen",{ fileName : "BackJS.hx", lineNumber : 155, className : "microbe.jsTools.BackJS", methodName : "listen"});
+		microbe.tools.Debug.Alerte("listen",{ fileName : "BackJS.hx", lineNumber : 158, className : "microbe.jsTools.BackJS", methodName : "listen"});
 		microbe.form.elements.CollectionElement.deleteSignal.add($bind(this,this.deleteCollection));
 		microbe.form.elements.DeleteButton.sign.add($bind(this,this.deleteSpod));
 		new js.JQuery(".ajout").click($bind(this,this.onAjoute));
@@ -4637,16 +4638,16 @@ microbe.jsTools.BackJS.prototype = {
 	}
 	,onSortChanged: function(e,ui) {
 		var pop = this.sort.sortable("serialize",{ attribute : "tri", key : "id"});
-		haxe.Log.trace(pop,{ fileName : "BackJS.hx", lineNumber : 131, className : "microbe.jsTools.BackJS", methodName : "onSortChanged"});
+		haxe.Log.trace(pop,{ fileName : "BackJS.hx", lineNumber : 134, className : "microbe.jsTools.BackJS", methodName : "onSortChanged"});
 		var liste = pop.split("&id=");
 		liste[0] = liste[0].split("id=")[1];
 		var req = new haxe.Http(microbe.jsTools.BackJS.back_url + "reorder/" + this.currentVo);
 		req.setParameter("orderedList",haxe.Serializer.run(liste));
 		req.onData = function(d) {
-			haxe.Log.trace(d,{ fileName : "BackJS.hx", lineNumber : 140, className : "microbe.jsTools.BackJS", methodName : "onSortChanged"});
+			haxe.Log.trace(d,{ fileName : "BackJS.hx", lineNumber : 143, className : "microbe.jsTools.BackJS", methodName : "onSortChanged"});
 		};
 		req.request(true);
-		haxe.Log.trace("afterreorder",{ fileName : "BackJS.hx", lineNumber : 142, className : "microbe.jsTools.BackJS", methodName : "onSortChanged"});
+		haxe.Log.trace("afterreorder",{ fileName : "BackJS.hx", lineNumber : 145, className : "microbe.jsTools.BackJS", methodName : "onSortChanged"});
 	}
 	,start: function() {
 		if(this.classMap != null) {
@@ -4672,6 +4673,9 @@ microbe.jsTools.BackJS.prototype = {
 	,init: function() {
 		this.start();
 	}
+	,injected: function() {
+		haxe.Log.trace("injected natif",{ fileName : "BackJS.hx", lineNumber : 62, className : "microbe.jsTools.BackJS", methodName : "injected"});
+	}
 	,sort: null
 	,microbeElements: null
 	,classMap: null
@@ -4691,8 +4695,16 @@ microbe.jsTools.ElementBinder.prototype = {
 	}
 	,createElement: function(microChamps) {
 		if(microChamps.element != null) {
-			var classe = Type.resolveClass(microChamps.element);
-			var d = Type.createInstance(classe,[microChamps]);
+			var d = null;
+			try {
+				var classe = Type.resolveClass(microChamps.element);
+				if(classe == null) throw "not a component";
+				d = Type.createInstance(classe,[microChamps]);
+			} catch( msg ) {
+				if( js.Boot.__instanceof(msg,String) ) {
+					js.Lib.alert("le composant : " + microChamps.element + " n'existe pas : " + msg);
+				} else throw(msg);
+			}
 			this.add(d);
 		} else {
 			var fake = new microbe.form.AjaxElement(microChamps);
@@ -4701,7 +4713,7 @@ microbe.jsTools.ElementBinder.prototype = {
 	}
 	,createCollectionElement: function(microChamps,position) {
 		var d = Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[microChamps,position]);
-		microbe.tools.Debug.Alerte(Std.string(position + "-pos"),{ fileName : "ElementBinder.hx", lineNumber : 34, className : "microbe.jsTools.ElementBinder", methodName : "createCollectionElement"});
+		microbe.tools.Debug.Alerte(Std.string(position + "-pos"),{ fileName : "ElementBinder.hx", lineNumber : 37, className : "microbe.jsTools.ElementBinder", methodName : "createCollectionElement"});
 	}
 	,elements: null
 	,__class__: microbe.jsTools.ElementBinder
@@ -5143,7 +5155,7 @@ microbe.form.elements.PlusCollectionButton.debug = 0;
 microbe.form.elements.PlusCollectionButton.cont = 0;
 microbe.form.elements.TagView.debug = 1;
 microbe.form.elements.TestCrossAjax.debug = false;
-microbe.jsTools.BackJS.debug = 1;
+microbe.jsTools.BackJS.debug = 0;
 microbe.jsTools.BackJS.base_url = js.Lib.window.location.protocol + "//" + js.Lib.window.location.host;
 microbe.jsTools.BackJS.back_url = microbe.jsTools.BackJS.base_url + "/index.php/pipo/";
 microbe.jsTools.ElementBinder.debug = 0;

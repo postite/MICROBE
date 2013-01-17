@@ -25,10 +25,17 @@ class Install extends GenericController
 	}
 
 	function index(){
+
+
+		var u:vo.UserVo= new vo.UserVo();
+		u.mdp="admin";
+		u.nom= "admin";
+		u.insert();
+
 		// TableCreate.create(vo.News.manager);
-		// TableCreate.create(vo.UserVo.manager);
-		// TableCreate.create(vo.Taxo.manager);
-		//TableCreate.create(vo.TagSpod.manager);
+		TableCreate.create(vo.UserVo.manager);
+		TableCreate.create(vo.Taxo.manager);
+		TableCreate.create(vo.TagSpod.manager);
 
 	}
 }
