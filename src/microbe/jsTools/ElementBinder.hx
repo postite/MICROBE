@@ -23,11 +23,14 @@ class ElementBinder
 		//"new".Alerte();
 	//Imports.pack("microbe.form.elements",false);
 	//Imports.pack("elements",false);
-		
+		//js.Lib.setErrorHandler(myHandler);
 		elements= new List<AjaxElement>();
 	}
 	
-	
+	 // static function myHandler( msg : String, stack : Array<String> ) {
+  //       js.Lib.alert(msg+stack);
+  //       return true;
+  //   }
 	public function createCollectionElement(microChamps:IMicrotype,?position:Int) : Void {
 		
 		var d:AjaxElement=cast Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[microChamps,position]);
@@ -39,11 +42,23 @@ class ElementBinder
 		//if (microChamps==null )return;
 		//Std.string(microChamps.element).Alerte();
 		if( microChamps.element!=null){
-		var classe=Type.resolveClass(microChamps.element);
+			
+			var d:AjaxElement=null;
 		
+		try{ 
+		var classe=Type.resolveClass(microChamps.element);
+		if (classe==null)throw "not a component";
+		d=cast Type.createInstance(classe,[microChamps]);
+
+		} catch( msg : String ) {
+		
+   		js.Lib.alert(Std.format("le composant : ${microChamps.element} n\'existe pas : $msg"));
+		}
 		//Type.getClassName(classe).Alerte();
-		var d:AjaxElement=cast Type.createInstance(classe,[microChamps]);
 		this.add(d);
+		
+
+		
 		}else{
 			var fake=new AjaxElement(microChamps);
 			this.add(fake);
