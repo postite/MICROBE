@@ -45,7 +45,14 @@ class AjaxDate extends AjaxElement{
 					valeur= DateTools.format(Date.now(),"%Y-%m-%d").toString();
 					
 				}
-				_date=Date.fromString(valeur);
+				try{
+					_date=Date.fromString(valeur);
+					}catch(e:String){
+						Lib.alert("erreur de parsage de Date "+e);
+						var fake=DateTools.format(Date.now(),"%Y-%m-%d").toString();
+						_date=Date.fromString(fake);
+					}
+				
 				//Lib.alert("date="+_date);
 				var format=DateTools.format(_date,"%Y-%m-%d");
 				//Lib.alert("format="+format);
