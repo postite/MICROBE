@@ -6,16 +6,24 @@ import haxigniter.server.Controller;
 import haxigniter.common.libraries.ParsedUrl;
 
 #if neko
-import neko.Web;
-import neko.io.File;
-import neko.io.FileOutput;
-import neko.io.Path;
+ import neko.Web;
+// import neko.io.File;
+// import neko.io.FileOutput;
+ import neko.io.Path;
 #elseif php
-import php.Web;
-import php.io.File;
-import php.io.FileOutput;
-import php.io.Path;
+ import php.Web;
+// import php.io.File;
+// import php.io.FileOutput;
+ import haxe.io.Path;
+import php.Lib;
 #end
+
+
+
+import sys.io.File;
+import sys.io.FileOutput;
+//import sys.io.Path;
+
 
 import haxe.io.Bytes;
 
@@ -83,6 +91,7 @@ class FileUploadDecorator extends RequestHandlerDecorator
 					}
 
 					arguments.push(hashFile);
+					arguments.push(currentWrittenByte);
 				}
 				
 				return RequestResult.methodCall(object, method, arguments);
@@ -110,9 +119,16 @@ class FileUploadDecorator extends RequestHandlerDecorator
             currentFileFieldName = fieldName;
             
 			//FIXME : Maybe make a config entry for temp directory ?
-			
-			var tmpPath = Path.directory(Web.getCwd())+"/www/runtime/cache/igni-"+haxe.Md5.encode(Std.string(Math.random() + Math.random()));
-			hashFile.set(fieldName, new FileInfo(fileName, tmpPath));
+			///TODO check path
+			var tmpPath = Path.directory(Web.getCwd())+"/runtime/cache/igni-"+haxe.Md5.encode(Std.string(Math.random() + Math.random()));
+			var standardizedName= StringTools.replace(fileName," ","_");
+			//var standardizedName= untyped __call__("strtr", fileName, "àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ$&+!*'(), ","aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY__________");
+			//var str = "aaabcbcbcbz";
+   //var r = ~/&(.)[^;]+/; 
+
+    var r =~/[\x80-\xFF]/;
+   standardizedName=r.replace(standardizedName,"-"); // "aaabcbcbcxx"
+			hashFile.set(fieldName, new FileInfo(standardizedName, tmpPath));
 
 			currentFile = File.write(tmpPath, true);
 		}
@@ -157,14 +173,30 @@ class FileInfo
 		this.name = name;
 	}
 
-    public function copyTo(relpath:String):String
+//     public function copyTo(relpath:String):String
+//     {
+// //return relpath;
+// microbe.controllers.GenericController.appDebug.log("realpath="+(relpath));
+// 	        if (!(Path.withoutDirectory(relpath) == ""))
+// 	        	         {
+// 	        	         	microbe.controllers.GenericController.appDebug.log("realpath+++"+name);
+// 	        	        	 relpath += name;
+// 	        	         }
+// 	      microbe.controllers.GenericController.appDebug.log("realpath="+relpath);
+// 	        File.copy(tmpPath,relpath);
+// 			return name;
+//     }
+
+    public function copyTo(relpath : String)
     {
-//return relpath;
-	        if (!(Path.withoutDirectory(relpath) == ""))
-	        	         {
-	        	        	 relpath += name;
-	        	         }
-	        File.copy(tmpPath,relpath);
-			return name;
+    	//microbe.controllers.GenericController.appDebug.log("initrealpath="+relpath);
+        if (Path.withoutDirectory(relpath) == "")
+        {
+        	//microbe.controllers.GenericController.appDebug.log("loop="+relpath+"name="+name);
+            relpath += name;
+        }
+       // microbe.controllers.GenericController.appDebug.log(Path.directory(Web.getCwd()) + "/"+relpath);
+        File.copy(tmpPath, Path.directory(Web.getCwd())  + relpath);
+        return name;
     }
 }
