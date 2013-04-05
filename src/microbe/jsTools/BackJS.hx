@@ -18,7 +18,8 @@ import microbe.form.elements.PlusCollectionButton;
 
 #if elements 
 import microbe.ImportHelper;
-#else
+import Pop;
+#elseif (elements && !basemicrobe)
   #error "add imports in microbe.ImportHelper.hx and compile with -D elements"
 #end
 
@@ -26,7 +27,7 @@ import microbe.ImportHelper;
 class BackJS implements mpartial.Partial
 {
 	
-	public static var debug=1;
+	public static var debug=0;
 	//singleton instance
 	public static var instance(getInstance,null):BackJS;
 	
@@ -41,7 +42,7 @@ class BackJS implements mpartial.Partial
 	
 	//model
 	public var microbeElements:ElementBinder;
-	
+	public var tamereenslip:Dynamic;
 	
 	var sort:Sortable;
 	
@@ -57,12 +58,15 @@ class BackJS implements mpartial.Partial
 		}
 		return instance;
 	}
-	
+	function injected(){
+
+		trace("injected natif");
+	}
 	//constriucteur
 	private function new()
 	{
-	
-
+	injected();
+	var backSignal:microbe.jsTools.BackSignal= new microbe.jsTools.BackSignal();
 	//taken from element Binder to allow lightJSBAck
 	
 	microbe.tools.Mytrace.setRedirection();
@@ -208,11 +212,21 @@ class BackJS implements mpartial.Partial
 		var req= new haxe.Http(back_url+"rec/");
 	//	req.setParameter("voName", voName);
 		req.setParameter("map", compressedValues);
-		req.onData=function(d) { afterRecord(d);}; 
+		req.onData=function(d) { preRedirect(d);}; 
 		req.request(true);
+	}
+	function preRedirect(d) 
+	{
+		trace( "PREREDIRECT");
+		
+		BackSignal.complete.add(afterRecord);
+		BackSignal.preredirect.dispatch("popo");
+
 	}
 	function afterRecord(d) : Void {
 		trace("Fter Record");
+
+
 		Lib.window.location.href=back_url+"nav/"+classMap.voClass+"/"+classMap.id;
 	}
 	
