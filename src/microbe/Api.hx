@@ -314,12 +314,13 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 	
 	//-----------WRITING-----------------
 	
-	public function rec():Void {
+	public function rec():Spodable {
 		getClassMap();
-		recClassMap();			
+		return recClassMap();	
+
 	}
 	
-	function recClassMap() : Void {
+	function recClassMap() : Spodable {
 		trace("record"+map.id);
 		var voInstance:Spodable= null;
 		if( map.id!=null){
@@ -349,6 +350,7 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 		}else{
 		fullSpod.update();
 		}
+		return cast(fullSpod);
 	}
 	
 	public function delete(voName:String,id:Int):Void{
