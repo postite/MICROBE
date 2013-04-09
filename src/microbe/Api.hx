@@ -19,7 +19,7 @@ import vo.Taxo;
 import haxigniter.server.libraries.Url;
 import microbe.TagManager;
 
-
+import microbe.form.Microfield;
 
 
 typedef Compressed=String;
@@ -319,14 +319,22 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 		return recClassMap();	
 
 	}
-	
+
+	// solo recording field
+	public function microRec():Spodable{
+		var cmap:Compressed= Web.getParams().get("micromap");
+		var micromap:Microfield=haxe.Unserializer.run(cmap);
+		var voInstance=getOne(micromap.voName,micromap.voId);
+		Reflect.setField(voInstance,micromap.field,micromap.value);
+		cast(voInstance,sys.db.Object).update();
+		return voInstance;
+	}
 	function recClassMap() : Spodable {
 		trace("record"+map.id);
 		var voInstance:Spodable= null;
 		if( map.id!=null){
 			trace("map.id!=null");
 		voInstance=getOne(map.voClass,map.id);
-		
 		}else{
 		voInstance=Type.createInstance(Type.resolveClass(voPackage +map.voClass),[]);
 		cast (voInstance).insert();
