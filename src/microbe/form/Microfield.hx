@@ -4,6 +4,7 @@ import microbe.form.IMicrotype;
 class Microfield implements IMicrotype
 {
 	
+	public var voId:Int;// pour microrecord  uniquement pour microrecord
 	public var voName:String; //nom du vo sans le package
 	public var field:String; //field in vo/sql
 	public var element:String; //microbe.form.element
