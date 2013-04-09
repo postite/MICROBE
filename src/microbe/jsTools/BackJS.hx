@@ -15,6 +15,8 @@ import microbe.form.elements.CollectionElement;
 import microbe.form.elements.CollectionWrapper;
 import microbe.form.elements.DeleteButton;
 import microbe.form.elements.PlusCollectionButton;
+import microbe.form.elements.RecButton;
+
 
 #if elements 
 import microbe.ImportHelper;
@@ -87,6 +89,7 @@ class BackJS implements mpartial.Partial
 		//c'est moche
 		if( classMap!=null){
 		//Std.string(classMap.submit).Alerte();
+		new RecButton(classMap.submit);
 		new JQuery("#"+classMap.submit).click(function(e):Void{instance.record();});
 		
 	//	parseMap();
@@ -215,18 +218,15 @@ class BackJS implements mpartial.Partial
 		req.onData=function(d) { preRedirect(d);}; 
 		req.request(true);
 	}
-	function preRedirect(d) 
+	function preRedirect(d:Dynamic)
 	{
-		trace( "PREREDIRECT");
-		
-		BackSignal.complete.add(afterRecord);
-		BackSignal.preredirect.dispatch("popo");
-
+		trace( "PREREDIRECT" + d);
+		BackSignal.preredirectomplete.add(afterRecord);
+		BackSignal.preredirect.dispatch(d);
+		//TODO find a way to redirect if no signal interfere...
 	}
 	function afterRecord(d) : Void {
 		trace("Fter Record");
-
-
 		Lib.window.location.href=back_url+"nav/"+classMap.voClass+"/"+classMap.id;
 	}
 	
