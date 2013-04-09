@@ -20,7 +20,7 @@ import microbe.form.Microfield;
 import microbe.form.BrickField;
 import microbe.form.elements.CollectionElement;
 import microbe.form.FormElement;
-
+import microbe.form.elements.RecButton;
 
 
 
@@ -111,7 +111,9 @@ class FormGenerator
 			_classMap.fields=fields;
 						//submission
 						//var deleteaction:String=DeleteButton.action; 
-						var submit = new Button("submit", "enregistrer","enregistrer",BUTTON);
+
+						//var submit = new Button("submit", "enregistrer","enregistrer",BUTTON);
+						var submit = new RecButton("submit", "enregistrer","enregistrer",BUTTON);
 						submit.cssClass="submitor";
 						var delete = new DeleteButton(nomVo+"_"+_formulaire.name+"_effacer", "effacer !");
 						//delete.cssClass="deletebutton";

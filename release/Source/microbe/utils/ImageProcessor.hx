@@ -29,8 +29,8 @@ package microbe.utils;
 
 import haxe.Md5;
 import microbe.utils.GD;
-import php.FileSystem;
-import php.io.File;
+import sys.FileSystem;
+import sys.io.File;
 import php.Lib;
 import php.Sys;
 import php.Web;
@@ -56,12 +56,17 @@ class ImageProcessor
 	
 	public var saveAlpha:Bool;
 	
+	public var mimeType:String;
+	public var outputFormat:ImageOutputFormat;
+	
 	public function new(file:String) 
 	{
 		fileName = file;
 		queue = new List();
 		cache = true;
-		cacheFolder = "./cache";
+		cacheFolder =    ".cache";
+		
+
 		forceNoCache = false;
 		
 		saveAlpha = false;
@@ -69,20 +74,33 @@ class ImageProcessor
 		quality =  .8;
 		format = ImageOutputFormat.JPG;
 		
-		hash = getHash();
+		//hash = getHash();
 		
 		//var fname = fileName.lastIndexOf("/");
 		
-		resource = switch(getFileFormat(file))
+		outputFormat = getFileFormat(file);
+		
+		init();
+	}
+	public function init(){
+		resource = switch(outputFormat)
 		{
-			case ImageOutputFormat.JPG: GD.imageCreateFromJpeg(file);
-			case ImageOutputFormat.GIF: GD.imageCreateFromGif(file);
-			case ImageOutputFormat.PNG: GD.imageCreateFromPng(file);
+			case ImageOutputFormat.JPG: GD.imageCreateFromJpeg(fileName);
+			case ImageOutputFormat.GIF: GD.imageCreateFromGif(fileName);
+			case ImageOutputFormat.PNG: GD.imageCreateFromPng(fileName);
+			case ImageOutputFormat.BMP: GD.imageCreateFromPng(fileName);
+		}
+		
+		mimeType = switch(outputFormat)
+		{
+			case ImageOutputFormat.JPG: "image/jpeg";
+			case ImageOutputFormat.GIF: "image/gif";
+			case ImageOutputFormat.PNG: "image/png";
+			case ImageOutputFormat.BMP: "image/bmp";
 		}
 		
 		if(resource == null) throw("Could not load image");
 	}
-	
 	public function getWidth():Int
 	{
 		return GD.imageSX(resource);
@@ -145,13 +163,6 @@ class ImageProcessor
 		
 		var newResource:ImageResource = GD.imageCreateTrueColor(nw, nh);
 		
-		if( saveAlpha==true){
-       GD.imageAlphaBlending(newResource, false);
-       GD.imageSaveAlpha(newResource,true);
-       var transparent = GD.imageColorAllocateAlpha(newResource, 255, 255, 255, 127);
-       GD.imageFilledRectangle(newResource, 0, 0, nw, nh, transparent);
-		}
-		
 		var success = GD.imageCopyResampled(newResource, resource, 0, 0, 0, 0, nw, nh, ow, oh);
 		if (!success) throw("There was an error resizing the image");
 		
@@ -176,13 +187,6 @@ class ImageProcessor
 		if (nh < 1) nh = 1;
 		
 		var newResource:ImageResource = GD.imageCreateTrueColor(nw, nh);
-		
-		if( saveAlpha==true){
-       GD.imageAlphaBlending(newResource, false);
-       GD.imageSaveAlpha(newResource,true);
-       var transparent = GD.imageColorAllocateAlpha(newResource, 255, 255, 255, 127);
-       GD.imageFilledRectangle(newResource, 0, 0, nw, nh, transparent);
-		}
 		
 		var success = GD.imageCopyResampled(newResource, resource, 0, 0, Std.int((ow - nw) / 2), Std.int((oh - nh) / 2), nw, nh, nw, nh);
 		if (!success) throw("There was an error cropping the image to aspect");
@@ -223,12 +227,7 @@ class ImageProcessor
 		if (nh < 1) nh = 1;
 		
 		var newResource:ImageResource = GD.imageCreateTrueColor(nw, nh);
-		if( saveAlpha==true){
-       GD.imageAlphaBlending(newResource, false);
-       GD.imageSaveAlpha(newResource,true);
-       var transparent = GD.imageColorAllocateAlpha(newResource, 255, 255, 255, 127);
-       GD.imageFilledRectangle(newResource, 0, 0, nw, nh, transparent);
-		}
+		
 		var success = GD.imageCopyResampled(newResource, resource, 0, 0, 0, 0, nw, nh, ow, oh);
 		if (!success) throw("There was an error applying scale to the image");
 		
@@ -273,6 +272,7 @@ class ImageProcessor
 			case "jpg", "jpeg": ImageOutputFormat.JPG;
 			case "gif": ImageOutputFormat.GIF;
 			case "png": ImageOutputFormat.PNG;
+			case "bmp": ImageOutputFormat.BMP;
 		}
 	}
 	
@@ -283,7 +283,7 @@ class ImageProcessor
 			for (field in Reflect.fields(action))
 				s += "&" + field + "=" + Reflect.field(action, field);
 		
-		var stat:FileStat = FileSystem.stat(fileName);
+		var stat:sys.FileStat = FileSystem.stat(fileName);
 		
 		s += "&" + stat.mtime + "&" + stat.ctime + "&" + revision + quality + (saveAlpha ? 1 : 0);
 		
@@ -303,6 +303,7 @@ class ImageProcessor
 			case ImageOutputFormat.GIF: GD.imageGif(resource);
 			case ImageOutputFormat.JPG: GD.imageJpeg(resource, null, Std.int(quality * 100));
 			case ImageOutputFormat.PNG: GD.imagePng(resource);
+			case ImageOutputFormat.BMP: GD.imageWBmp(resource);
 		}
 		
 		var out = untyped __call__("ob_get_contents");
@@ -321,16 +322,11 @@ class ImageProcessor
 			case ImageOutputFormat.GIF: "gif";
 			case ImageOutputFormat.JPG: "jpg";
 			case ImageOutputFormat.PNG: "png";
+			case ImageOutputFormat.BMP: "bmp";
 		}
 		
 		return hash + "." + ext;
 	}
-	
-	
-		
-		
-		
-	
 	
 	public function getOutput(flush:Bool = false):String
 	{
@@ -348,9 +344,11 @@ class ImageProcessor
 				if (!queue.isEmpty()) processQueue();
 				
 				var output = output();
-				
-				File.putContent(cacheFile, output);
-				
+				//microbe.controllers.GenericController.appDebug.log("getOutput"+cacheFile +output);
+				//change for 2.09
+				//File.putContent(cacheFile, output);
+				File.saveContent(cacheFile, output);
+				//end change
 				return output;
 			}
 		} 
@@ -401,6 +399,7 @@ enum ImageOutputFormat
 	JPG;
 	PNG;
 	GIF;
+	BMP;
 }
 
 enum ImageAction

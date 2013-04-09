@@ -11,7 +11,8 @@
 
 lib=$1
 version=$2
-targetd=$TM_PROJECT_DIRECTORY"/release"
+#targetd=$TM_PROJECT_DIRECTORY"/release"
+targetd=./release
 echo $1
 echo $2
 echo "→ Assembling the 'release.zip' package"

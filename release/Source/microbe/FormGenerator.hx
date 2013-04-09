@@ -20,7 +20,7 @@ import microbe.form.Microfield;
 import microbe.form.BrickField;
 import microbe.form.elements.CollectionElement;
 import microbe.form.FormElement;
-
+import microbe.form.elements.RecButton;
 
 
 
@@ -56,10 +56,18 @@ class FormGenerator
 		Imports.pack("microbe.form.elements",false);
 	}
 
-public function render():String{
+	public function render():String{
 	return formulaire+cloud;
-}
-		
+	}
+	public function renderForm():String 
+	{
+		return formulaire.toString();
+	}
+	public function renderCloud() 
+	{
+		this.cloud=new TagView("pif","paf").render();
+		return cloud;
+	}
 		
 		//////// function d'execution des formules de vo ... peut etre a externaliser 
 		
@@ -73,8 +81,9 @@ public function render():String{
 			
 			//instanciation du vo ->spodvo
 			var stringVo = voPackage + nomVo;
-			if(data==null) {
+			if(data==null){
 			spodvo=Type.createInstance(Type.resolveClass(stringVo),[]);
+			//if (Reflect.hasField(spodvo,"date")Reflect.setField(spodvo,"date",Date.now());
 			}else{
 			spodvo=data;
 			_classMap.id=spodvo.id;
@@ -94,15 +103,17 @@ public function render():String{
 				fields.taggable=true;
 		//	var tags=haxe.Serializer.run(TagManager.getTags(TagManager.getSpodName(spodvo)));
 		//	var tagid=haxe.Serializer.run(TagManager.getTagsById(TagManager.getSpodName(spodvo), spodvo.id));
-			this.cloud=new TagView("pif","paf").render();
+			
 				//_formulaire.addElement(new TagView("pif","paf",tags));
-				
+				renderCloud();
 			}	
 			
 			_classMap.fields=fields;
 						//submission
 						//var deleteaction:String=DeleteButton.action; 
-						var submit = new Button("submit", "enregistrer","enregistrer",BUTTON);
+
+						//var submit = new Button("submit", "enregistrer","enregistrer",BUTTON);
+						var submit = new RecButton("submit", "enregistrer","enregistrer",BUTTON);
 						submit.cssClass="submitor";
 						var delete = new DeleteButton(nomVo+"_"+_formulaire.name+"_effacer", "effacer !");
 						//delete.cssClass="deletebutton";
@@ -113,7 +124,7 @@ public function render():String{
 						_classMap.submit=_formulaire.name+"_"+"submit";
 						formulaire=_formulaire;		
 						classMap=_classMap;
-						trace("classMAp="+classMap.fields);
+					//	trace("classMAp="+classMap.fields);
 					//	recurMaptrace(classMap.fields,"-");
 				
 		}
@@ -126,10 +137,10 @@ public function render():String{
 					recurMaptrace(cast chps,indent);
 					
 				}else{
-				trace(indent+"chps="+chps +"<br/>");
-				trace( indent+ chps.field);
-				trace( indent+ chps.value);
-				trace( indent+ chps.voName);
+				//trace(indent+"chps="+chps +"<br/>");
+				//trace( indent+ chps.field);
+				//trace( indent+ chps.value);
+			//	trace( indent+ chps.voName);
 					
 				}
 				
@@ -171,7 +182,7 @@ public function render():String{
 			liste.voName=voName; /// attribution du nomDuVo à la liste
 			liste.type=spodable;
 			liste.id=voInstance.id;
-			trace("yeahhh");
+			//trace("yeahhh");
 			
 					
 			var formule=voInstance.getFormule();
@@ -182,7 +193,7 @@ public function render():String{
 			
 			
 			
-			trace("resolt="+creator.result);
+			//trace("resolt="+creator.result);
 			return creator.result;
 			
 			

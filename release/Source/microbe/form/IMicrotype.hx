@@ -14,6 +14,7 @@ enum InstanceType
 	formElement;
 	collection;
 	spodable;
+	dataElement;
 }
 
 interface IMicrotype

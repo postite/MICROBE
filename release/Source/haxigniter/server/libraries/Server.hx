@@ -3,15 +3,19 @@
 import haxigniter.server.content.ContentHandler;
 import haxigniter.server.session.SessionObject;
 
+
+import haxe.io.Path;
+import sys.io.File;
+import sys.io.FileOutput;
 #if php
-import php.io.Path;
-import php.io.File;
+
+
 import php.Lib;
 import php.Web;
-import php.Sys;
+
 #elseif neko
 import neko.io.Path;
-import neko.io.File;
+
 import neko.Lib;
 import neko.Web;
 import neko.Sys;

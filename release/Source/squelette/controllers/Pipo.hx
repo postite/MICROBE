@@ -15,6 +15,8 @@ import sys.db.Manager;
 import sys.db.Object;
 import microbe.MicroCreator;
 import microbe.form.IMicrotype;
+import vo.Traductable;
+
 class Pipo extends Back
 	{
 		
@@ -55,6 +57,8 @@ class Pipo extends Back
 		//	sys.db.TableCreate.create(vo.RelationTest.manager);
 		//sys.db.TableCreate.create(vo.TagSpod.manager);
 			//sys.db.TableCreate.create(vo.Taxo.manager);
+			//sys.db.TableCreate.create(vo.SubChild.manager);
+
 		//	new vo.Edito();
 			api= new Api();	
 			this.view.assign("contenttype",null);
@@ -62,7 +66,8 @@ class Pipo extends Back
 		
 		public function defaultAssign() 
 		{
-			//	createMenu();
+				//	createMenu();
+				
 				this.view.assign("page", null);
 				this.view.assign("link", url.siteUrl());
 				this.view.assign("backpage",url.siteUrl()+"/pipo");
@@ -70,6 +75,7 @@ class Pipo extends Back
 				jsLib.addOnce(backjs);
 				jsLib.addOnce(GenericController.appConfig.jsPath+"jquery-ui-1.8.14.custom.min.js");
 				this.view.assign("menu", getMenu());
+				this.view.assign("localClass","default");
 				/*this.view.assign("chemins", this.chemins);
 				this.view.assign("menu", null);*/
 				//this.view.assign("content", null);
@@ -77,7 +83,7 @@ class Pipo extends Back
 				this.view.assign("currentVo",null);
 				this.view.assign("jsScript",jsScript);
 				this.view.assign("jsLib",jsLib);
-				
+				this.view.assign("custom",true);
 				this.view.assign("title", "Microbe admin");
 				this.view.assign("scope",this);
 
@@ -114,14 +120,46 @@ class Pipo extends Back
 			jsScript.add(backInstance+".instance.setClassMap('"+generator.compressedClassMap+"');");
 			//jsScript.add("alert('popop');");
 			defaultAssign();
+
 			this.view.assign("currentVo",voName);
+
+			if(Std.is(data,vo.Traductable)){
+				this.view.assign("lang","fr");
+				this.view.assign("linkfr",url.siteUrl()+"/pipo/choix/"+data.id+"/"+voName);
+				//var id_ref=cast(data,vo.Traductable).id_ref;
+				var id_ref=cast (data,vo.Traductable).getTrad("en");
+				if (id_ref==null){
+					//id_ref=0;
+					//return traduit(voName,data.id);
+
+				}
+				this.view.assign("localClass",voName);
+
+			
+				this.view.assign("linken",url.siteUrl()+"/pipo/traduit/"+data.id+"/"+voName+"/en");
+				
+
+
+				this.view.assign("tradContent",generator.renderForm());
+				if(Std.is(data,microbe.vo.Taggable)){
+				this.view.assign ("tradCloud",generator.renderCloud());
+				} else{
+					this.view.assign ("tradCloud","");
+				}
+				this.view.assign("content",this.view.render("back/TradContent.html"));
+					}else{
 			this.view.assign("content", generator.render());
+			}
+			
 			this.view.display("back/design.html");
 		}
 		
 		public function getVoList(voName:String):List<Spodable>{
 		//	return 	spodeur.getRecordList(voName);
-		 return api.getAllorded(voName);
+		//if traducatble 
+		//return api.getSearch(voName,{lang:"fr"});
+		//default better ..
+		return api.getAllorded(voName);
 		}
 		
 		public function getMenu():List<NavItem>{
@@ -133,8 +171,10 @@ class Pipo extends Back
 			trace("index");
 			jsLib.add(backjs);
 			//session.user=null;
-			defaultAssign();		
-			this.view.assign("content", "popopo");
+			defaultAssign();
+			this.view.assign("custom",false);
+			this.view.assign("localClass","index");	
+			this.view.assign("content", this.view.render("back/custom.html"));
 			this.view.display("back/design.html");
 			trace("after");
 		}
@@ -194,6 +234,51 @@ class Pipo extends Back
 					champs:null},field,graine);
 					Lib.print(haxe.Serializer.run(retour));
 		}
+
+
+		public function traduit(id:Int,voName:String,?lang:String) 
+		{
+			var data:Spodable=api.getOne(voName,id);
+			var clone:Bool=config.Config.clone;
+			var traduction_id:Int=cast (data,vo.Traductable).getTrad(lang);
+			var newData:Traductable=null;
+	
+			if(traduction_id==0){
+				if (clone){
+				newData= cast data;
+				cast(newData,Spodable).id=null;
+				}else{
+				newData= cast Type.createInstance(Type.resolveClass(GenericController.appConfig.voPackage+voName),[]);
+					}
+
+			cast(newData,vo.Traductable).id_ref=id;
+			cast(newData,vo.Traductable).lang=lang;
+			generator.generateComplexClassMapForm(voName,cast newData);//
+			}else{
+				generator.generateComplexClassMapForm(voName,api.getOne(voName,traduction_id));
+			}
+			jsLib.addOnce(backjs);//
+			
+			jsScript.add(backInstance+".instance.setClassMap('"+generator.compressedClassMap+"');");
+		
+			defaultAssign();
+				//si on a une page unique , le comportement est different
+			if( Std.is(data,Page))this.view.assign("contenttype","page");
+				
+			this.view.assign("linkfr",url.siteUrl()+"/pipo/choix/"+data.id+"/"+voName);
+			this.view.assign("linken",url.siteUrl()+"/pipo/traduit/"+data.id+"/"+voName+"/en");
+			this.view.assign("currentVo",voName);	
+			this.view.assign("lang","en");
+			//this.view.assign("linken",url.siteUrl()+"/pipo/traduit/"+id_ref+"/"+voName+"/en");
+
+
+			this.view.assign("tradContent",generator.renderForm());
+			this.view.assign ("tradCloud",generator.renderCloud());
+			this.view.assign("content",this.view.render("back/TradContent.html"));
+		
+			this.view.display("back/design.html");
+		}
+
 		public function ajoute(voName:String):Void{
 			trace("ajoute");
 			generator.generateComplexClassMapForm(voName);//
@@ -211,7 +296,12 @@ class Pipo extends Back
 
 		}
 		public function rec(){
-		  return api.rec();
+		  	//var retour=api.rec();
+			Lib.print(api.rec().id); //return spod.id before redirection
+		 // 	return retour;
+		}
+		public function microRec(){
+			Lib.print(api.microRec().id);
 		}
 
 		public function delete(voName:String,id:Int):Void{
@@ -245,6 +335,7 @@ class Pipo extends Back
 						///ça peut etre plus efficace avec un When then
 						for (i in 0...tab.length) {  
 						           db.query("UPDATE "+table+" SET poz = "+i+" WHERE id = "+tab[i]+" ");
+						         
 						          }
 						
 			

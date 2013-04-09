@@ -29,7 +29,7 @@ import controllers.Terazor;
 import controllers.Myback;
 import controllers.Test;
 import controllers.Pipo;
-import vo.MicrobeNews;
+import vo.News;
 import vo.Edito;
 import controllers.Upload;
 import controllers.ImageBase;
@@ -38,6 +38,9 @@ import controllers.Gap;
 import controllers.Login;
 import vo.RelationTest;
 import vo.ChildTest;
+import controllers.Simple;
+import vo.SubChild;
+import controllers.Install;
 
 class Config extends haxigniter.server.Config
 {
@@ -53,8 +56,9 @@ class Config extends haxigniter.server.Config
 	public var frontjsPath:String;
 	public var frontcssPath:String;
 
-	
-	
+	///traduction stuff
+	public static var traductable:Bool=true;
+	public static var clone:Bool=false;
 	
 	/*
 	|--------------------------------------------------------------------------
@@ -407,8 +411,10 @@ class Config extends haxigniter.server.Config
 			cssPath = "/microbe/css/";
 			backjs="backjs.js";
 			voPackage="vo.";
-			uploadsPath=applicationPath+"uploads/";
+			uploadsPath=applicationPath+"/uploads/";
 			imagesPath=uploadsPath+"images/";
+			
+
 			
 			
 			/*

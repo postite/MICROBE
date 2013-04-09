@@ -14,7 +14,7 @@ import microbe.vo.Taggable;
 
 @:table("actu")
 @:id(id)
-class News extends Object , implements Spodable , implements Taggable
+class News extends Object , implements Spodable ,implements Taggable, implements Traductable 
 {
 	public var poz:Int;
 	public var id:SId;
@@ -24,16 +24,28 @@ class News extends Object , implements Spodable , implements Taggable
 	public var image:SString<255>;
 	public var datelitterale:SString<255>;
 	public var en_ligne:SString<255>;
+	public var lang:SString<11>;
+	public var id_ref:Int;
 	
 	public function new() : Void {
 		super();
 		/*
 				sys.db.Manager.cnx = this.db.connection;
 				sys.db.TableCreate.create(manager);*/
+		lang="fr";
 	}
 	public function getTags():List<String>{
 		return new List<String>();
 	}
+	///have to move it to Enum
+public function getTrad(lang:String):Int
+{
+	try{ 
+		return manager.search({id_ref:this.id,lang:lang}).first().id;
+		}catch(e:String){
+		return 0;
+	}
+}
 public function getFormule():Hash<FieldType> 
 {
 	var formule:Hash<microbe.form.FieldType>;
@@ -44,7 +56,12 @@ public function getFormule():Hash<FieldType>
 	formule.set("contenu",{type:formElement,classe:"microbe.form.elements.AjaxEditor",champs:contenu});
 	formule.set("image", {type:formElement,classe:"microbe.form.elements.ImageUploader",champs:image});
 	formule.set("en_ligne",{type:formElement,classe:"microbe.form.elements.CheckBox",champs:en_ligne});
+	
+	formule.set("lang",{type:dataElement,classe:null,champs:lang});
+	formule.set("id_ref",{type:dataElement,classe:null,champs:id_ref});
+
 	return formule;
+
 }
  public function getDefaultField():String{
 	return titre;

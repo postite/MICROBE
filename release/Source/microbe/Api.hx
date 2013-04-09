@@ -17,9 +17,9 @@ import microbe.vo.Spodable;
 import php.Lib;
 import vo.Taxo;
 import haxigniter.server.libraries.Url;
+import microbe.TagManager;
 
-
-
+import microbe.form.Microfield;
 
 
 typedef Compressed=String;
@@ -40,8 +40,8 @@ enum ACTION
 	DELETE;
 }
 
-
-class Api implements haxe.rtti.Infos
+  #if haxe3 @:rttiInfos #end
+class Api #if !haxe3  implements haxe.rtti.Infos #end
 {
 	
 		private var map:ClassMap;
@@ -52,6 +52,7 @@ class Api implements haxe.rtti.Infos
 		
 	public function new()
 	{
+		microbe.tools.Mytrace.setRedirection();
 		cnx = Manager.cnx = GenericController.appDb.connection;
 		Manager.initialize();
 		voPackage=GenericController.appConfig.voPackage;
@@ -73,8 +74,12 @@ class Api implements haxe.rtti.Infos
 			//var tags=Taxo.m
 			return tags;
 		}*/
+
+		/// mmm pas normal cette function .. getSpodsBytags devrait avoir un spodstring en arg
+		//par qui est elle appelée
+
  	public function spodByTag(s:String):List<Spodable>{
-		var spods=Taxo.manager.getSpodsByTag(s);
+		var spods=TagManager.getSpodsByTag(s);
 		Lib.print(spods);
 		
 		/*for (a in spods){
@@ -89,7 +94,7 @@ class Api implements haxe.rtti.Infos
 	//à privatiser 
 	public function recTag(tag:String,spod:String,spod_id:Int){
 		tag=StringTools.urlDecode(tag);
-		if( Taxo.manager.getTag(tag,spod) ==null){
+		if( TagManager.getTaxo(tag,spod) ==null){
 		var neotag= new Taxo();
 		neotag.tag=tag.toLowerCase();
 		neotag.spodtype=spod.toLowerCase();
@@ -103,10 +108,10 @@ class Api implements haxe.rtti.Infos
 	
 	public function dissociateTag(tag:String,spod:String,spod_id:Int){
 		tag=StringTools.urlDecode(tag);
-		Taxo.manager.dissociate(tag,spod,spod_id);
+		TagManager.dissociate(tag,spod,spod_id);
 	}
 	public function associateTag(tag:String,spod:String,spodId:Int){
-		Taxo.manager.associate(tag,spod,spodId);
+		TagManager.associate(tag,spod,spodId);
 	}
 	
 	
@@ -134,23 +139,28 @@ class Api implements haxe.rtti.Infos
 						var spodName= args.slice(2)[0];
 						var spods=null;
 						
-							spods=microbe.TagManager.getSpodsbyTag(tagName,spodName);
+							spods=microbe.TagManager.getSpodsByTag(tagName,spodName);
 						
 						
 					
 							Lib.print(haxe.Serializer.run(spods));
+
 							//Lib.print(haxe.Serializer.run("heho"));
 					case "spod":
-//trace("spod");
+					trace("spod");
 					//on attends une url de ce type...
 					//http://localhost:8888/index.php/gap/tags/spod/blog
 						var args=rest.slice(1);
 						var spodName=args[0].toLowerCase();
+						trace("spod"+spodName);
 						var spodId= Std.parseInt(args.slice(2)[0]);
 						
 						
 						var tags=microbe.TagManager.getTags(spodName,spodId);
+						trace("microbe.TagManager.getTags"+tags);
+						trace("length="+tags.length);
 						
+						//Lib.print("zouhhhhha"+"spodName="+spodName+"spodId="+spodId+"----");
 						Lib.print(haxe.Serializer.run(tags));
 						//Lib.print(haxe.Serializer.run("heho"+spodName));
 					default:
@@ -159,11 +169,26 @@ class Api implements haxe.rtti.Infos
 				
 	    		//associateTag(_tag,2);
 	}
-	
+	public function test(arg:String) 
+	{
+		Lib.print(arg);
+	}
+	//test access specifique method on Spod
+	public function trigger(_voName:String,functionName:String,?params:Array<String>)
+	{
+		//return _voName;
+		var instance=createInstance(voPackage+_voName);
+		//return instance;
+		Lib.print( Reflect.callMethod(instance,functionName,params));
+	}
+
+
+
 	//recuper la valeur de "map" passée en POST dans l'appel sous forme Serialisée
 	function getClassMap():ClassMap{
 		var cmap:Compressed= Web.getParams().get("map");
 		map = haxe.Unserializer.run(cmap);
+		trace( "map="+map);
 		return map;
 	}
 	
@@ -177,14 +202,17 @@ class Api implements haxe.rtti.Infos
 			//trace("getOne="+_vo+"id="+id);
 			return cast getManager(_vo).unsafeGet(id);
 		}
-			public function getLast(_vo:String) : Spodable {
+			public function getLast(_vo:String,?search:Dynamic) : Spodable {
 				//var inst:Object= cast this.createInstance(_vo);
 				//trace("getOne="+_vo+"id="+id);
 				var all=null;
 				try {
 				    // ...
-				all= cast getManager(_vo).all();
-				
+				    if( search!=null){
+				    	all= cast getManager(_vo).dynamicSearch(search);
+				    	}else{
+					all= cast getManager(_vo).all();
+					}
 				} catch( msg : String ) {
 				    trace("Error occurred: " + msg);
 				}
@@ -210,29 +238,64 @@ class Api implements haxe.rtti.Infos
 		//	Lib.print(compressed);
 		}
 		
-		
-		public function getAllorded(_vo:String):List<Spodable>{
+		public function getAllorded(_vo:String,?arg:Array<Dynamic>):List<Spodable>{
+		//public function getAllorded(_vo:String):Dynamic{
+
 			var stringVo = voPackage+_vo; 
 			var liste:List<Object>=new List<Object>();
 			//var manager =  Type.createInstance(
+
 			var manager:Manager<Object>=cast Reflect.field(Type.resolveClass(stringVo),"manager");
+			
 			//var manager= vo.RelationTest.manager;
 			//var liste:List<Dynamic> = manager.all(true);
 			var table=manager.dbInfos().name;
+			
 			//trace("table="+table);
 			//var liste:List<Dynamic> = manager.all(true);
+
 			for (a in Type.getClassFields(Type.resolveClass(stringVo))){
 				if (a=="getAllorded"){
-					liste= Reflect.callMethod( Type.resolveClass(stringVo), "getAllorded", []);
+					liste= Reflect.callMethod( Type.resolveClass(stringVo), "getAllorded", arg);
 					return  cast liste;
 				}
 			}
-		
-				trace( "nofunction");
+			
+				
 			 liste =cast manager.unsafeObjects("SELECT * FROM "+table+" ORDER BY poz",true);
 			
 			return  cast liste;
 			
+		}
+
+		public function getSearch(_vo:String,search:Dynamic):List<Spodable>
+		{
+			var stringVo = voPackage+_vo; 
+			var liste:List<Object>=new List<Object>();
+			//var manager =  Type.createInstance(
+
+			var manager:Manager<Object>=cast Reflect.field(Type.resolveClass(stringVo),"manager");
+			
+			//var manager= vo.RelationTest.manager;
+			//var liste:List<Dynamic> = manager.all(true);
+			var table=manager.dbInfos().name;
+			
+			//trace("table="+table);
+			//var liste:List<Dynamic> = manager.all(true);
+
+			for (a in Type.getClassFields(Type.resolveClass(stringVo))){
+				
+				if (a=="getAllorded"){
+
+					liste= Reflect.callMethod( Type.resolveClass(stringVo), "getAllorded", []);
+					return  cast liste;
+				}
+			}
+			
+				
+			 liste =cast manager.dynamicSearch(search);
+			
+			return  cast liste;
 		}
 		
 		public function getAll(_vo:String):List<Spodable> {
@@ -251,20 +314,34 @@ class Api implements haxe.rtti.Infos
 	
 	//-----------WRITING-----------------
 	
-	public function rec():Void {
+	public function rec():Spodable {
 		getClassMap();
-		recClassMap();			
+		return recClassMap();	
+
 	}
-	
-	function recClassMap() : Void {
+
+	// solo recording field
+	public function microRec():Spodable{
+		var cmap:Compressed= Web.getParams().get("micromap");
+		var micromap:Microfield=haxe.Unserializer.run(cmap);
+		var voInstance=getOne(micromap.voName,micromap.voId);
+		Reflect.setField(voInstance,micromap.field,micromap.value);
+		cast(voInstance,sys.db.Object).update();
+		return voInstance;
+	}
+	function recClassMap() : Spodable {
 		trace("record"+map.id);
 		var voInstance:Spodable= null;
 		if( map.id!=null){
+			trace("map.id!=null");
 		voInstance=getOne(map.voClass,map.id);
-		trace("map.id="+map.id);
 		}else{
 		voInstance=Type.createInstance(Type.resolveClass(voPackage +map.voClass),[]);
+		cast (voInstance).insert();
+			cast(voInstance).id= microbe.controllers.GenericController.appDb.connection.lastInsertId();
+			trace("MONID="+cast(voInstance).id);
 		
+		//voInstance.update();
 		}
 		trace("after");
 	//cast(voInstance).insert();
@@ -273,12 +350,15 @@ class Api implements haxe.rtti.Infos
 		creator.source=map.fields;
 		creator.data=voInstance;
 		var fullSpod:Object=cast creator.record();
-		trace("beforeRec="+fullSpod);
+		// trace("beforeRec="+Type.typeof(cast(fullSpod).date));
+		// trace("beforeReccheck date="+cast(fullSpod).date.getTime());
+		cast(fullSpod).date=Date.now();
 		if(cast(fullSpod).id==null){
 		fullSpod.insert();
 		}else{
 		fullSpod.update();
 		}
+		return cast(fullSpod);
 	}
 	
 	public function delete(voName:String,id:Int):Void{

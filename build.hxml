@@ -19,9 +19,11 @@
 -lib feffects
 -lib postite
 -debug
+-D basemicrobe
 -lib hxs
+-lib msignal
 -D noEmbedJS
--D elements
+
 #--no-output
 #--no-traces
 

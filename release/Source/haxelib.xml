@@ -3,7 +3,7 @@
     <tag v="js/php"/>
     <tag v="example"/>
     <description>this is an experimental framework to compile pseudo cms</description>
-    <version name="0.6">second release, everything is working almost correctly</version>
+    <version name="1">tag evoluted branch</version>
 </project>
 
 

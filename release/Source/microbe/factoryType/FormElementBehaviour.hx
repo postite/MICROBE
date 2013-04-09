@@ -16,11 +16,11 @@ class FormElementBehaviour implements IBehaviour
 	}
 	public function parse(source:IMicrotype):String{
 		source.value=source.value+"___modif";
-		return "im a formElement"+source.voName;
+		return "im a dataElement"+source.voName;
 
 	}
 	public function create(voName:String,element:FieldType,field:String,?formulaire:Form):IMicrotype{
-
+		trace(voName+"it s a formElement >"+element);
 		var fieldClass= Type.resolveClass(element.classe);
 		var micro:Microfield=creeMicroFieldListElement(field,element,voName,formulaire);		
 
@@ -32,10 +32,11 @@ class FormElementBehaviour implements IBehaviour
 		}
 		
 	public function record(source:IMicrotype,data:Spodable):Spodable {
-			trace("elementVAlue="+data);
+
+			trace("FormElementBehaviour"+source.field +"--"+source.value);
 			Reflect.setField(data,source.field, source.value);
-			trace("afterReflect"+Reflect.field(data, source.field));
-			trace("titre value="+Reflect.field(data, "titre"));
+			// trace("titre value="+Reflect.field(data, "titre"));
+			// trace("DATE value="+Reflect.field(data, "date"));
 			return data;
 		}
 		
@@ -52,7 +53,13 @@ class FormElementBehaviour implements IBehaviour
 			brickElement.element=element.classe; //instancier MicrobeElement
 			brickElement.elementId =voName+"_"+field;
 			brickElement.type=element.type;
-			brickElement.value=Reflect.field(data,field);
+
+			/// forcer le toString() pour les dates sinon il fait un Std.string auto!
+			//et std.string génére une date de type TUE 23...
+			var val:Dynamic=Reflect.field(data,field);
+			if( Std.is(val,Date)){ val=val.toString();}
+			brickElement.value=val;
+
 			return brickElement;
 		}
 		

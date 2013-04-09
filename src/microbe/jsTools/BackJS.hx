@@ -83,6 +83,7 @@ class BackJS implements mpartial.Partial
 	function init() : Void {
 	//	"init".Alerte();
 		start();
+		BackSignal.requestSaving.add(microRecord);
 	}
 	
 	public function start():Void{
@@ -202,6 +203,7 @@ class BackJS implements mpartial.Partial
    	}
 
 		AjaxFormTraitement();
+		
 		trace("finrecord");
    }
 
@@ -215,13 +217,25 @@ class BackJS implements mpartial.Partial
 		var req= new haxe.Http(back_url+"rec/");
 	//	req.setParameter("voName", voName);
 		req.setParameter("map", compressedValues);
-		req.onData=function(d) { preRedirect(d);}; 
+		req.onData=function(d) {preRedirect(d);}; 
 		req.request(true);
 	}
+
+	public function microRecord(m:Microfield){
+		trace("classMAp="+classMap +"back_url="+back_url);
+		var req= new haxe.Http(back_url+"microRec/");
+	//	req.setParameter("voName", voName);
+		req.setParameter("micromap", haxe.Serializer.run(m));
+		req.onData=function(d) { microbe.jsTools.BackSignal.requestSavingComplete.dispatch(d);}; 
+		req.request(true);
+	}
+
+
 	function preRedirect(d:Dynamic)
 	{
 		trace( "PREREDIRECT" + d);
 		BackSignal.preredirectomplete.add(afterRecord);
+		
 		BackSignal.preredirect.dispatch(d);
 		//TODO find a way to redirect if no signal interfere...
 	}

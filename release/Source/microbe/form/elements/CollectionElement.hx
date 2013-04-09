@@ -42,9 +42,10 @@ class CollectionElement extends FormElement
 
 		
 		var str="<div class='collection' name='"+n+"' id='"+n+pos+"' pos='"+pos+"' tri='id_"+collItemId+"'>";
-	//	str+= "<span>length="+inside.length+"</span>";
+	#if microbeDebug
 		str+="<span class='realpos'> realpos="+collItemId+"</span>";
 		str+="<span class='pos'> pos="+pos+"</span>";
+	#end
 		str+="<button value='delete' type='BUTTON' id='delete"+pos+"' class='deletecollection' >delete</button>";
 	
 		  for(item in inside){
@@ -52,7 +53,7 @@ class CollectionElement extends FormElement
 			item.form=form;
 			//str+=item.test();
 			
-			str+=item.value;
+			//str+=item.value;
 			str+="<div>";
 			str+="<label for='"+item.name+"'>"+item.label+"</label>";
 			str+=item.render(pos);

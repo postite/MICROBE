@@ -8,19 +8,28 @@ using microbe.tools.Debug;
 import microbe.notification.Note;
 import js.JQuery;
 import js.Lib;
-import jquery.ui.Sortable;
-
-
+import postite.jquery.ui.Sortable;
+import microbe.macroUtils.Imports;
 import microbe.form.elements.TagView;
 import microbe.form.elements.CollectionElement;
 import microbe.form.elements.CollectionWrapper;
 import microbe.form.elements.DeleteButton;
 import microbe.form.elements.PlusCollectionButton;
+import microbe.form.elements.RecButton;
 
-class BackJS
+
+#if elements 
+import microbe.ImportHelper;
+import Pop;
+#elseif (elements && !basemicrobe)
+  #error "add imports in microbe.ImportHelper.hx and compile with -D elements"
+#end
+
+@:expose("microbe.jsTools.BackJS")
+class BackJS implements mpartial.Partial
 {
 	
-	public static var debug=1;
+	public static var debug=0;
 	//singleton instance
 	public static var instance(getInstance,null):BackJS;
 	
@@ -35,11 +44,11 @@ class BackJS
 	
 	//model
 	public var microbeElements:ElementBinder;
-	
+	public var tamereenslip:Dynamic;
 	
 	var sort:Sortable;
 	
-	public static function main() : Void {
+	public static function main() : Void { 
 		//à voir avec cette histoire de Singleton
 		instance=new BackJS();
 	}
@@ -51,11 +60,20 @@ class BackJS
 		}
 		return instance;
 	}
-	
+	function injected(){
+
+		trace("injected natif");
+	}
 	//constriucteur
 	private function new()
 	{
-	"new".Alerte();
+	injected();
+	var backSignal:microbe.jsTools.BackSignal= new microbe.jsTools.BackSignal();
+	//taken from element Binder to allow lightJSBAck
+	
+	microbe.tools.Mytrace.setRedirection();
+
+	Imports.pack("microbe.form.elements",false);
 	//base_url=Lib.window.location.protocol+"//"+Lib.window.location.host;
 	//back_url=base_url+"/index.php/pipo/"; //TODO replace pipo par config
 	new JQuery("document").ready(function(e):Void{instance.init();});
@@ -65,12 +83,14 @@ class BackJS
 	function init() : Void {
 	//	"init".Alerte();
 		start();
+		BackSignal.requestSaving.add(microRecord);
 	}
 	
 	public function start():Void{
 		//c'est moche
 		if( classMap!=null){
-		Std.string(classMap.submit).Alerte();
+		//Std.string(classMap.submit).Alerte();
+		new RecButton(classMap.submit);
 		new JQuery("#"+classMap.submit).click(function(e):Void{instance.record();});
 		
 	//	parseMap();
@@ -81,19 +101,21 @@ class BackJS
 		if (classMap.fields.taggable==true){
 			
 			//mettre une condition si pas de Tag
+
 			new TagView(classMap.fields);
+			
 		}
-	}
-		"".Alerte();
+	
+		//"".Alerte();
 		
 		microbeElements=new ElementBinder();
-		"".Alerte();
+		//"".Alerte();
 		var deleteBouton= new DeleteButton(classMap.voClass+"_form_effacer");
 		var parser=new MapParser(microbeElements);
 		
-		"beforeparse".Alerte();
+		//"beforeparse".Alerte();
 		parser.parse(classMap);
-		"afterparse".Alerte();
+		//"afterparse".Alerte();
 		var wrapper= new CollectionWrapper(); /// added dans la new version plus
 		CollectionWrapper.plusInfos.add(PlusCollection);
 		var sortoptions:SortableOptions= cast {};
@@ -108,7 +130,8 @@ class BackJS
 		//var note= new Note("hello",alerte);
 		//note.execute();
 		listen();
-		"endStart".Alerte();
+		//"endStart".Alerte();
+	}
 	}
 	
 	public function onSortChanged(e:JqEvent,ui:UI):Void{
@@ -131,7 +154,7 @@ class BackJS
 	//	trace("setClassMAp");
 	//	compressedMap.Alerte();
 		classMap=haxe.Unserializer.run(compressedMap);
-		"".Alerte();
+		//"".Alerte();
 		//Lib.alert("hello" +classMap);
 	}
 	
@@ -154,7 +177,7 @@ class BackJS
 
 	///utilisé par bouton delete
 	function deleteSpod():Void{
-		"sur?".Alerte();
+		
 	//Lib.window.location.href="http://localhost:8888/index.php/myback/delete/"+classMap.voClass+"/"+classMap.id;
 		Lib.window.location.href=back_url+"delete/"+classMap.voClass+"/"+classMap.id;
 	}
@@ -170,27 +193,51 @@ class BackJS
 	///appelé par bouton enregistrer
    public function record(){
    	trace("clika"+microbeElements);
-   	"record".Alerte();
+   
    	for( mic in microbeElements){
-		//	mic.getValue().Alerte();
-			trace("micVAlue="+mic.getValue());
+		
+		if(mic.element!=null){
    		mic.microfield.value= mic.getValue();
+   		}
+   		//Lib.alert("mic="+mic.microfield.value);
    	}
+
 		AjaxFormTraitement();
+		
 		trace("finrecord");
    }
 
    	//utilisé à l'enregistrement
 	public function AjaxFormTraitement(){
 		Std.string(classMap).Alerte();
+		trace("classMAp="+classMap);
 		var compressedValues=haxe.Serializer.run(classMap);
 	//	back_url.Alerte();
 		trace("classMAp="+classMap +"back_url="+back_url);
 		var req= new haxe.Http(back_url+"rec/");
 	//	req.setParameter("voName", voName);
 		req.setParameter("map", compressedValues);
-		req.onData=function(d) { afterRecord(d);}; 
+		req.onData=function(d) {preRedirect(d);}; 
 		req.request(true);
+	}
+
+	public function microRecord(m:Microfield){
+		trace("classMAp="+classMap +"back_url="+back_url);
+		var req= new haxe.Http(back_url+"microRec/");
+	//	req.setParameter("voName", voName);
+		req.setParameter("micromap", haxe.Serializer.run(m));
+		req.onData=function(d) { microbe.jsTools.BackSignal.requestSavingComplete.dispatch(d);}; 
+		req.request(true);
+	}
+
+
+	function preRedirect(d:Dynamic)
+	{
+		trace( "PREREDIRECT" + d);
+		BackSignal.preredirectomplete.add(afterRecord);
+		
+		BackSignal.preredirect.dispatch(d);
+		//TODO find a way to redirect if no signal interfere...
 	}
 	function afterRecord(d) : Void {
 		trace("Fter Record");

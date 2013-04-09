@@ -1,0 +1,235 @@
+
+CSS("@font-face") {
+    font-family: 'Lobster13Regular';
+    src: CSS("url('fonts/Lobster/Lobster_1.3-webfont.eot')");
+    src: CSS("url('fonts/Lobster/Lobster_1.3-webfont.eot?#iefix') format('embedded-opentype'),
+             url('fonts/Lobster/Lobster_1.3-webfont.woff') format('woff'),
+             url('fonts/Lobster/Lobster_1.3-webfont.ttf') format('truetype'),
+             url('fonts/Lobster/Lobster_1.3-webfont.svg#Lobster13Regular') format('svg');");
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+var mycolor = #DADCCD;
+var myfont = "Helvetica", Arial, sans-serif;
+var myLabelFont='Lobster13Regular';
+var buttonColor=#3A3A3A;
+var buttonColorHover=#D0D0D0;
+var selectedColor=#8E9430;
+
+var blackblock={ 
+	background-color:black;
+	color:white;
+	padding-left:2px;
+	padding-right:2px;
+	line-height:22px;
+	font-size:18px;
+	font-family:"Lobster13Regular";
+	}
+form{
+
+	background-color:$mycolor;
+	font-family:$myfont;
+	display:block;
+	height:100%;
+	float:left;
+	ul{
+	max-width:600px;	
+	}
+	label{
+		$blackblock;
+	}
+	.collectionWrapper{
+		padding:0 10px 0 10px;
+		border: 1px dashed gray;
+		position:relative;
+		//background-color:#CDCDCD;
+	}
+	.collection{
+	/*	float:left;*/
+	padding:5px;
+		margin-bottom:10px;
+		background-color:#DCDCDC;
+		
+		min-width:100px;
+		min-height:100px;
+	}
+	input[type="text"]{
+		background: #fff;
+		  border: none;
+		  border-radius: 3px;
+		/*  font-family: italic 13px Georgia, "Times New Roman", Times, serif;*/
+		  outline: none;
+		  padding: 5px;
+		  width: 200px;
+	}
+	input[type="file"]{
+		color:#fff;
+		 input[type="submit"]{
+			background:$buttonColor ;
+			font:$myLabelFont;
+			  border: none;
+			  border-radius: 20px;
+		}
+	}
+	textarea {
+	  background: #fff;
+	  border: none;
+
+
+	  border-radius: 3px;
+	/*  font-family: italic 13px Georgia, "Times New Roman", Times, serif;*/
+	  outline: none;
+	  padding: 5px;
+	  width: 200px;
+		
+	}
+	textarea:focus{
+		background-color:gray;
+	}
+	button {
+		height:34px; 
+	  background:$buttonColor ;
+	  border: none;
+	  border-radius: 20px;
+	  color: #ffffff;
+	  display: block;
+	font:$myLabelFont;
+	  letter-spacing: 1px;
+	  margin:5px;
+	  padding: 7px 25px;
+	
+	  //text-shadow: 0 1px 1px #000000;
+	  //text-transform: uppercase;
+	
+	}
+	button:hover{
+			 background:$selectedColor;
+			 cursor: pointer;
+			color:$buttonColor;
+		}
+	.tailleSelector{
+		font-size:36px;
+		.taille{
+			border:1px solid  black ;
+		}
+	}
+
+	
+}//fin form closure
+
+
+#tagSelector{
+	position:absolute;
+	right:0;
+	background-color:#00aaff;
+	width:150px;
+	float:left;
+	
+	.tags{
+		float:right;
+	}
+	.tagitem{
+	position:relative;
+	
+	width:100px;
+	height:32px;
+		.tag{
+			float:left;
+		height:32px;
+		line-height:32px;
+		font-size:18px;
+		font-family:$myLabelFont;
+		}
+		.minus{
+			
+			float:left;
+			background-image: url('assets/images/tag_03.png');
+			width:32px;
+			height:32px;
+			
+		}//fin .minus
+		.minus:hover{
+		background-image: url("assets/images/tag_06.png");
+		}
+	}//fin tagItem
+	
+	#instantag{
+		var hauteurText=30px;
+		var largeurText=120px;
+		position:relative;
+		background-color:olive;
+
+		input{
+			height:$hauteurText;
+			width:$largeurText;
+		}
+///select
+	#results{
+			position:absolute;
+			display:none;
+			//top:$hauteurText;
+			//top:0px;
+			left:0;
+			top:$hauteurText;
+			width:$largeurText;
+			background-color:white;
+	        //padding:10px 0px 0px 15px;
+	       
+
+	 		.result{
+	           //padding:10px 0px;
+	           //margin:10px 0px 10px 0px;
+
+	       	a.readMore{color:green;}
+
+	      	h2{
+	       		font-size:19px;
+	       		margin:0px 0px 5px 0px;
+	       		padding:0px;
+	       		color:#1111CC;
+	       		font-weight:normal;
+	       	}
+
+	       	h2 a{
+	        	text-decoration:none;
+	       		border-bottom:1px solid #1111cc;
+	      	}
+
+	       	p{
+	       		margin:0;
+	      		padding:0;
+			}
+		
+		}//fin .result
+		
+ .result:hover{          
+ 	background-color:gray;
+ 	cursor:hand;          
+ }     
+		                  
+	}//fin #results
+	
+}//fin instantatg
+	
+}//fin tagSelector
+
+.tooltip{
+	
+	text-align:center;
+	width:107px;
+	height:41px;
+	color:white;
+	font-family:$myLabelFont;
+	background-color:$buttonColor;
+	background: url("assets/tooltip.png") no-repeat top left;
+	position:absolute;
+	z-index:10;
+
+	span{
+	
+	line-height:30px;
+	margin-left:5px;
+	}
+}

@@ -2,6 +2,7 @@ package microbe.form;
 import microbe.form.IMicrotype;
 //import microbe.vo.Spodable;
 // à implementer sur demande
+import haxe.Json;
 class MicroFieldList implements IMicrotype //, implements List<Dynamic> 
 {
 	
@@ -17,6 +18,7 @@ class MicroFieldList implements IMicrotype //, implements List<Dynamic>
 	public var length(getLength,null) : Int;
 	public var pos:Int;
 	public var taggable:Bool;
+	public var traductable:Bool;
 	
 	public function new()
 	{

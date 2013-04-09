@@ -1,65 +1,85 @@
-
-/*
- * Copyright (c) 2008, TouchMyPixel & contributors
- * Original author : Tony Polinelli <tonyp@touchmypixel.com> 
- * Contributers: Tarwin Stroh-Spijer 
- * All rights reserved.
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- *   - Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *   - Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE TOUCH MY PIXEL & CONTRIBUTERS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE TOUCH MY PIXEL & CONTRIBUTORS
- * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
- * THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-
 package microbe.form.elements;
 
+
+#if php
+import microbe.form.Formatter;
+import microbe.form.FormElement;
 import microbe.form.Form;
 import microbe.form.FormElement;
+import microbe.form.Validator;
+import microbe.form.validators.BoolValidator;
+import microbe.form.Formatter;
 
 class Hidden extends FormElement
 {
-	public var display:Bool;
+
+	public var password:Bool;
+	public var width:Int;
+	public var showLabelAsDefaultValue:Bool;
+	public var useSizeValues:Bool;
+	public var printRequired:Bool;
 	
-	public function new(name:String, ?value:Dynamic, ?required:Bool = false, ?display:Bool = false,  ?attributes:String = "") 
+	public var formatter:Formatter;
+	public function new(name:String, label:String, ?value:String, ?required:Bool=false, ?validators=null, ?attributes:String="") 
 	{
 		super();
 		this.name = name;
+		this.label = label;
 		this.value = value;
 		this.required = required;
-		this.display = display;
 		this.attributes = attributes;
+		this.password = false;
+		
+		showLabelAsDefaultValue = false;
+		useSizeValues = false;
+		printRequired = false;
+		
+		width=180;
 	}
-	
 	override public function render(?iter:Int):String
-	{
+	{		
 		var n = name;
-		var type = display ? "text" : "hidden";
-		return '<input type="' + type + '" name="' + n + '" id="' + n + '" value="' +value + '"/>';
-	}
+		
+
+		var str = "<input   type='hidden' name=\"" + n + "\" id=\"" + n + "\" value=\"\"  " + attributes + " />" ;
+		
+		str += (if (required && form.isSubmitted() && printRequired) " required");
+		return str;
+		}
 	
-	override public function getPreview():String
-	{
-		return this.render();
-	}	
-	
-	public function toString() :String
-	{
-		return render();
-	}
 }
+#end
+
+
+
+#if js
+
+import js.Lib;
+import js.JQuery;
+import js.Dom;
+import microbe.form.AjaxElement;
+import microbe.form.Microfield;
+
+class Hidden extends AjaxElement
+{
+	
+	public var moduleid:String;
+	public function new(_microfield:Microfield)
+	{
+		super(_microfield);
+	
+		
+	}
+	
+	
+	
+	override public function getValue():String{
+		return new JQuery("#"+id).attr("value");
+	}
+	override public function setValue(val:String):Void{
+		Lib.alert("val="+val);
+	new JQuery("#"+id).attr("value",val);
+	}
+	
+}
+#end

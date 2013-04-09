@@ -27,10 +27,11 @@ class AjaxDate extends AjaxElement{
 		override public function getValue():String{	
 	
 					var valeur=new JQuery("#madate_"+pos).val();
-
+					trace("get value valeur="+valeur);
 					//Lib.alert("get date"+valeur);
 					var _date=Date.fromString(valeur);
 					var format=DateTools.format(_date,"%Y-%m-%d");
+					trace("getValue after format"+format);
 					//Lib.alert("true date"+format);
 					trace("format="+format.toString());
 					return format.toString();
@@ -42,11 +43,13 @@ class AjaxDate extends AjaxElement{
 			trace("date="+valeur);
 			var _date:Date=null;
 				if( valeur==null){
+					trace ( "date nulle -> date.now()");
 					valeur= DateTools.format(Date.now(),"%Y-%m-%d").toString();
 					
 				}
 				try{
 					_date=Date.fromString(valeur);
+					trace ( "parsage de date"+ _date);
 					}catch(e:String){
 						Lib.alert("erreur de parsage de Date "+e);
 						var fake=DateTools.format(Date.now(),"%Y-%m-%d").toString();

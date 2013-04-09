@@ -12,11 +12,8 @@ import microbe.controllers.GenericController;
 import php.Lib;
 
 
-#if !spod_macro
-import php.db.ResultSet;
-#else
 import sys.db.ResultSet;
-#end
+
 /**
 
  * ...
@@ -41,11 +38,13 @@ class Login extends GenericController, implements Controller
 		url = new Url(this.configuration);
 	}
 	function defaultAssign() {
+		this.view.assign("customLogo",null);
 		this.view.assign("page", null);
 		this.view.assign("link", url.siteUrl());
 		this.view.assign("backpage",url.siteUrl()+"/pipo");
 		this.view.assign("title","microbe admin");
-		
+		this.view.assign("localClass","login");
+		this.view.assign("custom",true);
 		/*this.view.assign("chemins", this.chemins);
 		this.view.assign("menu", null);*/
 		//this.view.assign("content", null);

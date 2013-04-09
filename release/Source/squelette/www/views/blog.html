@@ -1,0 +1,38 @@
+	<!-- <p id ="edito">@edito.contenu</p> -->
+	
+  <div id="timeline">
+
+	 <ul id="dates">
+	
+		@for( item in venir){
+			<li><a href="#ancre_@item.id">@item.datelitterale</a></li>
+		}
+			
+		</ul> 
+		 <div class="pointedruler"></div> 
+	<ul id="issues">
+	
+	 		@for( item in venir){
+				<li id="#ancre_@item.id">
+				<h1>@item.titre</h1>
+				<div class="image">
+					
+				<a href="@link/imageBase/resize/big/@item.image" class="lightbox_simple"><img  src="@link/imageBase/resize/slim/@item.image" /></a>
+				</div>
+				@if(item.contenu != null){
+					@item.contenu
+				}
+				
+				</li>
+	} 
+		
+	</ul>
+<a href="#" id="next">+</a>
+		<a href="#" id="prev">-</a> 
+</div>  
+
+
+
+
+
+

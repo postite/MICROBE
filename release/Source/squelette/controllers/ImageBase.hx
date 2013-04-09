@@ -1,15 +1,15 @@
 package controllers;
-import microbe.controllers.GenericController;
-import haxigniter.server.content.ContentHandler;
+//import microbe.controllers.GenericController;
+//import haxigniter.server.content.ContentHandler;
 import haxigniter.server.request.BasicHandler;
 import config.Config;
-
+import microbe.controllers.LightController;
 import haxe.Md5;
 import microbe.utils.ImageProcessor;
 import poko.utils.PhpTools;
-import php.FileSystem;
-import php.io.File;
-import php.io.Process;
+import sys.FileSystem;
+import sys.io.File;
+import sys.io.Process;
 import php.Lib;
 import php.Sys;
 import php.Web;
@@ -18,19 +18,25 @@ import php.Web;
  * ...
  * @author postite
  */
-
-class ImageBase extends GenericController
+///set as reference for squelette
+class ImageBase extends LightController
 {
 	public var data:Dynamic;
 	public var upfolder:String;
+	//var writeFolder
 	public function new() 
 	{
 		super();
 		//upfolder = MyController.appConfig.runtimePath + "/res/";
 		//upfolder = "runtime/" + "res/";
 		var configuration:Config= new Config();
-	//	upfolder="uploads/images/";
+
+		//changed path system
 		upfolder=configuration.imagesPath;
+		//upfolder="http://localhost:8888/uploads/images/";
+		//upfolder=MicrobeConfig.imagesPath+"/";
+		//writeFolder=MicrobeConfig.imagesPath+"/";
+		
 		this.requestHandler = new BasicHandler(this.configuration);
 		
 	}
@@ -43,8 +49,8 @@ class ImageBase extends GenericController
 		if ( preset!=null )
 		{
 			// Create a new image processor.
-			var image : ImageProcessor 	= new ImageProcessor( upfolder + src );
-			image.cacheFolder 			= upfolder + "cache";
+			var image : ImageProcessor 	= new ImageProcessor( "."+upfolder + src );
+			image.cacheFolder 			= "."+upfolder + "cache";
 			image.format 				= image.getFileFormat(src);
 			//image.forceNoCache 			= true;
 			
@@ -63,6 +69,7 @@ class ImageBase extends GenericController
 			
 			// Finally output the image.
 			Lib.print( imageStr );
+
 		}
 		else
 		{
@@ -93,7 +100,6 @@ class ImageBase extends GenericController
 		switch(preset)
 		{
 			case "slim":
-			
 			image.queueResize(300, 300);
 			image.queueCropToAspect(300, 60);
 			
@@ -109,13 +115,13 @@ class ImageBase extends GenericController
 				var h:Int = Std.parseInt(h);
 				image.queueCropToAspect(w, h);
 				
-			case "custom": 
+			case "custom":
 				var w:Int = Std.parseInt(w);
 				var h:Int = Std.parseInt(h);
-				image.queueFitSize(w, h);
+				image.queueFitSize(w,h);
 				
 			case "gallery":
-				image.queueFitSize(300, 300);
+				image.queueFitSize(500, 500);
 			
 			case "modele":
 				image.queueFitSize(260, 350);
@@ -125,8 +131,7 @@ class ImageBase extends GenericController
 			image.queueFitSize(70, 70);
 				
 				case "big":
-				image.applyFitSize(1000, 1000);
-				
+			image.applyFitSize(600, 600);
 			//case "trans":
 			//image.format = ImageOutputFormat.PNG;
 			//image.saveAlpha = true;

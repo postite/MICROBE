@@ -35,7 +35,7 @@ class MicroCreator
 		for ( field in formule.keys()){
 			var item:FieldType=formule.get(field);
 			var factory = new TypeFactory();
-			var behaviour=factory.create(item.type);
+			var behaviour=factory.create(item.type); 
 			behaviour.data=data;//Reflect.field(data,field);
 			result.add(behaviour.create(voName,item,field,formulaire));	
 		}

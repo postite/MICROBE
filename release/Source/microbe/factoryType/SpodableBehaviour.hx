@@ -14,15 +14,12 @@ import php.Lib;
 
 ////implementer les tags la dedans?
 
-
-
-
 class SpodableBehaviour implements IBehaviour
 {
 	public var data:Spodable;
 	public function new()
 	{
-
+microbe.tools.Mytrace.setRedirection();
 	}
 	
 	
@@ -33,10 +30,8 @@ class SpodableBehaviour implements IBehaviour
 			parser.parse();
 		}
 		return "i'm a spod" + source.voName;
-	} 
-	
-	
-	
+	}
+
 	public function create(voName:String,element:FieldType,field:String,?formulaire:Form):IMicrotype{ 
 		trace("im'a spod");
 		var liste= new MicroFieldList();
@@ -54,11 +49,12 @@ class SpodableBehaviour implements IBehaviour
 		return liste;
 	}
 	public function record(source:IMicrotype,data:Spodable) : Spodable {
-		//trace("spodable");
+		trace("spodable");
 		var voInstance=null;
 			var castedsource:MicroFieldList= cast source;
 			if(data.id==null){
 			 voInstance=Type.createInstance(Type.resolveClass(GenericController.appConfig.voPackage+castedsource.voName),[]);
+			
 			}else{
 			 voInstance=Reflect.callMethod(data, Reflect.field(data, "get_"+source.field), [voInstance]);	
 			}
@@ -67,9 +63,11 @@ class SpodableBehaviour implements IBehaviour
 				var parser=new MicroCreator();
 				parser.source=castedsource;
 				parser.data=voInstance;
+
 				var child:Object=cast parser.record();
 				if (cast(child).id==null){
 				child.insert();
+
 				}else{
 				child.update();
 				}

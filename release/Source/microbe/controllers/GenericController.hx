@@ -26,7 +26,8 @@ import php.Web;
  * NOTE: Controllers called by haXigniter can only have the starting character capitalized!
  *       MyController is never called, so it's excepted.
  */
-class GenericController implements haxigniter.server.Controller, implements haxe.rtti.Infos
+ #if haxe3 @:rttiInfos #end
+class GenericController implements haxigniter.server.Controller  #if !haxe3 , implements haxe.rtti.Infos #end
 {
 	/* --- Starting with the Controller interface implementation --- */
 	
@@ -67,7 +68,7 @@ class GenericController implements haxigniter.server.Controller, implements haxe
 	private static var appSession = new FileSession(appConfig.sessionPath);
 
 	// A debug object, for tracing and logging.
-	private static var appDebug = new Debug(appConfig);
+	public static var appDebug = new Debug(appConfig);
 	
 	/*
 	| Template files are displayed by a ViewEngine, which is any class extending 
@@ -92,6 +93,8 @@ class GenericController implements haxigniter.server.Controller, implements haxe
 	 */
 	public static function main()
 	{
+
+		microbe.tools.Mytrace.setRedirection();
 		// Configure database depending on development mode.
 		if(appConfig.development)
 			appDb = new DevelopmentConnection();
@@ -121,18 +124,20 @@ class GenericController implements haxigniter.server.Controller, implements haxe
 	 */
 	public function new()
 	{	
+
 		// Set the controller vars to the static vars, so they can be referenced from the controllers.
 			this.configuration = appConfig;
 			this.db = appDb;
 			this.debug = appDebug; // Will be used in this.trace() and this.log()
 			this.view = appView;
-
+			
 			// The session is restored from SessionObject, passing in the interface and the output type.
 			this.session = SessionObject.restore(appSession, config.Session);
-
+			
 			// Set the default request handler to a RestHandler.
 			// See haxigniter.server.request.RestHandler class for documentation.
 			this.requestHandler = new RestHandler(this.configuration);
+			
 	}
 	
 	///// Some useful trace/log methods /////////////////////////////

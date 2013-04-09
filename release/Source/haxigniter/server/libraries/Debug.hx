@@ -5,9 +5,9 @@ import haxigniter.server.Config;
 
 #if php
 import php.Lib;
-import php.io.File;
-import php.io.FileOutput;
-import php.FileSystem;
+import sys.io.File;
+import sys.io.FileOutput;
+import sys.FileSystem;
 #elseif neko
 import neko.Lib;
 import neko.io.File;

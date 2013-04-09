@@ -296,7 +296,12 @@ class Pipo extends Back
 
 		}
 		public function rec(){
-		  return api.rec();
+		  	//var retour=api.rec();
+			Lib.print(api.rec().id); //return spod.id before redirection
+		 // 	return retour;
+		}
+		public function microRec(){
+			Lib.print(api.microRec().id);
 		}
 
 		public function delete(voName:String,id:Int):Void{

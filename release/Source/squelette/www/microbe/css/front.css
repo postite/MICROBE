@@ -1,0 +1,226 @@
+@import url('reset.css'); @font-face {
+	font-family : "HelveticaNeueLTStd45Light";
+	src : url('/fonts/helvetica/HelveticaNeueLTStd-Lt.eot');
+	src : local('Helvetica Neue LT Std'), local('fonts/helvetica/HelveticaNeueLTStd-Lt'), url('fonts/helvetica/HelveticaNeueLTStd-Lt.woff') format('woff'), url('fonts/helvetica/HelveticaNeueLTStd-Lt.svg#HelveticaNeueLTStd-Lt') format('svg');;
+}
+h1, h2, h3 {
+	font-size : 36px;
+	font-weight : 100;
+}
+body {
+	font-family : "HelveticaNeueLTStd45Light";
+	font-weight : 100;
+}
+#menu {
+	position : fixed;
+	z-index : 100;
+}
+#page {
+	width : 960px;
+	position : relative;
+	margin-right : auto;
+	margin-left : auto;
+}
+#side {
+	width : 200px;
+	float : left;
+}
+#contenu {
+	margin-top : 20px;
+	background-color : white;
+}
+#admin {
+	float : left;
+	width : 300px;
+}
+#catalogue {
+	position : relative;
+}
+#catalogue .categorie {
+	font-size : 64px;
+}
+#catalogue .coupon {
+	z-index : 10;
+	position : absolute;
+	top : -20px;
+	right : 0;
+	width : 195px;
+	margin : 0;
+}
+#catalogue .coupon .contenu {
+	padding : 10px;
+	color : white;
+	background-color : black;
+	min-height : 300px;
+	margin : 0;
+}
+#catalogue .coupon .queue {
+	margin : 0;
+	margin-top : -1px;
+	width : 100%;
+	height : 50px;
+	background : url("assets/coupon_04.png") no-repeat top left;
+}
+#catalogue .coupon #buy {
+	color : white;
+}
+.cat {
+	position : relative;
+	height : 280px;
+	width : 725px;
+	margin : 0;
+	margin-left : 36px;
+	margin-top : 20px;
+}
+.cat .fakecontenant {
+	height : 100%;
+}
+.cat .col {
+	margin-right : 12px;
+	position : relative;
+	float : left;
+	height : 100%;
+}
+.cat .col1 {
+	width : 195px;
+}
+.cat .col2 {
+	width : 230px;
+}
+.cat .col3 {
+	width : 70px;
+}
+.cat .col4 {
+	width : 70px;
+}
+.cat .col5 {
+	width : 100px;
+}
+.cat .colTitle {
+	font-size : 24px;
+	padding-bottom : 7px;
+	border-bottom : 1px solid black;
+}
+.cat .modele {
+	position : relative;
+	float : left;
+	width : 183px;
+	height : 238px;
+	margin-top : 30px;
+	border : 1px solid black;
+	padding : 5px;
+}
+.cat .modele img {
+	position : absolute;
+	width : 185px;
+	height : 238px;
+}
+.cat .rub {
+	position : absolute;
+	z-index : 10;
+	bottom : 40px;
+	height : 50px;
+	left : -36px;
+	color : white;
+	width : 250px;
+	background : url("assets/ruban-gaughe.png") no-repeat top left;
+}
+.cat .rub h1 {
+	font-size : 24px;
+	margin : 0px;
+	line-height : 40px;
+	background-color : black;
+	margin-left : 36px;
+	width : 195px;
+}
+.cat .modeledescription {
+	position : absolute;
+	bottom : 0;
+	min-height : 30%;
+	padding : 10px;
+	width : 210px;
+	float : left;
+	color : black;
+}
+.cat .variantes {
+	position : absolute;
+	bottom : 0;
+}
+.cat .variante {
+	width : 70px;
+	margin-top : 10px;
+	border : 1px solid black;
+	cursor : pointer;
+}
+.cat .variante .description {
+	display : none;
+}
+.cat .variante:hover img {
+	width : 75px;
+}
+.cat .tailles {
+	position : absolute;
+}
+.cat .tailles .taille {
+	margin-top : 10px;
+	color : white;
+	line-height : 30px;
+	text-align : center;
+	background-color : black;
+	width : 30px;
+	height : 30px;
+	cursor : pointer;
+}
+.cat .price {
+	position : absolute;
+	bottom : 0px;
+	text-align : center;
+	background-color : black;
+}
+.cat .price h1 {
+	font-size : 24px;
+	line-height : 40px;
+	color : white;
+}
+.cat .price .rub2 {
+	background : url("assets/ruban-droite.png") no-repeat top left;
+	position : absolute;
+	z-index : 10;
+	bottom : 40px;
+	height : 50px;
+	left : -36px;
+	width : 100px;
+}
+#blog {
+	margin-left : 200px;
+}
+#blog h1 {
+	font-family : "HelveticaNeueLTStd45Light";
+	margin-bottom : 22px;
+}
+#blog .date {
+	color : gray;
+	font-size : 12px;
+}
+#blog .post {
+	margin-bottom : 150px;
+	border-top : 1px solid gray;
+}
+#publictags {
+	width : 100%;
+	margin-bottom : 20px;
+}
+#publictags .publictag {
+	display : inline;
+	padding : 3px;
+	margin-right : 5px;
+	background-color : black;
+	color : white;
+	cursor : hand;
+}
+#publictags .publictag:focus, #publictags .publictag:hover {
+	background-color : #00aaff;
+}
+#admin {
+	float : right;
+}

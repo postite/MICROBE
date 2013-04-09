@@ -14,7 +14,8 @@ import haxigniter.server.libraries.DebugLevel;
 import haxigniter.server.request.RestHandler;
 import haxigniter.server.views.ViewEngine;
 
-class Upload implements haxigniter.server.Controller, implements haxe.rtti.Infos
+  #if haxe3 @:rttiInfos #end
+class Upload implements haxigniter.server.Controller #if !haxe3 , implements haxe.rtti.Infos #end
 {
 	public var requestHandler : RequestHandler;
 	public var contentHandler : ContentHandler;
@@ -31,41 +32,50 @@ class Upload implements haxigniter.server.Controller, implements haxe.rtti.Infos
 	// A debug object, for tracing and logging.
 	private static var appDebug = new Debug(appConfig);
 
-	private static var appView = new haxigniter.server.views.Templo(appConfig);
+	//private static var appView = new haxigniter.server.views.Templo(appConfig);
 
 	public function new()
 	{
 		this.config = new config.Config();
 		this.debug = appDebug;
-		this.view = appView;
+		//this.view = appView;
 		this.requestHandler = new FileUploadDecorator(new RestHandler(this.config));
 
 		var url = new haxigniter.server.libraries.Url(this.config);
-		this.view.assign('link', url.siteUrl());
+		//this.view.assign('link', url.siteUrl());
 	}
 
 	public function index()
 	{
-		this.view.displayDefault();
+		//this.view.displayDefault();
 	}
 
 	public function show(id : Int)
 	{
 		this.view.assign('id', id);
-		this.view.display('upload/index.mtt');
+		//this.view.display('upload/index.mtt');
 	}
 
-	public function create(posted:Hash<String>,?files:Hash<FileInfo>)
+	public function create(posted:Hash<String>,?files:Hash<FileInfo>,?bytes:Int)
 	{
-	//	this.trace("Post data : "+posted);
+		//this.trace("Post data : "+posted);
 		//this.trace("Files : "+files);
+		appDebug.log("bytes="+bytes);
+
+		//if plus de 1meg
+		if (bytes >1024000 ){
+			php.Lib.print("tooBig");
+			return;
+		}
 		var name:String="";
 		for (i in files){
 		//trace ("iname="+i)	;		        
 	if (!(i.name=="")){
 	//i.copyTo(Path.directory(name /*Web.getCwd())+"/www/runtime/cache/"*/);
 	//php.Lib.print(i.copyTo("uploads/images/"));
+	//changed path system
 	php.Lib.print(i.copyTo(config.imagesPath));
+	//php.Lib.print(i.copyTo(MicrobeConfig.imagesPath));
 	}
 					        }
 	//php.Lib.print(name);

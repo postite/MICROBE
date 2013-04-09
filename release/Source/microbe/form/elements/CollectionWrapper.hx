@@ -10,10 +10,13 @@ class CollectionWrapper extends FormElement
 	var field:String;
 	public function new(_field:String)
 	{
+		trace("new Collection Wrapper"+_field);
 		field=_field;
 		super();
 		this.label=_field;
 		wrapped=new List<FormElement>();
+		trace("after new Collection Wrapper"+_field);
+
 	}
 	override function render(?iter:Int) : String {
 			var str:String="<div class='collectionWrapper' spod='"+field+"'>";
@@ -29,6 +32,7 @@ class CollectionWrapper extends FormElement
 	}
 	
 	public function addElement(collecItem:FormElement) : Void {
+		trace("addElement"+collecItem);
 		collecItem.form=this.form;
 		wrapped.add(collecItem);
 	}
@@ -43,7 +47,7 @@ class CollectionWrapper extends FormElement
 import js.Lib;
 using microbe.tools.Debug;
 import js.JQuery;
-import jquery.ui.Sortable;
+import postite.jquery.ui.Sortable;
 import hxs.Signal1;
 import microbe.jsTools.BackJS;
 typedef PlusInfos =
