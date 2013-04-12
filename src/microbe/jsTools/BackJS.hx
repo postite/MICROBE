@@ -127,8 +127,7 @@ class BackJS implements mpartial.Partial
 		sortoptions.update=onSortChanged;
 		
 		sort=new Sortable("#leftCol .itemslist").sortable(sortoptions);
-		//var note= new Note("hello",alerte);
-		//note.execute();
+		
 		listen();
 		//"endStart".Alerte();
 	}
@@ -217,7 +216,9 @@ class BackJS implements mpartial.Partial
 		var req= new haxe.Http(back_url+"rec/");
 	//	req.setParameter("voName", voName);
 		req.setParameter("map", compressedValues);
+
 		req.onData=function(d) {preRedirect(d);}; 
+		//req.onData=function(d)afterRecord(d); 
 		req.request(true);
 	}
 
@@ -235,8 +236,12 @@ class BackJS implements mpartial.Partial
 	{
 		trace( "PREREDIRECT" + d);
 		BackSignal.preredirectomplete.add(afterRecord);
-		
+		if( BackSignal.preredirect.numListeners>1){
+		trace( "numListenersfor before redirect="+BackSignal.preredirect.numListeners);
 		BackSignal.preredirect.dispatch(d);
+		}else{
+		BackSignal.preredirectomplete.dispatch("nib");
+		}
 		//TODO find a way to redirect if no signal interfere...
 	}
 	function afterRecord(d) : Void {
