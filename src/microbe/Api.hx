@@ -214,7 +214,7 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 					all= cast getManager(_vo).all();
 					}
 				} catch( msg : String ) {
-				    trace("Error occurred: " + msg);
+				    Lib.print(msg);
 				}
 				
 			
@@ -314,7 +314,7 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 	
 	//-----------WRITING-----------------
 	
-	public function rec():Spodable {
+	public function rec():Dynamic {
 		getClassMap();
 		return recClassMap();	
 
@@ -329,7 +329,7 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 		cast(voInstance,sys.db.Object).update();
 		return voInstance;
 	}
-	function recClassMap() : Spodable {
+	function recClassMap() : Dynamic {
 		trace("record"+map.id);
 		var voInstance:Spodable= null;
 		if( map.id!=null){
@@ -337,10 +337,39 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 		voInstance=getOne(map.voClass,map.id);
 		}else{
 		voInstance=Type.createInstance(Type.resolveClass(voPackage +map.voClass),[]);
+		var manager=Reflect.field(Type.resolveClass(voPackage +map.voClass),"manager");
+
+		var dbInfos:sys.db.SpodInfos=manager.dbInfos();
+		trace("DBINFOS"+dbInfos);
+		var indexes:Array<{ unique : Bool, keys : Array<String> }>=dbInfos.indexes;
+		for ( index in dbInfos.indexes){
+			if (index.unique)
+			for ( key in index.keys){
+				trace( "unique="+key);
+				//trace("classMap="+map.fields);
+				for ( f in map.fields){
+					if( f.field ==key) {
+						trace("found unique KEY");
+					Reflect.setField(voInstance,key,f.value);
+					var pip=manager.unsafeExecute("Select * from "+dbInfos.name+" where "+key+"='"+f.value+"'");
+					trace("pip="+pip);
+					if (pip.length>0)
+					return "safe doublon";
+					trace("POUM");
+					}
+
+				}
+				
+			}
+		}
+		try{
 		cast (voInstance).insert();
+		}catch(err:String){
+			return "doublon";
+		}
 			cast(voInstance).id= microbe.controllers.GenericController.appDb.connection.lastInsertId();
-			trace("MONID="+cast(voInstance).id);
-		
+			
+			//trace("MONID="+cast(voInstance).id);
 		//voInstance.update();
 		}
 		trace("after");
@@ -352,9 +381,14 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 		var fullSpod:Object=cast creator.record();
 		// trace("beforeRec="+Type.typeof(cast(fullSpod).date));
 		// trace("beforeReccheck date="+cast(fullSpod).date.getTime());
+
 		cast(fullSpod).date=Date.now();
 		if(cast(fullSpod).id==null){
-		fullSpod.insert();
+			try{
+			fullSpod.insert();
+			}catch(msg:String){
+			return "erreur "+msg;
+			}
 		}else{
 		fullSpod.update();
 		}
