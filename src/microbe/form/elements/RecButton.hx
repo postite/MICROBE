@@ -39,6 +39,7 @@ import js.JQuery;
 import feffects.Tween;
 import feffects.easing.Bounce;
 import js.Dom.HtmlDom;
+import microbe.jsTools.BackSignal;
 
 class RecButton extends AjaxElement{
 	private var elementid:String;
@@ -57,16 +58,25 @@ class RecButton extends AjaxElement{
 	//	Lib.alert("new Delete boutton"+id);
 	//	Lib.alert("YOUHOU");
 		new JQuery("#"+this.elementid).bind("click",onClick);
+		BackSignal.tryAgain.add(_tryAgain);
 	}
 	function onClick(event) : Void {
 	//	Lib.alert("delete button click");
 		microbe.jsTools.BackSignal.preredirect.add(AfterRec);
 		//new JQuery("#"+this.elementid).wrap("<div class='tooltip'><span>sure ?</span></div>");
-		new JQuery("#"+this.elementid).css("background","red");
+		new JQuery("#"+this.elementid).css("background","green");
 				
 			
 	}
-
+	override public function onError(err:microbe.ERROR) 
+	{
+		new JQuery("#"+this.elementid).css("background","red");
+	}
+	//this.one is not overrided
+	 public function _tryAgain() 
+	{
+		new JQuery("#"+this.elementid).css("background","");
+	}
 	function AfterRec(d) 
 	{
 		new JQuery("#"+this.elementid).css("background","");

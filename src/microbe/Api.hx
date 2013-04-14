@@ -354,7 +354,7 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 					var pip:sys.db.ResultSet=manager.unsafeExecute("Select * from "+dbInfos.name+" where "+key+"='"+f.value+"'");
 					trace("pip="+pip.length);
 					if (pip.length>0)
-					return new microbe.ERROR(microbe.ERROR.ERROR_TYPE.DOUBLON);
+					return new microbe.ERROR(microbe.ERROR.ERROR_TYPE.DOUBLON,null,key);
 					
 					}
 
@@ -365,7 +365,7 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 		try{
 		cast (voInstance).insert();
 		}catch(err:String){
-			return new microbe.ERROR(microbe.ERROR.ERROR_TYPE.DOUBLON);
+			return new microbe.ERROR(microbe.ERROR.ERROR_TYPE.FATAL);
 		}
 			cast(voInstance).id= microbe.controllers.GenericController.appDb.connection.lastInsertId();
 			
@@ -387,11 +387,12 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 			try{
 			fullSpod.insert();
 			}catch(msg:String){
-			return "erreur "+msg;
+			throw "erreur "+msg;
 			}
 		}else{
 		fullSpod.update();
 		}
+		trace("fullSpod"+fullSpod);
 		return cast(fullSpod);
 	}
 	

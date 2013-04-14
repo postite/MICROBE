@@ -232,10 +232,20 @@ class BackJS implements mpartial.Partial
 	}
 
 
-	function preRedirect(d:Dynamic)
+	function preRedirect(d:Dynamic)//spodId + string error
 	{
-		trace( "PREREDIRECT" + d);
-		this.classMap.id=d;
+		var retour=null;
+		try{
+		 retour= haxe.Unserializer.run(d);
+		}catch(m:String){
+			retour=d;
+		}
+		//trace("TYPE="+Type.typeof(retour)+retour);
+		if( Std.is(retour,microbe.ERROR)){
+			  microbe.jsTools.BackSignal.erreur.dispatch(retour);
+			  return afterError(retour);
+			}
+		this.classMap.id=cast (retour);
 		BackSignal.preredirectomplete.add(afterRecord);
 		if( BackSignal.preredirect.numListeners>1){
 		trace( "numListenersfor before redirect="+BackSignal.preredirect.numListeners);
@@ -243,12 +253,26 @@ class BackJS implements mpartial.Partial
 		}else{
 		BackSignal.preredirectomplete.dispatch("nib");
 		}
+		return null;
 		//TODO find a way to redirect if no signal interfere...
 	}
 	function afterRecord(d) : Void {
 		trace("Fter Record");
 		
 		Lib.window.location.href=back_url+"nav/"+classMap.voClass+"/"+classMap.id;
+	}
+
+	function afterError(er:microbe.ERROR) 
+	{
+		trace("afterError");
+		switch (er.type) {
+			case DOUBLON:
+			new Note(" votre "+er.forfield+ " existe dejà",NoteType.erreur).execute();
+			case FATAL:
+			new Note("quelque chose s'est mal passé",NoteType.erreur).execute();
+		}
+		BackSignal.tryAgain.dispatch();
+
 	}
 	
 	

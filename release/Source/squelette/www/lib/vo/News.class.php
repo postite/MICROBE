@@ -60,5 +60,5 @@ class vo_News extends sys_db_Object implements vo_Traductable, microbe_vo_Taggab
 	static $manager;
 	function __toString() { return 'vo.News'; }
 }
-vo_News::$__meta__ = _hx_anonymous(array("obj" => _hx_anonymous(array("rtti" => new _hx_array(array("oy4:namey4:actuy7:indexesahy9:relationsahy7:hfieldsby7:contenuoR0R5y6:isNullfy1:tjy15:sys.db.SpodType:15:0gy5:titreoR0R9R6fR7jR8:9:1i255gy13:datelitteraleoR0R10R6fR7jR8:9:1i255gy8:en_ligneoR0R11R6fR7jR8:9:1i255gy3:pozoR0R12R6fR7jR8:1:0gy4:dateoR0R13R6fR7jR8:10:0gy6:id_refoR0R14R6fR7r13gy5:imageoR0R15R6fR7jR8:9:1i255gy4:langoR0R16R6fR7jR8:9:1i11gy2:idoR0R17R6fR7jR8:0:0ghy3:keyaR17hy6:fieldsar12r21r6r14r4r17r8r10r19r16hg"))))));
+vo_News::$__meta__ = _hx_anonymous(array("obj" => _hx_anonymous(array("rtti" => new _hx_array(array("oy4:namey4:actuy7:indexesaoy4:keysay5:titrehy6:uniquetghy9:relationsahy7:hfieldsby7:contenuoR0R8y6:isNullfy1:tjy15:sys.db.SpodType:15:0gR4oR0R4R9fR10jR11:9:1i255gy13:datelitteraleoR0R12R9fR10jR11:9:1i255gy8:en_ligneoR0R13R9fR10jR11:9:1i255gy3:pozoR0R14R9fR10jR11:1:0gy4:dateoR0R15R9fR10jR11:10:0gy6:id_refoR0R16R9fR10r15gy5:imageoR0R17R9fR10jR11:9:1i255gy4:langoR0R18R9fR10jR11:9:1i11gy2:idoR0R19R9fR10jR11:0:0ghy3:keyaR19hy6:fieldsar14r23r8r16r6r19r10r12r21r18hg"))))));
 vo_News::$manager = new sys_db_Manager(_hx_qtype("vo.News"));

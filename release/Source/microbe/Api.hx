@@ -337,10 +337,39 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 		voInstance=getOne(map.voClass,map.id);
 		}else{
 		voInstance=Type.createInstance(Type.resolveClass(voPackage +map.voClass),[]);
+		var manager=Reflect.field(Type.resolveClass(voPackage +map.voClass),"manager");
+
+		var dbInfos:sys.db.SpodInfos=manager.dbInfos();
+		trace("DBINFOS"+dbInfos);
+		var indexes:Array<{ unique : Bool, keys : Array<String> }>=dbInfos.indexes;
+		for ( index in dbInfos.indexes){
+			if (index.unique)
+			for ( key in index.keys){
+				trace( "unique="+key);
+				//trace("classMap="+map.fields);
+				for ( f in map.fields){
+					if( f.field ==key) {
+						trace("found unique KEY");
+					
+					var pip:sys.db.ResultSet=manager.unsafeExecute("Select * from "+dbInfos.name+" where "+key+"='"+f.value+"'");
+					trace("pip="+pip.length);
+					if (pip.length>0)
+					return new microbe.ERROR(microbe.ERROR.ERROR_TYPE.DOUBLON,null,key);
+					
+					}
+
+				}
+				
+			}
+		}
+		try{
 		cast (voInstance).insert();
+		}catch(err:String){
+			return new microbe.ERROR(microbe.ERROR.ERROR_TYPE.FATAL);
+		}
 			cast(voInstance).id= microbe.controllers.GenericController.appDb.connection.lastInsertId();
-			trace("MONID="+cast(voInstance).id);
-		
+			
+			//trace("MONID="+cast(voInstance).id);
 		//voInstance.update();
 		}
 		trace("after");
@@ -352,17 +381,18 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 		var fullSpod:Object=cast creator.record();
 		// trace("beforeRec="+Type.typeof(cast(fullSpod).date));
 		// trace("beforeReccheck date="+cast(fullSpod).date.getTime());
-		throw cast(voInstance).titre;
+
 		cast(fullSpod).date=Date.now();
 		if(cast(fullSpod).id==null){
 			try{
 			fullSpod.insert();
 			}catch(msg:String){
-			return "erreur "+msg;
+			throw "erreur "+msg;
 			}
 		}else{
 		fullSpod.update();
 		}
+		trace("fullSpod"+fullSpod);
 		return cast(fullSpod);
 	}
 	

@@ -14,6 +14,7 @@ import microbe.vo.Taggable;
 
 @:table("actu")
 @:id(id)
+@:index(titre,unique)
 class News extends Object , implements Spodable ,implements Taggable, implements Traductable 
 {
 	public var poz:Int;

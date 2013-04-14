@@ -2,6 +2,8 @@ package microbe.form;
 using microbe.tools.Debug;
 import js.JQuery;
 import microbe.form.Microfield;
+import microbe.jsTools.BackSignal;
+
 
 class AjaxElement  {
 	
@@ -39,9 +41,25 @@ class AjaxElement  {
 		}
 		if (_iter!=null) pos=_iter;
 		setValue(value);
+
+		BackSignal.erreur.add(onError);
 	//	self=this;
 	}
-
+	public function onError(er:microbe.ERROR) 
+	{
+		trace("onERROR"+er.forfield +"/"+this.field);
+		if( er.forfield!=null){
+			if (this.field == er.forfield){
+				trace("ERROR"+er.forfield +"==?"+this.field +"id="+this.id);
+			new js.JQuery("#"+this.id).css("background","red");
+			BackSignal.tryAgain.addOnce(tryAgain);
+			}
+		}
+	}
+	public function tryAgain() 
+	{
+	new JQuery(" #"+this.id).focus(function(e)new JQuery(" #"+this.id).css("background",""));
+	}
 	public function focus() : Void {
 		new JQuery("#"+id).addClass("borded");
 	}

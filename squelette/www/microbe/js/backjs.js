@@ -3051,6 +3051,25 @@ microbe.ClassMapUtils.prototype = {
 	,currentCollec: null
 	,__class__: microbe.ClassMapUtils
 }
+microbe.ERROR_TYPE = $hxClasses["microbe.ERROR_TYPE"] = { __ename__ : ["microbe","ERROR_TYPE"], __constructs__ : ["DOUBLON","FATAL"] }
+microbe.ERROR_TYPE.DOUBLON = ["DOUBLON",0];
+microbe.ERROR_TYPE.DOUBLON.toString = $estr;
+microbe.ERROR_TYPE.DOUBLON.__enum__ = microbe.ERROR_TYPE;
+microbe.ERROR_TYPE.FATAL = ["FATAL",1];
+microbe.ERROR_TYPE.FATAL.toString = $estr;
+microbe.ERROR_TYPE.FATAL.__enum__ = microbe.ERROR_TYPE;
+microbe.ERROR = $hxClasses["microbe.ERROR"] = function(type,message,forfield) {
+	this.message = message;
+	this.type = type;
+	this.forfield = forfield;
+};
+microbe.ERROR.__name__ = ["microbe","ERROR"];
+microbe.ERROR.prototype = {
+	forfield: null
+	,type: null
+	,message: null
+	,__class__: microbe.ERROR
+}
 microbe.TagManager = $hxClasses["microbe.TagManager"] = function() {
 };
 microbe.TagManager.__name__ = ["microbe","TagManager"];
@@ -3096,7 +3115,7 @@ microbe.Tag.prototype = {
 }
 if(!microbe.form) microbe.form = {}
 microbe.form.AjaxElement = $hxClasses["microbe.form.AjaxElement"] = function(_microfield,_iter) {
-	microbe.tools.Debug.Alerte("new",{ fileName : "AjaxElement.hx", lineNumber : 23, className : "microbe.form.AjaxElement", methodName : "new"});
+	microbe.tools.Debug.Alerte("new",{ fileName : "AjaxElement.hx", lineNumber : 25, className : "microbe.form.AjaxElement", methodName : "new"});
 	if(js.Boot.__instanceof(_microfield,microbe.form.Microfield)) {
 		this.microfield = _microfield;
 		this.id = _microfield.elementId;
@@ -3115,6 +3134,7 @@ microbe.form.AjaxElement = $hxClasses["microbe.form.AjaxElement"] = function(_mi
 	}
 	if(_iter != null) this.pos = _iter;
 	this.setValue(this.value);
+	microbe.jsTools.BackSignal.erreur.add($bind(this,this.onError));
 };
 microbe.form.AjaxElement.__name__ = ["microbe","form","AjaxElement"];
 microbe.form.AjaxElement.prototype = {
@@ -3132,6 +3152,22 @@ microbe.form.AjaxElement.prototype = {
 	}
 	,focus: function() {
 		new js.JQuery("#" + this.id).addClass("borded");
+	}
+	,tryAgain: function() {
+		var _g = this;
+		new js.JQuery(" #" + this.id).focus(function(e) {
+			new js.JQuery(" #" + _g.id).css("background","");
+		});
+	}
+	,onError: function(er) {
+		haxe.Log.trace("onERROR" + er.forfield + "/" + this.field,{ fileName : "AjaxElement.hx", lineNumber : 50, className : "microbe.form.AjaxElement", methodName : "onError"});
+		if(er.forfield != null) {
+			if(this.field == er.forfield) {
+				haxe.Log.trace("ERROR" + er.forfield + "==?" + this.field + "id=" + this.id,{ fileName : "AjaxElement.hx", lineNumber : 53, className : "microbe.form.AjaxElement", methodName : "onError"});
+				new js.JQuery("#" + this.id).css("background","red");
+				microbe.jsTools.BackSignal.tryAgain.addOnce($bind(this,this.tryAgain));
+			}
+		}
 	}
 	,spodId: null
 	,voName: null
@@ -4276,6 +4312,7 @@ microbe.form.elements.RecButton = $hxClasses["microbe.form.elements.RecButton"] 
 	microbe.form.elements.RecButton.sign = new hxs.Signal();
 	this.elementid = id;
 	new js.JQuery("#" + this.elementid).bind("click",$bind(this,this.onClick));
+	microbe.jsTools.BackSignal.tryAgain.add($bind(this,this._tryAgain));
 };
 microbe.form.elements.RecButton.__name__ = ["microbe","form","elements","RecButton"];
 microbe.form.elements.RecButton.sign = null;
@@ -4284,9 +4321,15 @@ microbe.form.elements.RecButton.prototype = $extend(microbe.form.AjaxElement.pro
 	AfterRec: function(d) {
 		new js.JQuery("#" + this.elementid).css("background","");
 	}
+	,_tryAgain: function() {
+		new js.JQuery("#" + this.elementid).css("background","");
+	}
+	,onError: function(err) {
+		new js.JQuery("#" + this.elementid).css("background","red");
+	}
 	,onClick: function(event) {
 		microbe.jsTools.BackSignal.preredirect.add($bind(this,this.AfterRec));
-		new js.JQuery("#" + this.elementid).css("background","red");
+		new js.JQuery("#" + this.elementid).css("background","green");
 	}
 	,buttonwidth: null
 	,start: null
@@ -4579,7 +4622,7 @@ microbe.jsTools.BackJS.prototype = {
 		maputil.searchCollec(microfield.voName);
 		maputil.addInCollec(microfield);
 		this.classMap.fields = maputil.mapFields;
-		microbe.tools.Debug.Alerte(Std.string(microfield),{ fileName : "BackJS.hx", lineNumber : 330, className : "microbe.jsTools.BackJS", methodName : "parseplusCollec"});
+		microbe.tools.Debug.Alerte(Std.string(microfield),{ fileName : "BackJS.hx", lineNumber : 354, className : "microbe.jsTools.BackJS", methodName : "parseplusCollec"});
 	}
 	,onAddItemPlus: function(x,PI) {
 		var raw = null;
@@ -4587,7 +4630,7 @@ microbe.jsTools.BackJS.prototype = {
 			raw = haxe.Unserializer.run(x);
 		} catch( err ) {
 			if( js.Boot.__instanceof(err,String) ) {
-				microbe.tools.Debug.Alerte(err,{ fileName : "BackJS.hx", lineNumber : 309, className : "microbe.jsTools.BackJS", methodName : "onAddItemPlus"});
+				microbe.tools.Debug.Alerte(err,{ fileName : "BackJS.hx", lineNumber : 333, className : "microbe.jsTools.BackJS", methodName : "onAddItemPlus"});
 			} else throw(err);
 		}
 		PI.target.notify(raw.element);
@@ -4596,9 +4639,9 @@ microbe.jsTools.BackJS.prototype = {
 	,PlusCollection: function(plusInfos) {
 		var _g = this;
 		this._plusInfos = plusInfos;
-		microbe.tools.Debug.Alerte(Std.string("name" + plusInfos.collectionName + "graine=" + plusInfos.graine),{ fileName : "BackJS.hx", lineNumber : 285, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
+		microbe.tools.Debug.Alerte(Std.string("name" + plusInfos.collectionName + "graine=" + plusInfos.graine),{ fileName : "BackJS.hx", lineNumber : 309, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
 		var req = new haxe.Http(microbe.jsTools.BackJS.back_url + "addCollectServerItem/");
-		microbe.tools.Debug.Alerte(microbe.jsTools.BackJS.back_url,{ fileName : "BackJS.hx", lineNumber : 288, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
+		microbe.tools.Debug.Alerte(microbe.jsTools.BackJS.back_url,{ fileName : "BackJS.hx", lineNumber : 312, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
 		req.setParameter("name",plusInfos.collectionName);
 		req.setParameter("voParent",this.classMap.voClass);
 		req.setParameter("voParentId",Std.string(this.classMap.id));
@@ -4608,7 +4651,7 @@ microbe.jsTools.BackJS.prototype = {
 			_g.onAddItemPlus(x,_g._plusInfos);
 		};
 		req.request(true);
-		microbe.tools.Debug.Alerte("end",{ fileName : "BackJS.hx", lineNumber : 296, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
+		microbe.tools.Debug.Alerte("end",{ fileName : "BackJS.hx", lineNumber : 320, className : "microbe.jsTools.BackJS", methodName : "PlusCollection"});
 	}
 	,_plusInfos: null
 	,deleteCollection: function(id,voName,pos,collecItemId) {
@@ -4622,18 +4665,42 @@ microbe.jsTools.BackJS.prototype = {
 		});
 		this.spodDelete(voName,spodid);
 	}
+	,afterError: function(er) {
+		haxe.Log.trace("afterError",{ fileName : "BackJS.hx", lineNumber : 267, className : "microbe.jsTools.BackJS", methodName : "afterError"});
+		switch( (er.type)[1] ) {
+		case 0:
+			new microbe.notification.Note(" votre " + er.forfield + " existe dejà",microbe.notification.NoteType.erreur).execute();
+			break;
+		case 1:
+			new microbe.notification.Note("quelque chose s'est mal passé",microbe.notification.NoteType.erreur).execute();
+			break;
+		}
+		microbe.jsTools.BackSignal.tryAgain.dispatch();
+	}
 	,afterRecord: function(d) {
-		haxe.Log.trace("Fter Record",{ fileName : "BackJS.hx", lineNumber : 249, className : "microbe.jsTools.BackJS", methodName : "afterRecord"});
+		haxe.Log.trace("Fter Record",{ fileName : "BackJS.hx", lineNumber : 260, className : "microbe.jsTools.BackJS", methodName : "afterRecord"});
 		js.Lib.window.location.href = microbe.jsTools.BackJS.back_url + "nav/" + this.classMap.voClass + "/" + this.classMap.id;
 	}
 	,preRedirect: function(d) {
-		haxe.Log.trace("PREREDIRECT" + Std.string(d),{ fileName : "BackJS.hx", lineNumber : 237, className : "microbe.jsTools.BackJS", methodName : "preRedirect"});
-		this.classMap.id = d;
+		var retour = null;
+		try {
+			retour = haxe.Unserializer.run(d);
+		} catch( m ) {
+			if( js.Boot.__instanceof(m,String) ) {
+				retour = d;
+			} else throw(m);
+		}
+		if(js.Boot.__instanceof(retour,microbe.ERROR)) {
+			microbe.jsTools.BackSignal.erreur.dispatch(retour);
+			return this.afterError(retour);
+		}
+		this.classMap.id = retour;
 		microbe.jsTools.BackSignal.preredirectomplete.add($bind(this,this.afterRecord));
 		if(microbe.jsTools.BackSignal.preredirect.get_numListeners() > 1) {
-			haxe.Log.trace("numListenersfor before redirect=" + microbe.jsTools.BackSignal.preredirect.get_numListeners(),{ fileName : "BackJS.hx", lineNumber : 241, className : "microbe.jsTools.BackJS", methodName : "preRedirect"});
+			haxe.Log.trace("numListenersfor before redirect=" + microbe.jsTools.BackSignal.preredirect.get_numListeners(),{ fileName : "BackJS.hx", lineNumber : 251, className : "microbe.jsTools.BackJS", methodName : "preRedirect"});
 			microbe.jsTools.BackSignal.preredirect.dispatch(d);
 		} else microbe.jsTools.BackSignal.preredirectomplete.dispatch("nib");
+		return null;
 	}
 	,microRecord: function(m) {
 		haxe.Log.trace("classMAp=" + Std.string(this.classMap) + "back_url=" + microbe.jsTools.BackJS.back_url,{ fileName : "BackJS.hx", lineNumber : 226, className : "microbe.jsTools.BackJS", methodName : "microRecord"});
@@ -4826,6 +4893,8 @@ microbe.jsTools.BackSignal = $hxClasses["microbe.jsTools.BackSignal"] = function
 	microbe.jsTools.BackSignal.preredirectomplete = new msignal.Signal1();
 	microbe.jsTools.BackSignal.requestSaving = new msignal.Signal1();
 	microbe.jsTools.BackSignal.requestSavingComplete = new msignal.Signal1();
+	microbe.jsTools.BackSignal.erreur = new msignal.Signal1();
+	microbe.jsTools.BackSignal.tryAgain = new msignal.Signal0();
 	msignal.Signal1.call(this,String);
 };
 microbe.jsTools.BackSignal.__name__ = ["microbe","jsTools","BackSignal"];
@@ -4833,6 +4902,8 @@ microbe.jsTools.BackSignal.preredirect = null;
 microbe.jsTools.BackSignal.preredirectomplete = null;
 microbe.jsTools.BackSignal.requestSaving = null;
 microbe.jsTools.BackSignal.requestSavingComplete = null;
+microbe.jsTools.BackSignal.erreur = null;
+microbe.jsTools.BackSignal.tryAgain = null;
 microbe.jsTools.BackSignal.__super__ = msignal.Signal1;
 microbe.jsTools.BackSignal.prototype = $extend(msignal.Signal1.prototype,{
 	__class__: microbe.jsTools.BackSignal
