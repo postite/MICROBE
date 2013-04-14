@@ -295,10 +295,15 @@ class Pipo extends Back
 			this.view.display("back/design.html");
 
 		}
-		public function rec(){
-		  	//var retour=api.rec();
-			Lib.print(api.rec().id); //return spod.id before redirection
-		 // 	return retour;
+		public function rec():Dynamic{
+		  	var retour=api.rec();
+		  	try{
+		  		Lib.print(retour.id);
+		  	}catch(msg:String){
+		  		Lib.print (retour);
+		  	}
+			 //return spod.id before redirection
+		 	return retour;
 		}
 		public function microRec(){
 			Lib.print(api.microRec().id);
