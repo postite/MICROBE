@@ -214,7 +214,7 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 					all= cast getManager(_vo).all();
 					}
 				} catch( msg : String ) {
-				    trace("Error occurred: " + msg);
+				    Lib.print(msg);
 				}
 				
 			
@@ -314,7 +314,7 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 	
 	//-----------WRITING-----------------
 	
-	public function rec():Spodable {
+	public function rec():Dynamic {
 		getClassMap();
 		return recClassMap();	
 
@@ -329,7 +329,7 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 		cast(voInstance,sys.db.Object).update();
 		return voInstance;
 	}
-	function recClassMap() : Spodable {
+	function recClassMap() : Dynamic {
 		trace("record"+map.id);
 		var voInstance:Spodable= null;
 		if( map.id!=null){
@@ -352,9 +352,14 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 		var fullSpod:Object=cast creator.record();
 		// trace("beforeRec="+Type.typeof(cast(fullSpod).date));
 		// trace("beforeReccheck date="+cast(fullSpod).date.getTime());
+		throw cast(voInstance).titre;
 		cast(fullSpod).date=Date.now();
 		if(cast(fullSpod).id==null){
-		fullSpod.insert();
+			try{
+			fullSpod.insert();
+			}catch(msg:String){
+			return "erreur "+msg;
+			}
 		}else{
 		fullSpod.update();
 		}

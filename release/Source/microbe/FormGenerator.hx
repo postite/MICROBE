@@ -74,7 +74,7 @@ class FormGenerator
 	
 		
 		//gestion des microfields imbriqués avec relations
-		public function generateComplexClassMapForm(nomVo:String,?data:Spodable) : Void {
+		public function generateComplexClassMapForm(nomVo:String,?data:Spodable,?ajout:Bool=false) : Void {
 			//stockage classMApping
 			var spodvo:Spodable;
 			var _classMap= new ClassMap();
@@ -105,6 +105,7 @@ class FormGenerator
 		//	var tagid=haxe.Serializer.run(TagManager.getTagsById(TagManager.getSpodName(spodvo), spodvo.id));
 			
 				//_formulaire.addElement(new TagView("pif","paf",tags));
+				if(!ajout)
 				renderCloud();
 			}	
 			

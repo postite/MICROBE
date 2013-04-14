@@ -45,7 +45,7 @@ class controllers_Pipo extends microbe_backof_Back {
 	}
 	public function ajoute($voName) {
 		haxe_Log::trace("ajoute", _hx_anonymous(array("fileName" => "Pipo.hx", "lineNumber" => 283, "className" => "controllers.Pipo", "methodName" => "ajoute")));
-		$this->generator->generateComplexClassMapForm($voName, null);
+		$this->generator->generateComplexClassMapForm($voName, null, null);
 		$this->jsLib->addOnce(controllers_Pipo::$backjs);
 		$this->jsScript->add(controllers_Pipo::$backInstance . ".instance.setClassMap('" . $this->generator->getCompressedClassMap() . "');");
 		$this->defaultAssign();
@@ -67,9 +67,9 @@ class controllers_Pipo extends microbe_backof_Back {
 			}
 			_hx_deref(($newData))->id_ref = $id;
 			_hx_deref(($newData))->lang = $lang;
-			$this->generator->generateComplexClassMapForm($voName, $newData);
+			$this->generator->generateComplexClassMapForm($voName, $newData, null);
 		} else {
-			$this->generator->generateComplexClassMapForm($voName, $this->api->getOne($voName, $traduction_id));
+			$this->generator->generateComplexClassMapForm($voName, $this->api->getOne($voName, $traduction_id), null);
 		}
 		$this->jsLib->addOnce(controllers_Pipo::$backjs);
 		$this->jsScript->add(controllers_Pipo::$backInstance . ".instance.setClassMap('" . $this->generator->getCompressedClassMap() . "');");
@@ -151,7 +151,7 @@ class controllers_Pipo extends microbe_backof_Back {
 		if(Std::is($data, _hx_qtype("microbe.vo.Page"))) {
 			$this->view->assign("contenttype", "page");
 		}
-		$this->generator->generateComplexClassMapForm($voName, $data);
+		$this->generator->generateComplexClassMapForm($voName, $data, null);
 		$this->jsLib->addOnce(microbe_controllers_GenericController::$appConfig->jsPath . "jquery-ui-1.8.14.custom.min.js");
 		$this->jsLib->addOnce(controllers_Pipo::$backjs);
 		$this->jsScript->add(controllers_Pipo::$backInstance . ".instance.setClassMap('" . $this->generator->getCompressedClassMap() . "');");

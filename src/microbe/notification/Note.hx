@@ -42,12 +42,13 @@ class Note
 		
 		var _box:String= "<div class='note'>"+_text+"</div>";
 		box=_box;
+		var winPos =new JQuery(Lib.window).scrollTop();
 		jBox= new JQuery(box);
 		jBox.css("position","absolute");
 		jBox.css("background-color",getType());
 		jBox.css("width","400px");
 		jBox.css("right","-400px");
-		jBox.css("top","400px");
+		jBox.css("top",winPos+400+"px");
 		jBox.css("font-size","33px");
 		jBox.css("display","block");
 		return jBox;
@@ -71,8 +72,12 @@ class Note
 	}
 	function onDone() : Void {
 	//	Lib.alert("OnDone");
-		jBox.animate({right:-400}, 300);
+		jBox.animate({right:-400}, 300,finsished);
 		
+	}
+	function finsished():Void 
+	{
+		jBox.remove();
 	}
 	
 	

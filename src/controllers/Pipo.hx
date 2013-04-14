@@ -298,9 +298,11 @@ class Pipo extends Back
 		public function rec():Dynamic{
 		  	var retour=api.rec();
 		  	try{
-		  		Lib.print(retour.id);
+		  		var ret=haxe.Serializer.run(retour.id);
+		  		Lib.print(ret);
 		  	}catch(msg:String){
-		  		Lib.print (retour);
+		  		var ret=haxe.Serializer.run(retour);
+		  		Lib.print(ret);
 		  	}
 			 //return spod.id before redirection
 		 	return retour;

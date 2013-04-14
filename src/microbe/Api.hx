@@ -350,12 +350,12 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 				for ( f in map.fields){
 					if( f.field ==key) {
 						trace("found unique KEY");
-					Reflect.setField(voInstance,key,f.value);
-					var pip=manager.unsafeExecute("Select * from "+dbInfos.name+" where "+key+"='"+f.value+"'");
-					trace("pip="+pip);
+					
+					var pip:sys.db.ResultSet=manager.unsafeExecute("Select * from "+dbInfos.name+" where "+key+"='"+f.value+"'");
+					trace("pip="+pip.length);
 					if (pip.length>0)
-					return "safe doublon";
-					trace("POUM");
+					return new microbe.ERROR(microbe.ERROR.ERROR_TYPE.DOUBLON);
+					
 					}
 
 				}
@@ -365,7 +365,7 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 		try{
 		cast (voInstance).insert();
 		}catch(err:String){
-			return "doublon";
+			return new microbe.ERROR(microbe.ERROR.ERROR_TYPE.DOUBLON);
 		}
 			cast(voInstance).id= microbe.controllers.GenericController.appDb.connection.lastInsertId();
 			

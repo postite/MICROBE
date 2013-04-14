@@ -71,7 +71,10 @@ class microbe_FormGenerator {
 			}
 		}
 	}
-	public function generateComplexClassMapForm($nomVo, $data = null) {
+	public function generateComplexClassMapForm($nomVo, $data = null, $ajout = null) {
+		if($ajout === null) {
+			$ajout = false;
+		}
 		$spodvo = null;
 		$_classMap = new microbe_ClassMap();
 		$stringVo = microbe_FormGenerator::$voPackage . $nomVo;
@@ -90,7 +93,9 @@ class microbe_FormGenerator {
 		$fields->taggable = false;
 		if(Std::is($spodvo, _hx_qtype("microbe.vo.Taggable"))) {
 			$fields->taggable = true;
-			$this->renderCloud();
+			if(!$ajout) {
+				$this->renderCloud();
+			}
 		}
 		$_classMap->fields = $fields;
 		$submit = new microbe_form_elements_RecButton("submit", "enregistrer", "enregistrer", microbe_form_elements_ButtonType::$BUTTON, null);

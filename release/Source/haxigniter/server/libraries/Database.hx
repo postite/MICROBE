@@ -334,7 +334,7 @@ class Database
 		try
 		{
 			this.lastQuery = query;
-			return this.connection.request(query);
+			return  this.connection.request(query);
 		}
 		catch(e : Dynamic)
 		{

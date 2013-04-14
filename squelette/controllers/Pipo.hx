@@ -89,14 +89,14 @@ class Pipo extends Back
 
 		}
 		
-		public function nav(voName:String,?id:Int){
+		public function nav(voName:String){
 			trace("voName="+voName);
 			defaultAssign();
 			
 			this.view.assign("currentVo",voName);
 			/////// not ready specific renderer pour les pages ...ou autres
 			var content:String="";
-			return choix(id,voName);
+			return choix(null,voName);
 			////.....end
 			this.view.assign("content", content);
 			this.view.display("back/design.html"); 
