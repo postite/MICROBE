@@ -10,6 +10,7 @@ class BackSignal extends Signal1<String>
 	public static  var requestSavingComplete:Signal1<String>;
 
 	public static var  erreur:Signal1<microbe.ERROR>;
+	public static var  tryAgain:Signal0;
 	public function new()
 	{
 		preredirect= new Signal1();
@@ -17,6 +18,7 @@ class BackSignal extends Signal1<String>
 		requestSaving= new Signal1();
 		requestSavingComplete= new Signal1();
 		erreur= new Signal1();
+		tryAgain= new Signal0();
 		super(String);
 	}
 }
