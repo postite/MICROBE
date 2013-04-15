@@ -1,3 +1,104 @@
+.picto {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+}
+.tagcross {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: 0px 0px;
+  width: 29px;
+  height: 29px;
+}
+.tagcross:hover {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: 0px -29px;
+  width: 29px;
+  height: 29px;
+}
+.cross {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -29px 0px;
+  width: 38px;
+  height: 39px;
+}
+.cross:hover {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -29px -39px;
+  width: 38px;
+  height: 39px;
+}
+.tooltipbot {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -67px 0px;
+  width: 62px;
+  height: 28px;
+}
+.tooltipbot:hover {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -67px -28px;
+  width: 62px;
+  height: 28px;
+}
+.tooltipleft {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -129px 0px;
+  width: 107px;
+  height: 41px;
+}
+.tooltipleft:hover {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -129px -41px;
+  width: 107px;
+  height: 41px;
+}
+.blank {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -236px 0px;
+  width: 106px;
+  height: 107px;
+}
+.blank:hover {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -236px -107px;
+  width: 106px;
+  height: 107px;
+}
+.up {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -342px 0px;
+  width: 39px;
+  height: 39px;
+}
+.up:hover {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -342px -39px;
+  width: 39px;
+  height: 39px;
+}
 .blackblock {
   display: inline-block;
   background-color: black;
@@ -99,7 +200,7 @@ form input[type="text"] {
 
   outline: none;
   padding: 5px;
-  width: 100%;
+  width: 90%;
 }
 form input[type="file"] {
   color: #fff;
@@ -168,11 +269,9 @@ form input[type="submit"] {
   font-size: 12px;
   height: 38px;
   width: 40px;
-  padding: 0 2px;
+  text-align: center;
   line-height: 38px;
-  position: absolute;
-  top: 0px;
-  right: 45px;
+  float: right;
   background-color: black;
 }
 .imageuploader .file_input_button:hover {
@@ -180,16 +279,38 @@ form input[type="submit"] {
   cursor: pointer;
 }
 .imageuploader #uploadButton {
-  width: 38px;
-  height: 38px;
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  background-image: url("assets/images/up.png");
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -342px 0px;
+  width: 39px;
+  height: 39px;
+  float: right;
 }
 .imageuploader #uploadButton:hover {
-  background-image: url("assets/images/up_hover.png");
-  cursor: pointer;
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -342px -39px;
+  width: 39px;
+  height: 39px;
+}
+.imageuploader #cancel {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -29px 0px;
+  width: 38px;
+  height: 39px;
+  float: right;
+}
+.imageuploader #cancel:hover {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -29px -39px;
+  width: 38px;
+  height: 39px;
 }
 #tagSelector {
   position: absolute;
@@ -223,23 +344,29 @@ form input[type="submit"] {
   float: left;
 }
 #tagSelector .tagitem .minus {
-  float: right;
-  background-image: url('assets/images/tagsuppr.png');
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: 0px 0px;
   width: 29px;
   height: 29px;
+  float: right;
 }
 #tagSelector .tagitem .minus:hover {
-  background-image: url("assets/images/tagsuppr_hover.png");
-  cursor: hand;
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: 0px -29px;
+  width: 29px;
+  height: 29px;
 }
 #tagSelector #instantag {
   position: relative;
   background-color: olive;
 }
 #tagSelector #instantag input {
-  margin-top: 0px;
   height: 28px;
-  background: #808080;
+  background: olive;
   border: none;
   /*  font-family: italic 13px Georgia, "Times New Roman", Times, serif;*/
 

@@ -1,3 +1,4 @@
+@import 'spriteAssets.less';
 @mycolor : #DADCCD;
 
 @helvetica:"HelveticaNeueLTStd45Light";
@@ -118,7 +119,7 @@ li li{
 		/*  font-family: italic 13px Georgia, "Times New Roman", Times, serif;*/
 		  outline: none;
 		  padding: 5px;
-		  width: 100%;
+		  width: 90%;
 	}
 	
 	input[type="file"]{
@@ -201,11 +202,9 @@ input[type="submit"]{
 				font-size:12px;
 				height:38px;
 				width:40px; 
-				padding:0 2px;
+				text-align: center;
 				line-height:38px;
-				position: absolute; 
-				top: 0px;
-				right:45px;
+				float:right;
 				background-color:black;
 			}
 			.file_input_button:hover{
@@ -214,19 +213,24 @@ input[type="submit"]{
 			}
 
 			#uploadButton{
-				width: 38px;
-				height:38px;
-				position: absolute; 
-				top: 0px;
-				right:0px;
-				background-image:url("assets/images/up.png");
+				.up;
+				//width: 38px;
+				//height:38px;
+				float:right;
+				//background-image:url("assets/images/up.png");
 	
 			}
-			#uploadButton:hover{
-				
-				background-image:url("assets/images/up_hover.png");
-				cursor:pointer;
+			#cancel{
+				.cross;
+				// position: absolute;
+				// top:0;
+				float:right
 			}
+			// #uploadButton:hover{
+				
+			// 	background-image:url("assets/images/up_hover.png");
+			// 	cursor:pointer;
+			// }
 
 }///fin .image uploader
 
@@ -267,20 +271,20 @@ input[type="submit"]{
 		}
 		
 		.minus{
-	
+		.tagcross;
 		//display:inline;
 		float:right;
-		background-image: url('assets/images/tagsuppr.png');
-		width:29px;
-		height:29px;
+		// background-image: url('assets/images/tagsuppr.png');
+		// width:29px;
+		// height:29px;
 		
 		
 		}//fin .minus
 		
-		.minus:hover{
-		background-image: url("assets/images/tagsuppr_hover.png");
-		cursor:hand;
-		}
+		// .minus:hover{
+		// background-image: url("assets/images/tagsuppr_hover.png");
+		// cursor:hand;
+		// }
 	}//fin tagItem
 	
 	#instantag{
@@ -290,15 +294,16 @@ input[type="submit"]{
 		background-color:olive;
 
 		input{
-			margin-top:0px;
+			//margin-top:0px;
 			height:@hauteurChamp;
-			background: @champsColor;
-			  border: none;
+			background: olive;//@champsColor;
+			border: none;
 			  //border-radius: 3px;
 			/*  font-family: italic 13px Georgia, "Times New Roman", Times, serif;*/
 			  outline:none;
 			  padding: 5px;
 			  width: 100%;
+
 				//float:right;
 		}
 		
@@ -396,6 +401,7 @@ input[type="submit"]{
 	font-family:@myLabelFont;
 	background-color:@buttonColor;
 	background: url("assets/tooltip.png") no-repeat top left;
+
 	position:absolute;
 	z-index:10;
 	span{
