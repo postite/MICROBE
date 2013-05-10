@@ -202,6 +202,13 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 			//trace("getOne="+_vo+"id="+id);
 			return cast getManager(_vo).unsafeGet(id);
 		}
+
+
+
+
+			/// trop trop lent
+			///consider this
+			//return manager.unsafeObject(Std.format("select * from ${manager.dbInfos().name}  where lang='$defLang' order by -id limit 1"),false);
 			public function getLast(_vo:String,?search:Dynamic) : Spodable {
 				//var inst:Object= cast this.createInstance(_vo);
 				//trace("getOne="+_vo+"id="+id);
@@ -349,13 +356,12 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 				//trace("classMap="+map.fields);
 				for ( f in map.fields){
 					if( f.field ==key) {
-						trace("found unique KEY");
-					
-					var pip:sys.db.ResultSet=manager.unsafeExecute("Select * from "+dbInfos.name+" where "+key+"='"+f.value+"'");
+					trace("found unique KEY");
+					var value= untyped __call__("addslashes",f.value);
+					var pip:sys.db.ResultSet=manager.unsafeExecute("Select * from "+dbInfos.name+" where "+key+"='"+ value+"'");
 					trace("pip="+pip.length);
 					if (pip.length>0)
 					return new microbe.ERROR(microbe.ERROR.ERROR_TYPE.DOUBLON,null,key);
-					
 					}
 
 				}
