@@ -1,6 +1,6 @@
 package microbe;
 import microbe.vo.Taggable;
-
+import microbe.vo.Traductable;
 import microbe.form.IMicrotype;
 import microbe.form.MicroFieldList;
 import microbe.ClassMap;
@@ -39,6 +39,7 @@ import microbe.form.elements.IframeUploader;*/
 import microbe.form.elements.DeleteButton;
 import microbe.form.elements.TagView;
 import microbe.macroUtils.Imports;
+
 
 class FormGenerator
 {
@@ -107,8 +108,16 @@ class FormGenerator
 				//_formulaire.addElement(new TagView("pif","paf",tags));
 				if(!ajout)
 				renderCloud();
-			}	
+			}
+			fields.traductable=false;
+			if (Std.is(spodvo,Traductable)){		
+				fields.traductable=true;
+		//	var tags=haxe.Serializer.run(TagManager.getTags(TagManager.getSpodName(spodvo)));
+		//	var tagid=haxe.Serializer.run(TagManager.getTagsById(TagManager.getSpodName(spodvo), spodvo.id));
 			
+				//_formulaire.addElement(new TagView("pif","paf",tags));
+				
+			}
 			_classMap.fields=fields;
 						//submission
 						//var deleteaction:String=DeleteButton.action; 

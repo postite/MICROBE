@@ -97,6 +97,10 @@ class microbe_FormGenerator {
 				$this->renderCloud();
 			}
 		}
+		$fields->traductable = false;
+		if(Std::is($spodvo, _hx_qtype("microbe.vo.Traductable"))) {
+			$fields->traductable = true;
+		}
 		$_classMap->fields = $fields;
 		$submit = new microbe_form_elements_RecButton("submit", "enregistrer", "enregistrer", microbe_form_elements_ButtonType::$BUTTON, null);
 		$submit->cssClass = "submitor";

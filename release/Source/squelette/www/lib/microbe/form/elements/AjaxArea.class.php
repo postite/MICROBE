@@ -12,6 +12,8 @@ class microbe_form_elements_AjaxArea extends microbe_form_FormElement {
 		$this->value = $value;
 		$this->required = $required;
 		$this->attributes = $attributes;
+		$this->width = 300;
+		$this->height = 200;
 	}}
 	public function toString() {
 		return $this->render(null);
@@ -22,6 +24,7 @@ class microbe_form_elements_AjaxArea extends microbe_form_FormElement {
 		$s .= "<textarea  name=\"" . $n . "\" id=\"" . $n . "\" " . $this->attributes . " >" . Std::string($this->value) . "</textarea>";
 		return $s;
 	}
+	public $width;
 	public $height;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))

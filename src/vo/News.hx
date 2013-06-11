@@ -11,6 +11,7 @@ import sys.db.TableCreate;
 import microbe.vo.Spodable;
 import microbe.form.IMicrotype;
 import microbe.vo.Taggable;
+import microbe.vo.Traductable;
 
 @:table("actu")
 @:id(id)

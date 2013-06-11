@@ -51,8 +51,8 @@ class AjaxInput extends FormElement
 						
 						var style = useSizeValues ? "style=\"width:" + width + "px\"" : "";
 
-		var str = "<input " + style +"\" type=\"" + tType + "\" name=\"" + n + "\" id=\"" + n + "\" value=\"" +safeString(value) + "\"  " + attributes + " />" ;
-		
+		//var str = "<input " + style +"\" type=\"" + tType + "\" name=\"" + n + "\" id=\"" + n + "\" value=\"" +safeString(value) + "\"  " + attributes + " />" ;
+		var str=Std.format("<input $style type='$tType' name='$n' id='$n' value='${safeString(value)}' attributes />");
 		str += (if (required && form.isSubmitted() && printRequired) " required");
 		return str;
 		}
@@ -69,7 +69,7 @@ import js.JQuery;
 import js.Dom;
 import microbe.form.AjaxElement;
 import microbe.form.Microfield;
-
+@:keep
 class AjaxInput extends AjaxElement
 {
 	

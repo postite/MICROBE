@@ -97,6 +97,7 @@ class AjaxEditor extends AjaxElement
 {
 	
 	public static var self:AjaxEditor;
+	public static var wymCount;
 	public var formDefaultAction:String;
 	private var base_url:String;
 	//private var wym:Dynamic;
@@ -150,6 +151,7 @@ class AjaxEditor extends AjaxElement
 		wymOptions.html=value;
 		//Lib.alert("before wym" + "#"+this.id+".editor:visible");
 		wym= new Wymeditor("#"+this.id+".editor:visible");
+		wymCount++;
 		trace("after new wym");
 		//Lib.alert("before"+"wymeditor()");
 		//wym.wymeditor(wymOptions);
@@ -170,8 +172,10 @@ class AjaxEditor extends AjaxElement
 	// 			);
 
 	trace("wym");
-	wym.wymeditors(0).update();
-
+	for (i in 0...wymCount){
+		//Lib.alert("i="+i);
+	wym.wymeditors(i).update();
+	}
 	return new JQuery("#"+id).attr("value");
 	}
 	override public function output() : String {

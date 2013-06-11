@@ -11174,3 +11174,1061 @@ INFO - 2013-04-14 22:17:57 --> Newsit s a formElement >{
 	classe : microbe.form.elements.CheckBox, 
 	champs : null
 } ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:20:58 --> index ::> Pipo.hx 171 index
+INFO - 2013-04-14 22:20:58 --> after ::> Pipo.hx 179 index
+INFO - 2013-04-14 22:21:00 --> voName=News ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:21:00 --> choix id=null vo=News ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:21:00 --> micrabeLast ::> Api.hx 223 getLast
+INFO - 2013-04-14 22:21:00 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : machine
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:21:00 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxDate, 
+	type : formElement, 
+	champs : 2013-04-14 00:00:00
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:21:00 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:21:00 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.AjaxEditor, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:21:00 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.ImageUploader, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:21:00 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.CheckBox, 
+	champs : false
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:21:00 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:21:00 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:21:00 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:21:00 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:21:00 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:21:00 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:21:00 --> microbe.TagManager.getTags{} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:21:00 --> length=0 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:21:00 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:21:00 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:21:00 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:21:00 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:21:00 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:21:00 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:21:00 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:21:00 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:21:00 --> length=5 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:21:12 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:21:12 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:21:12 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:21:12 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:21:12 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:21:12 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:21:12 --> microbe.TagManager.getTags{microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:21:12 --> length=1 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:21:12 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:21:12 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:21:12 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:21:12 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:21:12 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:21:12 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:21:12 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:21:12 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:21:12 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:21:44 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:21:44 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:21:44 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:21:44 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:21:44 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:21:44 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:21:44 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:21:44 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:21:44 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:21:44 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:21:44 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:21:44 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:21:44 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:21:44 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:21:44 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:21:44 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:21:44 --> length=7 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:21:47 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:21:47 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:21:47 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:21:47 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:21:47 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:21:47 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:21:47 --> microbe.TagManager.getTags{microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:21:47 --> length=1 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:21:48 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:21:48 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:21:48 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:21:48 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:21:48 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:21:48 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:21:48 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:21:48 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:21:48 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:22:02 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:22:02 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:22:02 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:22:02 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:22:02 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:22:02 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:22:02 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:22:02 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:22:02 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:22:02 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:22:02 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:22:02 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:22:02 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:22:02 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:22:02 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:22:02 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:22:02 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:23:43 --> voName=News ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:23:43 --> choix id=null vo=News ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:23:43 --> micrabeLast ::> Api.hx 223 getLast
+INFO - 2013-04-14 22:23:43 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : machine
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:23:43 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxDate, 
+	type : formElement, 
+	champs : 2013-04-14 00:00:00
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:23:43 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:23:43 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.AjaxEditor, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:23:43 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.ImageUploader, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:23:43 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.CheckBox, 
+	champs : false
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:23:44 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:23:44 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:23:44 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:23:44 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:23:44 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:23:44 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:23:44 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:23:44 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:23:44 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:23:44 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:23:44 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:23:44 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:23:44 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:23:44 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:23:44 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:23:44 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:23:44 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:24:59 --> voName=News ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:24:59 --> choix id=null vo=News ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:24:59 --> micrabeLast ::> Api.hx 223 getLast
+INFO - 2013-04-14 22:24:59 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : machine
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:24:59 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxDate, 
+	type : formElement, 
+	champs : 2013-04-14 00:00:00
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:24:59 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:24:59 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.AjaxEditor, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:24:59 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.ImageUploader, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:24:59 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.CheckBox, 
+	champs : false
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:25:00 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:25:00 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:25:00 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:25:00 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:25:00 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:25:00 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:25:00 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:25:00 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:25:00 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:25:00 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:25:00 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:25:00 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:25:00 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:25:00 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:25:00 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:25:00 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:25:00 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:25:47 --> voName=News ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:25:47 --> choix id=null vo=News ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:25:47 --> micrabeLast ::> Api.hx 223 getLast
+INFO - 2013-04-14 22:25:47 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : machine
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:25:47 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxDate, 
+	type : formElement, 
+	champs : 2013-04-14 00:00:00
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:25:47 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:25:47 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.AjaxEditor, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:25:47 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.ImageUploader, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:25:47 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.CheckBox, 
+	champs : false
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:25:47 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:25:47 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:25:47 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:25:47 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:25:47 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:25:47 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:25:47 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:25:47 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:25:48 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:25:48 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:25:48 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:25:48 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:25:48 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:25:48 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:25:48 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:25:48 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:25:48 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:29:39 --> voName=News ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:29:39 --> choix id=null vo=News ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:29:39 --> micrabeLast ::> Api.hx 223 getLast
+INFO - 2013-04-14 22:29:39 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : machine
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:29:39 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxDate, 
+	type : formElement, 
+	champs : 2013-04-14 00:00:00
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:29:39 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:29:39 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.AjaxEditor, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:29:39 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.ImageUploader, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:29:39 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.CheckBox, 
+	champs : false
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:29:39 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:29:39 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:29:39 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:29:39 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:29:39 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:29:39 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:29:39 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:29:39 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:29:40 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:29:40 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:29:40 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:29:40 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:29:40 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:29:40 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:29:40 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:29:40 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:29:40 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:31:16 --> voName=News ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:31:16 --> choix id=null vo=News ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:31:16 --> micrabeLast ::> Api.hx 223 getLast
+INFO - 2013-04-14 22:31:16 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : machine
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:31:16 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxDate, 
+	type : formElement, 
+	champs : 2013-04-14 00:00:00
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:31:16 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:31:16 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.AjaxEditor, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:31:16 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.ImageUploader, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:31:16 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.CheckBox, 
+	champs : false
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:31:17 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:31:17 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:31:17 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:31:17 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:31:17 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:31:17 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:31:17 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:31:17 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:31:17 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:31:17 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:31:17 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:31:17 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:31:17 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:31:17 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:31:17 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:31:17 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:31:17 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:31:44 --> voName=News ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:31:44 --> choix id=null vo=News ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:31:44 --> micrabeLast ::> Api.hx 223 getLast
+INFO - 2013-04-14 22:31:44 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : machine
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:31:44 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxDate, 
+	type : formElement, 
+	champs : 2013-04-14 00:00:00
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:31:44 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:31:44 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.AjaxEditor, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:31:44 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.ImageUploader, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:31:44 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.CheckBox, 
+	champs : false
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:31:44 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:31:44 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:31:44 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:31:44 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:31:44 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:31:44 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:31:44 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:31:44 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:31:44 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:31:44 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:31:44 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:31:44 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:31:44 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:31:44 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:31:44 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:31:44 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:31:44 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:36:26 --> voName=News ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:36:26 --> choix id=null vo=News ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:36:26 --> micrabeLast ::> Api.hx 223 getLast
+INFO - 2013-04-14 22:36:26 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : machine
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:36:26 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxDate, 
+	type : formElement, 
+	champs : 2013-04-14 00:00:00
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:36:26 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:36:26 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.AjaxEditor, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:36:26 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.ImageUploader, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:36:26 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.CheckBox, 
+	champs : false
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:36:27 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:36:27 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:36:27 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:36:27 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:36:27 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:36:27 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:36:27 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:36:27 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:36:27 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:36:27 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:36:27 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:36:27 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:36:27 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:36:27 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:36:27 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:36:27 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:36:27 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:37:35 --> voName=News ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:37:35 --> choix id=null vo=News ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:37:35 --> micrabeLast ::> Api.hx 223 getLast
+INFO - 2013-04-14 22:37:35 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : machine
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:37:35 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxDate, 
+	type : formElement, 
+	champs : 2013-04-14 00:00:00
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:37:35 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:37:35 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.AjaxEditor, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:37:35 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.ImageUploader, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:37:35 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.CheckBox, 
+	champs : false
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:37:36 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:37:36 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:37:36 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:37:36 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:37:36 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:37:36 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:37:36 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:37:36 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:37:36 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:37:36 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:37:36 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:37:36 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:37:36 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:37:36 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:37:36 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:37:36 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:37:36 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:40:33 --> voName=News ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:40:33 --> choix id=null vo=News ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:40:33 --> micrabeLast ::> Api.hx 223 getLast
+INFO - 2013-04-14 22:40:33 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : machine
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:40:33 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxDate, 
+	type : formElement, 
+	champs : 2013-04-14 00:00:00
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:40:33 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:40:33 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.AjaxEditor, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:40:33 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.ImageUploader, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:40:33 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.CheckBox, 
+	champs : false
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:40:34 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:40:34 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:40:34 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:40:34 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:40:34 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:40:34 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:40:34 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:40:34 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:40:34 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:40:34 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:40:34 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:40:34 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:40:34 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:40:34 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:40:34 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:40:34 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:40:34 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:42:52 --> voName=News ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:42:52 --> choix id=null vo=News ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:42:52 --> micrabeLast ::> Api.hx 223 getLast
+INFO - 2013-04-14 22:42:52 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : machine
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:42:52 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxDate, 
+	type : formElement, 
+	champs : 2013-04-14 00:00:00
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:42:52 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:42:52 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.AjaxEditor, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:42:52 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.ImageUploader, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:42:52 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.CheckBox, 
+	champs : false
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:42:53 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:42:53 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:42:53 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:42:53 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:42:53 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:42:53 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:42:53 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:42:53 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:42:53 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:42:53 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:42:53 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:42:53 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:42:53 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:42:53 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:42:53 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:42:53 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:42:53 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:43:20 --> voName=News ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:43:20 --> choix id=null vo=News ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:43:20 --> micrabeLast ::> Api.hx 223 getLast
+INFO - 2013-04-14 22:43:20 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : machine
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:43:20 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxDate, 
+	type : formElement, 
+	champs : 2013-04-14 00:00:00
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:43:20 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:43:20 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.AjaxEditor, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:43:20 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.ImageUploader, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:43:20 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.CheckBox, 
+	champs : false
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:43:21 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:43:21 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:43:21 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:43:21 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:43:21 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:43:21 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:43:21 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:43:21 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:43:21 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:43:21 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:43:21 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:43:21 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:43:21 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:43:21 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:43:21 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:43:21 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:43:21 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:43:27 --> voName=Edito ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:43:27 --> choix id=null vo=Edito ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:43:31 --> voName=News ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:43:31 --> choix id=null vo=News ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:43:31 --> micrabeLast ::> Api.hx 223 getLast
+INFO - 2013-04-14 22:43:31 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : machine
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:43:31 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxDate, 
+	type : formElement, 
+	champs : 2013-04-14 00:00:00
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:43:31 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:43:31 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.AjaxEditor, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:43:31 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.ImageUploader, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:43:31 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.CheckBox, 
+	champs : false
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:43:32 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:43:32 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:43:32 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:43:32 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:43:32 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:43:32 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:43:32 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:43:32 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:43:32 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:43:32 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:43:32 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:43:32 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:43:32 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:43:32 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:43:32 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:43:32 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:43:32 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:43:34 --> voName=RelationTest ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:43:34 --> choix id=null vo=RelationTest ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:43:36 --> voName=News ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:43:36 --> choix id=null vo=News ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:43:36 --> micrabeLast ::> Api.hx 223 getLast
+INFO - 2013-04-14 22:43:36 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : machine
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:43:36 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxDate, 
+	type : formElement, 
+	champs : 2013-04-14 00:00:00
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:43:36 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:43:36 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.AjaxEditor, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:43:36 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.ImageUploader, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:43:36 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.CheckBox, 
+	champs : false
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:43:37 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:43:37 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:43:37 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:43:37 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:43:37 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:43:37 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:43:37 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:43:37 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:43:37 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:43:37 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:43:37 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:43:37 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:43:37 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:43:37 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:43:37 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:43:37 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:43:37 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:44:11 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:44:11 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:44:11 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:44:11 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:44:11 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:44:11 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:44:11 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:44:11 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:44:11 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:44:11 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:44:11 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:44:11 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:44:11 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:44:11 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:44:11 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:44:11 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:44:11 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:45:07 --> voName=News ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:45:07 --> choix id=null vo=News ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:45:07 --> micrabeLast ::> Api.hx 223 getLast
+INFO - 2013-04-14 22:45:07 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : machine
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:45:07 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxDate, 
+	type : formElement, 
+	champs : 2013-04-14 00:00:00
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:45:07 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:45:07 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.AjaxEditor, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:45:07 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.ImageUploader, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:45:07 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.CheckBox, 
+	champs : false
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:45:08 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:45:08 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:45:08 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:45:08 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:45:08 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:45:08 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:45:08 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:45:08 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:45:08 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:45:08 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:45:08 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:45:08 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:45:08 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:45:08 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:45:08 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:45:08 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:45:08 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:45:35 --> voName=News ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:45:35 --> choix id=null vo=News ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:45:35 --> micrabeLast ::> Api.hx 223 getLast
+INFO - 2013-04-14 22:45:35 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : machine
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:45:35 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxDate, 
+	type : formElement, 
+	champs : 2013-04-14 00:00:00
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:45:35 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:45:35 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.AjaxEditor, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:45:35 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.ImageUploader, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:45:35 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.CheckBox, 
+	champs : false
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:45:36 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:45:36 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:45:36 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:45:36 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:45:36 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:45:36 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:45:36 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:45:36 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:45:36 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:45:36 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:45:36 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:45:36 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:45:36 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:45:36 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:45:36 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:45:36 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:45:36 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:46:43 --> voName=News ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:46:43 --> choix id=null vo=News ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:46:43 --> micrabeLast ::> Api.hx 223 getLast
+INFO - 2013-04-14 22:46:43 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : machine
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:46:43 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxDate, 
+	type : formElement, 
+	champs : 2013-04-14 00:00:00
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:46:43 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:46:43 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.AjaxEditor, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:46:43 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.ImageUploader, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:46:43 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.CheckBox, 
+	champs : false
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:46:44 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:46:44 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:46:44 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:46:44 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:46:44 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:46:44 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:46:44 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:46:44 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:46:44 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:46:44 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:46:44 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:46:44 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:46:44 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:46:44 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:46:44 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:46:44 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:46:44 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:47:16 --> voName=News ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:47:16 --> choix id=null vo=News ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:47:16 --> micrabeLast ::> Api.hx 223 getLast
+INFO - 2013-04-14 22:47:16 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : machine
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:47:16 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxDate, 
+	type : formElement, 
+	champs : 2013-04-14 00:00:00
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:47:16 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:47:16 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.AjaxEditor, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:47:16 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.ImageUploader, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:47:16 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.CheckBox, 
+	champs : false
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:47:17 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:47:17 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:47:17 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:47:17 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:47:17 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:47:17 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:47:17 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:47:17 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:47:17 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:47:17 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:47:17 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:47:17 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:47:17 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:47:17 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:47:17 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:47:17 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:47:17 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:47:56 --> voName=News ::> Pipo.hx 93 nav
+INFO - 2013-04-14 22:47:56 --> choix id=null vo=News ::> Pipo.hx 108 choix
+INFO - 2013-04-14 22:47:56 --> micrabeLast ::> Api.hx 223 getLast
+INFO - 2013-04-14 22:47:56 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : machine
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:47:56 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxDate, 
+	type : formElement, 
+	champs : 2013-04-14 00:00:00
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:47:56 --> Newsit s a formElement >{
+	classe : microbe.form.elements.AjaxInput, 
+	type : formElement, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:47:56 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.AjaxEditor, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:47:56 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.ImageUploader, 
+	champs : 
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:47:56 --> Newsit s a formElement >{
+	type : formElement, 
+	classe : microbe.form.elements.CheckBox, 
+	champs : false
+} ::> FormElementBehaviour.hx 23 create
+INFO - 2013-04-14 22:47:57 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:47:57 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:47:57 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:47:57 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:47:57 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:47:57 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:47:57 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:47:57 --> length=2 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:47:57 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:47:57 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:47:57 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:47:57 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:47:57 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:47:57 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:47:57 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:47:57 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:47:57 --> length=6 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:48:08 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:48:08 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:48:08 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:48:09 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:48:09 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:48:09 --> before ::> TagManager.hx 133 getTaxoBySpodID
+INFO - 2013-04-14 22:48:09 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:48:09 --> length=3 ::> Api.hx 161 tags
+INFO - 2013-04-14 22:48:09 --> spod ::> Api.hx 150 tags
+INFO - 2013-04-14 22:48:09 --> spodnews ::> Api.hx 155 tags
+INFO - 2013-04-14 22:48:09 --> getSpoTablenews ::> TagManager.hx 317 getSpodTable
+INFO - 2013-04-14 22:48:09 --> spodablevo.News ::> TagManager.hx 322 getSpodTable
+INFO - 2013-04-14 22:48:09 --> managersys.db.Manager ::> TagManager.hx 324 getSpodTable
+INFO - 2013-04-14 22:48:09 --> spodTAble=actu ::> TagManager.hx 93 getTaxos
+INFO - 2013-04-14 22:48:09 --> resultSet=sys.db._Mysql.MysqlResultSetspodTAble=actu ::> TagManager.hx 101 getTaxos
+INFO - 2013-04-14 22:48:09 --> microbe.TagManager.getTags{microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag, microbe.Tag} ::> Api.hx 160 tags
+INFO - 2013-04-14 22:48:09 --> length=7 ::> Api.hx 161 tags

@@ -13,7 +13,7 @@ class microbe_backof_Login extends microbe_controllers_GenericController impleme
 		$formulaire2 = new microbe_form_Form("cool", null, null);
 		$this->session->user = $result;
 		$formulaire2->submitButton = new microbe_form_elements_Button("continuer", "continuer", "continuer", null, null);
-		$formulaire2->action = $this->url->siteUrl(null, null) . "/pipo/";
+		$formulaire2->action = $this->url->siteUrl(null, null) . "/" . config_Config::$backPage . "/";
 		$this->view->assign("content", $formulaire2);
 		$this->view->assign("commentaire", "merci de vous etre identifie ");
 		$this->view->display("back/design.html");
@@ -60,7 +60,7 @@ class microbe_backof_Login extends microbe_controllers_GenericController impleme
 		$this->view->assign("customLogo", null);
 		$this->view->assign("page", null);
 		$this->view->assign("link", $this->url->siteUrl(null, null));
-		$this->view->assign("backpage", $this->url->siteUrl(null, null) . "/pipo");
+		$this->view->assign("backpage", $this->url->siteUrl(null, null) . "/" . config_Config::$backPage);
 		$this->view->assign("title", "microbe admin");
 		$this->view->assign("localClass", "login");
 		$this->view->assign("custom", true);

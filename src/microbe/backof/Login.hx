@@ -41,7 +41,7 @@ class Login extends GenericController, implements Controller
 		this.view.assign("customLogo",null);
 		this.view.assign("page", null);
 		this.view.assign("link", url.siteUrl());
-		this.view.assign("backpage",url.siteUrl()+"/pipo");
+		this.view.assign("backpage",url.siteUrl()+"/"+config.Config.backPage);
 		this.view.assign("title","microbe admin");
 		this.view.assign("localClass","login");
 		this.view.assign("custom",true);
@@ -132,7 +132,7 @@ class Login extends GenericController, implements Controller
 				session.user = result;
 			
 				formulaire2.submitButton=new Button("continuer", "continuer", "continuer");
-				formulaire2.action = url.siteUrl() + "/pipo/";
+				formulaire2.action = url.siteUrl() + "/"+config.Config.backPage+"/";
 				
 				this.view.assign("content", formulaire2);
 				this.view.assign("commentaire", "merci de vous etre identifie ");

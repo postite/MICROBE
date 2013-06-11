@@ -53,6 +53,7 @@ class config_Config extends haxigniter_server_Config {
 		else
 			throw new HException('Unable to call «'.$m.'»');
 	}
+	static $backPage = "pipo";
 	static $traductable = true;
 	static $hclone = false;
 	function __toString() { return 'config.Config'; }

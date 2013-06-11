@@ -36,7 +36,7 @@ class BackJS implements mpartial.Partial
 	//config
 	//public static var base_url:String=MicrobeConfig.siteRoot;
 	public static var base_url:String=Lib.window.location.protocol+"//"+Lib.window.location.host;
-	public static var back_url:String=base_url+"/index.php/pipo/";
+	public static var back_url:String=base_url+"/index.php/"+config.Config.backPage+"/";
 	
 	//position
 	public var currentVo:String;
@@ -234,6 +234,7 @@ class BackJS implements mpartial.Partial
 
 	function preRedirect(d:Dynamic)//spodId + string error
 	{
+		trace("d="+d);
 		var retour=null;
 		try{
 		 retour= haxe.Unserializer.run(d);
@@ -249,6 +250,8 @@ class BackJS implements mpartial.Partial
 		BackSignal.preredirectomplete.add(afterRecord);
 		if( BackSignal.preredirect.numListeners>1){
 		trace( "numListenersfor before redirect="+BackSignal.preredirect.numListeners);
+		trace("traductable?="+classMap.fields.traductable);
+
 		BackSignal.preredirect.dispatch(d);
 		}else{
 		BackSignal.preredirectomplete.dispatch("nib");
@@ -256,10 +259,10 @@ class BackJS implements mpartial.Partial
 		return null;
 		//TODO find a way to redirect if no signal interfere...
 	}
-	function afterRecord(d) : Void {
-		trace("Fter Record");
+	function afterRecord(d:String) : Void {
 		
 		Lib.window.location.href=back_url+"nav/"+classMap.voClass+"/"+classMap.id;
+		return null;
 	}
 
 	function afterError(er:microbe.ERROR) 

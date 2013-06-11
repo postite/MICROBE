@@ -1,6 +1,6 @@
 <?php
 
-class vo_News extends sys_db_Object implements vo_Traductable, microbe_vo_Taggable, microbe_vo_Spodable{
+class vo_News extends sys_db_Object implements microbe_vo_Traductable, microbe_vo_Taggable, microbe_vo_Spodable{
 	public function __construct() {
 		if(!php_Boot::$skip_constructor) {
 		parent::__construct();

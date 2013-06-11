@@ -20,16 +20,16 @@ class microbe_Api {
 		$spodadelete->delete();
 	}
 	public function recClassMap() {
-		haxe_Log::trace("record" . _hx_string_rec($this->map->id, ""), _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 333, "className" => "microbe.Api", "methodName" => "recClassMap")));
+		haxe_Log::trace("record" . _hx_string_rec($this->map->id, ""), _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 340, "className" => "microbe.Api", "methodName" => "recClassMap")));
 		$voInstance = null;
 		if($this->map->id !== null) {
-			haxe_Log::trace("map.id!=null", _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 336, "className" => "microbe.Api", "methodName" => "recClassMap")));
+			haxe_Log::trace("map.id!=null", _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 343, "className" => "microbe.Api", "methodName" => "recClassMap")));
 			$voInstance = $this->getOne($this->map->voClass, $this->map->id);
 		} else {
 			$voInstance = Type::createInstance(Type::resolveClass($this->voPackage . $this->map->voClass), new _hx_array(array()));
 			$manager = Reflect::field(Type::resolveClass($this->voPackage . $this->map->voClass), "manager");
 			$dbInfos = $manager->dbInfos();
-			haxe_Log::trace("DBINFOS" . Std::string($dbInfos), _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 343, "className" => "microbe.Api", "methodName" => "recClassMap")));
+			haxe_Log::trace("DBINFOS" . Std::string($dbInfos), _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 350, "className" => "microbe.Api", "methodName" => "recClassMap")));
 			$indexes = $dbInfos->indexes;
 			{
 				$_g = 0; $_g1 = $dbInfos->indexes;
@@ -41,19 +41,20 @@ class microbe_Api {
 						while($_g2 < $_g3->length) {
 							$key = $_g3[$_g2];
 							++$_g2;
-							haxe_Log::trace("unique=" . $key, _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 348, "className" => "microbe.Api", "methodName" => "recClassMap")));
+							haxe_Log::trace("unique=" . $key, _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 355, "className" => "microbe.Api", "methodName" => "recClassMap")));
 							if(null == $this->map->fields) throw new HException('null iterable');
 							$»it = $this->map->fields->iterator();
 							while($»it->hasNext()) {
 								$f = $»it->next();
 								if($f->field === $key) {
-									haxe_Log::trace("found unique KEY", _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 352, "className" => "microbe.Api", "methodName" => "recClassMap")));
-									$pip = $manager->unsafeExecute("Select * from " . $dbInfos->name . " where " . $key . "='" . $f->value . "'");
-									haxe_Log::trace("pip=" . _hx_string_rec($pip->getLength(), ""), _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 355, "className" => "microbe.Api", "methodName" => "recClassMap")));
+									haxe_Log::trace("found unique KEY", _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 359, "className" => "microbe.Api", "methodName" => "recClassMap")));
+									$value = addslashes($f->value);
+									$pip = $manager->unsafeExecute("Select * from " . $dbInfos->name . " where " . $key . "='" . $value . "'");
+									haxe_Log::trace("pip=" . _hx_string_rec($pip->getLength(), ""), _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 362, "className" => "microbe.Api", "methodName" => "recClassMap")));
 									if($pip->getLength() > 0) {
 										return new microbe_ERROR(microbe_ERROR_TYPE::$DOUBLON, null, $key);
 									}
-									unset($pip);
+									unset($value,$pip);
 								}
 							}
 							unset($key);
@@ -73,7 +74,7 @@ class microbe_Api {
 			}
 			$voInstance->id = microbe_controllers_GenericController::$appDb->getConnection()->lastInsertId();
 		}
-		haxe_Log::trace("after", _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 375, "className" => "microbe.Api", "methodName" => "recClassMap")));
+		haxe_Log::trace("after", _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 381, "className" => "microbe.Api", "methodName" => "recClassMap")));
 		$creator = new microbe_MicroCreator();
 		$creator->source = $this->map->fields;
 		$creator->data = $voInstance;
@@ -91,7 +92,7 @@ class microbe_Api {
 		} else {
 			$fullSpod->update();
 		}
-		haxe_Log::trace("fullSpod" . Std::string($fullSpod), _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 395, "className" => "microbe.Api", "methodName" => "recClassMap")));
+		haxe_Log::trace("fullSpod" . Std::string($fullSpod), _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 401, "className" => "microbe.Api", "methodName" => "recClassMap")));
 		return $fullSpod;
 	}
 	public function microRec() {
@@ -175,10 +176,10 @@ class microbe_Api {
 			} else throw $»e;;
 		}
 		if(_hx_len($all) > 0) {
-			haxe_Log::trace("micrabeLast", _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 223, "className" => "microbe.Api", "methodName" => "getLast")));
+			haxe_Log::trace("micrabeLast", _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 230, "className" => "microbe.Api", "methodName" => "getLast")));
 			return $all->last();
 		} else {
-			haxe_Log::trace("null", _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 226, "className" => "microbe.Api", "methodName" => "getLast")));
+			haxe_Log::trace("null", _hx_anonymous(array("fileName" => "Api.hx", "lineNumber" => 233, "className" => "microbe.Api", "methodName" => "getLast")));
 			return null;
 		}
 	}
@@ -274,6 +275,6 @@ class microbe_Api {
 		else
 			throw new HException('Unable to call «'.$m.'»');
 	}
-	static $__rtti = "<class path=\"microbe.Api\" params=\"\">\x0A\x09<map><c path=\"microbe.ClassMap\"/></map>\x0A\x09<voPackage><c path=\"String\"/></voPackage>\x0A\x09<cnx><c path=\"sys.db.Connection\"/></cnx>\x0A\x09<rootSpod><c path=\"microbe.vo.Spodable\"/></rootSpod>\x0A\x09<_xml set=\"method\" line=\"62\"><f a=\"data\">\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></_xml>\x0A\x09<_json set=\"method\" line=\"65\"><f a=\"data\">\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></_json>\x0A\x09<spodByTag public=\"1\" set=\"method\" line=\"81\"><f a=\"s\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"List\"><c path=\"microbe.vo.Spodable\"/></c>\x0A</f></spodByTag>\x0A\x09<recTag public=\"1\" set=\"method\" line=\"95\"><f a=\"tag:spod:spod_id\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"Int\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></recTag>\x0A\x09<dissociateTag public=\"1\" set=\"method\" line=\"109\"><f a=\"tag:spod:spod_id\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"Int\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></dissociateTag>\x0A\x09<associateTag public=\"1\" set=\"method\" line=\"113\"><f a=\"tag:spod:spodId\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"Int\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></associateTag>\x0A\x09<tags public=\"1\" set=\"method\" line=\"120\"><f a=\"\"><e path=\"Void\"/></f></tags>\x0A\x09<test public=\"1\" set=\"method\" line=\"172\"><f a=\"arg\">\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></test>\x0A\x09<trigger public=\"1\" set=\"method\" line=\"177\"><f a=\"_voName:functionName:?params\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"Array\"><c path=\"String\"/></c>\x0A\x09<e path=\"Void\"/>\x0A</f></trigger>\x0A\x09<getClassMap set=\"method\" line=\"188\"><f a=\"\"><c path=\"microbe.ClassMap\"/></f></getClassMap>\x0A\x09<read public=\"1\" set=\"method\" line=\"195\"><f a=\"_vo:?id:?offset\">\x0A\x09<c path=\"String\"/>\x0A\x09<t path=\"microbe.Vo_Id\"/>\x0A\x09<t path=\"microbe.Offset\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></read>\x0A\x09<getOne public=\"1\" set=\"method\" line=\"200\"><f a=\"_vo:id\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"Int\"/>\x0A\x09<c path=\"microbe.vo.Spodable\"/>\x0A</f></getOne>\x0A\x09<getLast public=\"1\" set=\"method\" line=\"205\"><f a=\"_vo:?search\">\x0A\x09<c path=\"String\"/>\x0A\x09<d/>\x0A\x09<c path=\"microbe.vo.Spodable\"/>\x0A</f></getLast>\x0A\x09<getOneH public=\"1\" set=\"method\" line=\"232\"><f a=\"_vo:id\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"Int\"/>\x0A\x09<c path=\"String\"/>\x0A</f></getOneH>\x0A\x09<getAllorded public=\"1\" set=\"method\" line=\"241\"><f a=\"_vo:?arg\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"Array\"><d/></c>\x0A\x09<c path=\"List\"><c path=\"microbe.vo.Spodable\"/></c>\x0A</f></getAllorded>\x0A\x09<getSearch public=\"1\" set=\"method\" line=\"271\"><f a=\"_vo:search\">\x0A\x09<c path=\"String\"/>\x0A\x09<d/>\x0A\x09<c path=\"List\"><c path=\"microbe.vo.Spodable\"/></c>\x0A</f></getSearch>\x0A\x09<getAll public=\"1\" set=\"method\" line=\"301\"><f a=\"_vo\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"List\"><c path=\"microbe.vo.Spodable\"/></c>\x0A</f></getAll>\x0A\x09<getPages set=\"method\" line=\"309\"><f a=\"vo:offset\">\x0A\x09<t path=\"microbe.VoName\"/>\x0A\x09<c path=\"Int\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></getPages>\x0A\x09<rec public=\"1\" set=\"method\" line=\"317\"><f a=\"\"><d/></f></rec>\x0A\x09<microRec public=\"1\" set=\"method\" line=\"324\"><f a=\"\"><c path=\"microbe.vo.Spodable\"/></f></microRec>\x0A\x09<recClassMap set=\"method\" line=\"332\"><f a=\"\"><d/></f></recClassMap>\x0A\x09<delete public=\"1\" set=\"method\" line=\"399\"><f a=\"voName:id\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"Int\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></delete>\x0A\x09<getManager set=\"method\" line=\"406\"><f a=\"_vo\">\x0A\x09<t path=\"microbe.VoName\"/>\x0A\x09<c path=\"sys.db.Manager\"><c path=\"sys.db.Object\"/></c>\x0A</f></getManager>\x0A\x09<createInstance set=\"method\" line=\"413\"><f a=\"_vo\">\x0A\x09<t path=\"microbe.VoName\"/>\x0A\x09<c path=\"microbe.vo.Spodable\"/>\x0A</f></createInstance>\x0A\x09<new public=\"1\" set=\"method\" line=\"53\"><f a=\"\"><e path=\"Void\"/></f></new>\x0A\x09<meta><m n=\":rttiInfos\"/></meta>\x0A</class>";
+	static $__rtti = "<class path=\"microbe.Api\" params=\"\">\x0A\x09<map><c path=\"microbe.ClassMap\"/></map>\x0A\x09<voPackage><c path=\"String\"/></voPackage>\x0A\x09<cnx><c path=\"sys.db.Connection\"/></cnx>\x0A\x09<rootSpod><c path=\"microbe.vo.Spodable\"/></rootSpod>\x0A\x09<_xml set=\"method\" line=\"62\"><f a=\"data\">\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></_xml>\x0A\x09<_json set=\"method\" line=\"65\"><f a=\"data\">\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></_json>\x0A\x09<spodByTag public=\"1\" set=\"method\" line=\"81\"><f a=\"s\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"List\"><c path=\"microbe.vo.Spodable\"/></c>\x0A</f></spodByTag>\x0A\x09<recTag public=\"1\" set=\"method\" line=\"95\"><f a=\"tag:spod:spod_id\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"Int\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></recTag>\x0A\x09<dissociateTag public=\"1\" set=\"method\" line=\"109\"><f a=\"tag:spod:spod_id\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"Int\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></dissociateTag>\x0A\x09<associateTag public=\"1\" set=\"method\" line=\"113\"><f a=\"tag:spod:spodId\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"Int\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></associateTag>\x0A\x09<tags public=\"1\" set=\"method\" line=\"120\"><f a=\"\"><e path=\"Void\"/></f></tags>\x0A\x09<test public=\"1\" set=\"method\" line=\"172\"><f a=\"arg\">\x0A\x09<c path=\"String\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></test>\x0A\x09<trigger public=\"1\" set=\"method\" line=\"177\"><f a=\"_voName:functionName:?params\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"Array\"><c path=\"String\"/></c>\x0A\x09<e path=\"Void\"/>\x0A</f></trigger>\x0A\x09<getClassMap set=\"method\" line=\"188\"><f a=\"\"><c path=\"microbe.ClassMap\"/></f></getClassMap>\x0A\x09<read public=\"1\" set=\"method\" line=\"195\"><f a=\"_vo:?id:?offset\">\x0A\x09<c path=\"String\"/>\x0A\x09<t path=\"microbe.Vo_Id\"/>\x0A\x09<t path=\"microbe.Offset\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></read>\x0A\x09<getOne public=\"1\" set=\"method\" line=\"200\"><f a=\"_vo:id\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"Int\"/>\x0A\x09<c path=\"microbe.vo.Spodable\"/>\x0A</f></getOne>\x0A\x09<getLast public=\"1\" set=\"method\" line=\"212\"><f a=\"_vo:?search\">\x0A\x09<c path=\"String\"/>\x0A\x09<d/>\x0A\x09<c path=\"microbe.vo.Spodable\"/>\x0A</f></getLast>\x0A\x09<getOneH public=\"1\" set=\"method\" line=\"239\"><f a=\"_vo:id\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"Int\"/>\x0A\x09<c path=\"String\"/>\x0A</f></getOneH>\x0A\x09<getAllorded public=\"1\" set=\"method\" line=\"248\"><f a=\"_vo:?arg\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"Array\"><d/></c>\x0A\x09<c path=\"List\"><c path=\"microbe.vo.Spodable\"/></c>\x0A</f></getAllorded>\x0A\x09<getSearch public=\"1\" set=\"method\" line=\"278\"><f a=\"_vo:search\">\x0A\x09<c path=\"String\"/>\x0A\x09<d/>\x0A\x09<c path=\"List\"><c path=\"microbe.vo.Spodable\"/></c>\x0A</f></getSearch>\x0A\x09<getAll public=\"1\" set=\"method\" line=\"308\"><f a=\"_vo\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"List\"><c path=\"microbe.vo.Spodable\"/></c>\x0A</f></getAll>\x0A\x09<getPages set=\"method\" line=\"316\"><f a=\"vo:offset\">\x0A\x09<t path=\"microbe.VoName\"/>\x0A\x09<c path=\"Int\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></getPages>\x0A\x09<rec public=\"1\" set=\"method\" line=\"324\"><f a=\"\"><d/></f></rec>\x0A\x09<microRec public=\"1\" set=\"method\" line=\"331\"><f a=\"\"><c path=\"microbe.vo.Spodable\"/></f></microRec>\x0A\x09<recClassMap set=\"method\" line=\"339\"><f a=\"\"><d/></f></recClassMap>\x0A\x09<delete public=\"1\" set=\"method\" line=\"405\"><f a=\"voName:id\">\x0A\x09<c path=\"String\"/>\x0A\x09<c path=\"Int\"/>\x0A\x09<e path=\"Void\"/>\x0A</f></delete>\x0A\x09<getManager set=\"method\" line=\"412\"><f a=\"_vo\">\x0A\x09<t path=\"microbe.VoName\"/>\x0A\x09<c path=\"sys.db.Manager\"><c path=\"sys.db.Object\"/></c>\x0A</f></getManager>\x0A\x09<createInstance set=\"method\" line=\"419\"><f a=\"_vo\">\x0A\x09<t path=\"microbe.VoName\"/>\x0A\x09<c path=\"microbe.vo.Spodable\"/>\x0A</f></createInstance>\x0A\x09<new public=\"1\" set=\"method\" line=\"53\"><f a=\"\"><e path=\"Void\"/></f></new>\x0A\x09<meta><m n=\":rttiInfos\"/></meta>\x0A</class>";
 	function __toString() { return 'microbe.Api'; }
 }

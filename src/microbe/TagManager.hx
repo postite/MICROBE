@@ -350,14 +350,14 @@ return firstChar.toUpperCase()+restOfString.toLowerCase();
 	#if js
 	public static function getTags(spod:String,?spodId:Int):List<Tag>{
 		
-		Std.string(spodId).Alerte();
-		microbe.jsTools.BackJS.base_url.Alerte();
+		//Std.string(spodId).Alerte();
+		//microbe.jsTools.BackJS.base_url.Alerte();
 		var Xreponse:String=null;
 		  Xreponse=haxe.Http.requestUrl(microbe.jsTools.BackJS.base_url+"/index.php/gap/tags/spod/"+spod+"/id/"+spodId);
 			//throw "error";
 			
 		var reponse = haxe.Unserializer.run(Xreponse);
-		Std.string(reponse).Alerte();
+		//Std.string(reponse).Alerte();
 		return reponse;
 	}
 	

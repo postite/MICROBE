@@ -31,7 +31,7 @@ class microbe_form_elements_AjaxInput extends microbe_form_FormElement {
 			$this->value = $this->label;
 		}
 		$style = microbe_form_elements_AjaxInput_0($this, $iter, $n, $tType);
-		$str = "<input " . $style . "\" type=\"" . $tType . "\" name=\"" . $n . "\" id=\"" . $n . "\" value=\"" . microbe_form_elements_AjaxInput_1($this, $iter, $n, $style, $tType) . "\"  " . $this->attributes . " />";
+		$str = "<input " . $style . " type='" . $tType . "' name='" . $n . "' id='" . $n . "' value='" . microbe_form_elements_AjaxInput_1($this, $iter, $n, $style, $tType) . "' attributes />";
 		$str .= (($this->required && $this->form->isSubmitted() && $this->printRequired) ? " required" : null);
 		return $str;
 	}

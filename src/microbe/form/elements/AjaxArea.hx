@@ -14,7 +14,7 @@ class AjaxArea extends FormElement
 {
 
 	public var height:Int;
-
+public var width:Int;
 		public function new(name:String, label:String, ?value:String, ?required:Bool=false, ?validators:Array<Validator>, ?attributes:String) 
 		{		
 			super();
@@ -23,8 +23,8 @@ class AjaxArea extends FormElement
 			this.value = value;
 			this.required = required;
 			this.attributes = attributes;
-		//	width = 300;
-		//	height = 50;
+			width = 300;
+			height = 200;
 		}
 
 		override public function render(?iter:Int):String
@@ -58,6 +58,7 @@ import js.Dom;
 import microbe.form.AjaxElement;
 import microbe.form.Microfield;
 using  microbe.tools.Debug;
+@:keep
 class AjaxArea extends AjaxElement
 {
 	public static var debug=0;

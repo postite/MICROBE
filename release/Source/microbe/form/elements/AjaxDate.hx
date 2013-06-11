@@ -5,6 +5,7 @@ import microbe.form.AjaxElement;
 import js.Lib;
 import js.JQuery;
 import js.Dom.HtmlDom;
+@:keep
 class AjaxDate extends AjaxElement{
 	
 	

@@ -41,7 +41,7 @@ class AjaxElement  {
 		}
 		if (_iter!=null) pos=_iter;
 		setValue(value);
-
+		if(BackSignal!=null)
 		BackSignal.erreur.add(onError);
 	//	self=this;
 	}

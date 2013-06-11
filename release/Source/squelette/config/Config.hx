@@ -1,12 +1,14 @@
 package config; 
 
-import haxigniter.server.libraries.Debug; import haxigniter.server.libraries.DebugLevel;
+
 #if php
 import php.Sys; import php.Web;
 #elseif neko
 import neko.Sys; import neko.Web;
 #end
 
+#if (php || neko)
+import haxigniter.server.libraries.Debug; import haxigniter.server.libraries.DebugLevel;
 // ========================================================================
 // === Start of configuration file ========================================
 // ========================================================================
@@ -41,12 +43,12 @@ import vo.ChildTest;
 import controllers.Simple;
 import vo.SubChild;
 import controllers.Install;
-
-class Config extends haxigniter.server.Config
+#end
+class Config #if (php || neko) extends haxigniter.server.Config #end
 {
 	
-	
-	
+	public static var backPage:String="pipo";
+	#if (php || neko)
 	public var jsPath:String;
 	public var cssPath:String;
 	public var voPackage:String;
@@ -429,4 +431,5 @@ class Config extends haxigniter.server.Config
 		// Set default variables in super class and/or debug if dumpEnv is set.
 		super(dumpEnv);
 	}
+	#end
 }

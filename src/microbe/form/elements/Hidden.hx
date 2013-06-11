@@ -59,7 +59,7 @@ import js.JQuery;
 import js.Dom;
 import microbe.form.AjaxElement;
 import microbe.form.Microfield;
-
+@:keep
 class Hidden extends AjaxElement
 {
 	

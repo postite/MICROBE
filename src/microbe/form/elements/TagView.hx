@@ -30,11 +30,11 @@ class TagView extends AjaxElement
 	function init() : Void {
 		
 		getTags(this.voName,this.spodId);
-		Std.string(spodTags).Alerte();
+		//Std.string(spodTags).Alerte();
 		afficheTags();
-		Std.string(contextTags).Alerte();
+		//Std.string(contextTags).Alerte();
 		populateTags();
-		Std.string(fullTags).Alerte();
+		//Std.string(fullTags).Alerte();
 		
 		new JQuery("#tagSelector #pute").keyup(onType);
 		new JQuery("#tagSelector #results").blur(onBlur);
@@ -87,7 +87,7 @@ class TagView extends AjaxElement
 				}
 	   }
 	function onSelect(e:JqEvent) : Void {
-		Lib.alert("pop");
+		//Lib.alert("pop");
 	//	e.preventDefault();
 		//var selected = new JQuery("#tagSelector select option:selected");    
 		//Lib.alert(new JQuery(e.currentTarget).text());
@@ -108,19 +108,19 @@ class TagView extends AjaxElement
 	
 	function getTags(spod:String,?spodId:Int) : Void {
 		//Lib.alert("voNAme="+spod+"id="+spodId);
-		"".Alerte();
+		//"".Alerte();
 		
 		if( spodId!=null){
 			
 		var context=TagManager.getTags(spod,spodId);
-		"".Alerte();
+		//"".Alerte();
 		var tags=TagManager.getTags(spod);
-		"".Alerte();
+		//"".Alerte();
 		contextTags=cast context;
-		"".Alerte();
+		//"".Alerte();
 		spodTags=cast tags;
 	}else{
-		"".Alerte();
+		//"".Alerte();
 		contextTags=new List<Tag>();
 		spodTags=new List<Tag>();
 	}
@@ -176,7 +176,7 @@ class TagView extends AjaxElement
 //Lib.alert(this.voName+"_"+this.spodId+"_"+newTag);
 	trace("add"+newTag);
 	trace("spodId="+this.spodId);
-	Lib.alert(TagManager.addTag(this.voName,this.spodId,newTag));
+	TagManager.addTag(this.voName,this.spodId,newTag);
 	trace("after");
 	init();
 

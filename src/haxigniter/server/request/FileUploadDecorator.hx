@@ -128,7 +128,7 @@ class FileUploadDecorator extends RequestHandlerDecorator
 
     var r =~/[\x80-\xFF]/;
    standardizedName=r.replace(standardizedName,"-"); // "aaabcbcbcxx"
-			hashFile.set(fieldName, new FileInfo(standardizedName, tmpPath));
+			hashFile.set(fieldName, new FileInfo(standardizedName,tmpPath));
 
 			currentFile = File.write(tmpPath, true);
 		}

@@ -1,0 +1,101 @@
+.picto {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+}
+.littlecross {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: 0px 0px;
+  width: 23px;
+  height: 24px;
+}
+.littlecross:hover {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: 0px -24px;
+  width: 23px;
+  height: 24px;
+}
+.cross {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -23px 0px;
+  width: 38px;
+  height: 39px;
+}
+.cross:hover {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -23px -39px;
+  width: 38px;
+  height: 39px;
+}
+.tooltipbot {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -61px 0px;
+  width: 62px;
+  height: 28px;
+}
+.tooltipbot:hover {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -61px -28px;
+  width: 62px;
+  height: 28px;
+}
+.tooltipleft {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -123px 0px;
+  width: 107px;
+  height: 41px;
+}
+.tooltipleft:hover {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -123px -41px;
+  width: 107px;
+  height: 41px;
+}
+.blank {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -230px 0px;
+  width: 106px;
+  height: 107px;
+}
+.blank:hover {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -230px -107px;
+  width: 106px;
+  height: 107px;
+}
+.up {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -336px 0px;
+  width: 39px;
+  height: 39px;
+}
+.up:hover {
+  display: block;
+  text-indent: -9999px;
+  background-image: url('formsprite.png');
+  background-position: -336px -39px;
+  width: 39px;
+  height: 39px;
+}

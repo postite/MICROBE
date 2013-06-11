@@ -15,7 +15,7 @@ import sys.db.Manager;
 import sys.db.Object;
 import microbe.MicroCreator;
 import microbe.form.IMicrotype;
-import vo.Traductable;
+import microbe.vo.Traductable;
 
 class Pipo extends Back
 	{
@@ -123,11 +123,11 @@ class Pipo extends Back
 
 			this.view.assign("currentVo",voName);
 
-			if(Std.is(data,vo.Traductable)){
+			if(Std.is(data,Traductable)){
 				this.view.assign("lang","fr");
 				this.view.assign("linkfr",url.siteUrl()+"/pipo/choix/"+data.id+"/"+voName);
 				//var id_ref=cast(data,vo.Traductable).id_ref;
-				var id_ref=cast (data,vo.Traductable).getTrad("en");
+				var id_ref=cast (data,Traductable).getTrad("en");
 				if (id_ref==null){
 					//id_ref=0;
 					//return traduit(voName,data.id);
@@ -240,7 +240,7 @@ class Pipo extends Back
 		{
 			var data:Spodable=api.getOne(voName,id);
 			var clone:Bool=config.Config.clone;
-			var traduction_id:Int=cast (data,vo.Traductable).getTrad(lang);
+			var traduction_id:Int=cast (data,Traductable).getTrad(lang);
 			var newData:Traductable=null;
 	
 			if(traduction_id==0){
@@ -251,8 +251,8 @@ class Pipo extends Back
 				newData= cast Type.createInstance(Type.resolveClass(GenericController.appConfig.voPackage+voName),[]);
 					}
 
-			cast(newData,vo.Traductable).id_ref=id;
-			cast(newData,vo.Traductable).lang=lang;
+			cast(newData,Traductable).id_ref=id;
+			cast(newData,Traductable).lang=lang;
 			generator.generateComplexClassMapForm(voName,cast newData);//
 			}else{
 				generator.generateComplexClassMapForm(voName,api.getOne(voName,traduction_id));
@@ -264,7 +264,7 @@ class Pipo extends Back
 			defaultAssign();
 				//si on a une page unique , le comportement est different
 			if( Std.is(data,Page))this.view.assign("contenttype","page");
-				
+				if( data.id==null)data.id=id; //fromInter
 			this.view.assign("linkfr",url.siteUrl()+"/pipo/choix/"+data.id+"/"+voName);
 			this.view.assign("linken",url.siteUrl()+"/pipo/traduit/"+data.id+"/"+voName+"/en");
 			this.view.assign("currentVo",voName);	
@@ -281,7 +281,7 @@ class Pipo extends Back
 
 		public function ajoute(voName:String):Void{
 			trace("ajoute");
-			generator.generateComplexClassMapForm(voName);//
+			generator.generateComplexClassMapForm(voName,null,true);//no tags on ajoute
 			jsLib.addOnce(backjs);//
 			
 			jsScript.add(backInstance+".instance.setClassMap('"+generator.compressedClassMap+"');");

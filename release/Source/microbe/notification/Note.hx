@@ -79,8 +79,7 @@ class Note
 	{
 		jBox.remove();
 	}
-	
-	
-	
+
 	
 }
+
