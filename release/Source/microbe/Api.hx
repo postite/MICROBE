@@ -387,7 +387,7 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 		var fullSpod:Object=cast creator.record();
 		// trace("beforeRec="+Type.typeof(cast(fullSpod).date));
 		// trace("beforeReccheck date="+cast(fullSpod).date.getTime());
-
+		if(cast(fullSpod).date==null)
 		cast(fullSpod).date=Date.now();
 		if(cast(fullSpod).id==null){
 			try{

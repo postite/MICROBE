@@ -72,25 +72,27 @@ class CollectionBehaviour implements IBehaviour
 		if (data.id!=null){
 			
 			
-			trace("y'a de la data"+data.id +"voName"+voName);
+			trace("y'a de la data yeah"+data.id +"voName"+voName);
 			newCollec.id=data.id;
 			//recupere les données
+			trace("status2");
 			var voitures:List<Spodable>=cast Reflect.field(data,field);
 			
-			
+			trace("voiture"+voitures);
 			
 		
 			var micros:List<FormElement>= new List<FormElement>(); //?
 			
 			if( voitures.length>0){
+				trace("in voiture length");
 			//debut iteration des sous-vo
 			for (car in voitures.iterator()){
-				
+				trace(" in loop voiture iterator");
 				var micros:List<FormElement>= new List<FormElement>();
 			
 				var parent = Reflect.field(instanceClass,"rel"); ///dependance à rel
 				
-				
+				trace("parent="+parent);
 				//on checque les formElements  item:MicroField
 				
 				var spodList:MicroFieldList= new MicroFieldList();
@@ -104,7 +106,7 @@ class CollectionBehaviour implements IBehaviour
 				
 					
 				for (item in collec){
-
+					trace(" in loop collec iterator");
 		// 			if (element.type==collection){
 						
 		// 				var subcreator=new MicroCreator();
@@ -123,28 +125,31 @@ class CollectionBehaviour implements IBehaviour
 					bum.element=cast(item,Microfield).element;
 					bum.field=item.field;
 					spodList.add(bum);
-
+					trace( "bum="+bum);
 
 					var elem:FormElement=creeAjaxFormElement(cast bum,Std.string(graine));
 					micros.add(elem);
-					
+					trace ("end loope");
 					}//fin item in collec*/	
 					
 					//si data mais pas de collec encore...
 			
-					
+					trace("before CollectionElement");
 					//creation du wrapper qui va faire un render() sur tous les formelement creeé depuis bum
 	//RENAMING				var microWrapper:FormElement= Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[sousVoName+"_"+field,field,micros,graine,spodList.pos]);
 					var microWrapper:CollectionElement= Type.createInstance(Type.resolveClass("microbe.form.elements.CollectionElement"),[spodList.elementId,field,micros,graine,spodList.id]);
 					//formulaire.addElement(microWrapper);///warning
+					trace("after CollectionElement");
 					wrapper.addElement(cast microWrapper);
+					trace("then");
 					graine++;
 					//trace("spod="+spodList.fields.last().value);
 					newCollec.add(spodList);
 					}//fin voiture iterator
-					
+					trace("before else");
 				//si pas de données de collection
 				}else{
+					trace(" else");
 					
 					var car=instanceClass;
 					

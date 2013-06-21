@@ -79,7 +79,9 @@ class microbe_Api {
 		$creator->source = $this->map->fields;
 		$creator->data = $voInstance;
 		$fullSpod = $creator->record();
-		$fullSpod->date = Date::now();
+		if(_hx_field($fullSpod, "date") === null) {
+			$fullSpod->date = Date::now();
+		}
 		if(_hx_field($fullSpod, "id") === null) {
 			try {
 				$fullSpod->insert();

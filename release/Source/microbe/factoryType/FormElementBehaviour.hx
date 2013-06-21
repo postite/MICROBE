@@ -57,7 +57,10 @@ class FormElementBehaviour implements IBehaviour
 			/// forcer le toString() pour les dates sinon il fait un Std.string auto!
 			//et std.string génére une date de type TUE 23...
 			var val:Dynamic=Reflect.field(data,field);
+
+
 			if( Std.is(val,Date)){ val=val.toString();}
+			//if( Std.is(val,Int)){ val=val.toString();} //humpf marche pas 
 			brickElement.value=val;
 
 			return brickElement;
@@ -68,7 +71,7 @@ class FormElementBehaviour implements IBehaviour
 		function creeAjaxFormElement(formulaire:Form,microfield:Microfield,?graine:String=""):FormElement{
 				//microfield=brickelement
 //			var microbeFormElement:FormElement= Type.createInstance(Type.resolveClass(microfield.element),[microfield.voName+"_"+microfield.field+graine, microfield.field, null, null, null, null]);
-			var microbeFormElement:FormElement= Type.createInstance(Type.resolveClass(microfield.element),[microfield.elementId, microfield.field, null, null, null, null]);
+			var microbeFormElement:FormElement= Type.createInstance(Type.resolveClass(microfield.element),[microfield.elementId, microfield.field, microfield.value, null, null, null]);
 			//microfield.elementId=formulaire.name+"_"+microfield.voName+"_"+microfield.field;
 			//microfield.elementId="formElementBHcreaajaxElement";
 			microbeFormElement.cssClass="generatorClass";

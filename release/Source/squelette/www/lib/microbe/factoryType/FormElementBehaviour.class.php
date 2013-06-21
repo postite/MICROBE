@@ -10,7 +10,7 @@ class microbe_factoryType_FormElementBehaviour implements microbe_factoryType_IB
 		if($graine === null) {
 			$graine = "";
 		}
-		$microbeFormElement = Type::createInstance(Type::resolveClass($microfield->element), new _hx_array(array($microfield->elementId, $microfield->field, null, null, null, null)));
+		$microbeFormElement = Type::createInstance(Type::resolveClass($microfield->element), new _hx_array(array($microfield->elementId, $microfield->field, $microfield->value, null, null, null)));
 		$microbeFormElement->cssClass = "generatorClass";
 		return $microbeFormElement;
 	}

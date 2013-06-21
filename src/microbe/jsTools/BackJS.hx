@@ -217,7 +217,7 @@ class BackJS implements mpartial.Partial
 	//	req.setParameter("voName", voName);
 		req.setParameter("map", compressedValues);
 
-		req.onData=function(d) {preRedirect(d);}; 
+		req.onData=function(d) {preRedirect(d);};
 		//req.onData=function(d)afterRecord(d); 
 		req.request(true);
 	}
