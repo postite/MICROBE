@@ -11,6 +11,7 @@ class microbe_factoryType_FormElementBehaviour implements microbe_factoryType_IB
 			$graine = "";
 		}
 		$microbeFormElement = Type::createInstance(Type::resolveClass($microfield->element), new _hx_array(array($microfield->elementId, $microfield->field, $microfield->value, null, null, null)));
+		$microbeFormElement->setMicrofield($microfield);
 		$microbeFormElement->cssClass = "generatorClass";
 		return $microbeFormElement;
 	}
@@ -21,6 +22,7 @@ class microbe_factoryType_FormElementBehaviour implements microbe_factoryType_IB
 		$brickElement->element = $element->classe;
 		$brickElement->elementId = $voName . "_" . $field;
 		$brickElement->type = $element->type;
+		$brickElement->voId = $this->data->id;
 		$val = Reflect::field($this->data, $field);
 		if(Std::is($val, _hx_qtype("Date"))) {
 			$val = _hx_string_call($val, "toString", array());

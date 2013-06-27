@@ -247,7 +247,7 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 		
 		public function getAllorded(_vo:String,?arg:Array<Dynamic>):List<Spodable>{
 		//public function getAllorded(_vo:String):Dynamic{
-
+			
 			var stringVo = voPackage+_vo; 
 			var liste:List<Object>=new List<Object>();
 			//var manager =  Type.createInstance(
@@ -262,7 +262,9 @@ class Api #if !haxe3  implements haxe.rtti.Infos #end
 			//var liste:List<Dynamic> = manager.all(true);
 
 			for (a in Type.getClassFields(Type.resolveClass(stringVo))){
+				
 				if (a=="getAllorded"){
+					
 					liste= Reflect.callMethod( Type.resolveClass(stringVo), "getAllorded", arg);
 					return  cast liste;
 				}

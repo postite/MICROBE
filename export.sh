@@ -42,22 +42,45 @@ echo "→ Assembling the 'release.zip' package"
 	
 	#if [ -z $3 && $3 != "dev"]
 	
-	if [ $# -lt 3 ]
-		then
-		
-		echo "is not dev"
-		cp -r src/haxigniter $targetd/Source
+	if [[ $# < 3 ]]
+  then 
+    echo "moins de 3"
+    cp -r src/haxigniter $targetd/Source
 		cp -r www squelette
 		cp -r src/config squelette
 		cp -r src/controllers squelette
 		cp -r src/Nav.hx squelette
 		cp -r src/vo squelette
 		cp -r squelette $targetd/Source
-		elif [ $3 == "dev" ]
-			then
-		echo "beware dev"
+  elif [[ $3 == "dev" ]]
+    then
+     echo "arg3 = dev"
+  else
+
+    echo "arg3 présent mais vaut pas dev"
+fi
+
+
+
+
+
+
+	# if [ $# -lt 3 ]
+	# 	then
 		
-	fi
+	# 	echo "is not dev"
+	# 	cp -r src/haxigniter $targetd/Source
+	# 	cp -r www squelette
+	# 	cp -r src/config squelette
+	# 	cp -r src/controllers squelette
+	# 	cp -r src/Nav.hx squelette
+	# 	cp -r src/vo squelette
+	# 	cp -r squelette $targetd/Source
+	# 	elif [ $3 == "dev" ]
+	# 		then
+	# 	echo "beware dev"
+		
+	# fi
 	echo "After dev"
 	cp haxelib.xml $targetd/Source/haxelib.xml
 	cp run.n $targetd/Source/run.n

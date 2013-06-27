@@ -91,7 +91,7 @@ class microbe_form_FormElement {
 		}
 		$n = $this->form->name . "_" . $this->name;
 		$v = php_Web::getParams()->get($n);
-		haxe_Log::trace("v=" . Std::string(php_Web::getParams()), _hx_anonymous(array("fileName" => "FormElement.hx", "lineNumber" => 129, "className" => "microbe.form.FormElement", "methodName" => "populate")));
+		haxe_Log::trace("v=" . Std::string(php_Web::getParams()), _hx_anonymous(array("fileName" => "FormElement.hx", "lineNumber" => 138, "className" => "microbe.form.FormElement", "methodName" => "populate")));
 		if($v !== null) {
 			$this->value = $v;
 		}
@@ -139,6 +139,10 @@ class microbe_form_FormElement {
 		}
 		return true;
 	}
+	public function setMicrofield($micro) {
+		$this->microfield = $micro;
+	}
+	public $microfield;
 	public $inited;
 	public $cssClass;
 	public $validators;

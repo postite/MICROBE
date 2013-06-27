@@ -3517,6 +3517,10 @@ microbe.form.FormElement.prototype = {
 		}
 		return true;
 	}
+	,setMicrofield: function(micro) {
+		this.microfield = micro;
+	}
+	,microfield: null
 	,inited: null
 	,cssClass: null
 	,validators: null
@@ -3620,7 +3624,7 @@ microbe.form.Microfield.__name__ = ["microbe","form","Microfield"];
 microbe.form.Microfield.__interfaces__ = [microbe.form.IMicrotype];
 microbe.form.Microfield.prototype = {
 	toString: function() {
-		return "\nMICROFIELD :type:" + Std.string(this.type) + "\nfield:" + this.field + ",\nvoName:" + this.voName + ",\nelement:" + this.element + ", \nelementId:" + this.elementId + "\nvalue:" + this.value + "\n";
+		return "\nMICROFIELD :type:" + Std.string(this.type) + "\nfield:" + this.field + ",\nvoName:" + this.voName + ",\nelement:" + this.element + ", \nelementId:" + this.elementId + "\nvalue:" + this.value + "\nvoId:" + this.voId;
 		return "";
 	}
 	,type: null

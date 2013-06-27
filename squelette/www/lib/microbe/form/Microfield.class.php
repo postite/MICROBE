@@ -5,7 +5,7 @@ class microbe_form_Microfield implements microbe_form_IMicrotype{
 		;
 	}
 	public function toString() {
-		return "<div class='microfieldTrace'><p>MICROFIELD :<br/>type:" . Std::string($this->type) . "<br/>field:" . $this->field . ",<br/>voName:" . $this->voName . ",<br/>element:" . $this->element . ", <br/>elementId:" . $this->elementId . "<br/>value:" . $this->value . "</p></div>";
+		return "<div class='microfieldTrace'><p>MICROFIELD :<br/>type:" . Std::string($this->type) . "<br/>field:" . $this->field . ",<br/>voName:" . $this->voName . ",<br/>element:" . $this->element . ", <br/>elementId:" . $this->elementId . "<br/>value:" . $this->value . ", <br/>voId:" . _hx_string_rec($this->voId, "") . "</p></div>";
 		return "";
 	}
 	public $type;

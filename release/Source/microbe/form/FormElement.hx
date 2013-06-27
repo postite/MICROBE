@@ -31,7 +31,7 @@ package microbe.form;
 //import poko.js.JsBinding;
 //import poko.utils.PhpTools;
 #if php import php.Web; #end
-
+import microbe.form.Microfield;
 using StringTools;
 
 class FormElement
@@ -48,18 +48,23 @@ class FormElement
 	public var validators:List<Validator>;
 	public var cssClass:String;
 	public var inited:Bool;
-	
+	public var microfield:Microfield;
 	public function new() 
 	{
+		
 		active = true;
 		errors = new List();
 		validators = new List();
 		
 		inited = false;
 	}
-	
+	public function setMicrofield(micro:Microfield)
+	{
+		this.microfield=micro;
+	}
 	public function isValid():Bool
 	{
+		
 		errors.clear();
 				
 				if (active == false)
@@ -95,28 +100,32 @@ class FormElement
 	
 	public function checkValid()
 	{
+		
 		value == "";
 	}
 	
 	
 	public function init()
 	{
-	
+		
 		inited = true;
 	}
 	
 	public function addValidator(validator:Validator)
 	{
+		
 		validators.add(validator);
 	}
 	
 	public function bindEvent(event:String, method:String, params:Array<Dynamic>, ?isMethodGlobal:Bool=false) 
 	{
+		
 		//Poko.instance.request.jsBindings.add(new JsBinding(form.name + "_" + name, event, method, params, isMethodGlobal));
 	}
 	
 	public function populate():Void
 	{
+		
 		#if php
 		
 		if (!inited)
@@ -138,6 +147,7 @@ class FormElement
 
 	public function getErrors():List<String>
 	{
+		
 		isValid();
 		
 		for (val in validators)
@@ -149,6 +159,7 @@ class FormElement
 	
 	public function render(?iter:Int):String
 	{
+		
 		if (!inited)
 			init();
 			
@@ -157,6 +168,7 @@ class FormElement
 	
 	public function remove():Bool
 	{
+		
 		if ( form != null )
 		{
 			return form.removeElement(this);
@@ -169,17 +181,20 @@ class FormElement
 			return "<tr><td>" + getLabel() + "</td><td>" + this.render() + "<td></tr>";
 		}*/
 	public function getPreview():String{
+		
 		return "<li><span class='labelsp'>" + getLabel() + "</span><div>" + this.render() + "</div></li>";
 		//return "<li><div>" + this.render() + "</div></li>";
 	}
 	
 	public function getType():String
 	{
+		
 		return Std.string(Type.getClass(this));
 	}
 	
 	public function getLabelClasses() : String
 	{
+		
 		var css = "";
 		var requiredSet = false;
 		if (required) {
@@ -201,6 +216,7 @@ class FormElement
 	
 	public function getLabel():String
 	{
+		
 		var n = form.name + "_" + name;
 		if (label!=null)
 		return "<label for=\"" + n + "\" class=\""+getLabelClasses()+"\" id=\"" + n + "Label\">" + label +(if(required) form.labelRequiredIndicator) +"</label>";
@@ -209,6 +225,7 @@ class FormElement
 	
 	public function getClasses() : String
 	{
+		
 		var css = ( cssClass != null ) ? cssClass : form.defaultClass;
 		
 		if ( required && form.isSubmitted() )
@@ -224,6 +241,7 @@ class FormElement
 	
 	
 	public function test():String{
+		
 		this.init();
 		return "popoop"+form.name;
 	}

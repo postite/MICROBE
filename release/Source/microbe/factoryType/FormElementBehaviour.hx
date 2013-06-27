@@ -53,7 +53,7 @@ class FormElementBehaviour implements IBehaviour
 			brickElement.element=element.classe; //instancier MicrobeElement
 			brickElement.elementId =voName+"_"+field;
 			brickElement.type=element.type;
-
+			brickElement.voId=data.id;
 			/// forcer le toString() pour les dates sinon il fait un Std.string auto!
 			//et std.string génére une date de type TUE 23...
 			var val:Dynamic=Reflect.field(data,field);
@@ -66,14 +66,13 @@ class FormElementBehaviour implements IBehaviour
 			return brickElement;
 		}
 		
-		
-		
 		function creeAjaxFormElement(formulaire:Form,microfield:Microfield,?graine:String=""):FormElement{
-				//microfield=brickelement
+			//microfield=brickelement
 //			var microbeFormElement:FormElement= Type.createInstance(Type.resolveClass(microfield.element),[microfield.voName+"_"+microfield.field+graine, microfield.field, null, null, null, null]);
 			var microbeFormElement:FormElement= Type.createInstance(Type.resolveClass(microfield.element),[microfield.elementId, microfield.field, microfield.value, null, null, null]);
 			//microfield.elementId=formulaire.name+"_"+microfield.voName+"_"+microfield.field;
 			//microfield.elementId="formElementBHcreaajaxElement";
+			microbeFormElement.setMicrofield(microfield);
 			microbeFormElement.cssClass="generatorClass";
 			return microbeFormElement;
 		}

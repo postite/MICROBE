@@ -41,18 +41,22 @@
 # -neko run.n
 
 ####
+--next
 
 
 #### compilation to haxelib
 #-cmd  echo   $TM_PROJECT_DIRECTORY"/export.sh"
 #-cmd   $TM_PROJECT_DIRECTORY"/export.sh" microbe
 
+-main Test
+-x Test
+-cmd   ./export.sh microbe maria puy
 
--cmd   ./export.sh microbe 1.1
+
 
 
 ####
--cmd open http://localhost:8888/index.php/pipo
+#-cmd open http://localhost:8888/index.php/pipo
 
 
 #-cmd open http://postite.alwaysdata.net/
