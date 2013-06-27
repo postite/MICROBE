@@ -124,19 +124,21 @@ class Login extends GenericController, implements Controller
 				user.mdp=result.mdp;
 				user.nom=result.nom;*/
 		
-		this.trace("result.next="+result);
+		// this.trace("result.next="+result);
 		
-		defaultAssign();
-				var formulaire2:Form = new Form("cool");
+		// defaultAssign();
+		// 		var formulaire2:Form = new Form("cool");
 
-				session.user = result;
+		// 		session.user = result;
 			
-				formulaire2.submitButton=new Button("continuer", "continuer", "continuer");
-				formulaire2.action = url.siteUrl() + "/"+config.Config.backPage+"/";
+		// 		formulaire2.submitButton=new Button("continuer", "continuer", "continuer");
+		// 		formulaire2.action = url.siteUrl() + "/"+config.Config.backPage+"/";
 				
-				this.view.assign("content", formulaire2);
-				this.view.assign("commentaire", "merci de vous etre identifie ");
-				this.view.display("back/design.html");
+		// 		this.view.assign("content", formulaire2);
+		// 		this.view.assign("commentaire", "merci de vous etre identifie ");
+		// 		this.view.display("back/design.html");
+
+				php.Web.redirect( url.siteUrl() + "/"+config.Config.backPage+"/");
 		
 		
 		
