@@ -11,6 +11,7 @@
 
 lib=$1
 version=$2
+
 #targetd=$TM_PROJECT_DIRECTORY"/release"
 targetd=./release
 echo $1
@@ -25,7 +26,7 @@ echo "→ Assembling the 'release.zip' package"
 	# 	cp -r ndll/Source $targetd/
 	# 	cp -r curl $targetd/
 	
-	cp -r src/haxigniter $targetd/Source
+	
 	cp -r src/javascriptOutils $targetd/Source
 	#cp -r src/jquery $targetd/Source
 	#cp -r src/js $targetd/Source
@@ -36,12 +37,28 @@ echo "→ Assembling the 'release.zip' package"
 	cp -r src/poko $targetd/Source
 	
 	
-	cp -r www squelette
-	cp -r src/config squelette
-	cp -r src/controllers squelette
-	cp -r src/Nav.hx squelette
-	cp -r src/vo squelette
-	cp -r squelette $targetd/Source
+	#a remettre pour real haxelib
+	#permet un update plus rapide ... mais pas complet
+	
+	#if [ -z $3 && $3 != "dev"]
+	
+	if [ $# -lt 3 ]
+		then
+		
+		echo "is not dev"
+		cp -r src/haxigniter $targetd/Source
+		cp -r www squelette
+		cp -r src/config squelette
+		cp -r src/controllers squelette
+		cp -r src/Nav.hx squelette
+		cp -r src/vo squelette
+		cp -r squelette $targetd/Source
+		elif [ $3 == "dev" ]
+			then
+		echo "beware dev"
+		
+	fi
+	echo "After dev"
 	cp haxelib.xml $targetd/Source/haxelib.xml
 	cp run.n $targetd/Source/run.n
 	cd $targetd
