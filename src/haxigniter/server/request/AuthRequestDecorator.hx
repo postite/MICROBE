@@ -30,6 +30,8 @@ class AuthRequestDecorator extends  RequestHandlerDecorator
 
 	public override function handleRequest(controller :Controller , url : ParsedUrl, method : String, getPostData : Hash<String>, requestData : Dynamic) : RequestResult
 	{
+
+		
 		var result:RequestResult;
 		if (session.user != null){
 		//	trace("session="+session.user);
@@ -37,11 +39,13 @@ class AuthRequestDecorator extends  RequestHandlerDecorator
 		return result;
 		}else {
 		trace("pas identifié");
-		result = requestHandler.handleRequest(loginPage, url, method, getPostData, requestData);
+		
+		result = requestHandler.handleRequest(loginPage, new ParsedUrl("/"), method, null, null);
 		return result;
 		//cast(controller).checkID();
 		//result = RequestResult.returnValue("pas identifié");
 		}
+		
 		return RequestResult.noOutput;
 	}
 	
