@@ -129,7 +129,7 @@ class Login extends GenericController, implements Controller
 		// defaultAssign();
 		// 		var formulaire2:Form = new Form("cool");
 
-		// 		session.user = result;
+			session.user = result;
 			
 		// 		formulaire2.submitButton=new Button("continuer", "continuer", "continuer");
 		// 		formulaire2.action = url.siteUrl() + "/"+config.Config.backPage+"/";
